@@ -13,11 +13,6 @@ function formatDate(date) {
         .factory('referrals', referrals);
 
         function referrals($resource) {
-            // return $resource('api/referrals/:id', {}, {
-            //     update: {
-            //         method: 'PUT'
-            //     }
-            // });
             
             var Referal = $resource('api/referrals/:id', {}, {
                 update: {
@@ -41,9 +36,6 @@ function formatDate(date) {
               });
             }
 
-            // function getTime() {
-
-            // }
             
             return {
                 getReferals:getReferals

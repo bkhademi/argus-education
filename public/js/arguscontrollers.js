@@ -1513,21 +1513,51 @@
         // check for changes in the date to retrieve that date's AEC list 
         $scope.$watch('form.date.$modelValue', function (newVal, oldVal) {
             if (newVal) {//when date has a valid date request the List from that date
+                referrals.getReferals(newVal).then(function(results) {
+                    console.log("Returned  refferals");
+                    console.log(results[0]);
+                    // $scope.teacherStudents = results;
+
+
+                    var data = results;
+                    console.log("Data For the ref table");
+                    // console.log(data);
+                    if (!data) {
+                        $scope.refTable = [];
+                        alert("No students for current date");
+                       
+                    } else {
+                        $scope.refTable = data;
+                    }
+
+
+
+
+
+
+
+                  }, function(error) {
+                    console.log(error);
+                });
+
+
+
                 console.log("New Date" +newVal );
                 console.log("Old Date" +oldVal );
                 console.log("New Date" +formatDate(newVal) );
                 $scope.currentDate = newVal;
                 //console.log("newVal = " + $scope.form.date.$viewValue);
-                var data = ServerDataModel.getAECList(formatDate(newVal));
-                console.log("Data For the ref table");
-                console.log(data);
-                if (!data) {
-                    $scope.refTable = [];
-                    alert("No students for current date");
+                
+                // var data = ServerDataModel.getAECList(formatDate(newVal));
+                // console.log("Data For the ref table");
+                // console.log(data);
+                // if (!data) {
+                //     $scope.refTable = [];
+                //     alert("No students for current date");
                    
-                } else {
-                    $scope.refTable = data.stuInfo;
-                }
+                // } else {
+                //     $scope.refTable = data.stuInfo;
+                // }
             }
         });
 

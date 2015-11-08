@@ -80,7 +80,7 @@
             </div>
 
             <br />
-            <!-- 
+            
             <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
                 <thead>
                     <tr>
@@ -94,12 +94,15 @@
                 </thead>
                 <tbody>
                     <tr data-ng-repeat="stu in refTable">
-                        <td>{{stu.fn}}</td>
-                        <td>{{stu.ln}}</td>
-                        <td>{{stu.ID}}</td>
-                        <td>{{stu.GR}}</td>
+                        <td>{{stu.user.FirstName}}</td>
+                        <td>{{stu.user.LastName}}</td>
+                        <td>{{stu.StudentId}}</td>
+                        <td>{{stu.Grade}}</td>
                         <td>
-                            <select multiple chosen class="chosen-select" style="width:600px" placeholder="Select a homework" data-ng-model="stu.Assignments" data-ng-options="a as (a.name) for a in assignments"></select>
+                            <select multiple chosen class="chosen-select" style="width:600px" 
+                            placeholder="Select a homework" 
+                            data-ng-model="stu.Assignments" 
+                            data-ng-options="a as (a.Name) for a in assignments"></select>
 
                         </td>
 
@@ -113,9 +116,9 @@
                     </tr>
                 </tfoot>
             </table>
-                -->
+            
             <!--  Table Start -->
-            <div class="col-sm-12"  data-ng-controller="tablesCtrl">
+            <!-- <div class="col-sm-12"  data-ng-controller="tablesCtrl">
                 <table class="table table-bordered table-striped table-responsive table-hover">
                     <thead>
                         <tr>
@@ -179,12 +182,14 @@
                     </thead>
                     <tbody>
                         <tr data-ng-repeat="stu in refTableCurrentPage">
-                            <td>{{stu.fn}}</td>
-                            <td>{{stu.ln}}</td>
-                            <td>{{stu.ID}}</td>
-                            <td>{{stu.GR}}</td>
+                            <td>{{stu.user.FirstName}}</td>
+                            <td>{{stu.user.LastName}}</td>
+                            <td>{{stu.StudentId}}</td>
+                            <td>{{stu.Grade}}</td>
                             <td >
-                                <select multiple chosen class="chosen-select" style="width:600px" data-placeholder="Select a homework" data-ng-model="stu.Assignments" data-ng-options="a as (a.name) for a in assignments" ></select>
+                                <select multiple chosen class="chosen-select" style="width:600px" data-placeholder="Select a homework" 
+                                data-ng-model="stu.Assignments" 
+                                data-ng-options="a as (a.Name) for a in assignments" ></select>
                                 <span  data-ng-show="showChecks">
                                     <input data-ng-model="stu.selected" type="checkbox" if="assignment-{{$index}}-selected" />
                                     <label for="assignment-{{$index}}-selected"></label>
@@ -193,8 +198,7 @@
 
                         </tr>
                     </tbody>
-                </table>
-
+                </table> 
 
                 <footer class="table-footer">
                     <div class="row">
@@ -219,7 +223,8 @@
                                         boundary-links="true"></pagination>
                         </div>
                     </div>
-                </footer>
+                </footer>-->
+
             </div>
             <div class="col-md-12 text-center">
                 <button style="width:25%" type="button" data-ng-click='submitReferedStudents()' class="btn btn-info btn-lg">Submit</button>
