@@ -1,0 +1,33 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element" dropdown>
+                    <a class="dropdown-toggle" dropdown-toggle href>
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{{main.userName}}</strong>
+                            </span>
+                            <span class="text-muted text-xs block">option<b class="caret"></b></span>
+
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a  data-logout></a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+             
+            <li data-ng-repeat="item in tabs" ui-sref-active="active">
+                <a ui-sref="{{item.link}}">
+                    <i class="fa fa-{{item.icon}} "></i>
+                    <span class="nav-label">{{item.id}}</span>
+                </a>
+            </li>
+           
+        </ul>
+    </div>
+</nav>

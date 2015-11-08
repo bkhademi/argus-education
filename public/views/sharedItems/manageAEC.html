@@ -1,0 +1,169 @@
+<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="manageAECController">
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">Ms. De La Torre</span>, let's manage AEC! </h2>
+
+
+        <div class="panel-body">
+            <div class="table-filters">
+                <div class="text-center">
+
+                    <form role="form" name="form">
+                        <div class="form-group">
+                            <label class="font-noraml">Select AEC List Date</label>
+                            <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Buttons and Inputs  -->
+                    <ul class="list-group list-inline">
+                        <!-- AutoComplete Input Field -->
+                        <li style="width:35%">
+                            <form>
+                                <input type="text"
+                                       placeholder="Student"
+                                       class="form-control"
+                                       data-ng-model='selected2'
+                                       typeahead="stu as (stu.fn +' , ' +stu.ln+' '+stu.ID+' '+stu.GR+'th') for stu in refTable | filter:$viewValue"
+                                       typeahead-on-select="onSelect2($item, $model, $label)"
+                                       typeahead-append-to-body="true" />
+                            </form>
+                        </li>
+                        <!-- Present Button -->
+                        <li>
+                            <button type="button" class="btn  btn-primary " data-ng-click="openPresent(selected)" data-ng-disabled="!selected2">Present</button>
+                        </li>
+                        <!-- Reschedule Button -->
+                        <li>
+                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected2)" data-ng-disabled="!selected2">Re-Schedule</button>
+                        </li>
+                        <!-- Clear Button -->
+                        <li>
+                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected2)" data-ng-disabled="!selected2">Clear</button>
+                        </li>
+                    </ul>
+
+
+
+                </div>
+            </div>
+
+            <br />
+            <!--  Table Start -->
+                <div id="printSection">
+                    <div barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
+                </div>
+                <div style="float:none; margin:0 auto;" class="col-sm-12" data-ng-controller="tablesCtrl">
+                    <div data-ng-controller="printAssignmentsController" class="form-group">
+                        <button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
+                            <i class="fa fa-print"></i>Print Assignments
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
+                            <i class="fa fa-barcode"></i> Print Barcodes
+                        </button>
+                    </div>
+                    <div data-ng-controller="MultiplePassesController" class="form-group">
+                        <button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="generatePasses(passesTable)" data-ng-disabled="reftable.length">
+                            <i class="fa fa-ticket"></i> Print Passes
+                        </button>
+                    </div>
+                    <table class="table table-bordered table-striped table-responsive ">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="th">
+                                        First Name
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('fn') "
+                                              data-ng-class="{active: row == 'fn'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-fn') "
+                                              data-ng-class="{active: row == '-fn'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        Last Name
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('ln') "
+                                              data-ng-class="{active: row == 'ln'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-ln') "
+                                              data-ng-class="{active: row == '-ln'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        ID
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('ID') "
+                                              data-ng-class="{active: row == 'ID'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-ID') "
+                                              data-ng-class="{active: row == '-ID'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        Assignment
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('Assignment') "
+                                              data-ng-class="{active: row == 'Assignment'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-Assignment') "
+                                              data-ng-class="{active: row == '-Assignment'}"></span>
+                                    </div>
+                                </th>
+                                <th>Notified</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="stu in refTableCurrentPage">
+                                <td>{{stu.fn}}</td>
+                                <td>{{stu.ln}}</td>
+                                <td>{{stu.ID}}</td>
+                                <td>{{stu.Assignments[0].name}}<span data-ng-show="stu.Assignments.length>1" style="font-weight:700">...</span></td>
+                                <td>
+                                    <label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+                                    <label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <footer class="table-footer">
+                        <div class="row">
+                            <div class="col-md-6 page-num-info">
+                                <span>
+                                    Show
+                                    <select data-ng-model="numPerPage"
+                                            data-ng-options="num for num in numPerPageOpt"
+                                            data-ng-change="onNumPerPageChange()"></select>
+                                    entries per page
+                                </span>
+                            </div>
+                            <div class="col-md-6 text-right pagination-container">
+                                <pagination class="pagination-sm"
+                                            ng-model="currentPage"
+                                            total-items="refTable.length"
+                                            max-size="4"
+                                            ng-change="select(currentPage)"
+                                            items-per-page="numPerPage"
+                                            rotate="false"
+                                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                                            boundary-links="true"></pagination>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+
+    </div>
+
+</section>
+

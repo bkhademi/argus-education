@@ -1,0 +1,51 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+    currentDate -> changes as the date changes $scope.rescheduleForm.resDate.$modelValue
+    -->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">Re-Schedule - {{student.fn + " " + student.ln}}</h4>
+</div>
+<div class="modal-body ">
+    
+    <form name="form" role="form" class="form">
+        <div class="form-group col-lg-offset-2 col-sm-12 col-md-6" >
+            <label >Select a Date to Re-Schedule </label>
+            <div class="input-group date" style="margin:0 auto">
+                
+                <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <div class="form-group col-sm-12 col-md-3" >
+            <label>Excused</label>
+            <div class="switch">
+                <div class="onoffswitch" >
+                    <input type="checkbox" class="onoffswitch-checkbox" id="stuNotified" data-ng-model="excused">
+                    <label class="onoffswitch-label" for="stuNotified">
+                        <span class="onoffswitch-inner yesno"></span>
+                        <span class="onoffswitch-switch yesno"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div  class="form-group" >
+            <textarea id="addComment" type="text"
+                      placeholder="Add Comment"
+                      class="form-control auto-resize"
+                      data-ng-model="comment"
+                      data-ng-keyup=""></textarea>
+        </div>
+        <br />
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+</div>
+

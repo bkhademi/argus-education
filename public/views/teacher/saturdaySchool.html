@@ -1,0 +1,72 @@
+﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="saturdaySchoolController">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <p class="size-h3"> Saturday School </p>
+        </div>
+        <div class="ibox-content">
+            <div class="text-center">
+                <span class="size-h4" style="float:left">
+                    <a data-ng-click="openConfirmation()"> Brandon Hernandez </a>
+                </span>
+                <span class="size-h4" style="float:right">
+                    {{currentDate}}
+                </span>
+                <ul class="list-group list-inline">
+
+                    <li style="width:25%">
+                        <form>
+                            <input type="text"
+                                   placeholder="Student"
+                                   class="form-control input-lg"
+                                   data-ng-model="selected2"
+                                   typeahead="stu as ('<h4>'+stu.fn +' , ' +stu.ln+' <i>'+stu.ID+' <strong>'+stu.GR+'th') for stu in teacherStudents | filter:$viewValue"
+                                   typeahead-on-select='onSelect($item, $model, $label)' />
+                        </form>
+                    </li>
+                    <li>
+                        <button type="button" style="padding:0 5" class="btn  btn-info " data-ng-disabled="!selectedStudent" data-ng-click="sign()"><i class="fa fa-arrow-circle-right fa-2x"></i></button>
+                    </li>
+                </ul>
+                <br />
+                <br />
+
+                <ul class="list-group list-inline">
+                    <li>
+                        <button type="button" class="btn btn-lg btn-primary " data-ng-click="openConfirmation()">Finish</button>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Finish Saturday Confirmation Modal-->
+<script type="text/ng-template" id="ConfirmationModal.html">
+    <div class="modal-header text-center" >
+        <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Confirm Submition</h4>
+    </div>  
+    <div class="modal-body text-center">
+        <p> Are you sure you want to finish?</p>
+    </div> 
+    <div class="modal-footer">
+        <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+        <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<!-- Sign Out Confirmation Modal -->
+<script type="text/ng-template" id="SignoutModal.html">
+    <div class="modal-header">
+        <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">{{title}}</h4>
+    </div>
+    <div class="modal-body text-center">
+        <p> Are you sure you want to sign out?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+        <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+    </div>
+</script>

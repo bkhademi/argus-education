@@ -1,0 +1,187 @@
+* {
+  box-sizing: border-box;
+}
+.gauge_small {
+  position: relative;
+  margin: 15px auto;
+  width: 200px;
+  height: 100px;
+  background: #efefef;
+  border-radius: 200px 200px 0 0;
+  overflow: hidden;
+  box-shadow: 0 1px 5px #999;
+}
+.gauge_small:before {
+  display: block;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -40%;
+  width: 80%;
+  height: 80%;
+  background: #efefef;
+  box-shadow: 0 0 3px #999;
+  border-radius: 80px 80px 0 0;
+}
+.gauge_small:after {
+  display: block;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  margin-left: -25%;
+  width: 50%;
+  height: 50%;
+  background: #efefef;
+  box-shadow: 0 3px 3px -2px #999999 inset;
+  border-radius: 50px 50px 0 0;
+}
+.gauge_small .needle {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  z-index: 2;
+  margin-left: -8px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 75px solid #000;
+  border-radius: 0 0 10px 10px;
+  transform: rotate(-22.5deg);
+  transform-origin: center bottom;
+  animation: needleFair 4s;
+}
+.gauge_small .category {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  background: #ddd;
+  border-radius: 0 100px 0 0;
+  transform-origin: bottom left;
+}
+.gauge_small .category .char {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 6px;
+  height: 90px;
+  color: #555;
+  text-transform: uppercase;
+  font-size: 8px;
+  font-weight: bold;
+  transform-origin: bottom center;
+}
+.gauge_small .category.poor {
+  background: #BAABAB;
+  transform: rotate(-90deg);
+}
+.gauge_small .category.poor .char:nth-child(1) {
+  transform: rotate(14deg);
+}
+.gauge_small .category.poor .char:nth-child(2) {
+  transform: rotate(18deg);
+}
+.gauge_small .category.poor .char:nth-child(3) {
+  transform: rotate(22deg);
+}
+.gauge_small .category.poor .char:nth-child(4) {
+  transform: rotate(26deg);
+}
+.gauge_small .category.fair {
+  background: #BA7A7B;
+  transform: rotate(-45deg);
+}
+.gauge_small .category.fair .char:nth-child(1) {
+  transform: rotate(14deg);
+}
+.gauge_small .category.fair .char:nth-child(2) {
+  transform: rotate(18deg);
+}
+.gauge_small .category.fair .char:nth-child(3) {
+  transform: rotate(22deg);
+}
+.gauge_small .category.fair .char:nth-child(4) {
+  transform: rotate(26deg);
+}
+.gauge_small .category.good {
+  background: #BA5555;
+  transform: rotate(0deg);
+}
+.gauge_small .category.good .char:nth-child(1) {
+  transform: rotate(14deg);
+}
+.gauge_small .category.good .char:nth-child(2) {
+  transform: rotate(18deg);
+}
+.gauge_small .category.good .char:nth-child(3) {
+  transform: rotate(22deg);
+}
+.gauge_small .category.good .char:nth-child(4) {
+  transform: rotate(26deg);
+}
+.gauge_small .category.excellent {
+  background: #BA2425;
+  transform: rotate(45deg);
+}
+.gauge_small .category.excellent .char:nth-child(1) {
+  transform: rotate(6deg);
+}
+.gauge_small .category.excellent .char:nth-child(2) {
+  transform: rotate(10deg);
+}
+.gauge_small .category.excellent .char:nth-child(3) {
+  transform: rotate(14deg);
+}
+.gauge_small .category.excellent .char:nth-child(4) {
+  transform: rotate(18deg);
+}
+.gauge_small .category.excellent .char:nth-child(5) {
+  transform: rotate(22deg);
+}
+.gauge_small .category.excellent .char:nth-child(6) {
+  transform: rotate(26deg);
+}
+.gauge_small .category.excellent .char:nth-child(7) {
+  transform: rotate(30deg);
+}
+.gauge_small .category.excellent .char:nth-child(8) {
+  transform: rotate(34deg);
+}
+.gauge_small .category.excellent .char:nth-child(9) {
+  transform: rotate(38deg);
+}
+@keyframes needlePoor {
+  0%{
+    transform: rotate(-90deg);
+  }
+  33% {
+    transform: rotate(-67.5deg);
+  }
+}
+@keyframes needleFair {
+  0%{
+    transform: rotate(-90deg);
+  }
+  33% {
+    transform: rotate(-22.5deg);
+  }
+}
+@keyframes needleGood {
+  0%{
+    transform: rotate(-90deg);
+  }
+  33% {
+    transform: rotate(22.5deg);
+  }
+}
+@keyframes needleExcellent {
+  0%{
+    transform: rotate(-90deg);
+  }
+  33% {
+    transform: rotate(67.5deg);
+  }
+}

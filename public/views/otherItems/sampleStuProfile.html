@@ -1,0 +1,256 @@
+﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="ProfileCtrl" style="">
+
+    <div class="left" style="float:left;width:49% ">
+        <div class="ibox float-e-margins ">
+            <div class="ibox-title">
+                <div ibox-tools></div>
+            </div>
+            <div class="ibox-content">
+                <div class="widget-head-color-box bg-primary p-lg text-center">
+                    <div class="m-b-md">
+                        <h2 class="font-bold no-margins">
+                            {{student.fn + " " + student.ln}}
+                        </h2>
+                        <small>class of 2015</small>
+                    </div>
+                    <img src="../Client/Images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile">
+
+                    <div>
+                        <span>ID {{student.ID}}</span> |
+                        <span>Grade Level {{student.GR}}</span> |
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title" >
+                <h5> <span class="glyphicon glyphicon-th"></span> Student Information</h5>
+                <div ibox-tools></div>
+
+            </div>
+            <div class="ibox-content">
+                <div class="tabs-container">
+                    <tabset>
+                        <tab >
+                            <tab-heading>
+                                <i class="fa fa-dashcube "></i>
+                                Class Schedule
+                            </tab-heading>
+                            <table class=" table table-striped table-bordered">
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Class Name</th>
+                                    <th>Teacher</th>
+                                    <th>Room</th>
+                                </tr>
+                                <!-- Data -->
+                                <tr data-ng-repeat="class in schedule ">
+                                    <td>{{class.period}}</td>
+                                    <td>{{class.className}}</td>
+                                    <td>{{class.teacher}}</td>
+                                    <td>{{class.room}}</td>
+                                </tr>
+                            </table>
+                        </tab>
+                        <tab >
+                            <tab-heading>
+                                <i class="fa fa-mobile "></i>
+                                Parent Contact 
+                            </tab-heading>
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>phone</th>
+                                    <th>mphone</th>
+                                    <th>email</th>
+                                </tr>
+                                <!-- Data -->
+                                <tr data-ng-repeat="parent in parents">
+                                    <td>{{parent.fn + parent.ln}}</td>
+                                    <td>{{parent.phone}}</td>
+                                    <td>{{parent.mphone}}</td>
+                                    <td style="text-overflow:ellipsis;">{{parent.email}}</td>
+                                </tr>
+                            </table>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <i class="fa fa-ticket "></i>
+                                Create a Pass
+                            </tab-heading>
+                                <div data-ng-controller="MultiplePassesController">
+                                    <table class="table ">
+                                        <tr class=" no-borders">
+                                            <td style="border-top:0">
+                                                <label>Go To <input data-ng-model="location" type="text" /> </label>
+                                            </td>
+                                        </tr>
+                                        <tr >
+                                            <td style="border-top:0" class="radio" data-ng-repeat="time in whenToSend">
+                                                <label data-ng-click="onRadioSelect($index)">
+                                                    <input type="radio" name="when" />{{time}}
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border-top:0">
+                                                <button class="btn btn-success" value="Create" data-ng-click="generatePass(student)">
+                                                    <i class="fa fa-print"></i>
+                                                    Create
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                        </tab>
+                    </tabset>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="right" style="float:right; width:49%">
+        <!-- Date Specific Activity -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><span class="glyphicon glyphicon-th"></span> Date Specific Activity  </h5>
+                <div ibox-tools></div>
+
+            </div>
+            <div class="ibox-content">
+                <div class="filters">
+                    <form role="form" name="form">
+                        <div class="form-group text-center" id="data_1">
+                            <label class="font-noraml">Select a date</label>
+                            <div class="input-group date col-md-6 col-sm-12" style="margin:0 auto">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </form>
+                    <br />
+                    <div  class="text-center">
+                        <form role="form">
+                            <!--
+                    <input type="checkbox" data-ng-model="filter[act]" data-ng-click="changeBool($index)"><strong data-ng-class="checks[$index]?colors[$index%3]:''">{{act}}</strong> -->
+                            <div class="btn-group">
+                                <label data-ng-repeat="act in getActivities()" class="btn btn-default ng-pristine ng-untouched ng-valid" ng-model="filter[act]" btn-checkbox="">{{act}} <i data-ng-show="filter[act]"class="badge">5</i></label>
+                                
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+
+                <table class="table table-striped table-bordered" id="dateSpecificActivity" data-ng-hide="showDetail">
+                    <thead>
+                        <tr>
+                            <th> Date </th>
+                            <th>Activity </th>
+                            <th> Status</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="height: 200px;overflow-y: auto;">
+                    <table class="table table-striped table-bordered" id="dateSpecificActivity" data-ng-hide="showDetail">
+                        <tbody>
+                            <tr data-ng-repeat="activity in filtered=(activities | filter:filterByCategory)" data-ng-click="toggleShowDetail($index)">
+                                <td>{{activity.date}}</td>
+                                <td>{{activity.activity}}</td>
+                                <td>
+                                    <label class="btn btn-primary  ng-valid" ng-model="activity.parentNotified" btn-checkbox=""> <i class="fa fa-home"></i></label>
+                                    <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.studentNotified" btn-checkbox=""><i class="fa fa-user"></i></label>
+                                    <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.finished" btn-checkbox=""><i class="fa fa-check"></i></label>
+                            
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="activityContainer" data-ng-show="showDetail" data-ng-click="toggleShowDetail()">
+                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html' ">
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title" >
+                <h5><span class="glyphicon glyphicon-th"></span> Comments</h5>
+                <div ibox-tools></div>
+
+            </div>
+            <div class="ibox-content">
+                <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                    <thead>
+                        <tr>
+                            <th> Date</th>
+                            <th> Comment</th>
+                            <th> staff</th>
+
+                        </tr>
+                    </thead>
+                </table>
+
+                <div style="height: 200px;overflow-y: auto;">
+
+                    <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                        <tbody>
+                            <tr ng-repeat="com in  filtered=(activities | filter:filterByCategory)" data-ng-click="toggleShowComment($index)"
+                                class="warning"
+                                close="closeAlert($index)">
+                                <td> {{com.date}} </td>
+                                <td>{{com.Comment}} </td>
+                                <td>Mr. {{com.Staff}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="commentContainer" data-ng-show="showComment" data-ng-click="toggleShowComment()">
+                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html' ">
+                        </span>
+                    </div>
+                </div>
+                    <div class="form-group">
+
+                        <div class="row">
+                            <form class="col-sm-8">
+                                <textarea style="float:left;" id="addComment" type="text"
+                                          placeholder="Student"
+                                          class="form-control auto-resize"
+                                          data-ng-model="comment"
+                                          data-ng-keyup="search()"></textarea>
+                            </form>
+                            <button class='btn profilebtn col-sm-4 btn-lg' data-ng-click="addComment()">Add</button>
+                        </div>
+                        
+
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+<style>
+    .profilebtn {
+        background-color: rgb(253,215,92);
+    }
+
+        .profilebtn:active {
+            background-color: rgb(255, 120, 87);
+        }
+
+        .profilebtn:hover {
+            background-color: rgb(16,160,72);
+        }
+
+</style>

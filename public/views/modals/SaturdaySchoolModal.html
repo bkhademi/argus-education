@@ -1,0 +1,25 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, 
+
+    -->
+<div class="modal-header text-center">
+    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">{{title}} - {{student.fn  + " " + student.ln}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div class="text-center">
+        <div style="">
+            <canvas width="517" height="97" style="padding:0; margin:0; border:dashed 2px black" drawing></canvas>
+        </div> 
+       
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-success" data-ng-click="submit()">Submit</button>
+    <button class="btn btn-info" data-ng-click="cancel()">Cancel</button>
+</div>
+
+
+

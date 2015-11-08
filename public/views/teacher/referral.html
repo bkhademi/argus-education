@@ -1,0 +1,231 @@
+<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="referalController" >
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">Mr. Hernandez</span>, lets create references!</h2>
+
+        <div class="panel-body">
+            <div class="table-filters ">
+                <div class="text-center">
+
+                    <form role="form" name="form">
+                        <div class="form-group">
+                            <label class="font-noraml">Select AEC List Date</label>
+                            <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+
+                        </div>
+                    </form>
+                    <br />
+                     <!-- Buttons and Inputs  <strong>'+stu.GR+ -->
+                    <ul class="list-group list-inline "> 
+                        <li style="width:25%;" >
+                            <form>
+                                <input type="text"
+                                       placeholder="Enter Student Info"
+                                       class="form-control"
+                                       data-ng-model="selected2"
+                                       typeahead="stu as ('<h4>' + stu.FirstName +' , ' +stu.LastName+' <i>'+stu.UserName) for stu in teacherStudents | filter:$viewValue"
+                                       typeahead-on-select='onSelect($item, $model, $label)'
+                                       typeahead-append-to-body="true"
+                                       typeahead-editable="false"/>
+                                   
+                                <!--  
+                                <select chosen 
+                                        class=" chosen-select form-control"
+                                        data-placeholder="Enter student info"
+                                        data-ng-model="selected3"
+                                        data-ng-options="s as (s.fn +' '+s.ln+' '+s.ID+' '+s.GR ) for s in teacherStudents  | filter:$viewValue"
+                                        ></select>
+                                -->
+                            </form>
+                        </li >
+                        <!--
+                        <li>
+                            <button type="button" class="btn  bg-green">Add</button>
+                        </li>
+                        -->
+                        <li style="width:25%;">
+                            <form>
+                                <select multiple chosen
+                                        class="chosen-select form-control"
+                                        data-placeholder="Select a homework"
+                                        data-ng-model="selected3"
+                                        data-ng-options="a as (a.name) for a in assignments"></select>
+                            </form>
+                            <!-- 
+                            <form>
+                                <input type="text"
+                                       placeholder="Enter Homework Name"
+                                       class="form-control"
+                                       data-ng-model="selected3"
+                                       typeahead="assign as (assign.name) for assign in  assignments | filter:$viewValue"
+                                       typeahead-append-to-body="true"
+                                       typeahead-editable="false" />
+                            </form>
+                            -->
+                        </li>
+
+                        <li class="">
+                            <button type="button" class="btn  btn-primary" data-ng-click="assignToAll()" data-ng-disabled="selected3.length ==0 || refTable.length == 0  ">Assign to All</button>
+                        </li>
+
+                        <li class="">
+                            <button type="button" class="btn  btn-primary" data-ng-click="showChecks?assignSpecific2():assignSpecific()" data-ng-disabled="selected3.length ==0 || refTable.length == 0">Assign{{showChecks?'':' Specific'}}</button>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+            <br />
+            <!-- 
+            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
+                <thead>
+                    <tr>
+
+                        <th data-toggle="true">First Name</th>
+                        <th>Last Name</th>
+                        <th>ID</th>
+                        <th>Grade</th>
+                        <th>Assignment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="stu in refTable">
+                        <td>{{stu.fn}}</td>
+                        <td>{{stu.ln}}</td>
+                        <td>{{stu.ID}}</td>
+                        <td>{{stu.GR}}</td>
+                        <td>
+                            <select multiple chosen class="chosen-select" style="width:600px" placeholder="Select a homework" data-ng-model="stu.Assignments" data-ng-options="a as (a.name) for a in assignments"></select>
+
+                        </td>
+
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">
+                            <ul class="pagination pull-right"></ul>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+                -->
+            <!--  Table Start -->
+            <div class="col-sm-12"  data-ng-controller="tablesCtrl">
+                <table class="table table-bordered table-striped table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="th">
+                                    First Name
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('fn') "
+                                          data-ng-class="{active: row == 'fn'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-fn') "
+                                          data-ng-class="{active: row == '-fn'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Last Name
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('ln') "
+                                          data-ng-class="{active: row == 'ln'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-ln') "
+                                          data-ng-class="{active: row == '-ln'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    ID
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('ID') "
+                                          data-ng-class="{active: row == 'ID'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-ID') "
+                                          data-ng-class="{active: row == '-ID'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Grade
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('Grade') "
+                                          data-ng-class="{active: row == 'Grade'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-Grade') "
+                                          data-ng-class="{active: row == '-Grade'}"></span>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    Assignment
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('Assignments') "
+                                          data-ng-class="{active: row == 'Assignments'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-Assignments') "
+                                          data-ng-class="{active: row == '-Assignments'}"></span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="stu in refTableCurrentPage">
+                            <td>{{stu.fn}}</td>
+                            <td>{{stu.ln}}</td>
+                            <td>{{stu.ID}}</td>
+                            <td>{{stu.GR}}</td>
+                            <td >
+                                <select multiple chosen class="chosen-select" style="width:600px" data-placeholder="Select a homework" data-ng-model="stu.Assignments" data-ng-options="a as (a.name) for a in assignments" ></select>
+                                <span  data-ng-show="showChecks">
+                                    <input data-ng-model="stu.selected" type="checkbox" if="assignment-{{$index}}-selected" />
+                                    <label for="assignment-{{$index}}-selected"></label>
+                                </span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <footer class="table-footer">
+                    <div class="row">
+                        <div class="col-md-6 page-num-info">
+                            <span>
+                                Show
+                                <select data-ng-model="numPerPage"
+                                        data-ng-options="num for num in numPerPageOpt"
+                                        data-ng-change="onNumPerPageChange()"></select>
+                                entries per page
+                            </span>
+                        </div>
+                        <div class="col-md-6 text-right pagination-container">
+                            <pagination class="pagination-sm"
+                                        ng-model="currentPage"
+                                        total-items="refTable.length"
+                                        max-size="4"
+                                        ng-change="select(currentPage)"
+                                        items-per-page="numPerPage"
+                                        rotate="false"
+                                        previous-text="&lsaquo;" next-text="&rsaquo;"
+                                        boundary-links="true"></pagination>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+            <div class="col-md-12 text-center">
+                <button style="width:25%" type="button" data-ng-click='submitReferedStudents()' class="btn btn-info btn-lg">Submit</button>
+            </div>
+
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,48 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-xs-12 col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        Usage
+                        <small></small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content text-center">
+                    <div  data-ng-controller="usageChartCtrl">
+                        <canvas linechart options="lineOptions" data="lineData" height="140" responsive=true></canvas>
+                    </div>
+                    <br />
+                    <p class="size-h4">Chart Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-lg-6">
+            
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Percent Velocity Completion
+                        <small>extra info</small>
+                    </h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content text-center">
+                    <strong> Overall performance </strong>
+
+                    <div id="overAllGauge" class="gauge">
+                        <div class="category poor"> <span class="char">P</span><span class="char">o</span><span class="char">o</span><span class="char">r</span></div>
+                        <div class="category fair"> <span class="char">F</span><span class="char">a</span><span class="char">i</span><span class="char">r</span></div>
+                        <div class="category good"><span class="char">G</span><span class="char">o</span><span class="char">o</span><span class="char">d</span></div>
+                        <div class="category excellent"><span class="char">E</span><span class="char">x</span><span class="char">c</span><span class="char">e</span><span class="char">l</span><span class="char">l</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></div>
+                        <div class="needle"></div>
+
+                    </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>

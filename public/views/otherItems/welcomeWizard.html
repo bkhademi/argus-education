@@ -1,0 +1,42 @@
+
+<section class="wrapper wrapper-content animated fadeInRight " >
+
+    <div class=" wizard">
+        <h2>
+            Welcome Wizard
+        </h2>
+        <div class="steps clearfix">
+            <ul>
+
+                <li data-ui-sref-active="current">
+                    <a data-ui-sref=".step_one" class="btn-default"><span>1</span> Welcome</a>
+                </li>
+                <li data-ui-sref-active="current">
+                    <a data-ui-sref=".step_two" class="btn-default"><span>2</span> Upload Your Files</a>
+                </li>
+                <li data-ui-sref-active="current">
+                    <a data-ui-sref=".step_three" class="btn-default"><span>3</span> Finish</a>
+                </li>
+            </ul>
+        </div>
+        <div class="wizard">
+            <div class="content " style="margin:auto auto">
+
+                <form name="signupForm" data-ng-submit="processForm()" class="p-lg ">
+
+                    <!-- our nested state views will be injected here -->
+                    <div id="form-views" data-ui-view></div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+</section>
+<style>
+    html, body, div,fieldset, form, .row{
+        height:100%;
+    }
+
+    </style>

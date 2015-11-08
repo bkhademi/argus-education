@@ -1,0 +1,541 @@
+﻿
+<link rel="stylesheet" type="text/css" href="css/popup.css">
+<link rel="stylesheet" type="text/css" href="css/horizontalBar.css">
+<link rel="stylesheet" type="text/css" href="css/tooltip.css">
+
+<div id="popup" class="container pop-up container " style="float:left; min-width:20%;max-width:40%;font-size-adjust:.50; ">
+    <div class="row">
+        <div class="box small-6 large-centered ">
+            <a href="#" class="close-button">&#10006;</a>
+            <div class="wrap">
+                <h2 class="text-centered">Courses</h2>
+                <div class="barGraph">
+                    <ul class="graph">
+                        <p>AP Physics - 1254A</p>
+                        <span data-tooltip="AP Physics | Teacher Smith | June 27" class="graph-barBack">
+                            <li class="graph-bar" data-value="98" style="background-color:#BA2425;">
+                            </li>
+                        </span>
+                        <p>Introduction to Engineering - 4559A </p>
+                        <span data-tooltip="Introduction to Engineering | Teacher Michael | June 17" class="graph-barBack">
+                            <li class="graph-bar" data-value="85" style="background-color:#BA2425;">
+                            </li>
+                        </span>
+                        <p>Human Psychology - 2349A </p>
+                        <span data-tooltip="Human Psychology | Teacher Reid | June 22" class="graph-barBack">
+                            <li class="graph-bar" data-value="78.5" style="background-color:#BA5555;">
+                            </li>
+                        </span>
+                        <p>Physical Education - 88ACB</p>
+                        <span data-tooltip="Physical Education | Teacher Stallman | July 27" class="graph-barBack">
+                            <li class="graph-bar" data-value="30" style="background-color:#BAABAB;">
+                            </li>
+                        </span>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="popupAG" class="container pop-up container " style="float:left; min-width:20%;max-width:40%;font-size-adjust:.50; ">
+    <div class="row">
+        <div class="box small-6 large-centered ">
+            <a href="#" class="close-button">&#10006;</a>
+            <div class="wrap">
+                <h2 class="text-centered">A-G</h2>
+                <div class="barGraph">
+                    <ul class="graph">
+                        <p>A Arts and Humanities</p>
+                        <span class="graph-barBack">
+                            <li class="graph-bar" data-value="98" style="background-color:#BA2425;">
+                            </li>
+                        </span>
+                        <p>B Science and Mathematics </p>
+                        <span class="graph-barBack">
+                            <li class="graph-bar" data-value="25" style="background-color:#BAABAB;">
+                            </li>
+                        </span>
+                        <p>C English Writing</p>
+                        <span class="graph-barBack">
+                            <li class="graph-bar" data-value="78.5" style="background-color:#BA5555;">
+                            </li>
+                        </span>
+                        <p>D Social Sciences</p>
+                        <span class="graph-barBack">
+                            <li class="graph-bar" data-value="95" style="background-color:#BA2425;">
+                            </li>
+                        </span>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popupSAT" class="container pop-up container " style="float:left; min-width:20%;max-width:40%;font-size-adjust:.50; ">
+    <div class="row">
+        <div class="box small-6 large-centered ">
+            <a href="#" class="close-button">&#10006;</a>
+            <div class="wrap">
+                <h2 class="text-centered">SAT/ACT</h2>
+                <div style="height: 150px;overflow:hidden;
+height:1%;">
+                    <div class=" row">
+                        <div class='col-md-6'>
+                            <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                                <tr>
+                                    <th> SAT</th>
+                                    <th> ACT</th>
+                                </tr>
+                                <tr>
+                                    <td> 1700 </td>
+                                    <td>57</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                                <tr>
+                                    <th> School</th>
+                                    <th> Probability</th>
+                                </tr>
+                                <tr>
+                                    <td> UCSD </td>
+                                    <td>65% </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- <div><div id= "plot" ></div></div> -->
+                    <div class="ibox" data-ng-controller="chartistCtrl">
+                        <div class="ibox-title">
+                            <h5>UCSD Admissions Scattergram</h5>
+                        </div>
+                        <div id="scatterDiv" class="ibox-content">
+                            <chartist class="ct-chart ct-perfect-fourth" chartist-data="scatterData" style="width:80%; height:100%;" chartist-chart-options="scatterOptions" chartist-chart-type="Line"></chartist>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popupExtra" class="container pop-up container " style="float:left; min-width:20%;max-width:40%;font-size-adjust:.50; ">
+    <div class="row">
+        <div class="box small-6 large-centered ">
+            <a href="#" class="close-button">&#10006;</a>
+            <div class="wrap">
+                <h2 class="text-centered">Extracurricular</h2>
+                <div style="height: 150px;overflow:hidden;
+height:1%;">
+                    <button style="float:right;" type="button" class="btn btn-w-m btn-success">Print Resume</button>
+                    <div class=" row">
+                        <div class='col-md-12'>
+                            <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                                <tr>
+                                    <th> Organization</th>
+                                    <th> Description</th>
+                                    <th> Hours</th>
+                                    <th> Date</th>
+                                </tr>
+                                <tr>
+                                    <td> Rosa Parks Elementary </td>
+                                    <td>Volunteer as a teacher assistant and lead teaching activities with elementary students</td>
+                                    <td>20hr/month</td>
+                                    <td>August 2014 - June 2015</td>
+                                </tr>
+                                <tr>
+                                    <td> Scrips Hospital </td>
+                                    <td>Front desk clerk and form submitter</td>
+                                    <td>10hr/month</td>
+                                    <td>September 2015 - Current Position</td>
+                                </tr>
+                                <tr>
+                                    <td> Lacross Team </td>
+                                    <td>School team Defender - Win Championship</td>
+                                    <td>20hr/month</td>
+                                    <td>August 2014 - Currently on the team</td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="profileView" class="wrapper wrapper-content animated fadeInRight" data-ng-controller="A-GProfileCtrl" style="">
+    <div class="left" style="float:left;width:49% ">
+
+        
+        <div class="ibox float-e-margins ">
+            <div class="ibox-title">
+                <div ibox-tools></div>
+            </div>
+            <div class="ibox-content">
+                <div class="widget-head-color-box bg-primary p-lg text-center">
+                    <div class="m-b-md">
+                        <h2 class="font-bold no-margins">
+                            Brandon Hermandez
+                        </h2>
+                        <small>class of 2015</small>
+                    </div>
+                    <img src="../Client/Images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile">
+
+                    <div>
+                        <span>ID 8656845</span> |
+                        <span>Grade Level 12</span> 
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5> <span class="glyphicon glyphicon-th"></span> Student Information</h5>
+                <div ibox-tools></div>
+
+            </div>
+            <div class="ibox-content">
+                <div class="tabs-container">
+                    <tabset>
+                        <tab>
+                            <tab-heading>
+                                <i class="fa fa-dashcube "></i>
+                                Class Schedule
+                            </tab-heading>
+                            <table class="table table-striped table-bordered" id="studentSchedule">
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Class Name</th>
+                                    <th>Teacher</th>
+                                    <th>Grade</th>
+                                </tr>
+                                <!-- Data -->
+                                <tr data-ng-repeat="class in schedule ">
+                                    <td>{{class.period}}</td>
+                                    <td>{{class.className}}</td>
+                                    <td>{{class.teacher}}</td>
+                                    <td>{{class.room}}</td>
+                                </tr>
+                            </table>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <i class="fa fa-mobile "></i>
+                                Parent Contact
+                            </tab-heading>
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>phone</th>
+                                    <th>mphone</th>
+                                    <th>email</th>
+                                </tr>
+                                <!-- Data -->
+                                <tr data-ng-repeat="parent in parents">
+                                    <td>{{parent.fn + parent.ln}}</td>
+                                    <td>{{parent.phone}}</td>
+                                    <td>{{parent.mphone}}</td>
+                                    <td style="text-overflow:ellipsis;">{{parent.email}}</td>
+                                </tr>
+                            </table>
+                        </tab>
+                        <tab>
+                            <tab-heading>
+                                <i class="fa fa-ticket "></i>
+                                Create a Pass
+                            </tab-heading>
+                            <div data-ng-controller="MultiplePassesController">
+                                <table class="table ">
+                                    <tr class=" no-borders">
+                                        <td style="border-top:0">
+                                            <label>Go To <input data-ng-model="location" type="text" /> </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:0" class="radio" data-ng-repeat="time in whenToSend">
+                                            <label data-ng-click="onRadioSelect($index)">
+                                                <input type="radio" name="when" />{{time}}
+                                            </label>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top:0">
+                                            <button class="btn btn-success" value="Create" data-ng-click="generatePass()">
+                                                <i class="fa fa-print"></i>
+                                                Create
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="right" style="float:right; width:49%">
+        <!-- College Readiness -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><span class="glyphicon glyphicon-th"></span> College Readiness  </h5>
+                <div ibox-tools></div>        
+                </div>
+            <!--
+            <div class="panel-body text-center" style="height:auto;overflow-y:hidden;">
+
+                <canvas data-gauge-chart="" data-data="gaugeChart3.data" data-options="gaugeChart3.options" style="width: 440px; height: 220px; " class="ng-isolate-scope"></canvas>
+            </div>
+                -->
+            <div class="ibox-content">
+                <div class="row text-center">
+                    <div class="col-sm-12" data-ng-click="showMain=false" data-ng-show="showMain">
+                        <div id="overAllGauge" ng-controller="RadialGaugeA-G1" style="margin:auto auto;">
+                            <p> Overall performance </p>
+                            <gauge-regular position="overallScore"></gauge-regular>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center" data-ng-hide="showMain">
+                    <div class="col-sm-6">
+                        <div id="gpa_gauge" ng-controller="RadialGaugeA-G1" style="margin:auto auto;">
+                            <p> GPA </p>
+                            <gauge-small position="gpaScore" ></gauge-small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="ag_gauge" ng-controller="RadialGaugeA-G1" style="margin:auto auto;">
+                            <p> A-G Requirements </p>
+                            <gauge-small position="agScore" data-ng-click="openAGModal()"></gauge-small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="sat_gauge" ng-controller="RadialGaugeA-G1" style="margin:auto auto;">
+                            <p> SAT/ACT </p>
+                            <gauge-small position="satActScore"></gauge-small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="extra_gauge" ng-controller="RadialGaugeA-G1" style="margin:auto auto;">
+                            <p>Extra Curricular</p>
+                            <gauge-small position="extraScore"></gauge-small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Comments -->
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5><span class="glyphicon glyphicon-th"></span> Comments</h5>
+                <div ibox-tools></div>
+
+            </div>
+            <div class="ibox-content">
+                <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                    <thead>
+                        <tr>
+                            <th> Date</th>
+                            <th> Comment</th>
+                            <th> staff</th>
+
+                        </tr>
+                    </thead>
+                </table>
+
+                <div style="height: 200px;overflow-y: auto;">
+
+                    <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
+                        <tbody>
+                            <tr ng-repeat="com in  adminComments" data-ng-click="toggleShowComment($index)"
+                                class="warning"
+                                close="closeAlert($index)">
+                                <td> {{com.date}} </td>
+                                <td>{{com.comment}} </td>
+                                <td>Mr. {{com.author}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="commentContainer" data-ng-show="showComment" data-ng-click="toggleShowComment()">
+                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html' ">
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="row">
+                        <form class="col-sm-8">
+                            <textarea style="float:left;" id="addComment" type="text"
+                                      placeholder="Student"
+                                      class="form-control auto-resize"
+                                      data-ng-model="comment"
+                                      data-ng-keyup="search()"></textarea>
+                        </form>
+                        <button class='btn profilebtn col-sm-4 btn-lg' data-ng-click="addComment()">Add</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#popup').hide();
+        $('#popupSAT').show();
+        $('#popupSAT').hide();
+        $('#popupAG').hide();
+        $("#gpa_gauge").hide();
+        $("#ag_gauge").hide();
+        $("#sat_gauge").hide();
+        $("#extra_gauge").hide();
+        $("#popupExtra").hide();
+
+
+    });
+    $('#overAllGauge').click(function () {
+        $('#popup').hide();
+        $('#overAllGauge').hide();
+        $("#gpa_gauge").show();
+        $("#sat_gauge").show();
+        $("#extra_gauge").show();
+        $("#ag_gauge").show();
+
+    });
+
+
+
+    $('#gpa_gauge').click(function () {
+        //$('.pop-up').fadeIn(1000);
+        $('#profileView').removeClass('blur-out');
+        $('#profileView').addClass('blur-in');
+        $('#popup').show();
+        // Animate the width of the barChart class
+        $('.graph-bar').each(function () {
+            var dataWidth = $(this).data('value');
+            $(this).css("width", dataWidth + "%");
+        });
+
+    });
+    
+    $('#ag_gauge').click(function () {
+        //$('.pop-up').fadeIn(1000);
+        $('#profileView').removeClass('blur-out');
+        $('#profileView').addClass('blur-in');
+        $('#popupAG').show();
+
+        // Animate the width of the barChart class
+        $('.graph-bar').each(function () {
+            var dataWidth = $(this).data('value');
+            $(this).css("width", dataWidth + "%");
+        });
+
+    });
+    
+    $('#sat_gauge').click(function () {
+        //$('.pop-up').fadeIn(1000);
+        $('#profileView').removeClass('blur-out');
+        $('#profileView').addClass('blur-in');
+        $('#popupSAT').show();
+        window.dispatchEvent(new Event('resize'));
+        // Animate the width of the barChart class
+        $('.graph-bar').each(function () {
+            var dataWidth = $(this).data('value');
+            $(this).css("width", dataWidth + "%");
+        });
+
+    });
+
+    $('#extra_gauge').click(function () {
+        //$('.pop-up').fadeIn(1000);
+        $('#profileView').removeClass('blur-out');
+        $('#profileView').addClass('blur-in');
+        $('#popupExtra').show();
+        // Animate the width of the barChart class
+        $('.graph-bar').each(function () {
+            var dataWidth = $(this).data('value');
+            $(this).css("width", dataWidth + "%");
+        });
+
+    });
+
+    $('.close-button').click(function (e) {
+
+        $('.pop-up').fadeOut(300);
+        $('#profileView').removeClass('blur-in');
+        $('#profileView').addClass('blur-out');
+        e.stopPropagation();
+
+    });
+</script>
+
+<style>
+  
+
+
+    /*Bar Crab*/
+
+
+    /* Variables & Mixings */
+    .clearfix,
+    .clearfix:before,
+    .clearfix:after {
+        display: block;
+        content: " ";
+        clear: both;
+        zoom: 1;
+    }
+    /* Resets */
+    * {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    body h2 {
+        text-align: center;
+    }
+
+    .wrap {
+        margin: 0 auto;
+        padding: 50px;
+        max-width: 1200px;
+    }
+
+
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+    }
+
+    .dot {
+        stroke: #000;
+    }
+
+    .tooltip {
+        position: absolute;
+        width: 200px;
+        height: 28px;
+        pointer-events: none;
+    }
+</style>

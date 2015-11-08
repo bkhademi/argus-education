@@ -1,0 +1,55 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+    currentDate -> changes as the date changes $scope.form.date.$modelValue
+    -->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">Parent Notified - {{student.fn + " " + student.ln}}</h4>
+</div>
+<div class="modal-body ">
+
+    <form name="form" role="form" class="form">
+      
+        <div class=" col-lg-6 col-lg-offset-1">
+            <label>Parent Supportive</label>
+            <div class="switch col-lg-offset-1">
+                <div class="onoffswitch">
+                    <input type="checkbox" class="onoffswitch-checkbox" id="parentSupportive" data-ng-model="student.parentSupportive">
+                    <label class="onoffswitch-label" for="parentSupportive">
+                        <span class="onoffswitch-inner yesno"></span>
+                        <span class="onoffswitch-switch yesno"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="reschedule" btn-checkbox="" data-ng-click=""> <i class="fa fa-calendar"></i>Reschedule</label>
+        </div>
+        <div data-ng-if="reschedule" class="form-group col-lg-offset-3 col-sm-12 col-md-6">
+            <label>Select new date </label>
+            <div class="input-group date" style="margin:0 auto">
+
+                <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <textarea id="addComment" type="text"
+                      placeholder="Add details"
+                      class="form-control auto-resize"
+                      data-ng-model="student.parentNotifiedComment"
+                      data-ng-keyup=""></textarea>
+        </div>
+        <br />
+
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+</div>
+

@@ -1,0 +1,223 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Admin1 Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-lg-3">
+            <div class="btn btn-primary block widget " ui-sref="admin1.AECList">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-group fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Students Today </span>
+
+                        <h2 class="font-bold">13</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="btn btn-info block widget" ui-sref="admin1.pending">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-folder-open-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Follow up </span>
+
+                        <h2 class="font-bold">45</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="btn btn-primary block widget" data-ng-click="openAverageAttendance()">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-sort-amount-asc fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> % Avg. Attendance </span>
+
+                        <h2 class="font-bold">26</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="btn btn-info block widget" data-ng-click="openRating()">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-star fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> Rating </span>
+
+                        <h2 class="font-bold">26</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        Teacher (ALL) Usage
+                        <small>.</small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <canvas linechart options="lineOptions" data="lineData" height="140" responsive=true></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        Assignment Completion Rate
+                        <small>.</small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+
+                <div class="ibox-content text-center">
+
+
+                    <strong> Overall performance </strong>
+
+                    <div id="overAllGauge" class="gauge">
+                        <div class="category poor"> <span class="char">P</span><span class="char">o</span><span class="char">o</span><span class="char">r</span></div>
+                        <div class="category fair"> <span class="char">F</span><span class="char">a</span><span class="char">i</span><span class="char">r</span></div>
+                        <div class="category good"><span class="char">G</span><span class="char">o</span><span class="char">o</span><span class="char">d</span></div>
+                        <div class="category excellent"><span class="char">E</span><span class="char">x</span><span class="char">c</span><span class="char">e</span><span class="char">l</span><span class="char">l</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></div>
+                        <div class="needle"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>MY Team (Tutors)</h5>
+
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-wrench"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#">Config option 1</a>
+                            </li>
+                            <li>
+                                <a href="#">Config option 2</a>
+                            </li>
+                        </ul>
+                        <a class="close-link">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="8">
+                        <thead>
+                            <tr>
+
+                                <th data-toggle="true">First Name</th>
+                                <th>Last Name</th>
+                                <th>Subjects</th>
+                                <th>Day In</th>
+                                <th>Rate</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="item in teachersTeam">
+                                <td>{{item.fn}}</td>
+                                <td>{{item.ln}}</td>
+                                <td>
+                                    <span data-ng-repeat="subject in item.subjects">
+                                        {{subject}}  <span data-ng-if="$index != item.subjects.length-1">/</span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <span data-ng-repeat="day in item.days">
+                                        {{day}} <span data-ng-if="$index != item.subjects.length-1">/</span>
+                                    </span>
+
+                                </td>
+                                <td>{{item.rate}}/10.0</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5">
+                                    <ul class="pagination pull-right"></ul>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="averageAttendanceModal.html">
+    <div class="modal-header text-center">
+        <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">% Avg Attendance</h4>
+    </div>
+    <div class="modal-body text-center">
+        <div class="row">
+            <div class="col-sm-11">
+                <canvas data-ng-if="drawGraph" linechart options="graphOptions" data="graphData" responsive=true></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" data-ng-click="cancel()">Dismiss</button>
+    </div>
+</script>
+
+
+
+<script type="text/ng-template" id="ratingsModal.html">
+    <div class="modal-header text-center">
+        <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+        <h4 class="modal-title">Rating</h4>
+    </div>
+    <div class="modal-body text-center" data-ng-controller="CalendarCtrl">
+        <div class="row">
+            <div class="col-sm-11">
+                <canvas data-ng-if="drawGraph" linechart options="graphOptions" data="graphData" height="140" responsive=true></canvas>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" data-ng-click="cancel()">Dismiss</button>
+    </div>
+</script>

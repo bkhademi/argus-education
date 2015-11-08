@@ -1,0 +1,71 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight" data-ng-controller="studentInfoCtrl">
+
+
+    <ul class="list-group list-inline text-center" style="">
+        <li class="" style="width:50%">
+            <input type="text"
+                   data-ng-disabled="active==max"
+                   name="searchStudent"
+                   placeholder="Student"
+                   class="form-control"
+                   data-ng-model="selected"
+                   typeahead="stu as ('<h4>'+stu.fn +' , ' +stu.ln+' <i>'+stu.ID+' <strong>'+stu.GR+'th') for stu in students | filter:$viewValue"
+                   typeahead-on-select='onEnter($item, $model, $label)'
+                   typeahead-append-to-body="true" />
+        </li>
+
+    </ul>
+    <ul class="col-lg-12 list-inline list-group" style="margin-bottom: 0px;">
+        <li data-ng-repeat="pro in toShow" class="studentInfo col-lg-{{12/active}} "
+            id="stu{{$index}} "
+            data-ng-hide="!toShow[$index]">
+
+            <section class="panel panel-box">
+                <i class="fa fa-user fa-5x"></i>
+                <span class="size-h4 no-margin">{{toShow[$index].fn}}</span>
+                <span class="size-h4 no-margin">{{toShow[$index].ln}}</span>
+                <button class="btn btn-primary btn-circle btn-lg close1" type="button" data-ng-click="remove($index)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </section>
+        </li>
+    </ul>
+
+    <div class="row">
+        <ul class="col-lg-12 list-inline list-group">
+            <li data-ng-repeat="pro in toShow" class='col-lg-{{12/active}}'
+                data-ng-hide="!toShow[$index]">
+                <student student="toShow[$index]"></student>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<!--data-ng-include="'../Client/views/dashItems/sampleStuProfile.html'"-->
+<style>
+    .close1 {
+        float:right;
+        opacity: .60;
+        right: 0px;
+        width: 50px;
+        height: auto;
+        cursor: pointer;
+        border: 1px solid #000;
+        background-color: #efefef;
+        z-index: 5;
+        -webkit-transition: opacity 150ms;
+        /*background: url() no-repeat;*/
+        text-align: right;
+        border: 0;
+        cursor: pointer;
+    }
+</style>
+<script>
+    $('.studentInfo').hover(function () {
+        $(this).find('.close').animate({ opacity: 1 }, 100)
+    }, function () {
+        $(this).find('.close').animate({ opacity: 0 }, 100)
+    }
+                  )
+</script>

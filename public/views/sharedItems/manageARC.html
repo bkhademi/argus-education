@@ -1,0 +1,217 @@
+<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="ManageARCCtrl">
+    <div class="panel panel-default">
+
+        <div data-ng-hide="lastSubmit">
+
+
+            <h2 style="text-align:center"> Hello <span class="bg-primary">Ms. Corona</span>, lets manage O-Room!</h2>
+            <div class="panel-body">
+
+
+                <div class="table-filters">
+                    <div class="text-center">
+                        <!-- <form name="manageARCForm">
+            <div class="row  " data-ng-controller="DatepickerDemoCtrl">
+                <div style="float: none; margin: 0 auto" class=" text-center  col-sm-4 ">
+                    <h4>Select a Date   </h4>
+                    <div class="input-group ui-datepicker">
+                        <input type="text"
+                               class="form-control"
+                               datepicker-popup="{{format}}"
+                               ng-model="dt"
+                               is-open="opened"
+                               min="minDate"
+                               max="'2015-06-22'"
+                               datepicker-options="dateOptions"
+                               date-disabled="disabled(date, mode)"
+                               ng-required="true"
+                               name="date"
+                               close-text="Close"
+                               data-ng-change="onDateChange()">
+                        <span class="input-group-addon" ng-click="open($event)"><i class="fa fa-calendar"></i></span>
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+        -->
+                        <form role="form" name="form">
+                            <div class="form-group" id="data_1">
+                                <label class="font-noraml">Select AEC List Date</label>
+                                <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                    <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </form>
+                        <ul class="list-group list-inline">
+                            <li style="width:35%">
+                                <form>
+                                    <input type="text"
+                                           placeholder="Student"
+                                           class="form-control"
+                                           data-ng-model="selected2"
+                                           typeahead="stu as ('<h4>'+stu.fn +' , ' +stu.ln+' <i>'+stu.ID+' <strong>'+stu.GR+'th') for stu in refTable | filter:$viewValue"
+                                           typeahead-on-select='onSelect2($item, $model, $label)'
+                                           typeahead-append-to-body="true" />
+                                </form>
+                            </li>
+
+                            <li style="" class="">
+                                <button type="button" class="btn btn-primary" data-ng-click="present(selectedStudent)" data-ng-disabled="!refTable.length || !selected2 ">
+                                    {{secondAttendance?'Present2':'Present1';}}
+                                </button>
+                            </li>
+
+                            <li style="" class=" ">
+                                <button type="button" class="btn btn-info" data-ng-click="secondAttendance?ditched():openReschedule(selected3)" data-ng-disabled="!refTable.length || !selected2 ">
+                                    {{secondAttendance?'Ditched':'Re-Schedule';}}
+                                </button>
+                            </li>
+
+                            <li style="" class="">
+                                <button type="button" class="btn btn-primary" data-ng-click="secondAttendance?openOther(selected3):openClear(selected3)" data-ng-disabled="!refTable.length || !selected2 ">
+                                    {{secondAttendance?'Other':'clear';}}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <br />
+
+                <div class="col-sm-12" style="margin:auto; float:none;" data-ng-controller="tablesCtrl">
+                    <table class="table table-bordered table-striped table-responsive ">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="th">
+                                        First Name
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('fn') "
+                                              data-ng-class="{active: row == 'fn'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-fn') "
+                                              data-ng-class="{active: row == '-fn'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        Last Name
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('ln') "
+                                              data-ng-class="{active: row == 'ln'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-ln') "
+                                              data-ng-class="{active: row == '-ln'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        ID
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('ID') "
+                                              data-ng-class="{active: row == 'ID'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-ID') "
+                                              data-ng-class="{active: row == '-ID'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        GR
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('GR') "
+                                              data-ng-class="{active: row == 'GR'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-GR') "
+                                              data-ng-class="{active: row == '-GR'}"></span>
+                                    </div>
+                                </th>
+
+                                <th>
+                                    <div class="th">
+                                        Reason
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('Reason') "
+                                              data-ng-class="{active: row == 'Reason'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-Reason') "
+                                              data-ng-class="{active: row == '-Reason'}"></span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="th">
+                                        Staff
+                                        <span class="fa fa-angle-up"
+                                              data-ng-click=" order('Staff') "
+                                              data-ng-class="{active: row == 'Staff'}"></span>
+                                        <span class="fa fa-angle-down"
+                                              data-ng-click=" order('-Staff') "
+                                              data-ng-class="{active: row == '-Staff'}"></span>
+                                    </div>
+                                </th>
+                                <th>Notified</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="stu in refTableCurrentPage">
+                                <td>{{stu.fn}}</td>
+                                <td>{{stu.ln}}</td>
+                                <td>{{stu.ID}}</td>
+                                <td>{{stu.GR}}</td>
+                                <td>{{stu.Reason}}</td>
+                                <td>{{stu.Staff}}</td>
+                                <td>
+                                    <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+                                    <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <footer class="table-footer">
+                        <div class="row">
+                            <div class="col-md-6 page-num-info">
+                                <span>
+                                    Show
+                                    <select data-ng-model="numPerPage"
+                                            data-ng-options="num for num in numPerPageOpt"
+                                            data-ng-change="onNumPerPageChange()"></select>
+                                    entries per page
+                                </span>
+                            </div>
+                            <div class="col-md-6 text-right pagination-container">
+                                <pagination class="pagination-sm"
+                                            ng-model="currentPage"
+                                            total-items="filteredStores.length"
+                                            max-size="4"
+                                            ng-change="select(currentPage)"
+                                            items-per-page="numPerPage"
+                                            rotate="false"
+                                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                                            boundary-links="true"></pagination>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+                <div class="col-md-12 text-center">
+                    <button style="width:25%" type="button" class="btn btn-primary" data-ng-click="submit()">{{secondAttendance?'Submit2':'Submit';}}</button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div data-ng-show="lastSubmit" data-ng-click="reset()" id="thanksMessage" class="text-center">
+        <p class="size-h1 page-header" style="padding-top:20%">
+            ARC FINISHED
+        </p>
+
+    </div>
+</section>
+

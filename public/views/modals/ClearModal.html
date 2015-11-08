@@ -1,0 +1,28 @@
+﻿<!-- 
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+
+    -->
+<div class="modal-header text-center">
+    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">{{title}} - {{student.fn  + " " + student.ln}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div class="text-center">
+        <div>
+            <form>
+                <textarea id="addComment" type="text"
+                          placeholder="Add Comment"
+                          class="form-control auto-resize"
+                          data-ng-model="comment"
+                          data-ng-keyup="search()"></textarea>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+</div>
+                   

@@ -1,0 +1,72 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-lg-4" data-ng-click="">
+            <div class="widget style1 navy-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-line-chart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> Average Grade </span>
+
+                        <h2 class="font-bold">B+</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="widget style1 lazur-bg" data-ng-click="">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-folder-open-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> Upcoming </span>
+
+                        <h2 class="font-bold">3</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="widget style1 navy-bg" data-ng-click="">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-calendar fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> View Table </span>
+
+                        <h2 class="font-bold"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+    <div class="row" data-ng-controller="fileManagerController">
+        <div class="col-xs-12 col-lg-12">
+
+
+            <!-- <form action="/pdf/SaveUploadedFile" method="post" enctype="multipart/form-data"  class="dropzone"id="dropZone">-->
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Upload Assignments To Grade Here</h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <form data-ng-submit="submitSingleFile()" novalidate class="dropzone" id="dropZone" dropzone="dropzoneConfig">
+                        <div class="fallback">
+                            <input file-model="myFile[0]" name="file" type="file" multiple />
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

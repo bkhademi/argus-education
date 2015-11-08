@@ -1,0 +1,73 @@
+﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="studentInfoCtrl">
+
+
+
+    <ul class="list-group list-inline text-center" style="">
+        <li class="" style="width:30%">
+            <input type="text"
+                   data-ng-disabled="active==max"
+                   name="searchStudent"
+                   placeholder="Student"
+                   class="form-control"
+                   data-ng-model="selected"
+                   typeahead="stu as ('<h4>'+stu.fn +' , ' +stu.ln+' <i>'+stu.ID+' <strong>'+stu.GR+'th') for stu in students | filter:$viewValue"
+                   typeahead-on-select='onEnter($item, $model, $label)' />
+        </li>
+
+    </ul>
+    <ul class="col-lg-12 list-inline list-group" style="margin-bottom: 0px;">
+        <li data-ng-repeat="pro in toShow" class="studentInfo col-lg-{{12/active}}  " style="height:50px;"
+            id="stu{{$index}} "
+            data-ng-hide="!toShow[$index]">
+            <img src="../Client/Images/closeIcon.png" class="close" data-ng-click="remove($index)" />
+            <section class="panel panel-box" style="  margin-bottom: 0px;">
+                <div class="panel-left panel-item bg-green">
+                    <i class="fa fa-user text-large stat-icon"></i>
+                </div>
+                <div class="panel-right panel-item bg-reverse">
+                    <p class="size-h4 no-margin"><span data-i18n='{{profiles[$index].fn}}'></span></p>
+                    <p class="size-h4 no-margin"><span data-i18n='{{profiles[$index].ln}}'></span></p>
+
+                </div>
+            </section>
+        </li>
+    </ul>
+
+    <div class="row">
+        <ul class="col-lg-12 list-inline list-group">
+            <li data-ng-repeat="pro in toShow" class='col-lg-{{12/active}}'
+                data-ng-hide="!toShow[$index]">
+                <student student="toShow[$index]"></student>
+            </li>
+
+        </ul>
+    </div>
+</section>
+
+<!--data-ng-include="'../Client/views/dashItems/sampleStuProfile.html'"-->
+<style>
+    .close {
+        position: absolute;
+        opacity: 0;
+        right: 0px;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        border: 1px solid #000;
+        background-color: #efefef;
+        z-index: 5;
+        -webkit-transition: opacity 150ms;
+        /*background: url() no-repeat;*/
+        text-align: right;
+        border: 0;
+        cursor: pointer;
+    }
+</style>
+<script>
+    $('.studentInfo').hover(function () {
+        $(this).find('.close').animate({ opacity: 1 }, 100)
+    }, function () {
+        $(this).find('.close').animate({ opacity: 0 }, 100)
+    }
+                  )
+</script>

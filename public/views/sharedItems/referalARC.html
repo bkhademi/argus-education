@@ -1,0 +1,238 @@
+
+
+<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="referalARCController">
+    <div class="panel  panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">Mr. Gonzales</span>, lets create O-Room references!</h2>
+        <div class="panel-body">
+            <div class="left col-sm-5" >
+                <form name="form" role="form">
+
+                    <div class="form-group col-sm-12" id="data_1">
+                        <label>Select a Date</label>
+                        <div class="input-group date col-md-12 col-sm-12">
+                            <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-12 col-md-4">
+                        <label>Offense Level</label>
+                        <div class="switch">
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="offense" data-ng-model="checks[0]">
+                                <label class="onoffswitch-label" for="offense">
+                                    <span class="onoffswitch-inner highlow"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-4 ">
+                        <label>Protocol Followed</label>
+                        <div class="switch ">
+                            <div class="onoffswitch  ">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="protocol" data-ng-model="checks[1]">
+                                <label class="onoffswitch-label" for="protocol">
+                                    <span class="onoffswitch-inner yesno"></span>
+                                    <span class="onoffswitch-switch yesno"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-md-4">
+                        <label>Student Notified</label>
+                        <div class="switch">
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="stuNotified" data-ng-model="checks[2]">
+                                <label class="onoffswitch-label" for="stuNotified">
+                                    <span class="onoffswitch-inner yesno"></span>
+                                    <span class="onoffswitch-switch yesno"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+
+                    <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                        <input type="text"
+                               placeholder="Teacher"
+                               class="form-control"
+                               data-ng-model="teacher"
+                               typeahead="t  for t in teachers | filter:$viewValue"
+                               typeahead-on-select='onSelec($item, $model, $label)'
+                               typeahead-append-to-body="true" />
+                    </div>
+                    <div class="form-group col-xs-12 col-md-6 col-lg-4">
+                        <input type="text"
+                               placeholder="Student"
+                               class="form-control"
+                               data-ng-model="selected2"
+                               data-ng-disabled="!teacher"
+                               typeahead="stu as (stu.fn +'  ' +stu.ln+' '+stu.ID+' '+stu.GR) for stu in schoolStudents | filter:$viewValue"
+                               typeahead-on-select='onSelect2($item, $model, $label)'
+                               typeahead-append-to-body="true" />
+                    </div>
+                    <div class="form-group col-xs-12  col-lg-4">
+                        <select chosen
+                                class="chosen-select form-control"
+                                data-placeholder="Select a period"
+                                data-ng-model="selectedPeriod"
+                                data-ng-options="p for p in periods"></select>
+                    </div>
+                    <br />
+                    <div class="form-group col-sm-12 col-md-6">
+                        <label>Student Sent to office</label>
+                        <div class="switch">
+                            <div class="onoffswitch">
+                                <input type="checkbox" class="onoffswitch-checkbox" id="stuNotified" data-ng-model="sentToOffice">
+                                <label class="onoffswitch-label" for="stuNotified">
+                                    <span class="onoffswitch-inner yesno"></span>
+                                    <span class="onoffswitch-switch yesno"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                 
+                    <div class="form-group col-xs-12 col-md-6">
+                        <input type="text"
+                               placeholder="1 word to summarize reason"
+                               class="form-control"
+                               data-ng-model="sentToOffice" />
+                    </div>
+                    <br />
+                    <div class="form-group col-sm-12">
+                        <textarea id="addComment" type="text"
+                                  class="auto-resize form-control"
+                                  style=" height: 150px;"
+                                  placeholder="Add Description"
+                                  data-ng-model="selected3"></textarea>
+                    </div>
+
+                    <button style="font-weight: 900; margin-top:20px;" class='btn profilebtn col-md-12' ng-click="addRow()">Add</button>
+
+                </form>
+            </div>
+
+            <br />
+            <br />
+            <!-- Table Start-->
+            <div class="col-sm-7" data-ng-controller="tablesCtrl">
+                <table class="table-hover table table-bordered table-striped table-responsive table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="th">
+                                    First Name
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('fn') "
+                                          data-ng-class="{active: row == 'fn'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-fn') "
+                                          data-ng-class="{active: row == '-fn'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Last Name
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('ln') "
+                                          data-ng-class="{active: row == 'ln'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-ln') "
+                                          data-ng-class="{active: row == '-ln'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    ID
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('ID') "
+                                          data-ng-class="{active: row == 'ID'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-ID') "
+                                          data-ng-class="{active: row == '-ID'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Reason
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('Reason') "
+                                          data-ng-class="{active: row == 'Reason'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-Reason') "
+                                          data-ng-class="{active: row == '-Reason'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Teacher
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('Teacher') "
+                                          data-ng-class="{active: row == 'Teacher'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-Teacher') "
+                                          data-ng-class="{active: row == '-Teacher'}"></span>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="th">
+                                    Staff
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click=" order('Staff') "
+                                          data-ng-class="{active: row == 'Staff'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click=" order('-Staff') "
+                                          data-ng-class="{active: row == '-Staff'}"></span>
+                                </div>
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="stu in refTableCurrentPage" data-ng-click="editEntry($index)">
+
+                            <td>{{stu.fn}}</td>
+                            <td>{{stu.ln}}</td>
+                            <td>{{stu.ID}}</td>
+                            <td>{{stu.Reason}}</td>
+                            <td>{{stu.Teacher}}</td>
+                            <td>{{stu.Staff}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <footer class="table-footer">
+                    <div class="row">
+                        <div class="col-md-6 page-num-info">
+                            <span>
+                                Show
+                                <select data-ng-model="numPerPage"
+                                        data-ng-options="num for num in numPerPageOpt"
+                                        data-ng-change="onNumPerPageChange()"></select>
+                                entries per page
+                            </span>
+                        </div>
+                        <div class="col-md-6 text-right pagination-container">
+                            <pagination class="pagination-sm"
+                                        ng-model="currentPage"
+                                        total-items="refTable.length"
+                                        max-size="4"
+                                        ng-change="select(currentPage)"
+                                        items-per-page="numPerPage"
+                                        rotate="false"
+                                        previous-text="&lsaquo;" next-text="&rsaquo;"
+                                        boundary-links="true"></pagination>
+                        </div>
+                    </div>
+                </footer>
+                <div class="col-md-12 text-center">
+                    <button style="width:25%" type="button" class="btn profilebtn" data-ng-click="submitARCReferedStudents()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>

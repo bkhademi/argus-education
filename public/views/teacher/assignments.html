@@ -1,0 +1,60 @@
+﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="fileManagerController">
+    <div class="row">
+        <div class="col-xs-12 col-lg-6">
+
+
+            <!-- <form action="/pdf/SaveUploadedFile" method="post" enctype="multipart/form-data"  class="dropzone"id="dropZone">-->
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Upload New Assignments Here</h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <form data-ng-submit="submitSingleFile()" novalidate class="dropzone" id="dropZone" dropzone="dropzoneConfig">
+                        <div class="fallback">
+                            <input file-model="myFile[0]" name="file" type="file" multiple />
+                            <input type="submit" value="Upload" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-lg-6">
+            
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Modify your old files here</h5>
+
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>FileName</th>
+                                <!--  <th>Owner</th>-->
+                                <th> Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="file in files">
+                                <td>{{file.Name}}</td>
+                                <td>
+                                    <a class="btn btn-success" data-ng-click="deleteFile(file)">Delete</a>
+                                    <a class="btn btn-success" data-ng-click="openFile(file)">Download</a>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+ 
+</section>

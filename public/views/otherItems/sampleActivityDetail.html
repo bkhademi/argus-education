@@ -1,0 +1,38 @@
+﻿<div>
+    <table class="table table-dynamic tab">
+        <tr>
+            <th >Date:</th>
+            <td style="text-align:left;">   <p>{{selected.date}}</p></td> 
+
+            <th>Activity:</th>
+            <td>
+
+                {{selected.activity}}
+
+            </td>
+            <th>staff:</th>
+        
+            <td>Mr. {{selected.Staff}}</td>
+           
+        </tr>
+        <tr >
+            <th>
+                Comment:
+            </th>
+            <td colspan="4" style="text-align:left;">
+                <p>
+                    {{selected.Comment}}
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td colspan="4" style="text-align:left">
+                <label class="btn btn-primary  ng-valid" ng-model="activity.parentNotified" btn-checkbox=""> <i class="fa fa-home"></i></label>
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.studentNotified" btn-checkbox=""><i class="fa fa-user"></i></label>
+                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.finished" btn-checkbox=""><i class="fa fa-check"></i></label>
+            </td>
+        </tr>
+    </table>
+
+</div>

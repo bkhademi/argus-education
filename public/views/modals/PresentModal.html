@@ -1,0 +1,19 @@
+﻿<div class="modal-header text-center">
+    <button class="close" data-ng-click="cancel()">&times;</button>
+    <h4 class="modal-title">Present - {{student.fn + " " + student.ln}}</h4>
+</div>
+<div class="modal-body">
+    <div class="row text-left">
+        <form role="form" class="col-lg-offset-3">
+            <!--  data-ng-show="!presentClicked" -->
+            <div class='checkbox' data-ng-repeat="act in studentAssignments" style="">
+                <label> <input type="checkbox" data-ng-model="act.selected"> {{act.name}} </label>
+            </div>
+
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
+    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+</div>

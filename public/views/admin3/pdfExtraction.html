@@ -1,0 +1,34 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="ibox-content wizard">
+        <h2>
+            Data Scrapping
+        </h2>
+        <div class="steps clearfix">
+            <ul>
+
+                <li ui-sref-active="current">
+                    <a ui-sref=".step_one" class="btn-default"><span>1</span> Choose Your Report</a>
+                </li>
+                <li ui-sref-active="current">
+                    <a ui-sref=".step_two" class="btn-default"><span>2</span> Upload Your Files</a>
+                </li>
+                <li ui-sref-active="current">
+                    <a ui-sref=".step_three" class="btn-default"><span>3</span> Finish</a>
+                </li>
+            </ul>
+        </div>
+        <div class="wizard">
+            <div class="content">
+
+                <form name="dataScrappingForm" ng-submit="processForm()" class="p-lg">
+
+                    <!-- our nested state views will be injected here -->
+                    <div id="form-views" ui-view></div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>

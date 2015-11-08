@@ -1,0 +1,48 @@
+<fieldset>
+    <div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-sm-4"><button class="btn btn-default  pull-left">School By School</button></div>
+                    <div class="col-sm-4 text-center"><span class="size-h3">Report</span></div>
+                    <div class="col-sm-4"><button class="btn btn-default pull-right">Student By Student</button></div>
+                    <div class="col-sm-12 " style="border:1px dashed black; height:500px">
+                        <div class="panel-body" >
+
+                            <div style="height:100% ;width:100%"
+                                 morris-chart
+                                 data-data="simpleData"
+                                 data-type="line"
+                                 data-xkey="year"
+                                 data-ykeys='["value"]'
+                                 data-labels='["Value"]'
+                                 data-line-colors='["#674E9E"]'
+                                 data-line-width="2"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-right:0;">
+                <div class="list-group ">
+                    <p>
+                        <button class="btn btn-block btn-lg">Save Report</button>
+                    </p>
+                    <br />
+                    <p>
+                        <button class="btn btn-block btn-lg">Share</button>
+                    </p>
+                    <br />
+                    <p>
+                        <button class="btn btn-block btn-lg" data-ng-click="download()">Download As CSV</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+<fieldset class="m-t-md">
+    <a ui-sref="admin3.dataScrapping.step_two" class="btn btn-default">Previous</a>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</fieldset>

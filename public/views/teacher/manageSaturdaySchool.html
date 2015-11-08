@@ -1,0 +1,126 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight" data-ng-controller="manageSaturdaySchoolController">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Manage Saturday Schools</h3>
+        </div>
+
+        <!--  Table Start -->
+        <div class="col-sm-12" style="float:none; margin:0 auto;" data-ng-controller="tablesCtrl">
+            <button class="btn btn-success pull-right" data-ng-click="printSheet()">Print Saturday Sheet</button>
+            <table class="table table-bordered  table-responsive table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            <div class="th">
+                                First Name
+                                <span class="fa fa-angle-up"
+                                      data-ng-click=" order('fn') "
+                                      data-ng-class="{active: row == 'fn'}"></span>
+                                <span class="fa fa-angle-down"
+                                      data-ng-click=" order('-fn') "
+                                      data-ng-class="{active: row == '-fn'}"></span>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="th">
+                                Last Name
+                                <span class="fa fa-angle-up"
+                                      data-ng-click=" order('ln') "
+                                      data-ng-class="{active: row == 'ln'}"></span>
+                                <span class="fa fa-angle-down"
+                                      data-ng-click=" order('-ln') "
+                                      data-ng-class="{active: row == '-ln'}"></span>
+                            </div>
+                        </th>
+                        <th>
+                            <div class="th">
+                                ID
+                                <span class="fa fa-angle-up"
+                                      data-ng-click=" order('ID') "
+                                      data-ng-class="{active: row == 'ID'}"></span>
+                                <span class="fa fa-angle-down"
+                                      data-ng-click=" order('-ID') "
+                                      data-ng-class="{active: row == '-ID'}"></span>
+                            </div>
+                        </th>
+                        <th class="bg-info">
+                            <div class="th">
+                                SD
+                                <span class="fa fa-angle-up"
+                                      data-ng-click=" order('SD') "
+                                      data-ng-class="{active: row == 'SD'}"></span>
+                                <span class="fa fa-angle-down"
+                                      data-ng-click=" order('-SD') "
+                                      data-ng-class="{active: row == '-SD'}"></span>
+                            </div>
+                        </th>
+
+                        <th class="bg-info">
+                            <div class="th">
+                                CD
+                                <span class="fa fa-angle-up"
+                                      data-ng-click=" order('CD') "
+                                      data-ng-class="{active: row == 'CD'}"></span>
+                                <span class="fa fa-angle-down"
+                                      data-ng-click=" order('-CD') "
+                                      data-ng-class="{active: row == '-CD'}"></span>
+                            </div>
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="stu in refTableCurrentPage" data-ng-style="{opacity:$index==0?1:.5}">
+                        <td>{{stu.fn}}</td>
+                        <td>{{stu.ln}}</td>
+                        <td>{{stu.ID}}</td>
+                        <td class="bg-info">{{stu.SD}}</td>
+                        <td class="bg-info">{{stu.CD}}</td>
+                        <td class="pull-left no-border no-margin " data-ng-show="$index==0">
+                            <button type="button" data-ng-click="clearStudent($index)" class="btn btn-success "><span class="glyphicon glyphicon-remove-sign"></span></button>
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+
+            <footer class="table-footer">
+                <div class="row">
+                    <div class="col-md-6 page-num-info">
+                        <span>
+                            Show
+                            <select data-ng-model="numPerPage"
+                                    data-ng-options="num for num in numPerPageOpt"
+                                    data-ng-change="onNumPerPageChange()"></select>
+                            entries per page
+                        </span>
+                    </div>
+                    <div class="col-md-6 text-right pagination-container">
+                        <pagination class="pagination-sm"
+                                    ng-model="currentPage"
+                                    total-items="refTable.length"
+                                    max-size="4"
+                                    ng-change="select(currentPage)"
+                                    items-per-page="numPerPage"
+                                    rotate="false"
+                                    previous-text="&lsaquo;" next-text="&rsaquo;"
+                                    boundary-links="true"></pagination>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <style>
+        .td-yellow {
+            background-color: rgba(263, 215, 97, 1);
+        }
+
+        .td-green {
+            background-color: rgba(16, 170, 62, .95);
+        }
+    </style>
+
+</div>

@@ -1,0 +1,176 @@
+﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="MultiplePassesController">
+    <section class="panel panel-default table-dynamic">
+        <h2 class="text-center">Print Passes (print passses for selected students)</h2>
+        <div class="panel-body">
+            <div class="table-filters col-sm-12" style="float:none; margin:auto">
+                <form role="form" class="form-group">
+                    <div class="row">
+                        <div class="text-justify col-sm-3 col-xs-2">
+                            <input type="text"
+                                   placeholder="Go To"
+                                   class="form-control"
+                                   data-ng-model="goto" />
+                        </div>
+                    </div>
+                    <div class="radio" data-ng-repeat="time in whenToSend">
+                        <label data-ng-click="onRadioSelect($index)"><input type="radio" name="when" />{{time}}</label>
+
+                    </div>
+                    <div class="row">
+                        <div class="text-justify col-sm-3 col-xs-2">
+                            <!-- specify the attribute to filter better ..eg search.Name, search.Grade-->
+                            <input type="text"
+                                   placeholder="Search..."
+                                   class="form-control"
+                                   data-ng-model="search" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="panel-group">
+                        <button class="btn btn-success" data-ng-click="applySelected()">
+                            Apply Selected
+                        </button>
+                        <button class="btn btn-success" data-ng-click="applyAll()">
+                            Apply All
+                        </button>
+                        <span style="width:30px; padding :30px"></span>
+                        <button class="btn btn-info" data-ng-click="selectAll()">
+                            Select All
+                        </button>
+                        <button class="btn btn-info" data-ng-click="unselectAll()">
+                            Unselect All
+                        </button>
+                        <button class="btn btn-info" data-ng-click="invertSelection()">
+                            Invert Selection
+                        </button>
+                        <button class="btn  btn-success pull-right" data-ng-click="generatePasses()">
+                            Generate Passes
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-sm-12" style="float:none; margin:auto" data-ng-controller="tablesCtrl">
+                <table class="table table-bordered table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="th">
+                                    Student Name
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('fn')"
+                                          data-ng-class="{active:row == 'fn'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-fn')"
+                                          data-ng-class="{active: row=='-fn'}"></span>
+                                </div>
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    Student Id
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('ID')"
+                                          data-ng-class="{active:row == 'ID'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-ID')"
+                                          data-ng-class="{active: row=='-ID'}"></span>
+                                </div>
+
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    Grade
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('Grade')"
+                                          data-ng-class="{active:row == 'Grade'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-Grade')"
+                                          data-ng-class="{active: row=='-Grade'}"></span>
+                                </div>
+
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    Student Period
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('Period')"
+                                          data-ng-class="{active:row == 'Period'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-Period')"
+                                          data-ng-class="{active: row=='-Period'}"></span>
+                                </div>
+
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    Go to
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('goto')"
+                                          data-ng-class="{active:row == 'goto'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-goto')"
+                                          data-ng-class="{active: row=='-goto'}"></span>
+                                </div>
+
+                            </th>
+
+                            <th>
+                                <div class="th">
+                                    When
+                                    <span class="fa fa-angle-up"
+                                          data-ng-click="order('when')"
+                                          data-ng-class="{active:row == 'when'}"></span>
+                                    <span class="fa fa-angle-down"
+                                          data-ng-click="order('-when')"
+                                          data-ng-class="{active: row=='-when'}"></span>
+                                </div>
+
+                            </th>
+
+                            <th class="bg-success"><div class="th">Select</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="student in refTableCurrentPage | filter:search">
+                            <td>{{student.fn +" " + student.ln}}</td>
+                            <td>{{student.ID}}</td>
+                            <td>{{student.GR}}</td>
+                            <td>{{5}}</td>
+                            <td> {{student.location}}</td>
+                            <td> {{student.time}}</td>
+                            <td><input type="checkbox" ng-model="student.selected" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <footer class="table-footer">
+                    <div class="row">
+                        <div class="col-md-6 page-num-info">
+                            <span>
+                                Show
+                                <select data-ng-model="numPerPage"
+                                        data-ng-options="num for num in numPerPageOpt"
+                                        data-ng-change="onNumPerPageChange()"></select>
+                                entries per page
+                            </span>
+                        </div>
+                        <div class="col-md-6 text-right pagination-container">
+                            <pagination class="pagination-sm"
+                                        data-ng-model="currentPage"
+                                        total-items="refTable.length"
+                                        max-size="4"
+                                        ng-change="select(currentPage)"
+                                        rotate="false"
+                                        previous-text="&lsaquo;" next-text="&rsaquo;"
+                                        boundary-links="true"></pagination>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </section>
+</section>

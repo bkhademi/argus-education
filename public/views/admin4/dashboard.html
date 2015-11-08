@@ -1,0 +1,151 @@
+﻿<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Admin4 Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+
+        <div  class="col-sm-12 col-md-6 col-lg-3">
+            <div class="btn btn-primary block widget " ui-sref="admin1.AECList">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-group fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Students Today </span>
+
+                        <h2 class="font-bold">13</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <div class="btn btn-info block widget" ui-sref="admin1.pending">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-folder-open-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Students Helped </span>
+
+                        <h2 class="font-bold">45</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <div class="btn btn-primary block widget" data-ng-click="openAverageAttendance()">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-sort-amount-asc fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> % Avg. Attendance </span>
+
+                        <h2 class="font-bold">26</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-3">
+            <div class="btn btn-info block widget" data-ng-click="openRating()">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-star fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> Rating </span>
+
+                        <h2 class="font-bold">26</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        Teacher (ALL) Usage
+                        <small>.</small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div>
+                        <canvas linechart options="lineOptions" data="lineData" height="140" responsive=true></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        Assignment Completion Rate
+                        <small>.</small>
+                    </h5>
+                    <div ibox-tools></div>
+                </div>
+
+                <div class="ibox-content text-center">
+
+                    <strong> Overall performance </strong>
+
+                    <div id="overAllGauge" class="gauge">
+                        <div class="category poor"> <span class="char">P</span><span class="char">o</span><span class="char">o</span><span class="char">r</span></div>
+                        <div class="category fair"> <span class="char">F</span><span class="char">a</span><span class="char">i</span><span class="char">r</span></div>
+                        <div class="category good"><span class="char">G</span><span class="char">o</span><span class="char">o</span><span class="char">d</span></div>
+                        <div class="category excellent"><span class="char">E</span><span class="char">x</span><span class="char">c</span><span class="char">e</span><span class="char">l</span><span class="char">l</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></div>
+                        <div class="needle"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6" data-ng-click="openDFPercentagesModal()">
+            <div class="widget style1 navy-bg">
+                <div class="row">
+                    <div class="col-xs-4">
+
+                        <i class="fa fa-paint-brush fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+
+                        <span class="size-h1">
+
+                        </span>
+                        <h3>
+                            "From the moment I began to Fail, I began to Succeed”
+                        </h3>
+                        <br />
+                        - Brandon Hernandez
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6" data-ng-click="openCalendar()">
+            <div class="btn btn-info block widget">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-edit fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span># Days Till Next Progress Report</span>
+                        <h2 class="font-bold">24</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
