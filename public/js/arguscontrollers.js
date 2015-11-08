@@ -205,7 +205,8 @@
 
 (function (app) {
     app
-    .controller("manageAECController", ["$scope", "studentsService", "AECListService", "$filter", "$modal", "$log", "ServerDataModel", function ($scope, studentsService, AECListService, $filter, $modal, $log, ServerDataModel) {
+    .controller("manageAECController", ["$scope", "studentsService", "AECListService", "$filter", "$modal", "$log", "ServerDataModel", 
+	function ($scope, studentsService, AECListService, $filter, $modal, $log, ServerDataModel) {
         $scope.AEC = true;
         $scope.selected2; // student input field model
         $scope.selected3; // 

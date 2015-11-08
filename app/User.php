@@ -50,20 +50,36 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password','EmailConfirmed','IntroStep', 'SecurityStamp','TwoFactorEnabled','PhoneNumberConfirmed', 'LockoutEndDateUtc', 'LockoutEnabled', 'AccessFailedCount', ];
-
+    
+    // many to one
     public function school(){
-        $this->belongsTo('App\Schools',  'SchoolId','id');
+        $this->belongsTo('App\Schools',  'SchoolId');
     }
     
-    public function role(){
-        return $this->belongsToMany('App\Userroles');
+    // get all the roles this user might have (many to many)
+    public function roles(){
+        return $this->belongsToMany('App\roles', 'aspnetuserroles', 'UserId', 'RoleId');
     }
     
+    //  get all the classsttudents for this user (many to many throurgh
     public function classStudents(){
         return $this->hasManyThrough( 'App\Classstudents', 'App\Professorclasses','UserId', 'ProfessorClassId');
     }
-
-    public function studentInfo(){
-        $this->hasOne('App\Students', 'Id', 'id');
+    
+    // get all classes this user may have
+    public function classes(){
+        return $this->belongsToMany('App\Classes', 'professorclasses', 'UserId', 'ClassId' );
     }
+    
+    // get all assignments froma teacher 
+    public function assignments(){
+        return $this->hasMany('App\Assignments', 'TeacherId');
+    }
+    
+    public function referrals(){
+        return $this->hasMany('App\referrals', 'UserId');
+    }
+    
+  
+    
 }

@@ -23,12 +23,12 @@ class ReferralsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        
-
-        $referrals = Referrals::where('UserId', $this->userId)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
+        // UserId = Teacher's Id of the referral,, get the refferrals of a given teacher
+		$userId = $request->has('userId')? $request->input('userId') : $this->userId;
+		
+        $referrals = Referrals::where('UserId', $userId)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
         
 		// $referrals = Referrals::all();
 		
@@ -56,7 +56,9 @@ class ReferralsController extends Controller
         //
 
         $dataIn = collect($request->data);
-
+		
+		
+		
         error_log(print_R($dataIn[0],TRUE) );
         error_log($dataIn->count());
 
@@ -88,6 +90,8 @@ class ReferralsController extends Controller
 
         $date = $id;
 
+		$userId = $request->has('userId')? $request->input('userId') : $this->userId;
+		
         // $referrals = Referrals::where('UserId', $this->userId)->where('Date', $id)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
         //Getting the user referals for an specific date
         $referrals = Referrals::where('UserId', '00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->where('Date', '2012-00-00 00:00:00')->get();
