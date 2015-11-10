@@ -15,6 +15,7 @@ use App\ClassStudents;
 use App\Professorclasses;
 use App\User;
 use App\Assignments;
+use Carbon\Carbon ;
 
 class ReferralsController extends Controller
 {
@@ -195,18 +196,26 @@ class ReferralsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   ///////////////////////////////////////
+        //TODO: Change the timezone to the one in TEXAS on the tomorrow part.
+        /////////////////////////////
 		$param = $request->input('param');
+
+        error_log($param);
+
 		switch($param){
 			case 'present':
+                Referrals::where('Id',$id)->update(['RefferalStatus' => 1]);
 				return ['msg'=>'present  student'];
+
 			case 'reschedule':
+                Referrals::where('Id',$id)->update(['RefferalStatus' => 2, 'Date'=> Carbon::tomorrow()]);
 				if($request->input('comment') ==='Parent Requested Reschedule' ){
 					return ['msg'=>'parent requested rescheduling the student'];
 				}
 				return ['msg'=>'rescheduling the student'];
 			case 'clear':
+                Referrals::where('Id',$id)->update(['RefferalStatus' => 3]);
 				return ['msg'=>'clearing the student'];
 		}
 		return ['studentid'=>$id, 'userId'=>$request->input('userId'), 'param'=>$request->input('param')];
