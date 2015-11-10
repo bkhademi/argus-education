@@ -30,4 +30,8 @@ class Referrals extends Model
     {
         return $this->belongsTo('App\User','StudentId','id');
     }
+	
+	public function assignment(){
+		return $this->hasOne('App\Assignments',  'Id' ,'AssignmentId');
+	}
 }

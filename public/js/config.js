@@ -11,7 +11,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
-        debug: true
+        debug: false
     });
 
     $stateProvider
@@ -193,7 +193,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         }
                     ]);
                 }
-            },
+            }
         })
         
         /* Admin1 Stuff */
@@ -212,6 +212,9 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             name: 'angles',
                             files: ['js/plugins/chartJs/angles.js']
                         },
+						{
+                              files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                        },
                         {
                             name: 'ui.footable',
                             files: ['js/plugins/footable/angular-footable.js']
@@ -222,7 +225,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         {
                             name: 'ui.calendar',
                             files: ['js/plugins/fullcalendar/calendar.js']
-                        }
+                        },
+						{
+							insertBefore: '#loadBefore',
+							name: 'localytics.directives',
+							files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+						}
                     ]);
                 }
             }
@@ -236,15 +244,35 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                      return $ocLazyLoad.load([
                          {
                              files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+                         },
+						  {
+                             name: 'datePicker',
+                             files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
                          }
                      ]);
                  }
-             },
-         })
+             }
+        })
+		.state('admin1.referral',{
+			url:"/adminReferral",
+			templateUrl:'views/admin1/Referral.html',
+			data: { pageTitle: 'Referral' },
+			resolve: {
+                 loadPlugin: function ($ocLazyLoad) {
+                     return $ocLazyLoad.load([
+						  {
+                             name: 'datePicker',
+                             files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                         }
+                     ]);
+                 }
+             }
+
+		})
         .state('admin1.AECList', {
              url: "/AECList",
              templateUrl: 'views/sharedItems/manageAEC.html',
-             data: { pageTitle: 'Dashboard' },
+             data: { pageTitle: 'AEC List' },
              resolve: {
                  loadPlugin: function ($ocLazyLoad) {
                      return $ocLazyLoad.load([
@@ -256,16 +284,15 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                             name:'BarcodeGenerator',
                              files:['css/plugins/barcode/barcode.css', 'js/plugins/barcode/barcode.js']
                          }
-
-                     ])
+                     ]);
                  }
-             },
+             }
 
          })
         .state('admin1.pending', {
              url: "/pending",
              templateUrl: 'views/sharedItems/manageAECabsence.html',
-             data: { pageTitle: 'Dashboard' },
+             data: { pageTitle: 'Pending' },
              resolve: {
                  loadPlugin: function ($ocLazyLoad) {
                      return $ocLazyLoad.load([
@@ -273,14 +300,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                              name: 'datePicker',
                              files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
                          }
-                     ])
+                     ]);
                  }
-             },
+             }
          })
         .state('admin1.studentData', {
              url: "/studentData",
              templateUrl: 'views/sharedItems/studentInfo.html',
-             data: { pageTitle: 'Dashboard' },
+             data: { pageTitle: 'Student Data' },
              resolve: {
                  loadPlugin: function ($ocLazyLoad) {
                      return $ocLazyLoad.load([
@@ -288,14 +315,14 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                              name: 'datePicker',
                              files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
                          }
-                     ])
+                     ]);
                  }
              }
          })
         .state('admin1.createStudentPass', {
              url: "/createStudentPass",
              templateUrl: 'views/sharedItems/multiplePasses.html',
-             data: { pageTitle: 'Dashboard' },
+             data: { pageTitle: 'Create Pass' }
          })
         /* Admin2 Stuff */
         .state('admin2', {

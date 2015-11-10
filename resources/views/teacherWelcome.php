@@ -69,8 +69,8 @@
 <script src="js/arguscontrollers.js"></script>
 <script src="js/argusdirectives.js"></script>
 <script src="js/argusservices.js"></script>
-<script src="js/Data.js"></script>
-<script src="js/serverDataModel.js"></script></body>
+<!--<script src="js/Data.js"></script>
+<script src="js/serverDataModel.js"></script></body>-->
 
 
 

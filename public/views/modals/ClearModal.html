@@ -5,8 +5,8 @@
 
     -->
 <div class="modal-header text-center">
-    <button type="button" class="close" data-ng-click="cancel()">&times;</button>
-    <h4 class="modal-title">{{title}} - {{student.fn  + " " + student.ln}}</h4>
+    <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">{{title}} - {{student.FirstName  + ", " + student.LastName}}</h4>
 </div>
 <div class="modal-body text-center">
     <div class="text-center">
@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn  bg-green" data-ng-click="submit()">Submit</button>
-    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+    <button class="btn  bg-green" data-ng-click="$close({comment:comment, student:student})">Submit</button>
+    <button class="btn btn-danger" data-ng-click="$dismiss()">Cancel</button>
 </div>
                    

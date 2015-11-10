@@ -14,7 +14,7 @@ function formatDate(date) {
 
         function referrals($resource) {
             
-            var Referal = $resource('api/referrals/:id', {}, {
+            var Referal = $resource('api/referrals/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
                 update: {
                     method: 'PUT'
                 }
@@ -37,9 +37,11 @@ function formatDate(date) {
             }
 
             
-            return {
-                getReferals:getReferals
-            };
+            return Referal;
+//			{
+//                getReferals:getReferals,
+//				save : saveReferals
+//            };
             
         }
 })();
@@ -62,7 +64,7 @@ function formatDate(date) {
 
             
             // ngResource call to our static data
-            var Students = $resource('api/students/:id', {}, {
+            var Students = $resource('api/students/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
                 update: {
                     method: 'PUT',
                     headers: { 'UserID': 'Yes' }
@@ -75,8 +77,8 @@ function formatDate(date) {
             //     return Students.query();
             // }
 
-            function getStudents() {
-                return Students.query().$promise.then(function(results) {
+            function getStudents(teacherId) {
+                return Students.query({teacherId:teacherId}).$promise.then(function(results) {
                   return results;
                 }, function(error) {
                   console.log(error);
@@ -94,7 +96,24 @@ function formatDate(date) {
         }
 })();
 
+(function() {
+    
+    'use strict';
 
+    angular
+        .module('Argus')
+        .factory('teachers', referrals);
+
+        function referrals($resource) {
+            var teachers = $resource('api/teachers/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+
+            return teachers;
+        }
+})();
 
 
 /* AEC List */
@@ -213,7 +232,7 @@ function formatDate(date) {
 
     }])
 }(angular.module("Argus")));
-/* Assignments */
+/* Assignments File */
 (function (app) {
     app.factory("assignmentsService", [ "$resource", function ( $resource) {
             return $resource(api+"assignments/:id",{id:'@id'}, {
@@ -234,8 +253,34 @@ function formatDate(date) {
                     }
                 }
             });
-    }])
+    }]);
 }(angular.module("Argus")));
+
+/* Assignments List */
+(function (app) {
+    app.factory("assignmentsListService", [ "$resource", function ( $resource) {
+            return $resource(api+"assignments/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b",{id:'@id'}, {
+                pdf:{
+                    method:'GET',
+                    headers:{  accept:'application/pdf'},
+                    responseType:'arraybuffer',
+                    cache:true,
+                    transformResponse:function(data){
+                        console.log(data);
+                        var pdf;
+                        if(data){
+                            pdf = new Blob([data],{type:'application/pdf'})
+                        }
+                        return {
+                            response:pdf
+                        };
+                    }
+                }
+            });
+    }]);
+}(angular.module("Argus")));
+
+
 /* Classes */
 (function (app) {
     app

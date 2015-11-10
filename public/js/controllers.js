@@ -23,43 +23,44 @@ function DashTeacherCtrl($scope, $modal) {
            route: path + 'referal.html',
            link: "teacher.dashboard",
            icon: 'dashboard fa-2x'
-       }, {
-           id: 'Referral System',
-           text: ['Referral', 'System'],
-           route: path + 'referral.html',
-           link: "teacher.referral",
-           icon: 'eye fa-2x'
-       }, {
-           id: 'My Assignments',
-           text: ['My', 'Assignments'],
-           route: path + 'Assignments.html',
-           link: "teacher.assignments",
-           icon: 'file-pdf-o fa-2x'
-       }, {
-           id: 'Statistics',
-           text: ['Statistics'],
-           route: path + 'statistics.html',
-           link: "teacher.statistics",
-           icon: 'bar-chart fa-2x'
-       }, {
-           id: 'Saturday School',
-           text: ['Saturday', 'School'],
-           route: path + 'saturdaySchool.html',
-           link: "teacher.saturdaySchool",
-           icon: 'pencil-square-o fa-2x'
-       }, {
-           id: "Manage Saturday School",
-           text: ['Manage', 'Saturday', 'School'],
-           route: path + 'manageSaturdaySchool.html',
-           link: "teacher.manageSaturdaySchool",
-           icon: 'list-alt fa-2x'
-       }, {
-           id: "Gradebook",
-           text: ['Gradebook'],
-           route: path + 'gradebook.html',
-           link: "teacher.gradebook",
-           icon:'archive fa-2x'
        }
+//	   , {
+//           id: 'Referral System',
+//           text: ['Referral', 'System'],
+//           route: path + 'referral.html',
+//           link: "teacher.referral",
+//           icon: 'eye fa-2x'
+//       }, {
+//           id: 'My Assignments',
+//           text: ['My', 'Assignments'],
+//           route: path + 'Assignments.html',
+//           link: "teacher.assignments",
+//           icon: 'file-pdf-o fa-2x'
+//       }, {
+//           id: 'Statistics',
+//           text: ['Statistics'],
+//           route: path + 'statistics.html',
+//           link: "teacher.statistics",
+//           icon: 'bar-chart fa-2x'
+//       }, {
+//           id: 'Saturday School',
+//           text: ['Saturday', 'School'],
+//           route: path + 'saturdaySchool.html',
+//           link: "teacher.saturdaySchool",
+//           icon: 'pencil-square-o fa-2x'
+//       }, {
+//           id: "Manage Saturday School",
+//           text: ['Manage', 'Saturday', 'School'],
+//           route: path + 'manageSaturdaySchool.html',
+//           link: "teacher.manageSaturdaySchool",
+//           icon: 'list-alt fa-2x'
+//       }, {
+//           id: "Gradebook",
+//           text: ['Gradebook'],
+//           route: path + 'gradebook.html',
+//           link: "teacher.gradebook",
+//           icon:'archive fa-2x'
+//       }
     ];
 
     /**
@@ -258,6 +259,13 @@ function DashAdmin1Ctrl($scope, $modal) {
             link: "admin1.dashboard",
             icon: 'dashboard fa-2x'
         }, {
+           id: 'Referral System',
+           text: ['Referral', 'System'],
+           route: path + 'referral.html',
+           link: "admin1.referral",
+           icon: 'eye fa-2x'
+        }, 
+		{
             id: 'AEC List',
             text: ['AEC', 'List'],
             route: path + 'manageAEC.html',

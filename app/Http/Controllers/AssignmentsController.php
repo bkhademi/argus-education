@@ -24,9 +24,9 @@ class AssignmentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $userId = $this->userId;
+        $userId = isset($this->userId)? $this->userId : $request->input('userId') ;
         $userFolder = "UsersFiles/$userId/";
     
         $files = Storage::allFiles($userFolder);

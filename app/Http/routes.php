@@ -34,6 +34,7 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::resource('userclaims','UserClaimsController');
 	Route::resource('userlogins','UserLoginsController');
 	Route::resource('userroles','UserRolesController');
+	Route::resource('teachers', 'TeachersController');
 	
         Route::resource('printAssignments', 'PrintAssignmentsController');
         Route::resource('printPasses', 'PrintPassesController');

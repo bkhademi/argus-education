@@ -3,5 +3,6 @@
 Homestead.yaml
 Homestead.json
 .env
+.env2
 /nbproject
 .DS_Store

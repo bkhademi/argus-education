@@ -2,49 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use Illuminate\Http\Request;
+use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Students;
-use App\ClassStudents;
-use App\Professorclasses;
 use App\User;
 
-class StudentsController extends Controller
+class TeachersController extends Controller
 {
     /**
      * Display a listing of the resource.
-	 * Finds the students of a given teacher
-	 * teacherId is pased as urlEncoded 
-	 * userId is passed in the jwt (json web token)
-	 * if no teacherID is given then return the student
-	 * of the userId
-     * only students from user's school
+     *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        //get the school of the user
-        
-		// $studentsJson = ProfessorClasses::where('UserId', '00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->get();
-		// $stuClasses = $students[0]->classStudents()->get();
-        //$stuInfo = $stuClasses[0]->user()->get();
-
-		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
+        //
+		$userId = isset($this->userId)? $this->userId : '4663c614-c31d-451d-af9c-2b2c45ace8b2';
 		
-		// requesting the students of a given teacher
-		if($request->has('teacherId')){
-			$id = $request->input('teacherId');
-		}else{
-			$id = $this->getUserId($request);
-			//$id = isset($this->userId)? $this->userId: '00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b';
-		}
+		// get all the teachers of the requestor's school
+		$currentUser =  User::find($userId);
+		$teachers  = User::where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($query){
+			$query->where('aspnetroles.Name', 'teacher');
+		})->get();
+		return $teachers;
 		
-		//$userId = isset($this->userId) ? $this->userId : $request->input('userId');
-        $teacherWithClassStudents = User::with('classstudents.user.student')->find($id);
-		return $teacherWithClassStudents->classstudents;
-      
     }
 
     /**

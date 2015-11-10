@@ -21,26 +21,32 @@
                         <!-- AutoComplete Input Field -->
                         <li style="width:35%">
                             <form>
-                                <input type="text"
-                                       placeholder="Student"
-                                       class="form-control"
-                                       data-ng-model='selected2'
-                                       typeahead="stu as (stu.fn +' , ' +stu.ln+' '+stu.ID+' '+stu.GR+'th') for stu in refTable | filter:$viewValue"
-                                       typeahead-on-select="onSelect2($item, $model, $label)"
-                                       typeahead-append-to-body="true" />
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="refTable.$resolved"
+                                        data-placeholder="Select or enter a student"
+                                        data-ng-model="selected.student"
+										data-ng-change="selected.student?onSelectedStudent():''"
+                                        data-ng-options="s as 
+											(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
+											for s in refTable  track by s.id"
+									>
+											<option value=''></option>
+								</select>
                             </form>
                         </li>
                         <!-- Present Button -->
                         <li>
-                            <button type="button" class="btn  btn-primary " data-ng-click="openPresent(selected)" data-ng-disabled="!selected2">Present</button>
+                            <button type="button" class="btn  btn-primary " data-ng-click="openPresent(selected)" data-ng-disabled="!selected.student">Present</button>
                         </li>
                         <!-- Reschedule Button -->
                         <li>
-                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected2)" data-ng-disabled="!selected2">Re-Schedule</button>
+                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected2)" data-ng-disabled="!selected.student">Re-Schedule</button>
                         </li>
                         <!-- Clear Button -->
                         <li>
-                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected2)" data-ng-disabled="!selected2">Clear</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected2)" data-ng-disabled="!selected.student">Clear</button>
                         </li>
                     </ul>
 
@@ -51,117 +57,74 @@
 
             <br />
             <!--  Table Start -->
-                <div id="printSection">
-                    <div barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
-                </div>
-                <div style="float:none; margin:0 auto;" class="col-sm-12" data-ng-controller="tablesCtrl">
-                    <div data-ng-controller="printAssignmentsController" class="form-group">
-                        <button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
-                            <i class="fa fa-print"></i>Print Assignments
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
-                            <i class="fa fa-barcode"></i> Print Barcodes
-                        </button>
-                    </div>
-                    <div data-ng-controller="MultiplePassesController" class="form-group">
-                        <button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="generatePasses(passesTable)" data-ng-disabled="reftable.length">
-                            <i class="fa fa-ticket"></i> Print Passes
-                        </button>
-                    </div>
-                    <table class="table table-bordered table-striped table-responsive ">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <div class="th">
-                                        First Name
-                                        <span class="fa fa-angle-up"
-                                              data-ng-click=" order('fn') "
-                                              data-ng-class="{active: row == 'fn'}"></span>
-                                        <span class="fa fa-angle-down"
-                                              data-ng-click=" order('-fn') "
-                                              data-ng-class="{active: row == '-fn'}"></span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th">
-                                        Last Name
-                                        <span class="fa fa-angle-up"
-                                              data-ng-click=" order('ln') "
-                                              data-ng-class="{active: row == 'ln'}"></span>
-                                        <span class="fa fa-angle-down"
-                                              data-ng-click=" order('-ln') "
-                                              data-ng-class="{active: row == '-ln'}"></span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th">
-                                        ID
-                                        <span class="fa fa-angle-up"
-                                              data-ng-click=" order('ID') "
-                                              data-ng-class="{active: row == 'ID'}"></span>
-                                        <span class="fa fa-angle-down"
-                                              data-ng-click=" order('-ID') "
-                                              data-ng-class="{active: row == '-ID'}"></span>
-                                    </div>
-                                </th>
-                                <th>
-                                    <div class="th">
-                                        Assignment
-                                        <span class="fa fa-angle-up"
-                                              data-ng-click=" order('Assignment') "
-                                              data-ng-class="{active: row == 'Assignment'}"></span>
-                                        <span class="fa fa-angle-down"
-                                              data-ng-click=" order('-Assignment') "
-                                              data-ng-class="{active: row == '-Assignment'}"></span>
-                                    </div>
-                                </th>
-                                <th>Notified</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-ng-repeat="stu in refTableCurrentPage">
-                                <td>{{stu.fn}}</td>
-                                <td>{{stu.ln}}</td>
-                                <td>{{stu.ID}}</td>
-                                <td>{{stu.Assignments[0].name}}<span data-ng-show="stu.Assignments.length>1" style="font-weight:700">...</span></td>
-                                <td>
-                                    <label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
-                                    <label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+			<div id="printSection">
+				<div data-barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
+			</div>
+			<div style="float:none; margin:0 auto;" class="col-sm-12">
+<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
+					<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
+						<i class="fa fa-print"></i>Print Assignments
+					</button>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
+						<i class="fa fa-barcode"></i> Print Barcodes
+					</button>
+				</div>-->
+				<!--data-ng-controller="MultiplePassesController"--> 
+				<div class="form-group">
+					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="generatePasses(passesTable)" data-ng-disabled="reftable.length">
+						<i class="fa fa-ticket"></i> Print Passes
+					</button>
+				</div>
+				<table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
+					<thead>
+						<tr>
+							<th data-toggle="true">First Name</th>
+							<th>Last Name</th>
+							<th>ID</th>
+							<th>Grade</th>
+							<th class="col-sm-6">Assignment</th>
+							<th>Notified </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="stu in refTable track  by stu.id">
+							<td>{{stu.FirstName}}</td>
+							<td>{{stu.LastName}}</td>
+							<td>{{stu.student.StudentId}}</td>
+							<td>{{stu.student.Grade}}</td>
+							<td>
+								{{stu.referred[0].Name}}<span data-ng-show="stu.referred.length>1" style="font-weight:700">...</span>
 
+<!--								<select multiple chosen
+										class="chosen-select form-control"
+										data-ng-disabled
+										data-placeholder="Select a homework"
+										data-ng-model="stu.referred"
+										data-ng-options="a as (a.Name) for a in assignments track by a.Name">
+									<option value=''></option>
 
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+								</select>-->
 
-                    <footer class="table-footer">
-                        <div class="row">
-                            <div class="col-md-6 page-num-info">
-                                <span>
-                                    Show
-                                    <select data-ng-model="numPerPage"
-                                            data-ng-options="num for num in numPerPageOpt"
-                                            data-ng-change="onNumPerPageChange()"></select>
-                                    entries per page
-                                </span>
-                            </div>
-                            <div class="col-md-6 text-right pagination-container">
-                                <pagination class="pagination-sm"
-                                            ng-model="currentPage"
-                                            total-items="refTable.length"
-                                            max-size="4"
-                                            ng-change="select(currentPage)"
-                                            items-per-page="numPerPage"
-                                            rotate="false"
-                                            previous-text="&lsaquo;" next-text="&rsaquo;"
-                                            boundary-links="true"></pagination>
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </div>
+							</td>
+							<td>
+								<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+								<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6">
+								<ul class="pagination pull-right"></ul>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+
+			</div>
+		</div>
 
     </div>
 

@@ -66,6 +66,10 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasManyThrough( 'App\Classstudents', 'App\Professorclasses','UserId', 'ProfessorClassId');
     }
     
+	public function student(){
+		return $this->hasOne('App\students', 'Id', 'id');
+	}
+	
     // get all classes this user may have
     public function classes(){
         return $this->belongsToMany('App\Classes', 'professorclasses', 'UserId', 'ClassId' );
@@ -80,6 +84,8 @@ class User extends Model implements AuthenticatableContract,
         return $this->hasMany('App\referrals', 'UserId');
     }
     
-  
+	public function referred(){
+		return $this->hasMany('App\Referrals', 'StudentId');
+	}
     
 }

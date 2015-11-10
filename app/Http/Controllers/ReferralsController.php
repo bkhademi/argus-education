@@ -26,7 +26,9 @@ class ReferralsController extends Controller
     public function index(Request $request)
     {
         // UserId = Teacher's Id of the referral,, get the refferrals of a given teacher
-		$userId = $request->has('userId')? $request->input('userId') : $this->userId;
+		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
+		
+		$userId = getUserId($request);
 		
         $referrals = Referrals::where('UserId', $userId)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
         
@@ -54,27 +56,50 @@ class ReferralsController extends Controller
     public function store(Request $request)
     {
         //
-
+		$userId = $this->getUserId($request);// getUserId is in base controller
+		$date = new \Carbon\Carbon($request->date);
         $dataIn = collect($request->data);
+		
 		
 		
 		
         error_log(print_R($dataIn[0],TRUE) );
         error_log($dataIn->count());
-
+		$created=0;
+		$updated=0;
         for($i=0;$i<$dataIn->count();$i++){
-            Referrals::create(
-            ['UserId' => $dataIn[$i]['StudentId'],//$this->userId, 
-                'StudentId' => $dataIn[$i]['StudentId'],
-                'AssignmentId' => $dataIn[$i]['AssignmentId'], 
-                'RefferalStatus' => $dataIn[$i]['RefferalStatus'],
-                'Date' => $dataIn[$i]['Date'],
-                'ParentNotified' => $dataIn[$i]['ParentNotified'],
-                'StudentNotified' => $dataIn[$i]['StudentNotified']]
-             );
+			// check if the referral is already there 
+			// a referral is uniquely identified by 4 fields
+			// (UserID, StudentId, AssignmentId, Date)
+			$referral = Referrals
+				::whereUserid($userId)
+				->whereStudentid($dataIn[$i]['StudentId'])
+				->whereAssignmentid($dataIn[$i]['AssignmentId'])
+				->where('Date',$date)
+				->first();
+			if(!$referral){
+				$created++;
+				Referrals::create(
+				['UserId' => $userId,//$this->userId, 
+					'StudentId' => $dataIn[$i]['StudentId'],
+					'AssignmentId' => $dataIn[$i]['AssignmentId'], 
+					'RefferalStatus' => $dataIn[$i]['RefferalStatus'],
+					'Date' => $date,
+					'ParentNotified' => $dataIn[$i]['ParentNotified'],
+					'StudentNotified' => $dataIn[$i]['StudentNotified']]
+				 );
+			}else{
+				$updated++;
+				$referral->ParentNotified = $dataIn[$i]['ParentNotified'];
+				$referral->StudentNotified = $dataIn[$i]['StudentNotified'];
+				//$referral->RefferalStatus = $dateIn[$i]['ReferralStatus'];
+				$referral->save();
+				
+					
+			}
         }
         
-
+		return ['Created'=>$created, 'Updated'=>$updated];
         // $referrals->save();
     }
 
@@ -84,18 +109,34 @@ class ReferralsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         //
 
         $date = $id;
-
-		$userId = $request->has('userId')? $request->input('userId') : $this->userId;
+		$date = new \Carbon\Carbon($date);
+		
+		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
+		
+		$userId = isset($this->userId) ? $this->userId : $request->input('userId');
+		
+		//$userId =  'fefdfc7c-8ce1-47a4-bb7c-f475ea116a0e';
+		//$date  =  '2012-00-00 00:00:00';
+		
+		$referrals  = User::with(['referred'=>function($query)use($userId, $date){
+				$query->with('assignment')->where('refferals.UserId',$userId)->where('Date',$date);
+			}])->with('student')->whereHas('referred',function($query)use($userId, $date){
+				$query->where('refferals.UserId',$userId)->where('Date',$date);
+			})
+			->get();
+		
+		return $referrals;
 		
         // $referrals = Referrals::where('UserId', $this->userId)->where('Date', $id)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
         //Getting the user referals for an specific date
-        $referrals = Referrals::where('UserId', '00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->where('Date', '2012-00-00 00:00:00')->get();
-
+		$referrals = Referrals::with('studentUser.student','assignment')->where('UserId',$userId)
+			->where('Date', $date)->get();
+		
         $LeStatus = 0;
         $count = $referrals->count();
 
@@ -156,6 +197,19 @@ class ReferralsController extends Controller
     public function update(Request $request, $id)
     {
         //
+		$param = $request->input('param');
+		switch($param){
+			case 'present':
+				return ['msg'=>'present  student'];
+			case 'reschedule':
+				if($request->input('comment') ==='Parent Requested Reschedule' ){
+					return ['msg'=>'parent requested rescheduling the student'];
+				}
+				return ['msg'=>'rescheduling the student'];
+			case 'clear':
+				return ['msg'=>'clearing the student'];
+		}
+		return ['studentid'=>$id, 'userId'=>$request->input('userId'), 'param'=>$request->input('param')];
     }
 
     /**

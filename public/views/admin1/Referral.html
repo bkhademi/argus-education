@@ -1,4 +1,4 @@
-<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="referalController" >
+<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="admin1referalController" >
     <div class="panel panel-default">
         <h2 style="text-align:center"> Hello <span class="bg-primary">Mr. Hernandez</span>, lets create references!</h2>
 
@@ -20,14 +20,34 @@
                     <br />
                      <!-- Buttons and Inputs  <strong>'+stu.GR+ -->
                     <ul class="list-group list-inline "> 
+						 <li style="width:25%;" >
+                            <form>
+                                  
+                                <select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="teachers.$resolved"
+                                        data-placeholder="Select or enter a teacher"
+                                        data-ng-model="selected.teacher"
+										data-ng-change="selected.teacher?onSelectedTeacher():''"
+                                        data-ng-options="s as 
+											(s.FirstName +' '+s.LastName )
+											for s in teachers  track by s.id"
+									>
+											<option value=''></option>
+								</select>
+                                
+                            </form>
+                        </li >
                         <li style="width:25%;" >
                             <form>
                                   
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
+										ng-disabled='false'
 										data-ng-if="teacherStudents.$resolved"
-                                        data-placeholder="Enter student info"
+                                        data-placeholder="Select or enter a student"
                                         data-ng-model="selected.student"
 										data-ng-change="selected.student?onSelectedStudent():''"
                                         data-ng-options="s as 
@@ -44,7 +64,11 @@
                             <button type="button" class="btn  bg-green">Add</button>
                         </li>
                         -->
-                        <li style="width:25%;">
+                      
+                    </ul>
+					 
+					 <ul class='list-inline list-group'>
+						   <li style="width:25%;">
                             <form>
                                 <select 
 								multiple chosen
@@ -59,7 +83,11 @@
                             </form>
                             
                         </li>
-
+						<li class="">
+							<button type="button" class="btn btn-primary" data-ng-click="openCreateNewAssignment()" data-ng-disabled="!selected.teacher" data-ng-hide="showChecks">
+								Create New Assignment
+							</button>
+						</li>
                         <li class="">
                             <button type="button" class="btn  btn-primary" data-ng-click="assignToAll()" data-ng-hide='showChecks'
 									data-ng-disabled="!selected.assignments || selected.assignments.length ==0 || refTable.length == 0  ">Assign to All</button>
@@ -70,7 +98,7 @@
 									data-ng-disabled="!selected.assignments || selected.assignments.length ==0 || refTable.length == 0 ">Assign{{showChecks?'':' Specific'}}</button>
                         </li>
 
-                    </ul>
+					 </ul>
                 </div>
             </div>
 
