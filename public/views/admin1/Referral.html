@@ -29,13 +29,14 @@
 										data-ng-if="teachers.$resolved"
                                         data-placeholder="Select or enter a teacher"
                                         data-ng-model="selected.teacher"
-										data-ng-change="selected.teacher?onSelectedTeacher():''"
+										data-ng-change="onSelectedTeacher()"
                                         data-ng-options="s as 
 											(s.FirstName +' '+s.LastName )
 											for s in teachers  track by s.id"
 									>
 											<option value=''></option>
 								</select>
+								
                                 
                             </form>
                         </li >
@@ -45,8 +46,7 @@
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
-										ng-disabled='false'
-										data-ng-if="teacherStudents.$resolved"
+										data-ng-if='selected.teacher && teacherStudents.$resolved'
                                         data-placeholder="Select or enter a student"
                                         data-ng-model="selected.student"
 										data-ng-change="selected.student?onSelectedStudent():''"
@@ -56,7 +56,12 @@
 									>
 											<option value=''></option>
 								</select>
-                                
+                                <select  
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="!selected.teacher"
+									data-placeholder="Select a teacher first">
+								</select>
                             </form>
                         </li >
                         <!--
@@ -73,12 +78,18 @@
                                 <select 
 								multiple chosen
 								class="chosen-select form-control"
-								data-ng-if="assignments.$resolved"
-								data-placeholder="Select a homework"
+								data-ng-if="selected.teacher && teacherStudents.$resolved"
+								data-placeholder="Select an assignment"
 								data-ng-model="selected.assignments"
 								data-ng-options="assign as (assign.Name) for assign in  assignments track by assign.Id">
 									<option value=''></option>
 									
+								</select>
+								<select 
+								multiple chosen
+								class="chosen-select form-control"
+								data-ng-if="!selected.teacher"
+								data-placeholder="Select a teacher first">
 								</select>
                             </form>
                             
@@ -108,6 +119,7 @@
                 <thead>
                     <tr>
 						<th>Remove</th>
+						<th>Teacher</th>
                         <th data-toggle="true">First Name</th>
                         <th>Last Name</th>
                         <th>ID</th>
@@ -119,6 +131,7 @@
                 <tbody>
                     <tr data-ng-repeat="stu in refTable track  by stu.id">
 						<td> <button data-ng-click='refTable.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
+						<td>{{selected.teacher.FirstName + " " +selected.teacher.LastName}}</td>
                         <td>{{stu.FirstName}}</td>
                         <td>{{stu.LastName}}</td>
                         <td>{{stu.student.StudentId}}</td>
@@ -126,7 +139,7 @@
                         <td>
                              <select multiple chosen
 								class="chosen-select form-control"
-								data-ng-if="assignments"
+								data-ng-if="refTable"
 								data-placeholder="Select a homework"
 								data-ng-model="stu.referred"
 								data-ng-options="a as (a.Name) for a in assignments track by a.Name">

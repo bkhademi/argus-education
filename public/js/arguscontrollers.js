@@ -1708,10 +1708,10 @@
         });
 
 
-        $scope.assignments = assignmentsService.query(function(data){
-			console.log("Returned assignments");
-            console.log(data);
-		});//ServerDataModel.getAssignments();
+//        $scope.assignments = assignmentsService.query(function(data){
+//			console.log("Returned assignments");
+//            console.log(data);
+//		});
 		
         /* REFER A STUDENT LOGIC */
 
@@ -1737,14 +1737,24 @@
 		}
 		
 		$scope.onSelectedTeacher  = function(){
-			var teacherId = $scope.selected.teacher.id
+			if(!$scope.selected.teacher){
+				$scope.teacherStudents = null;
+				return;
+			}
+			var teacherId = $scope.selected.teacher.id;
 			students.getStudents(teacherId).then(function(results) {
-						console.log("Teacher students");
-						console.log(results);
-						$scope.teacherStudents = results;
-					  }, function(error) {
-						console.log(error);
-					  });		
+				console.log("Teacher students");
+				console.log(results);
+				$scope.teacherStudents = results;
+			  }, function(error) {
+				console.log(error);
+			  });
+			assignmentsService.query({teacherId:teacherId},function(results){
+				console.log("Returned assignments");
+				console.log(results);
+				$scope.assignments = results;
+			})
+			
 		}
 		
 		$scope.openCreateNewAssignment = function(){
@@ -1759,7 +1769,13 @@
                 }
             }) // End modalInstace
 
-            modalInstance.result.then(submitPresent);		
+            modalInstance.result.then(function(data){
+				assignmentsService.save({teacher:$scope.selected.teacher, assignment:data}, function(response){
+					console.log('assignment successfully added');
+				}, function(response){
+					console.warn('assignment unseccessfuly added');
+				})
+			});		
 		}
 		
 		var submitPresent = function(data){
