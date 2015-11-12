@@ -230,7 +230,8 @@
 					// adjust the returned referrals 
 				   for(var i = 0; i < data.length ; i++){
 					   for(var j = 0 ; j < data[i].referred.length ; j++){
-						   data[i].referred[j] = data[i].referred[j].assignment;
+						   data[i].referred[j].id = data[i].referred[j].Id;
+						   angular.extend(data[i].referred[j], data[i].referred[j].assignment);
 					   }
 				   }
 					 if (!data) {
@@ -258,11 +259,15 @@
             var completedAssignments = [];
             angular.forEach(student.referred, function (item) {
                 if (item.selected)
-                    completedAssignments.push({ assignmentId: item.Id });
+                    completedAssignments.push({ assignmentId: item.Id, referralId:item.id });
             })
-
             // submit information of student  '$scope.selected.student'  to the database
-			referrals.update({'param':'present','id':student.id}, completedAssignments);
+			angular.forEach(student.referred, function(item){
+				referrals.update({'param':'present','id':item.id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
+					console.log(response);
+				});
+			})
+			//referrals.update({'param':'present','id':student.id},{ data:completedAssignments });
             
             //remove element from table; backend works the logic for completeness and incompleteness
             // and to put the student in AEC Absence list// here or on backend
@@ -313,6 +318,16 @@
             
            
         }
+		
+		$scope.finishManageAEC = function(){
+			angular.forEach($scope.refTable, function(student){
+				angular.forEach(student.referred, function(assignment){
+					referrals.update({'id':assignment.id},
+					{'param':'absent' })
+				});
+			});
+			$scope.refTable = [];
+		}
         /********** MODALS   **********/
 
         /* Present Modal  */
@@ -322,6 +337,9 @@
                 size: 'md',
                 controller: function ($scope, student) {
                     $scope.student = student;
+					$scope.changedStatus = function(){
+						alert(item.accepted);
+					}
                 },
                 resolve: { // variables that get injected into the controller (taken from current $scope)
                     student: function () { return $scope.selected.student; },
@@ -430,55 +448,41 @@
 }(angular.module("Argus")));
 (function (app) {
     app
-    .controller("manageAECAbsenceController", ["$scope", "studentsService", "AECListService", "$filter", "$modal", "$log", "ServerDataModel", function ($scope, studentsService, AECListService, $filter, $modal, $log, ServerDataModel) {
-        $scope.selected2; // student input field model
-        $scope.selected3; // 
+    .controller("manageAECAbsenceController", ["$scope",  "$modal", "referrals", function ($scope, $modal,referrals) {
+        $scope.selected = {};
         $scope.refTable = [];// table model
         $scope.currentDate = new Date(); // date on the date picker
 
-        $scope.$watch('form.date.$modelValue', function (newVal, oldVal) {
+        $scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
 
             if (newVal) {//when date has a valid date request the List from that date
                 $scope.currentDate = newVal;
                 console.log("newVal = " + $scope.form.date.$viewValue);
-                var data = ServerDataModel.getAECList(formatDate(newVal));
-                if (!data) {
-                    $scope.refTable = [];
-                    alert("No students for current date");
+				
+                referrals.query({id:newVal, absence:true},function(data){
+					
+					if (!data.length) {
+						$scope.refTable = [];
+						alert("No students for current date");
 
-                } else {
-                    $scope.refTable = data.stuInfo;
-                    $scope.passesTable = data.stuInfo;
-                    angular.forEach($scope.refTable, function (student) {
+					} else {
+						$scope.refTable = data;
+						$scope.passesTable = data;
+						angular.forEach($scope.refTable, function (student) {
 
-                        student.status = [false, true];
-                    
-                    })
-                }
+							student.status = [false, true];
+
+						})
+					}
+				})
             }
         });
       
 
 
-        // get today's AEC List 
-        /*
-        AECListService.get()
-            .success(function (data) {
-                //console.log(data);
-                if (data === null) {
-                    console.warn("no AEC Absence List for current date:  " + new Date)
-                    
-                    return;
-                }
-                $scope.refTable = data.stuInfo;
-            })
-        */
-
-
-
  
 
-        /******** MANAGE AEC **********/
+        /******** MANAGE AEC Absence **********/
         var submitReschedule = function (data) {
             console.log(data);
 
@@ -490,14 +494,14 @@
             $scope.comment = '';
         };
 
-        var submitComment = function (data) {
-            console.log(data);// data,comment to obtain inputed comment
+        var submitComment = function (data) {// data.student , data.comment
 
-            // submit info of student 'selected2' to database
+            // submit info of student '$scope.selected.student' to database
+			referrals.update({id:data.student.Id}, {param:'AbsentComment', comment:data.comment})
+			
             var indexOfStudent = $scope.refTable.indexOf($scope.selected2);
-            $scope.refTable.splice(indexOfStudent, 1)
-            $scope.selected2 = '';
-            $scope.comment = ''
+            $scope.refTable.splice(indexOfStudent, 1);
+            $scope.selected.student = null;
         }
 
         /********** MODALS   **********/
@@ -535,26 +539,19 @@
         /* Comment Modal */
         $scope.openComment = function (studentInfo) {
             var commentModal = $modal.open({
-                templateUrl: 'views/modals/ClearModal.html',
+                templateUrl: 'views/modals/CommentAbsenceModal.html',
                 size: 'md',
-                controller: function ($scope, $modalInstance, student, title) {
-                    $scope.title = title
+                controller: function ($scope, student) {
+					console.log(student)
+                    $scope.title = "Comment";
                     $scope.student = student;
-
-                    $scope.cancel = function () { $modalInstance.dismiss('cancel'); }
-                    $scope.submit = function () {
-                        $modalInstance.close({ comment: $scope.comment });
-                    }
                 },
                 resolve: {
-                    student: function () { return $scope.selected2; },
-                    title: function () { return "Comment" }
+                    student: function () { return $scope.selected.student; },
                 }
             })// End commentModal
 
-            commentModal.result.then(submitComment, function () {
-                console.info('modal dismissed at' + new Date());
-            })
+            commentModal.result.then(submitComment)
         }
 
     }])
@@ -1334,7 +1331,7 @@
 }(angular.module("Argus")));
 (function (app) {
     app
-    .controller("ProfileCtrl", ["$scope", "classesService", "studentActivitiesService", function ($scope, classesService, studentActivitiesService) {
+    .controller("ProfileCtrl", ["$scope","students", function ($scope, students) {
         $scope.schedule = []; // holds  student's schedule
         $scope.activities = []; // holds student'activities
         $scope.checks = [];
@@ -1350,20 +1347,20 @@
             //console.info('student changed')
 
         })
-        studentActivitiesService.getAll()
-        .then(function (data) {
-            $scope.activities = data;
-        }, function (err) {
-            console.log(err);
-        })
+//        studentActivitiesService.getAll()
+//        .then(function (data) {
+//            $scope.activities = data;
+//        }, function (err) {
+//            console.log(err);
+//        })
         /*  Grab All information from database */
 
         /*******************  Left Side Controllers*********************/
 
-        classesService.get($scope.student.ID)
-            .success(function (data) {
-                $scope.schedule = data;
-            })
+//        classesService.get($scope.student.ID)
+//            .success(function (data) {
+//                $scope.schedule = data;
+//            })
         $scope.schedule = [
                  { period: 1, className: "Integrated Math III", teacher: "Mr. Brandon", room: 'A' },
                  { period: 1, className: "Advanced Math II", teacher: "Mr. Brandon", room: 'A' },
@@ -1383,14 +1380,14 @@
         };
 
         /*******************  Right Side Controllers*********************/
-        studentActivitiesService.get($scope.student.ID)
-            .success(function (data) {
-                if (data) {
-                    $scope.activities = data;
-                } else {
-                    $scope.activities = [];
-                }
-            })
+//        studentActivitiesService.get($scope.student.ID)
+//            .success(function (data) {
+//                if (data) {
+//                    $scope.activities = data;
+//                } else {
+//                    $scope.activities = [];
+//                }
+//            })
 
         $scope.currentDate;
         $scope.$watch("profileForm.date.$modelValue", function (newVal, oldVal) {
@@ -1535,6 +1532,7 @@
 		
 		// only called when a student is selected
 		$scope.onSelectedStudent = function(){
+			return;
 			// add to the list
 			var alreadyInList = false;
 			for(var  i = 0 ; i < $scope.refTable.length; i++){
@@ -1661,10 +1659,11 @@
             console.log(error);
           });
         }
-         getTeacherStudents();
+         //getTeacherStudents();
 		 
 		 function getTeachers(){
 			 $scope.teachers = teachers.query(function(data){
+				 console.log('the teachers')
 				 console.log(data);
 			 });
 		 }
@@ -1677,11 +1676,39 @@
                     console.log(results);
                    
 				   // adjust the returned referrals 
-				   for(var i = 0; i < results.length ; i++){
-					   for(var j = 0 ; j < results[i].referred.length ; j++){
-						   results[i].referred[j] = results[i].referred[j].assignment;
-					   }
-				   }
+							
+						
+					var AlluniqueTeachers = {};
+					var results_length = results.length;
+					var referrals=[];
+					for(var i = 0; i < results_length; i++){
+						var student  = results[i];
+						var uniqueTeachers = {};
+						angular.forEach(student.referred, function(referral, $index2){
+							uniqueTeachers[referral.UserId] =  referral.user;
+							delete referral.user;
+							//AlluniqueTeachers[referral.StudentId] = uniqueTeachers;
+						});
+						var teachersNo =  Object.keys(uniqueTeachers).length;
+						var teachersKeys = Object.keys(uniqueTeachers);
+							for(var j = 0; j < teachersNo; j++){
+								var studentCopy= angular.copy(student);
+								var studentReferrals = [];
+								studentCopy.teacher = uniqueTeachers[teachersKeys[j]];
+								for(var k =0; k < student.referred.length; k++){
+									
+									var referral = student.referred[k];
+									if(referral.assignment.TeacherId === teachersKeys[j])
+										studentReferrals.push(referral.assignment);
+								}
+								studentCopy.referred = studentReferrals;
+								studentCopy.old = true;
+								referrals.push(studentCopy);
+							}
+
+					}
+					results = referrals
+					console.log(results);
                     var data = results;
                     console.log("Data For the ref table");
 					console.log(results);
@@ -1721,6 +1748,7 @@
 		
 		// only called when a student is selected
 		$scope.onSelectedStudent = function(){
+			return;
 			// add to the list
 			var alreadyInList = false;
 			for(var  i = 0 ; i < $scope.refTable.length; i++){
@@ -1733,8 +1761,8 @@
 			else
 				alert('student is already in the list');
 			// clear the field
-			$scope.selected.student = null;
-		}
+			//$scope.selected.student = null;
+		};
 		
 		$scope.onSelectedTeacher  = function(){
 			if(!$scope.selected.teacher){
@@ -1745,17 +1773,16 @@
 			students.getStudents(teacherId).then(function(results) {
 				console.log("Teacher students");
 				console.log(results);
+				
+				
 				$scope.teacherStudents = results;
 			  }, function(error) {
 				console.log(error);
 			  });
-			assignmentsService.query({teacherId:teacherId},function(results){
-				console.log("Returned assignments");
-				console.log(results);
-				$scope.assignments = results;
-			})
 			
 		}
+		
+		
 		
 		$scope.openCreateNewAssignment = function(){
 			var modalInstance = $modal.open({
@@ -1771,17 +1798,17 @@
 
             modalInstance.result.then(function(data){
 				assignmentsService.save({teacher:$scope.selected.teacher, assignment:data}, function(response){
+					 $scope.selected.teacher.assignments.push(response.assignment);
+					 $scope.teachers.$resolved = false;
+					 $scope.teachers.$resolved = true;
 					console.log('assignment successfully added');
 				}, function(response){
 					console.warn('assignment unseccessfuly added');
-				})
+				});
 			});		
-		}
+		};
 		
-		var submitPresent = function(data){
-			
-		}
-		
+	
         $scope.assignToAll = function () {
 			debugger;
             var selectedAssignments = $scope.selected.assignments;
@@ -1790,7 +1817,18 @@
             });
             $scope.selected.assignments = null; // clear homework field when assigned to all???
         };
-
+		
+		$scope.addAssignment = function(){
+			debugger;
+			var selectedAssignments  = $scope.selected.assignments;
+			var referralToAdd = $scope.selected.student.user;
+			
+			addAssignmentsToStudent(selectedAssignments, referralToAdd);
+			referralToAdd.teacher = $scope.selected.teacher;
+			$scope.refTable.push(referralToAdd);
+			console.log($scope.refTable);
+			$scope.selected.student = null;
+		}
         // to be implemented
         // given a list of 'students', assign each one the 'assignment', update table
         // and database to reflect changes (not really, database would be updated on submit but it would be queried through the process) 
@@ -1846,8 +1884,12 @@
 			var studentsReferred = [];
 			angular.forEach($scope.refTable, function(student){
 				angular.forEach(student.referred, function(assignment){
+					if(student.old)
+						return;
+					
 					var referral = {
 						StudentId:student.id, 
+						UserId:assignment.TeacherId,
 						AssignmentId:assignment.Id,
 						RefferalStatus : 0,
 						Date :$scope.currentDate,
@@ -1857,8 +1899,8 @@
 					studentsReferred.push(referral);
 				})
 			})
-			
-			referrals.save({data:studentsReferred, date:$scope.currentDate});
+			if(studentsReferred.length )
+				referrals.save({data:studentsReferred, date:$scope.currentDate});
             //ServerDataModel.createAECList($scope.currentDate, $scope.refTable);
             $scope.refTable = [];
             
@@ -2238,27 +2280,26 @@
 /* end statistics controllers */
 (function (app) {
     app
-    .controller("studentInfoCtrl", ["$scope", "studentsService", "ServerDataModel", function ($scope, studentsService, ServerDataModel) {
+    .controller("studentInfoCtrl", ["$scope", "students",  function ($scope, students) {
         $scope.students;  // model for autocomplete
         $scope.toShow = []; //list of profiles to show on the view
         //student information from the database 
-        studentsService.getAll()
-            .success(function (data) {
-                $scope.students = data;
-            })
-        $scope.students = ServerDataModel.getStudents();
+        students.getAllStudents(function(data){
+			$scope.students = data;
+		});
 
         $scope.studentInfo = { name: 'naomi', address: '1600ffdf' }
         ;
         $scope.max = 4;
         $scope.profiles = ['', '', '', ''];
-        $scope.selected = '';
+        $scope.selected = {};
         $scope.active = 0;
-        $scope.onEnter = function ($item, $model, $label) {
+        $scope.onEnter = function () {
             //$scope.profiles[$scope.active] = $item; //
-            $scope.toShow.push($item)
+            $scope.toShow.push($scope.selected.student)
             $scope.active++; // increase number of active profiles
-            $scope.selected = ''; // clear search field
+            $scope.selected.student = null; // clear search field
+			
         };
         $scope.remove = function ($index) {
             $scope.toShow.splice($index, 1);

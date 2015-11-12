@@ -48,7 +48,7 @@
     app
     .directive('autoResize',function(){
         return {
-            restrict:"C",
+            restrict:"CA",
             link: function (scope, element) {
                 element = element[0];
                 element.addEventListener('keyup',function(event){

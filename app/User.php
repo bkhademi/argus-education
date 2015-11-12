@@ -53,7 +53,7 @@ class User extends Model implements AuthenticatableContract,
     
     // many to one
     public function school(){
-        $this->belongsTo('App\Schools',  'SchoolId');
+        return $this->belongsTo('App\Schools',  'SchoolId', 'Id');
     }
     
     // get all the roles this user might have (many to many)
@@ -88,4 +88,14 @@ class User extends Model implements AuthenticatableContract,
 		return $this->hasMany('App\Referrals', 'StudentId');
 	}
     
+	// where this user Id is in ActionByUserId field
+	public function activitiesCaused(){
+		return $this->hasMany('App\Useractions', 'ActionByUserId');
+	}
+	
+	// where this user Id is in the actionToUserId field
+	public function activitiesAffected(){
+		return $this->hasMany('App\Useractions', 'ActionToUserId');
+	}
+	
 }

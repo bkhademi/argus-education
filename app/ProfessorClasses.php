@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Professorclasses extends Model
 {
     protected $table = 'professorclasses';
-
+	protected $primaryKey = 'Id';
     // Eloquent relationship that says one user belongs to each time entry
     // public function user()
     // {

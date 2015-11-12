@@ -14,7 +14,7 @@ function formatDate(date) {
 
         function referrals($resource) {
             
-            var Referal = $resource('api/referrals/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var Referal = $resource('api/referrals/:id?userId=069a7857-7abe-4c4f-a2e9-68567ee2e067', {}, {
                 update: {
                     method: 'PUT'
                 }
@@ -84,13 +84,17 @@ function formatDate(date) {
                   console.log(error);
                 });
             }
-
+			
+			function getAllStudents(success, failure){
+				return Students.query({admin:true},success, failure);
+			}
             // function getTime() {
 
             // }
             
             return {
-                getStudents:getStudents
+                getStudents:getStudents,
+				getAllStudents:getAllStudents
             };
             
         }
@@ -106,6 +110,25 @@ function formatDate(date) {
 
         function referrals($resource) {
             var teachers = $resource('api/teachers/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+
+            return teachers;
+        }
+})();
+
+(function() {
+    
+    'use strict';
+
+    angular
+        .module('Argus')
+        .factory('teachers', referrals);
+
+        function referrals($resource) {
+            var teachers = $resource('api/useractions/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
                 update: {
                     method: 'PUT'
                 }

@@ -1,0 +1,27 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+	<h4 class="modal-title">Assignments To Reprint for {{student.FirstName + ', ' + student.LastName}}</h4>
+</div>
+<div class="modal-body " >
+	<div class='row'>
+		<div class='col-sm-8 col-sm-offset-2'>
+			<table class='table'>
+				<thead>
+					<tr>
+						<th>Assignment Name</th>
+						<th>Reprint</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat='item in student.referred' class="{{item.Reprint?'bg-danger':''}}" >
+						<td>{{item.Name}}</td>
+						<td>{{item.Reprint?'YES':'NO'}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-info" data-ng-click="$dismiss()">Dismiss</button>
+</div>

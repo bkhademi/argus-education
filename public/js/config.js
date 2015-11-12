@@ -100,7 +100,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
                         {
                             name: 'ui.calendar',
                             files: ['js/plugins/fullcalendar/calendar.js']
-                        }
+                        },
+						{
+							insertBefore: '#loadBefore',
+							name: 'localytics.directives',
+							files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+						}
                     ]);
                 }
             }

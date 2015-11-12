@@ -27,6 +27,12 @@ class AssignmentsController extends Controller
     public function index(Request $request)
     {
         $userId = isset($this->userId)? $this->userId : $request->input('userId') ;
+		if($request->has('teacherId')){
+			// if teacherId passed then grab only the content of the Assignments Table
+			// dont check if the file exists
+			$userId = $request->input('teacherId');
+			return Assignments::with('teacher')->whereTeacherid($userId)->get();
+		}
         $userFolder = "UsersFiles/$userId/";
     
         $files = Storage::allFiles($userFolder);

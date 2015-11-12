@@ -45,14 +45,23 @@ class UserActionsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
+     * Display all the activity entries for a student
+     * Expected URL encoded Parameters
+	 * 
+	 * ActionByUserId url encoded
+     * @param  int  $id (actionToId)
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $studentId = $id;
+		$ActionByUserId = $request->ActionByUserId;
+		$actions = UserActions
+			::where('ActionToUserId',$studentId)
+			//->where('ActionByUserId',$ActionByUserId)
+			->get();
+		
+		return $actions;
     }
 
     /**

@@ -29,10 +29,10 @@
                                         data-ng-model="selected.student"
 										data-ng-change="selected.student?onSelectedStudent():''"
                                         data-ng-options="s as 
-											(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
-											for s in refTable  track by s.id"
-									>
-											<option value=''></option>
+										(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
+										for s in refTable  track by s.id"
+										>
+									<option value=''></option>
 								</select>
                             </form>
                         </li>
@@ -42,11 +42,11 @@
                         </li>
                         <!-- Reschedule Button -->
                         <li>
-                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected2)" data-ng-disabled="!selected.student">Re-Schedule</button>
+                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected)" data-ng-disabled="!selected.student">Re-Schedule</button>
                         </li>
                         <!-- Clear Button -->
                         <li>
-                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected2)" data-ng-disabled="!selected.student">Clear</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected)" data-ng-disabled="!selected.student">Clear</button>
                         </li>
                     </ul>
 
@@ -61,16 +61,16 @@
 				<div data-barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
 			</div>
 			<div style="float:none; margin:0 auto;" class="col-sm-12">
-<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
-					<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
-						<i class="fa fa-print"></i>Print Assignments
-					</button>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
-						<i class="fa fa-barcode"></i> Print Barcodes
-					</button>
-				</div>-->
+				<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
+									<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
+										<i class="fa fa-print"></i>Print Assignments
+									</button>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
+										<i class="fa fa-barcode"></i> Print Barcodes
+									</button>
+								</div>-->
 				<!--data-ng-controller="MultiplePassesController"--> 
 				<div class="form-group">
 					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="generatePasses(passesTable)" data-ng-disabled="reftable.length">
@@ -89,23 +89,23 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr data-ng-repeat="stu in refTable track  by stu.id">
+						<tr data-ng-repeat="stu in refTable track  by stu.id" data-ng-show="stu.referred.length">
 							<td>{{stu.FirstName}}</td>
 							<td>{{stu.LastName}}</td>
 							<td>{{stu.student.StudentId}}</td>
 							<td>{{stu.student.Grade}}</td>
 							<td>
-								{{stu.referred[0].Name}}<span data-ng-show="stu.referred.length>1" style="font-weight:700">...</span>
+								{{stu.referred[0].Name}}<span data-ng-show="stu.referred.length > 1" style="font-weight:700">...</span>
 
-<!--								<select multiple chosen
-										class="chosen-select form-control"
-										data-ng-disabled
-										data-placeholder="Select a homework"
-										data-ng-model="stu.referred"
-										data-ng-options="a as (a.Name) for a in assignments track by a.Name">
-									<option value=''></option>
-
-								</select>-->
+								<!--								<select multiple chosen
+																		class="chosen-select form-control"
+																		data-ng-disabled
+																		data-placeholder="Select a homework"
+																		data-ng-model="stu.referred"
+																		data-ng-options="a as (a.Name) for a in assignments track by a.Name">
+																	<option value=''></option>
+								
+																</select>-->
 
 							</td>
 							<td>
@@ -123,6 +123,9 @@
 					</tfoot>
 				</table>
 
+				<div class="col-md-12 text-center">
+					<button style="width:25%" type="button" data-ng-click="finishManageAEC()" class="btn btn-info btn-lg">Finish</button>
+				</div>
 			</div>
 		</div>
 

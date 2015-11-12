@@ -13,4 +13,8 @@ class Assignments extends Model
     public function reference(){
         return $this->hasMany('App\Blobreferences', 'Assignment_Id', 'Id');
     }
+	
+	public function teacher(){
+		return $this->belongsTo('App\User', 'id', 'TeacherId');
+	}
 }

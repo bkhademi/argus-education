@@ -29,10 +29,24 @@ class ReferralsController extends Controller
         // UserId = Teacher's Id of the referral,, get the refferrals of a given teacher
 		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
 		
-		$userId = getUserId($request);
-		
-        $referrals = Referrals::where('UserId', $userId)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
+		$userId = $this->getUserId($request);
+		$date = new Carbon();
+        $referrals = Referrals::with('studentUser', 'assignment')->where('UserId', $userId)->orderBy('Date', 'desc')->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
         
+		$referrals = User::with(['referred'=>function($query)use($userId, $date){
+				$query->with('assignment', 'user.assignments')
+					->where('refferals.UserId',$userId)
+					//->where('Date','>=',$date)
+					//->where('RefferalStatus',0)
+					//->OrWhere('RefferalStatus',2);
+					;
+			}])->with('student')->whereHas('referred',function($query)use($userId, $date){
+				$query
+					->where('refferals.UserId',$userId);
+					//->where('Date','>=',$date);
+			})
+			->get();
+		
 		// $referrals = Referrals::all();
 		
 		return $referrals;
@@ -81,7 +95,7 @@ class ReferralsController extends Controller
 			if(!$referral){
 				$created++;
 				Referrals::create(
-				['UserId' => $userId,//$this->userId, 
+				['UserId' => $dataIn[$i]['UserId'],//$userId,//$this->userId, 
 					'StudentId' => $dataIn[$i]['StudentId'],
 					'AssignmentId' => $dataIn[$i]['AssignmentId'], 
 					'RefferalStatus' => $dataIn[$i]['RefferalStatus'],
@@ -120,17 +134,53 @@ class ReferralsController extends Controller
 		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
 		
 		$userId = isset($this->userId) ? $this->userId : $request->input('userId');
-		
+		$currentUser = User::find($userId);
 		//$userId =  'fefdfc7c-8ce1-47a4-bb7c-f475ea116a0e';
 		//$date  =  '2012-00-00 00:00:00';
 		
-		$referrals  = User::with(['referred'=>function($query)use($userId, $date){
-				$query->with('assignment')->where('refferals.UserId',$userId)->where('Date',$date);
-			}])->with('student')->whereHas('referred',function($query)use($userId, $date){
-				$query->where('refferals.UserId',$userId)->where('Date',$date);
-			})
-			->get();
+		if($request->has('absence')){
+			return  Referrals
+			::with('studentUser.student','assignment','user')
+				->where('Date', $date)
+				->where('RefferalStatus',4)
+				->get();
+		}
 		
+		if(!$request->has('referral')){
+			$referrals  = User::with(['referred'=>function($query)use($userId, $date){
+					$query->with('assignment', 'user.assignments')
+						//->where('refferals.UserId',$userId)
+						->where('Date',$date)
+						->where('RefferalStatus',0)
+						->OrWhere('RefferalStatus',2)
+						->OrWhere('RefferalStatus',4);
+				}])->with('student')->whereHas('referred',function($query)use($userId, $date){
+					$query
+						//->where('refferals.UserId',$userId)
+						->where('Date',$date);
+				})
+				->get();
+		}
+		else{
+	
+		$referrals = User::with(['referrals'=>function($q)use($date){
+				$q->where('Date',$date)->with('studentUser', 'assignment');
+			}])->where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($q){
+				$q->where('aspnetroles.Name', 'teacher');
+			})->whereHas('referrals', function($q)use($userId,$date){
+				$q->where('Date',$date);
+			})->get();
+		 
+//		$referrals = Referrals::with(['studentUser.referred'=>function($q){
+//		}])->select('StudentId')->distinct()->where("Date",$date);
+//		$referrals = $referrals->addSelect('UserId')->get()->load('user');
+//		
+			
+			
+//		$referrals = Referrals::with('user')->select('UserId')->distinct()->where("Date",$date);
+//		$referrals = $referrals->addSelect('StudentId')->get()->load('studentUser.referred');
+		 }
+		 
 		return $referrals;
 		
         // $referrals = Referrals::where('UserId', $this->userId)->where('Date', $id)->get();//find('00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b')->classStudents()->get();
@@ -205,7 +255,14 @@ class ReferralsController extends Controller
 
 		switch($param){
 			case 'present':
-                Referrals::where('Id',$id)->update(['RefferalStatus' => 1]);
+				// update the assignments for which the student was present.
+				// move the others to the next day
+				$status = $request->input('Completed')?1:0;
+				$Reprint =$request->input('Reprint')?1:0;
+                Referrals::where('Id',$id)->update(['RefferalStatus' => $status, 'Reprint'=>$Reprint]);
+				if(!$request->input('Completed')){// not completed, reschedule to next day
+					Referrals::where('Id',$id)->update(['RefferalStatus' => 0, 'Date'=> Carbon::tomorrow()]);
+				}
 				return ['msg'=>'present  student'];
 
 			case 'reschedule':
@@ -217,6 +274,33 @@ class ReferralsController extends Controller
 			case 'clear':
                 Referrals::where('Id',$id)->update(['RefferalStatus' => 3]);
 				return ['msg'=>'clearing the student'];
+			case 'teacherUpdate': 
+				$referral = $request->data;
+				$accepted = $referral['Accepted']?1:0;
+				$status = $accepted?3:2;
+				$reason = $referral['Reason']['value'];
+				$update = ['RefferalStatus'=>$status,'Accepted'=>$accepted,
+					'RejectedComment'=>$referral['RejectedComment'], "Reason"=>$reason];
+				Referrals::where('Id',$id)->update($update);
+				// check if the refferral was not accepted reschedule 
+				if(!$accepted){
+					// check next day available,, for now reschedue for next day 
+					
+					Referrals::where('Id',$id)->update(['Date'=> Carbon::tomorrow()]);
+				}
+				return ['msg'=>'Teacher Updating the  referral'];
+			case 'absent':
+				$status = 4;
+				$update = Referrals::find($id)->update(['RefferalStatus'=>$status, 'Date'=>Carbon::tomorrow()]);
+				return ['msg'=>'Student was Absent, rescheduling for  tomorrow :'.$update];
+			case 'AbsentComment':
+				$status = 0;
+				$comment = $request->comment;
+				$update = Referrals::find($id)->update(['RefferalStatus'=>$status]);
+				return ['msg'=>'Student Absence Processed, Comment: '.$comment];
+				
+			default:
+				return response('Unknown param ', 500);
 		}
 		return ['studentid'=>$id, 'userId'=>$request->input('userId'), 'param'=>$request->input('param')];
     }
