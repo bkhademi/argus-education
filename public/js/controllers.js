@@ -9,6 +9,7 @@
 function MainCtrl($rootScope,$auth, $state) {
 	
 	var user = JSON.parse(localStorage.getItem('user'));
+	var user = $rootScope.currentUser;
    if(user){
     this.userName = user.FirstName +', ' +user.LastName;//user.name;
     this.helloText = 'Welcome ';

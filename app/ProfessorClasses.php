@@ -34,7 +34,7 @@ class Professorclasses extends Model
     }
     
     public function students(){
-        return $this->hasMany('App\students', 'ProfessorClass_Id','Id');
+        return $this->hasMany('App\Students', 'ProfessorClass_Id','Id');
     }
     
 }

@@ -66,7 +66,9 @@ class AuthenticateController extends Controller
         }catch(JWTException $e){
             // something went wrong 
             return response()->json(['error' => 'could_not_create_token'], 500);
-        }
+		}catch(Extepcion $e){
+			throw $e;
+		}
         //$UserID = User::where('email', $credentials['email'])->value('name');
         //$UserID = Auth::user()->name;   // get the username when the user is authenticated 
         //if no error are encountered return a JWT

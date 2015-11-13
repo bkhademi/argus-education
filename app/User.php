@@ -58,7 +58,7 @@ class User extends Model implements AuthenticatableContract,
     
     // get all the roles this user might have (many to many)
     public function roles(){
-        return $this->belongsToMany('App\roles', 'aspnetuserroles', 'UserId', 'RoleId');
+        return $this->belongsToMany('App\Roles', 'aspnetuserroles', 'UserId', 'RoleId');
     }
     
     //  get all the classsttudents for this user (many to many throurgh
@@ -67,7 +67,7 @@ class User extends Model implements AuthenticatableContract,
     }
     
 	public function student(){
-		return $this->hasOne('App\students', 'Id', 'id');
+		return $this->hasOne('App\Students', 'Id', 'id');
 	}
 	
     // get all classes this user may have
@@ -81,7 +81,7 @@ class User extends Model implements AuthenticatableContract,
     }
     
     public function referrals(){
-        return $this->hasMany('App\referrals', 'UserId');
+        return $this->hasMany('App\Referrals', 'UserId');
     }
     
 	public function referred(){
