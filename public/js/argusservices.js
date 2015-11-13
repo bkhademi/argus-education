@@ -14,7 +14,7 @@ function formatDate(date) {
 
         function referrals($resource) {
             
-            var Referal = $resource('api/referrals/:id?userId=069a7857-7abe-4c4f-a2e9-68567ee2e067', {}, {
+            var Referal = $resource('api/referrals/:id', {}, {
                 update: {
                     method: 'PUT'
                 }
@@ -64,7 +64,7 @@ function formatDate(date) {
 
             
             // ngResource call to our static data
-            var Students = $resource('api/students/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var Students = $resource('api/students/:id', {}, {
                 update: {
                     method: 'PUT',
                     headers: { 'UserID': 'Yes' }
@@ -109,7 +109,7 @@ function formatDate(date) {
         .factory('teachers', referrals);
 
         function referrals($resource) {
-            var teachers = $resource('api/teachers/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var teachers = $resource('api/teachers/:id', {}, {
                 update: {
                     method: 'PUT'
                 }
@@ -125,10 +125,10 @@ function formatDate(date) {
 
     angular
         .module('Argus')
-        .factory('teachers', referrals);
+        .factory('useractions', referrals);
 
         function referrals($resource) {
-            var teachers = $resource('api/useractions/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var teachers = $resource('api/useractions/:id', {}, {
                 update: {
                     method: 'PUT'
                 }

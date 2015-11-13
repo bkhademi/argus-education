@@ -848,7 +848,7 @@
     app.directive('logout', function(){
         var controller = ['$scope', '$auth', '$rootScope', '$state', function($scope, $auth, $rootScope,$state){
            $scope.logout = function(){
-               debugger
+              
                $auth.logout().then(function(){
                    debugger
                    localStorage.removeItem('user');

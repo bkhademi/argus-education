@@ -6,12 +6,31 @@
 /**
  * MainCtrl - controller
  */
-function MainCtrl() {
+function MainCtrl($rootScope,$auth, $state) {
+	
+	var user = JSON.parse(localStorage.getItem('user'));
+   if(user){
+    this.userName = user.FirstName +', ' +user.LastName;//user.name;
+    this.helloText = 'Welcome ';
+    //this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+   }
+   else{
+       this.userName = "Please Log In"
+   }
 
-    this.userName = 'Brandon Hernandez';
-    this.helloText = 'Welcome in SeedProject';
-    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+//    this.userName = 'Brandon Hernandez';
+//    this.helloText = 'Welcome in SeedProject';
+//    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+	this.logout = function(){
+		 $auth.logout().then(function(){
+			localStorage.removeItem('user');
 
+		$rootScope.authenticated = false;
+
+		$rootScope.currentUser  = null;
+		$state.go('auth'); 
+		});
+	}
 };
 
 function DashTeacherCtrl($scope, $modal, referrals) {
@@ -72,7 +91,7 @@ function DashTeacherCtrl($scope, $modal, referrals) {
 			for(var i = 0; i < data.length ; i++){
 				for(var j = 0 ; j < data[i].referred.length ; j++){
 					
-					if(data[i].referred[j].RefferalStatus === 1){
+					if(data[i].referred[j].RefferalStatus === 1 && data[i].referred[j].Accepted != 1){
 						$scope.incommingAssignments++;
 						data[i].showAccept = true;
 					}
@@ -1243,7 +1262,7 @@ function welcomeWizardCtrl($scope, $rootScope) {
 
 angular
     .module('Argus')
-    .controller('MainCtrl', MainCtrl)
+    .controller('MainCtrl',["$rootScope","$auth", "$state", MainCtrl])
     .controller('DashTeacherCtrl', ["$scope", "$modal","referrals", DashTeacherCtrl])
     .controller('DashAdmin1Ctrl', ["$scope", "$modal", DashAdmin1Ctrl])
     .controller('DashAdmin2Ctrl', ["$scope", "$modal", DashAdmin2Ctrl])

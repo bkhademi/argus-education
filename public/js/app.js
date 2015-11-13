@@ -26,7 +26,7 @@
 					// instead of checking fora status code of 400 which might be used
 					// for other reasons in laravel, we check for the specific rejection
 					// reason to tell us if we need to redirect to the loggin state
-					var rejectionReason  = ['token_not_provided', 'token_expired', 'token_absent', 'token_invalid'];
+					var rejectionReason  = ['token_not_provided', 'token_expired', 'token_absent', 'token_invalid','user_not_found'];
 					
 					// Loop through each rejection reason and redirect to the login
 					// state if one is encountered
@@ -63,7 +63,8 @@
 		.state('auth', {
 			url:'/auth',
 			templateUrl: 'views/login.html',
-			controller: 'AuthController as auth'
+			controller: 'AuthController as auth',
+			data: {pageTitle: "Login", specialClass: "white-bg"}
 		})
 	}).run(function($rootScope, $state){
 		// $stateChangeStart is fired whenever the state changes. We can use some parameters

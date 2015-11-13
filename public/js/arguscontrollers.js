@@ -263,7 +263,7 @@
             })
             // submit information of student  '$scope.selected.student'  to the database
 			angular.forEach(student.referred, function(item){
-				referrals.update({'param':'present','id':item.id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
+				referrals.update({'param':'present','id':item.Id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
 					console.log(response);
 				});
 			})
@@ -284,7 +284,7 @@
 				newDate:data.date,
 				oldDate:$scope.currentDate,
 				id:data.student.id},
-			data.student) 
+				data) 
 
             removeSelectedStudentFromTableAndClear();
         };
@@ -292,11 +292,11 @@
 		var submitClear = function (data) {
 			
 			// submit information of student '$scope.selected.student' to the database
-			referrals.update({param:'clear', comment:data.comment, id:data.student.id}, data.student)
+			referrals.update({param:'clear', comment:data.comment, id:data.student.referred[0].id}, data)
             //remove element from table; backend works the logic for completeness and incompleteness
             // and to put the student in AEC Absence list// here or on backend
 			removeSelectedStudentFromTableAndClear();
-        }
+        };
 
         var submitParentNotified = function (data) {
             var rescheduleComment = "Parent Requested Reschedule";

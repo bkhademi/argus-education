@@ -11,6 +11,8 @@ use App\Http\Controllers\Controller;
 use App\Referrals;
 
 use App\Students;
+use App\Useractions;
+
 use App\ClassStudents;
 use App\Professorclasses;
 use App\User;
@@ -273,6 +275,7 @@ class ReferralsController extends Controller
 				return ['msg'=>'rescheduling the student'];
 			case 'clear':
                 Referrals::where('Id',$id)->update(['RefferalStatus' => 3]);
+				//Useractions::create([])
 				return ['msg'=>'clearing the student'];
 			case 'teacherUpdate': 
 				$referral = $request->data;
