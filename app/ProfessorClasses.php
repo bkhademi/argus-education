@@ -8,6 +8,8 @@ class Professorclasses extends Model
 {
     protected $table = 'professorclasses';
 	protected $primaryKey = 'Id';
+	public $timestamps = false;
+	public $guarded = [];
     // Eloquent relationship that says one user belongs to each time entry
     // public function user()
     // {

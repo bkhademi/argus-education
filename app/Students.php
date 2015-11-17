@@ -8,6 +8,10 @@ class Students extends Model
 {
 	protected $table = 'students';
 	protected $primaryKey = 'Id';
+	protected $guarded = [];
+	
+	public $timestamps = false;
+	
     // Eloquent relationship that says one user belongs to each time entry
     public function classes()
     {// link not well established

@@ -8,5 +8,10 @@ class Roles extends Model
 {
     //
 	protected $table = 'aspnetroles';
-
+	
+	protected $guarded = [];
+	
+	public $primaryKey = 'Id';
+	
+	public $timestamps = false;
 }

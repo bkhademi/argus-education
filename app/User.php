@@ -27,7 +27,7 @@ class User extends Model implements AuthenticatableContract,
 	 * The primary key of this model's table
 	 * @var string
 	 */
-	 protected $primaryKey = 'id';
+	 public $primaryKey = 'id';
 	 
 	  /**
      * Indicates if the model should  be timestamped.
@@ -42,7 +42,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $guarded = [];
 
     /**
      * The attributes excluded from the model's JSON form.

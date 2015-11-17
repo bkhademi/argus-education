@@ -140,7 +140,14 @@
                             <!--
                     <input type="checkbox" data-ng-model="filter[act]" data-ng-click="changeBool($index)"><strong data-ng-class="checks[$index]?colors[$index%3]:''">{{act}}</strong> -->
                             <div class="btn-group">
-                                <label data-ng-repeat="act in getActivities()" class="btn btn-default ng-pristine ng-untouched ng-valid" ng-model="filter[act]" btn-checkbox="">{{act}} <i data-ng-show="filter[act]"class="badge">5</i></label>
+                                <label data-ng-repeat="act in getActivities()" 
+									   class="btn btn-default ng-pristine ng-untouched ng-valid" 
+									   ng-model="filter[act]" btn-checkbox="">
+											{{act}}
+<!--										<i data-ng-show="filter[act]"class="badge">
+											{{activities.length}}
+										</i>-->
+								</label>
                                 
                             </div>
                             

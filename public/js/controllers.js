@@ -9,11 +9,13 @@
 function MainCtrl($rootScope,$auth, $state) {
 	
 	var user = JSON.parse(localStorage.getItem('user'));
-	var user = $rootScope.currentUser;
-   if(user){
-    this.userName = user.FirstName +', ' +user.LastName;//user.name;
-    this.helloText = 'Welcome ';
-    //this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+	$rootScope.currentUser=  user;
+	// var user = $rootScope.currentUser;
+   if($rootScope.currentUser || JSON.parse(localStorage.getItem('user')) ){
+	  
+    this.userName = $rootScope.currentUser.FirstName +', ' 
+		+ $rootScope.currentUser.LastName;//user.name;
+
    }
    else{
        this.userName = "Please Log In"

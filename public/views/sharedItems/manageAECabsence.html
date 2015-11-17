@@ -52,7 +52,7 @@
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
-										data-ng-if="refTable.$resolved"
+										data-ng-if="refTable.$resolved && refTable.length"
                                         data-placeholder="Select or enter a student"
                                         data-ng-model="selected.student"
 										

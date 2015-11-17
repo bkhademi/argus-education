@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 use App\Userroles;
 use App\Roles;
+use App\User;
 
 
 class AuthenticateController extends Controller
@@ -19,7 +20,7 @@ class AuthenticateController extends Controller
 		// except for the authenticate method. We don't want to prevent
 		// the  user from retrieving their token if they don't already have it
 		
-		$this->middleware('jwt.auth', ['except'=>['authenticate']]);
+		$this->middleware('jwt.auth', ['except' => ['authenticate']]);
 		
 	}
     
@@ -32,21 +33,29 @@ class AuthenticateController extends Controller
     public function index()
     {
         //
-        return "index";
+        $users = User::all();
+		return $users;
         
     }
     public function getAuthenticatedUser(){
-        try{
-            if( ! $user = JWTAuth::parseToken()->authenticate()){
-                    return response()->json(['user_not_found'], 404);
+        try {
+
+            if (! $user = JWTAuth::parseToken()->authenticate()) {
+                return response()->json(['user_not_found'], 404);
             }
 
-        }catch(Tymon\JWTAuth\Exceptions\TokenExpiredException $e){
+        } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
             return response()->json(['token_expired'], $e->getStatusCode());
-        }catch(Tymon\JWTAuth\Exceptions\TokenInvalidException $e){
+
+        } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
             return response()->json(['token_invalid'], $e->getStatusCode());
-        }catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+        } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+
             return response()->json(['token_absent'], $e->getStatusCode());
+
         }
 
         // the token is valid and we have found uservia the sub claim
@@ -66,9 +75,8 @@ class AuthenticateController extends Controller
         }catch(JWTException $e){
             // something went wrong 
             return response()->json(['error' => 'could_not_create_token'], 500);
-		}catch(Extepcion $e){
-			throw $e;
 		}
+		
         //$UserID = User::where('email', $credentials['email'])->value('name');
         //$UserID = Auth::user()->name;   // get the username when the user is authenticated 
         //if no error are encountered return a JWT

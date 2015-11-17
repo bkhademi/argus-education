@@ -13,16 +13,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
-        // $this->call(UserTableSeeder::class);
-        User::create(
-                [
-                    'username' => 'you',
-                    'email' => 'you@you.com',
-                    'passwordhash' => Hash::make('secret'),
-                    'schoolid' => 1 
-                ]
-        );
+		
+		//$this->call(EstacadoRoomsTableSeeder::class);
+		//$this->call(StudentsUsersTablesSeeder::class);
+		//$this->call(AdminsSeeder::class);
+		$this->call(professorsAndClasses::class);
         Model::reguard();
     }
 }

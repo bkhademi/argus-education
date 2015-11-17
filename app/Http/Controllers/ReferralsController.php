@@ -88,12 +88,18 @@ class ReferralsController extends Controller
 			// check if the referral is already there 
 			// a referral is uniquely identified by 4 fields
 			// (UserID, StudentId, AssignmentId, Date)
+			$teacher = User::find($dataIn[$i]['UserId']);
+			$assign = Assignments::find($dataIn[$i]['AssignmentId']);
 			$referral = Referrals
-				::whereUserid($userId)
+				::whereUserid($dataIn[$i]['UserId'])
 				->whereStudentid($dataIn[$i]['StudentId'])
 				->whereAssignmentid($dataIn[$i]['AssignmentId'])
 				->where('Date',$date)
 				->first();
+			$action  = Useractions::create(['ActionDate'=>Carbon::today(), 'ActionByUserId'=> $dataIn[$i]['UserId'],
+				'ActionToUserId'=> $dataIn[$i]['StudentId'], 'ActionType'=>0, 
+				'Comment'=>'Student Referred from teacher '.$teacher->LastName.' for assignment '.$assign->Name
+				]);
 			if(!$referral){
 				$created++;
 				Referrals::create(
@@ -254,30 +260,56 @@ class ReferralsController extends Controller
 		$param = $request->input('param');
 
         error_log($param);
-
+		$referral = Referrals::with('assignment')->findOrFail($id);
+		
 		switch($param){
 			case 'present':
+				$action = Useractions::create(['ActionDate'=>Carbon::today(),
+					'ActionByUserId'=>$this->userId,'ActionToUserId'=>$referral->StudentId,'ActionType'=>1,
+					'Comment'=>'student was present for assignment '.$referral->assignment->Name,
+					'ParentNotified'=>$request->data['ParentNotified'],
+					'StudentNotified'=>$request->data['StudentNotified'],'Completed'=>$request->Completed 
+					]);
 				// update the assignments for which the student was present.
-				// move the others to the next day
+				// move the others to the next day- no, frontend sends requests for that,, 
 				$status = $request->input('Completed')?1:0;
 				$Reprint =$request->input('Reprint')?1:0;
-                Referrals::where('Id',$id)->update(['RefferalStatus' => $status, 'Reprint'=>$Reprint]);
+                $referral->update(['RefferalStatus' => $status, 'Reprint'=>$Reprint]);
 				if(!$request->input('Completed')){// not completed, reschedule to next day
-					Referrals::where('Id',$id)->update(['RefferalStatus' => 0, 'Date'=> Carbon::tomorrow()]);
+					$referral->update([ 'Date'=> Carbon::tomorrow()]);
+					$action->update(['Comment'=>"Student didn't complete assignment ".$referral->assignment->Name." , Rescheduling for Next Day" ]);
+					return ['msg'=>'student didnt completed this assignent '.$referral->assignment->Name];
+					
 				}
 				return ['msg'=>'present  student'];
 
 			case 'reschedule':
-                Referrals::where('Id',$id)->update(['RefferalStatus' => 2, 'Date'=> Carbon::tomorrow()]);
+				return $request->all();
+				$newDate = new Carbon($request->newDate);
+				$action = Useractions::create(['ActionDate'=>Carbon::today(),
+					'ActionByUserId'=>$this->userId,'ActionToUserId'=>$referral->StudentId,'ActionType'=>2,
+					//'Comment'=>'Student was Rescheduled from '.$request->oldDate.' to '.$request->newDate,
+					'Comment'=>$request->comment,
+					'ParentNotified'=>$request->data['ParentNotified'],
+					'StudentNotified'=>$request->data['StudentNotified'],
+					'Excused'=> $request->excused?1:0
+					]);
+				$referral->update(['RefferalStatus' => 2, 'Date'=>new Carbon($request->newDate)]);
 				if($request->input('comment') ==='Parent Requested Reschedule' ){
+					$action->update(['comment'=>$action->comment.'Parent Requested Rescheduling']);
 					return ['msg'=>'parent requested rescheduling the student'];
 				}
 				return ['msg'=>'rescheduling the student'];
 			case 'clear':
-                Referrals::where('Id',$id)->update(['RefferalStatus' => 3]);
-				//Useractions::create([])
+				
+				$action = Useractions::create(['ActionDate'=>Carbon::today(), 
+					'ActionByUserId'=>$this->userId, 'ActionToUserId'=>$referral->StudentId, 'ActionType'=>3,
+					'Comment'=>$request->comment, 'ParentNotified'=>$request->data['ParentNotified'],
+					'StudentNotified'=>$request->data['StudentNotified'] ,
+					'Completed'=>1]);
+                $referral->update(['RefferalStatus' => 3]);
 				return ['msg'=>'clearing the student'];
-			case 'teacherUpdate': 
+			case 'teacherUpdate': // Not used in this 1st version
 				$referral = $request->data;
 				$accepted = $referral['Accepted']?1:0;
 				$status = $accepted?3:2;
@@ -292,14 +324,24 @@ class ReferralsController extends Controller
 					Referrals::where('Id',$id)->update(['Date'=> Carbon::tomorrow()]);
 				}
 				return ['msg'=>'Teacher Updating the  referral'];
-			case 'absent':
+			case 'absent': // used for students left when finish button is pressed 
+				$action = Useractions::create(['ActionDate'=>Carbon::today(),
+					'ActionByUserId'=>$this->userId, 'ActionToUserId'=>$referral->StudentId, 'ActionType'=>4,
+					'Comment'=>'Student Was Absent For AEC on '.Carbon::now(),
+					 'ParentNotified'=>$request->data['ParentNotified']?1:0,
+					'StudentNotified'=>$request->data['StudentNotified']?1:0
+					]);
 				$status = 4;
-				$update = Referrals::find($id)->update(['RefferalStatus'=>$status, 'Date'=>Carbon::tomorrow()]);
-				return ['msg'=>'Student was Absent, rescheduling for  tomorrow :'.$update];
+				$referral->update(['RefferalStatus'=>$status, 'Date'=>Carbon::tomorrow()]);
+				return ['msg'=>'Student was Absent, rescheduling for  tomorrow :'];
 			case 'AbsentComment':
 				$status = 0;
 				$comment = $request->comment;
-				$update = Referrals::find($id)->update(['RefferalStatus'=>$status]);
+				$action = Useractions::create(['ActionDate'=>Carbon::today(), 
+					'ActionByUserId'=>$this->userId, 'ActionToUserId'=>$referral->StudentId, 'ActionType'=>4,
+					'Comment'=>$comment,  'ParentNotified'=>$request->data['ParentNotified']?1:0,
+					'StudentNotified'=>$request->data['StudentNotified']?1:0]);
+				$referral->update(['RefferalStatus'=>$status]);
 				return ['msg'=>'Student Absence Processed, Comment: '.$comment];
 				
 			default:

@@ -88,13 +88,14 @@ function formatDate(date) {
 			function getAllStudents(success, failure){
 				return Students.query({admin:true},success, failure);
 			}
-            // function getTime() {
-
-            // }
+            function getStudent(param, success, failure){
+				return Students.get(param, success, failure);
+			}
             
             return {
                 getStudents:getStudents,
-				getAllStudents:getAllStudents
+				getAllStudents:getAllStudents,
+				getStudent:getStudent
             };
             
         }

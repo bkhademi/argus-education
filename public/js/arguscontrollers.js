@@ -234,7 +234,7 @@
 						   angular.extend(data[i].referred[j], data[i].referred[j].assignment);
 					   }
 				   }
-					 if (!data) {
+					 if (!data.length) {
 						$scope.refTable = [];
 						alert("No students for current date");
 
@@ -256,14 +256,14 @@
         var submitPresent = function (data) {
             // get assignments info from the checkboxes
 			var student = data.student;
-            var completedAssignments = [];
-            angular.forEach(student.referred, function (item) {
-                if (item.selected)
-                    completedAssignments.push({ assignmentId: item.Id, referralId:item.id });
-            })
+//            var completedAssignments = [];
+//            angular.forEach(student.referred, function (item) {
+//                if (item.selected)
+//                    completedAssignments.push({ assignmentId: item.Id, referralId:item.id });
+//            })
             // submit information of student  '$scope.selected.student'  to the database
 			angular.forEach(student.referred, function(item){
-				referrals.update({'param':'present','id':item.Id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
+				referrals.update({'param':'present','id':item.id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
 					console.log(response);
 				});
 			})
@@ -277,14 +277,18 @@
         var submitReschedule = function (data) {
             // get info from comment box and DatePicker       
             // submit information of student '$scope.selected.student' to the database
-			referrals.update(
-				{param:'reschedule', 
-				comment:data.comment,
-				excused:data.excused,
-				newDate:data.date,
-				oldDate:$scope.currentDate,
-				id:data.student.id},
-				data) 
+			var student = data.student;
+			angular.forEach(student.referred, function(item){
+				referrals.update({
+					param:'reschedule',
+					comment:data.comment,
+					excused:data.excused,
+					newDate:data.date,
+					oldDate:$scope.currentDate,
+					id:item.id},{data:item}, function(response){
+					console.log(response);
+				});
+			});
 
             removeSelectedStudentFromTableAndClear();
         };
@@ -1329,6 +1333,8 @@
 
     }])
 }(angular.module("Argus")));
+
+/************************** ProfileController *****************************/
 (function (app) {
     app
     .controller("ProfileCtrl", ["$scope","students", function ($scope, students) {
@@ -1355,7 +1361,7 @@
 //        })
         /*  Grab All information from database */
 
-        /*******************  Left Side Controllers*********************/
+        /*******************  Left Side Controllers ***************************/
 
 //        classesService.get($scope.student.ID)
 //            .success(function (data) {
@@ -1634,6 +1640,7 @@
 
 }(angular.module("Argus")));
 
+/************************** admin1referalController ***************************/
 (function (app) {
     app.
     controller("admin1referalController",["$scope", "assignmentsListService",  "teachers", "referrals", "students", "$http",'$modal',
@@ -1671,7 +1678,7 @@
         // check for changes in the date to retrieve that date's AEC list 
         $scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
             if (newVal) {//when date has a valid date request the List from that date
-                referrals.query({id:newVal},function(results) {
+				var processReceivedReferrals  = function(results) {
                     console.log("Returned  refferals");
                     console.log(results);
                    
@@ -1720,9 +1727,10 @@
                     } else {
                         $scope.refTable = data;
                     }
-                  }, function(error) {
-                    console.log(error);
-                });
+                  }
+//                referrals.query({id:newVal},processReceivedReferrals, function(error) {
+//                    console.log(error);
+//                });
 
 
 
@@ -1899,6 +1907,7 @@
 					studentsReferred.push(referral);
 				})
 			})
+			debugger;
 			if(studentsReferred.length )
 				referrals.save({data:studentsReferred, date:$scope.currentDate});
             //ServerDataModel.createAECList($scope.currentDate, $scope.refTable);
@@ -2277,7 +2286,8 @@
     }])
 
 }(angular.module('Argus')));
-/* end statistics controllers */
+
+/************************** StudentInfoController *****************************/
 (function (app) {
     app
     .controller("studentInfoCtrl", ["$scope", "students",  function ($scope, students) {
@@ -2295,10 +2305,16 @@
         $scope.selected = {};
         $scope.active = 0;
         $scope.onEnter = function () {
+			// get more information of the selected student 
+			students.getStudent({id:$scope.selected.student.Id}, function(data){
+				$scope.selectedStudent = data;
+			});
+			
             //$scope.profiles[$scope.active] = $item; //
             $scope.toShow.push($scope.selected.student)
             $scope.active++; // increase number of active profiles
             $scope.selected.student = null; // clear search field
+			
 			
         };
         $scope.remove = function ($index) {
@@ -2538,7 +2554,6 @@
 		
 		vm.loginError = false;
 		vm.loginErrorText ;
-		
 		vm.login = function(){
 			var credentials = {
 				email:vm.email,
@@ -2549,6 +2564,7 @@
 			$auth.login(credentials).then(function(response){
 				// if login is successful, redirectto the users state
 				//$state.go('users', {});
+				
 				return $http.get('api/authenticate/user');
 				
 				//handle errors
@@ -2570,7 +2586,6 @@
 				// so we can now show parts of the ui that relyon the
 				// user being logged in
 				$rootScope.authenticated = true;
-				
 				
 				// Putting the user's data on $rootScope allows 
 				// us to access it anywhere across the app

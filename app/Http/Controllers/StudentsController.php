@@ -79,7 +79,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         //
-		return Students::with('user', 'professorClasses')->findOrFail($id);
+		return Students::with('user.activitiesAffected', 'professorClasses' )->findOrFail($id);
     }
 
     /**
