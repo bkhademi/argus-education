@@ -1,0 +1,2588 @@
+[
+  {
+    "Teacher":"Murray-Seaman, Elizabeth ",
+    "Course":"Instructional Ed/Training",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"Physics",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"English 2",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"World History",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guesnier, Taylor ",
+    "Course":"English 3 AP Language/Comp",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hansen, Sandi ",
+    "Course":"Algebra 2",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Smith, Scott",
+    "Course":"Spanish 2",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Chemistry",
+    "Period":"4",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Psychology Pre-AP",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"English 4 AP Literature/Comp",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Blazier, Sarah ",
+    "Course":"Calculus AB AP",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Bolton, John ",
+    "Course":"SAT College Prep",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"US Govt AP",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Whitfill, Samuel ",
+    "Course":"Physics 2 AP",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Reyes, Rudy ",
+    "Course":"Office Practice 1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 4 Basketball B S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Sociology",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Duran, Elizabeth ",
+    "Course":"Student Leadership",
+    "Period":"4",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"Macroeconomics AP",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 4 Basketball B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Trevino, Lucio ",
+    "Course":"Law Enforcement I",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Davis, Christopher ",
+    "Course":"Chemistry Pre AP",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"US History AP",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Russell, Connie ",
+    "Course":"Vocal Ensemble 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Willen, Lauren ",
+    "Course":"English 2 Pre AP",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Keeton, Megan ",
+    "Course":"Algebra 2 Pre-AP",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 2 Tennis V S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"PE Found of Person Fitness",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Duran, Elizabeth ",
+    "Course":"AVID 2",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Olden, Brenda ",
+    "Course":"Animation",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Garcia, Dottie ",
+    "Course":"Graph, Design & Illus",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hunter, Zacnicte",
+    "Course":"World Geog Pre-Ap",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hill, Robert ",
+    "Course":"Band 2",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"Forensic Science",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Business Info Mgmt 1",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guesnier, Taylor ",
+    "Course":"English 4",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"US Govt",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Osorio, Anthony ",
+    "Course":"US History",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Brandt, Andrea ",
+    "Course":"Fashion Marketing",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guesnier, Taylor ",
+    "Course":"College Readiness - English",
+    "Period":"0E",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hansen, Sandi ",
+    "Course":"College Readiness - Math",
+    "Period":"0M",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"Economics",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"Comprehensive Wellness",
+    "Period":"6",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Brandt, Andrea ",
+    "Course":"Entrepreneurship",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"Biology",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kaerwer, Sean ",
+    "Course":"Practical Mathematics",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wright, Landon ",
+    "Course":"Geometry",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 1 Basketball G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kinsey, Brandi ",
+    "Course":"English 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Maddox, Tamara ",
+    "Course":"Principles of Ready, Set, Teach",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Walton, Shannon ",
+    "Course":"Art 1 - Fund Art",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Williams, Sasha",
+    "Course":"CA 1 Basketball G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Duran, Elizabeth ",
+    "Course":"Professional Comm",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"Math Models",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Cox, Jennifer",
+    "Course":"Art 3 - Painting",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Osorio, Anthony ",
+    "Course":"EOC US History I",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Whitfill, Samuel ",
+    "Course":"Physics",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Moffett, Sarabeth ",
+    "Course":"English 3",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 3 Basketball B S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 3 Basketball B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Blazier, Sarah ",
+    "Course":"Pre Calculus Pre AP",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Maddox, Tamara ",
+    "Course":"Lifetime Nutr/Wellness",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Career Prep 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hooks, Sara ",
+    "Course":"Tr St 4",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hooks, Sara ",
+    "Course":"Tr St 5",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"Health Ed",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"MurgaAnaya, Oscar ",
+    "Course":"Spanish 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Willen, Lauren ",
+    "Course":"English 2",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Davis, Christopher ",
+    "Course":"Chemistry",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Cox, Jennifer",
+    "Course":"2 Dim Design Portfolio",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Copeland, Janet ",
+    "Course":"Prac in Health Sci - CNA",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Blazier, Sarah ",
+    "Course":"Ind Stdy Math",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Found Person Fitness",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"English 4",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Maddox, Tamara ",
+    "Course":"Child Development",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 2 Soccer B S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"Mth Mod Co-Teach M",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Brandt, Andrea ",
+    "Course":"Money Matters",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Osorio, Anthony ",
+    "Course":"US Hist Co-Teach M",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"McCarty, Debora ",
+    "Course":"Algebra 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Moffett, Sarabeth ",
+    "Course":"Eng III Co-Teach M",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 2 Soccer B S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"McCarty, Debora ",
+    "Course":"English 1",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"IPC Co-Teach M",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Maddox, Tamara ",
+    "Course":"Child Development",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"Health Ed",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Russell, Connie ",
+    "Course":"Choral Music 2",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Keeton, Megan ",
+    "Course":"Geometry",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gerhart, Reed ",
+    "Course":"US History",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"English 2",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"Biology",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"MurgaAnaya, Oscar ",
+    "Course":"Spanish 2",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hunter, Zacnicte",
+    "Course":"World Geography",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Ramirez, Kimberly ",
+    "Course":"English 1 Pre AP",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Cox, Jennifer",
+    "Course":"Art 1 - Fund Art",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Quilantan, Allison ",
+    "Course":"Practical Mathematics",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 1 Football S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 1 Football S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"PE Found Person Fitness",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Anderson, Henry ",
+    "Course":"Welding 1",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Smith, Scott",
+    "Course":"Spanish 3 Pre AP",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"PE Found of Person Fitness",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Smith, Ricky ",
+    "Course":"ROTC Military Science 2",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Trevino, Lucio ",
+    "Course":"Principles Law/Safe/Secur",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 1 Soccer B S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Int Physics/Chem",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 1 Soccer B S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Brandt, Andrea ",
+    "Course":"Dollars/Sense",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 4 Football S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 4 Football S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Hust, Randall ",
+    "Course":"Construction Tech",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 3 Football S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 3 Football S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Richardson-Anzley, Lafrances ",
+    "Course":"Social Skills 11",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Quilantan, Allison ",
+    "Course":"Algebra 1",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Alonzo, Carolina ",
+    "Course":"A/V Production",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Brandt, Andrea ",
+    "Course":"Sports/Entertain Mrkt",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Navarro, Kenneth ",
+    "Course":"Digital/Interact Media",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Whitfill, Samuel ",
+    "Course":"Physics 1 AP",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Livesay, Renee ",
+    "Course":"Health Science",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Navarro, Kenneth ",
+    "Course":"Principles of Bus/Mrkt/Fin",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Russell, Connie ",
+    "Course":"Choral Music 4",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Whitfill, Samuel ",
+    "Course":"Astronomy",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 4 Baseball S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"Eng 2 Co-Teach A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Cox, Jennifer",
+    "Course":"Art 2 - Drawing",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Sewell, Elizabeth ",
+    "Course":"A/V Production",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Ramirez, Kimberly ",
+    "Course":"English 1",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Biology",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kaerwer, Sean ",
+    "Course":"Alg I Co-Teach M",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas Jr, Danny",
+    "Course":"Biology Co-Teach M",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kinsey, Brandi ",
+    "Course":"Eng I Co-Teach M",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Touch Data Systems",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hunter, Zacnicte",
+    "Course":"W Geog Co_Teach M",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Smith, Scott",
+    "Course":"Spanish 2 Pre AP",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"PE Adven/Outdr Ed",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hill, Robert ",
+    "Course":"Band 1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"W Hist Co-Teach M",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Ramirez, Kimberly ",
+    "Course":"Eng I Co-Teach M",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Navarro, Kenneth ",
+    "Course":"Touch Data Systems",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Provencio, Zoya ",
+    "Course":"Theatre Arts 1",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Martinez, Isaias",
+    "Course":"ROTC Military Science 4",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"Envir Systems",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"CA 4 Track B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 2 Football S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Danny ",
+    "Course":"CA 2 Football S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Douglas Jr, Danny",
+    "Course":"CA 1 Wrestling S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"CA 1 Wrestling S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"World History",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Smith, Ricky ",
+    "Course":"ROTC Military Science 1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Maddox, Tamara ",
+    "Course":"Intro to Culinary Arts",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Russell, Connie ",
+    "Course":"Choral Music 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Salazar, James ",
+    "Course":"Auto Technology",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 3 Baseball S1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 3 Baseball S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Aeorbic Activities",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Eng 3",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Walton, Shannon ",
+    "Course":"Art 2 Ceramics",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Chambers, Bobby ",
+    "Course":"Principles of Hum Srvs",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Math Model",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic US Hist",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Commsk 11",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Aerobic Activities",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Hinkle, Denise ",
+    "Course":"Anatomy/Physiology",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Adkins, Jana ",
+    "Course":"Principles of Hlth Sci",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"CA 2 Softball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"Int Physics/Chem",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Sharon ",
+    "Course":"CA 2 Softball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"PE Substitution Cheerleading",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Trevino, Lucio ",
+    "Course":"Law Enforcement II",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Trevino, Lucio ",
+    "Course":"Court Sys/Practices",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Bolton, John ",
+    "Course":"Ind Stdy Math",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Psychology",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Copeland, Janet ",
+    "Course":"Principles of Hlth Sci",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Ewan, Starla ",
+    "Course":"Anatomy/Physiology",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"English 2",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Anderson, Henry ",
+    "Course":"Adv Welding - 2 hr",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Trevino, Lucio ",
+    "Course":"Prac Law/Safe/Secur I",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"US Govt",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Faison, Todd ",
+    "Course":"CA 4 Trainer S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"Economics",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Faison, Todd ",
+    "Course":"CA 4 Trainer S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"Biology Co-Teach A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Ramirez, Kimberly ",
+    "Course":"Eng 1 Co-Teach A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Quilantan, Allison ",
+    "Course":"Alg 1 Co-Teach A",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hunter, Zacnicte",
+    "Course":"W Geog Co-Teach A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 1 Baseball S1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 1 Baseball S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 1 Basketball B S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 1 Basketball B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 2 Basketball B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Keeton, Megan ",
+    "Course":"Geom Supp Fac A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"IPC Co-Teach A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gerhart, Reed ",
+    "Course":"US Hist Co-Teach A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Livesay, Renee ",
+    "Course":"Anatomy/Physiology",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Thornton, Debra ",
+    "Course":"Principles of Hlth Sci",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Rheuark, Debra ",
+    "Course":"Fund Eng 4",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"Govt Co-Teach M",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Rheuark, Debra ",
+    "Course":"ELAR SUPP 12",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Chambers, Bobby ",
+    "Course":"Office Practice 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Chambers, Bobby ",
+    "Course":"Pract in Human Services 1 - 15hr",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"Eco Co-Teach M",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Ind Stdy Eng P/Ap",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Roman, Angelica ",
+    "Course":"Open",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 4 Track B S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 4 Track B S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Moffett, Sarabeth ",
+    "Course":"Eng 3 Supp Fac A",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Dotson, Jordan ",
+    "Course":"W Hist Supp Fac A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Found of Person Fitness",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Russell, Connie ",
+    "Course":"Choral Music 3",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Martinez Jr, Isaias",
+    "Course":"ROTC Drill Team 4",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hill, Robert ",
+    "Course":"Band 4",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Blazier, Sarah ",
+    "Course":"Practical Mathematics",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic W Hist",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Eng 1",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Bio",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Alg 1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Commsk",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Voc 09",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic DL 09",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Commsk (L)",
+    "Period":"6",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Douglas Jr, Danny",
+    "Course":"Biology Co-Teach A",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"Mth Md Supp Fac A",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Davis, Christopher ",
+    "Course":"Chemistry Supp Fac A",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 3 Basketball G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 3 Basketball G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Rheuark, Debra ",
+    "Course":"ELAR SUPP 09",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"MATH SUPP 09",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Bolton, John ",
+    "Course":"Statistics AP",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hill, Robert ",
+    "Course":"Band 3",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Provencio, Zoya ",
+    "Course":"Theatre Arts 2",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"CA 1 Softball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Sharon ",
+    "Course":"CA 1 Softball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"AVID 1",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"Biology Pre AP",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 4 Tennis V S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 4 Tennis V S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Martinez Jr, Isaias",
+    "Course":"ROTC Military Science 3",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guesnier, Taylor ",
+    "Course":"Eng 4 Supp Fac A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hansen, Sandi ",
+    "Course":"Alg 2 Supp Fac A",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Garcia, Dottie ",
+    "Course":"Graph DIMC Emphasis II",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Quilantan, Allison ",
+    "Course":"Algebra 1 Pre AP",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Dotson, Jordan ",
+    "Course":"World History AP",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Biology Pre AP",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hansen, Sandi ",
+    "Course":"Geometry Pre AP",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"CA 3 Wrestling S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Martinez, Isaias",
+    "Course":"ROTC Drill Team 3",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"CA 3 Wrestling S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Kaerwer, Sean ",
+    "Course":"Alg 1 Supp Fac A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Biology Supp Fac A",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kinsey, Brandi ",
+    "Course":"Eng 1 Supp Fac A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 3 Soccer B S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 3 Soccer B S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Servance, Yushica ",
+    "Course":"CA 1 Volleyball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 1 Track G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"CA 3 Track B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"Chemistry",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 3 Volleyball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Blazier, Sarah ",
+    "Course":"AVID 3",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Bolton, John ",
+    "Course":"Practical Mathematics",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Provencio, Zoya ",
+    "Course":"Theatre Production 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 4 Basketball G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 4 Basketball G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Provencio, Zoya ",
+    "Course":"Technical Theatre 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Fritz, Patricia ",
+    "Course":"3-D Graphic Modeling/Animation",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Keeton, Megan ",
+    "Course":"Geom Co-Teach M",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"Eng II Co-Teach M",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"IPC Supp Fac A",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hunter, Zacnicte",
+    "Course":"W Geog Supp Fac A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guesnier, Taylor ",
+    "Course":"Eng IV Co-Teach M",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Adven/Outdr Ed",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 1 Volleyball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"World Geography",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Spanish 2",
+    "Period":"4",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 3 Tennis V S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 3 Tennis V S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Hinkle, Denise ",
+    "Course":"Anatomy/Physiology",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 2 Volleyball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 2 Basketball G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"Biology Co-Teach M",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Richardson-Anzley, Lafrances ",
+    "Course":"Social Skills 09",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"CA 3 Softball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Sharon ",
+    "Course":"CA 3 Softball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Ind Stdy Eng 3 P/Ap",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 4 Soccer B S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 4 Soccer B S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Faison, Todd ",
+    "Course":"Sports Medicine I",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 3 Track G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 3 Track G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"Int Physics/Chem",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 4 Baseball S1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 4 Volleyball S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Sharon ",
+    "Course":"CA 4 Softball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"Cheerleading",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"PE Adven/Outdr Ed",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Quilantan, Allison ",
+    "Course":"Alg I Co-Teach M",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Salazar, James ",
+    "Course":"Auto Technology",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Grace, Brandon ",
+    "Course":"Computer Technician",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Duran, Elizabeth ",
+    "Course":"Student Council Board",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"Spanish 2",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hinkle, Denise ",
+    "Course":"Prac in Health Sci - CMA",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"Fund Geom",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"ELAR SUPP 10",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"MATH SUPP 10",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"Fund Eng 2",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Dollars/Sense",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic IPC",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Stephens, Laura ",
+    "Course":"Cosmetology II",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hill, Robert ",
+    "Course":"Instrumental Ensem 1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"W Hist Co-Teach A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kaerwer, Sean ",
+    "Course":"Alg 1 Co-Teach A",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Biology Co-Teach A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Kinsey, Brandi ",
+    "Course":"Eng 1 Co-Teach A",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wright, Landon ",
+    "Course":"Geom Co-Teach M",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"W Hist Supp Fac A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"Spanish 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Grace, Brandon ",
+    "Course":"Computer Networking",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Grace, Brandon ",
+    "Course":"Comp Maintenance",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"US History",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Martinez, Isaias",
+    "Course":"ROTC Military Science 3",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Spanish 1",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Keeton, Megan ",
+    "Course":"Geom Co-Teach A",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Biology",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Servance, Yushica ",
+    "Course":"CA 1 Track G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"Govt Supp Fac A",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"Eco Supp Fac A",
+    "Period":"7",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"IPC Co-Teach M",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Richardson-Anzley, Lafrances ",
+    "Course":"Social Skills 10",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gerhart, Reed ",
+    "Course":"US Hist Co-Teach M",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"Fund Rdg 10",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Guerrero, Mario ",
+    "Course":"Auto Technology",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Ind Stdy Eng 2 P/Ap",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Anderson, Frank ",
+    "Course":"Eng Des/Pres",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Rec/Lei 11",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 2 Basketball G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Willen, Lauren ",
+    "Course":"Eng 2 Supp Fac A",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gifford, Joseph ",
+    "Course":"Biology Co-Teach M",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Shoemaker, Stacey ",
+    "Course":"Fund Rdg 09",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Rheuark, Debra ",
+    "Course":"Fund Eng 1",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"Fund Alg 1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"CA 1 Golf B S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"CA 1 Golf B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic W Geo",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Eng 4",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Alg 2",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Govt",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Eco",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 4 Volleyball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Shoemaker, Stacey ",
+    "Course":"Fund Rdg 10",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas Jr, Danny",
+    "Course":"CA 2 Wrestling S1",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas, Danny",
+    "Course":"CA 2 Wrestling S2",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Jackson, Benjamin ",
+    "Course":"Medical Math",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Livesay, Renee ",
+    "Course":"Prac in Health Sci - EMT",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jackson, Benjamin ",
+    "Course":"Medical Terminology",
+    "Period":"1",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Uscilka, Peter ",
+    "Course":"Coll Repair/Refinish",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Whitfill, Samuel ",
+    "Course":"Physics Supp Fac A",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Eng 4 Supp Fac A",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Spanish 1",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Compton, Diana",
+    "Course":"Prac in Health Sci - CNA",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Countryman, Stanley ",
+    "Course":"Mth Mod Co-Teach A",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gerhart, Reed ",
+    "Course":"US Hist Supp Fac A",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wagner, Anthony ",
+    "Course":"CA 2 Basketball B S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"Fund Eng 3",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"Fund Math Model",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 1 Soccer G S1",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Eng 2",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Chem",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic DL 10",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gray, Shannon ",
+    "Course":"Prec Metal Manufac",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Eng 4 Supp Fac A",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gray, Shannon ",
+    "Course":"Adv Prec Mtl Manufac",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Walton, Shannon ",
+    "Course":"Art 3 Crmc (Pottery)",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 2 Baseball S1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Llanas, Mark ",
+    "Course":"CA 2 Baseball S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 2 Volleyball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"May, Michael ",
+    "Course":"Adult Transition 2",
+    "Period":"1",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"ELAR SUPP 11",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic DL 11",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"MATH SUPP 11",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Gray, Shannon ",
+    "Course":"Prec Metal Manufac",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Anderson, Frank ",
+    "Course":"Eng Des/Pres",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hayes, David ",
+    "Course":"CA 4 Swimming S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Hayes, David ",
+    "Course":"CA 4 Swimming S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Provencio, Zoya ",
+    "Course":"Technical Theatre 2",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Garcia, Dottie ",
+    "Course":"Graph, Design & Fash Illus",
+    "Period":"3",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Algebra 1",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"English 1",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Anderson, Henry ",
+    "Course":"Adv Welding - 3hr",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"CA 1 Soccer G S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Hust, Randall ",
+    "Course":"Adv Construction Tech - 2hr",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Harris, Sarah ",
+    "Course":"Professional Comm",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"World History",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"Physics",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Nix, Ladonna ",
+    "Course":"Fund Rdg 11",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"McCarty, Debora ",
+    "Course":"Professional Comm",
+    "Period":"3",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Grace, Brandon ",
+    "Course":"PS1 Information Technology",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"",
+    "Course":"Int Physics/Chem",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Richardson-Anzley, Lafrances ",
+    "Course":"US History",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Handlin, Charemon ",
+    "Course":"CA 3 Volleyball S2",
+    "Period":"5",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Adkins, Jana ",
+    "Course":"Anatomy/Physiology",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"StClair, Amanda ",
+    "Course":"MATH SUPP 12",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"Govt Supp Fac A",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Medulla, Joseph ",
+    "Course":"Eco Supp Fac A",
+    "Period":"4",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nystel, Thomas ",
+    "Course":"CA 1 Tennis S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 1 Tennis S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Morrison, Mark ",
+    "Course":"CA 2 Tennis V S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Weaver, Cecily ",
+    "Course":"PE Indiv Team Sprts",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Health 12",
+    "Period":"4",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Voc 12",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Commsk 12",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Douglas Jr, Danny",
+    "Course":"Env Sys Supp Fac A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"Math Models",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Uscilka, Peter ",
+    "Course":"Adv Coll Repair/Refinish - 2hr",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"PE Found Person Fitness",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wilson, Clyde ",
+    "Course":"English 3",
+    "Period":"4",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Geometry",
+    "Period":"2",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Zimmermann, Zackary ",
+    "Course":"Chemistry",
+    "Period":"2",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"CA 3 Golf B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Nepomnick, Lindsey ",
+    "Course":"Eng 2 Supp Fac A",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Delgado-Vega, Brenda ",
+    "Course":"IPC Co-Teach A",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Inmon, Jessie ",
+    "Course":"CA 2 Golf B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Olden, Brenda ",
+    "Course":"Advanced Animation",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Jones, Dino ",
+    "Course":"CA 2 Track B S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"World Geography",
+    "Period":"7",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Compton, Diana",
+    "Course":"Medical Terminology",
+    "Period":"3",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Way, Jacob ",
+    "Course":"US Govt",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Wright, Landon ",
+    "Course":"Geom Supp Fac A",
+    "Period":"6",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Lovelady, Jakob ",
+    "Course":"Basic Geom",
+    "Period":"5",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Faison, Todd ",
+    "Course":"CA 2 Trainer S1",
+    "Period":"8",
+    "Term":"S1"
+  },
+  {
+    "Teacher":"Faison, Todd ",
+    "Course":"CA 2 Trainer S2",
+    "Period":"8",
+    "Term":"S2"
+  },
+  {
+    "Teacher":"Moffett, Sarabeth ",
+    "Course":"Eng 3 Co-Teach A",
+    "Period":"6",
+    "Term":"S1"
+  }
+]

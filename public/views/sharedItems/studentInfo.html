@@ -3,15 +3,21 @@
 
     <ul class="list-group list-inline text-center" style="">
         <li class="" style="width:50%">
-            <input type="text"
-                   data-ng-disabled="active==max"
-                   name="searchStudent"
-                   placeholder="Student"
-                   class="form-control"
-                   data-ng-model="selected"
-                   typeahead="stu as ('<h4>'+stu.fn +' , ' +stu.ln+' <i>'+stu.ID+' <strong>'+stu.GR+'th') for stu in students | filter:$viewValue"
-                   typeahead-on-select='onEnter($item, $model, $label)'
-                   typeahead-append-to-body="true" />
+            
+			<select chosen
+					class=" chosen-select form-control"
+					allow-single-deselect="true"
+					data-ng-if='students'
+					data-placeholder="Select or enter a student"
+					data-ng-model="selected.student"
+					data-ng-change="onEnter($item,$model,$label)"
+					data-ng-disabled="active==max"
+					data-ng-options="s as 
+						(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+						for s in students  track by s.Id"
+				>
+						<option value=''></option>
+			</select>
         </li>
 
     </ul>

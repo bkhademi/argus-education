@@ -14,7 +14,7 @@ function formatDate(date) {
 
         function referrals($resource) {
             
-            var Referal = $resource('api/referrals/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var Referal = $resource('api/referrals/:id', {}, {
                 update: {
                     method: 'PUT'
                 }
@@ -64,7 +64,7 @@ function formatDate(date) {
 
             
             // ngResource call to our static data
-            var Students = $resource('api/students/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var Students = $resource('api/students/:id', {}, {
                 update: {
                     method: 'PUT',
                     headers: { 'UserID': 'Yes' }
@@ -84,13 +84,18 @@ function formatDate(date) {
                   console.log(error);
                 });
             }
-
-            // function getTime() {
-
-            // }
+			
+			function getAllStudents(success, failure){
+				return Students.query({admin:true},success, failure);
+			}
+            function getStudent(param, success, failure){
+				return Students.get(param, success, failure);
+			}
             
             return {
-                getStudents:getStudents
+                getStudents:getStudents,
+				getAllStudents:getAllStudents,
+				getStudent:getStudent
             };
             
         }
@@ -105,7 +110,26 @@ function formatDate(date) {
         .factory('teachers', referrals);
 
         function referrals($resource) {
-            var teachers = $resource('api/teachers/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b', {}, {
+            var teachers = $resource('api/teachers/:id', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+
+            return teachers;
+        }
+})();
+
+(function() {
+    
+    'use strict';
+
+    angular
+        .module('Argus')
+        .factory('useractions', referrals);
+
+        function referrals($resource) {
+            var teachers = $resource('api/useractions/:id', {}, {
                 update: {
                     method: 'PUT'
                 }

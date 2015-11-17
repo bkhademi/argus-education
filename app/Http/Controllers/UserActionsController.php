@@ -12,15 +12,27 @@ class UserActionsController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * Url encoded params: 
+	 * ActionByUserId = get all entries where ActionByUserId 
+	 * ActionToUserId = get all entries where ActionToUserId
+	 * if not retur all the actions caused by the current user
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request )
     {
         //
-		$userActions = Useractions::all();
+		$userId = $this->getUserId($request);
 		
-		return $userActions;
+		if($request->has('ActionByUserId')){
+			return  Useractions::with('student', 'user')->where('ActionByUserId', $request->ActionByUserId)->get();
+		}else if($request->has('ActionToUserId')){
+			return Useractions::with('student', 'user')->where('ActionToUserId', $request->ActionToUserId)->get();
+		}else{
+			return Useractions::with('student', 'user')->where('ActionByUserId',$userId)->get();
+			
+		}
+		
+		return response(['msg'=>'Params Expected:  UserId or TeacherId,Or loggedIn if both,UserId has priority,'],500);
     }
 
     /**
@@ -42,17 +54,29 @@ class UserActionsController extends Controller
     public function store(Request $request)
     {
         //
+		$dataIn = collect($request->all());
+			
+		try{
+			$insert =  UserActions::create($dataIn);
+		}catch(Exception $e){
+			throw $e;
+			return response(['msg'=>'Unable to create Item '],500);
+		}
+		
+		return $this->stored();
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
+     * Display all the activity entries for a student
+     * Expected URL encoded Parameters
+	 * 
+	 * ActionByUserId url encoded
+     * @param  int  $id (actionToId)
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        return Useractions::findOrFail($id);
     }
 
     /**

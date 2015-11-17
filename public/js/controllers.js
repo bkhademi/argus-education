@@ -6,15 +6,37 @@
 /**
  * MainCtrl - controller
  */
-function MainCtrl() {
+function MainCtrl($rootScope,$auth, $state) {
+	
+	var user = JSON.parse(localStorage.getItem('user'));
+	$rootScope.currentUser=  user;
+	// var user = $rootScope.currentUser;
+   if($rootScope.currentUser || JSON.parse(localStorage.getItem('user')) ){
+	  
+    this.userName = $rootScope.currentUser.FirstName +', ' 
+		+ $rootScope.currentUser.LastName;//user.name;
 
-    this.userName = 'Brandon Hernandez';
-    this.helloText = 'Welcome in SeedProject';
-    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+   }
+   else{
+       this.userName = "Please Log In"
+   }
 
+//    this.userName = 'Brandon Hernandez';
+//    this.helloText = 'Welcome in SeedProject';
+//    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
+	this.logout = function(){
+		 $auth.logout().then(function(){
+			localStorage.removeItem('user');
+
+		$rootScope.authenticated = false;
+
+		$rootScope.currentUser  = null;
+		$state.go('auth'); 
+		});
+	}
 };
 
-function DashTeacherCtrl($scope, $modal) {
+function DashTeacherCtrl($scope, $modal, referrals) {
     var path = "../Client/Views/dashItems/";
     $scope.tabs = [
        {
@@ -63,7 +85,35 @@ function DashTeacherCtrl($scope, $modal) {
 //       }
     ];
 
-    /**
+   $scope.incommingAssignments = 0;
+   $scope.assignmentsToReprint  = 0;
+	$scope.getReferrals  = function(){
+		$scope.referrals =referrals.query(function(data){
+			// preprocess referrals to show easily
+			// adjust the returned referrals 
+			for(var i = 0; i < data.length ; i++){
+				for(var j = 0 ; j < data[i].referred.length ; j++){
+					
+					if(data[i].referred[j].RefferalStatus === 1 && data[i].referred[j].Accepted != 1){
+						$scope.incommingAssignments++;
+						data[i].showAccept = true;
+					}
+					if(data[i].referred[j].Reprint === 1){
+						$scope.assignmentsToReprint++;
+						data[i].showReprint = true;
+					}
+					 data[i].referred[j].id = data[i].referred[j].Id;
+					angular.extend(data[i].referred[j] ,data[i].referred[j].assignment);
+					delete( data[i].referred[j].assignment);
+				}
+			}
+		
+			console.log(data);
+		});
+	}
+	$scope.getReferrals();
+	
+	 /**
      * Options for Bar chart
      */
     $scope.barOptions = {
@@ -198,6 +248,81 @@ function DashTeacherCtrl($scope, $modal) {
             }
         })// End assignmentsModal
     }
+	
+	$scope.openAccept = function(item, $index){
+		var modalInstance = $modal.open({
+			templateUrl:'views/modals/acceptModal.html',
+			size:'lg',
+			controller:function($scope, student){
+				$scope.student = student;
+				$scope.changedStatus = function(item){
+						console.log(item);
+					};
+			},
+			resolve:{
+				student:function(){return item;}
+			}
+		});
+		
+		modalInstance.result.then(function (data) {
+			
+				$scope.rejectUnaccepted(data.student, $index);
+		});
+	};
+	
+	$scope.rejectUnaccepted = function(item, $index){
+		var modalInstance = $modal.open({
+			templateUrl:'views/modals/fillRejectedModal.html',
+			size:'lg',
+			controller:function($scope,$modalInstance,student,totalIncomming){
+				var count = 0;
+				debugger;
+				angular.forEach(student.referred, function(referral){
+					if(referral.RefferalStatus === 1 && referral.Accepted ){
+						count++;
+					}
+				})
+				if(count === totalIncomming){
+					console.log('closing');
+					$modalInstance.close($scope.student);
+				}
+				
+				$scope.student = student;
+				$scope.reasons= [
+					{name:'Mostly wrong answers', value:1},
+					{name:'Incomplete work', value:2},
+					{name:'Other', value:3}
+				];
+			},
+			resolve:{
+				student: function(){return item;},
+				totalIncomming: function(){ return	$scope.incommingAssignments; }
+			}
+		});
+		modalInstance.result.then(function(data){
+			// submit all to db
+			var student  = data.student;
+			angular.forEach(student.referred, function(referral){
+				if(referral.RefferalStatus !== 0)
+					referrals.update({'param':'teacherUpdate', 'id':referral.id},{data:referral} );
+			});
+		
+		});
+		
+	};
+	$scope.openReprint = function(item, $index){
+		var modalInstance = $modal.open({
+			templateUrl:'views/modals/reprintModal.html',
+			size: 'lg',
+			controller: function($scope,student){
+				$scope.student =student;
+			},
+			resolve:{
+				student:function(){return item;}
+			}
+		});
+		
+	};
 
 
 }
@@ -283,13 +408,14 @@ function DashAdmin1Ctrl($scope, $modal) {
             route: path + 'studentInfo.html',
             link: "admin1.studentData",
             icon: 'user fa-2x'
-        }, {
-            id: 'Create Student Pass',
-            text: ['Create', 'Pass'],
-            route: path + "multiplePasses.html",
-            link: "admin1.createStudentPass",
-            icon: 'file fa-2x'
         }
+//		, {
+//            id: 'Create Student Pass',
+//            text: ['Create', 'Pass'],
+//            route: path + "multiplePasses.html",
+//            link: "admin1.createStudentPass",
+//            icon: 'file fa-2x'
+//        }
     ]; 
     $scope.openAverageAttendance = function () {
         var averageAttendanceModal = $modal.open({
@@ -1139,8 +1265,8 @@ function welcomeWizardCtrl($scope, $rootScope) {
 
 angular
     .module('Argus')
-    .controller('MainCtrl', MainCtrl)
-    .controller('DashTeacherCtrl', ["$scope", "$modal", DashTeacherCtrl])
+    .controller('MainCtrl',["$rootScope","$auth", "$state", MainCtrl])
+    .controller('DashTeacherCtrl', ["$scope", "$modal","referrals", DashTeacherCtrl])
     .controller('DashAdmin1Ctrl', ["$scope", "$modal", DashAdmin1Ctrl])
     .controller('DashAdmin2Ctrl', ["$scope", "$modal", DashAdmin2Ctrl])
     .controller('DashAdmin3Ctrl', ["$scope", "$modal", DashAdmin3Ctrl])

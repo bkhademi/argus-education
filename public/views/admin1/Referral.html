@@ -1,6 +1,6 @@
 <section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="admin1referalController" >
     <div class="panel panel-default">
-        <h2 style="text-align:center"> Hello <span class="bg-primary">Mr. Hernandez</span>, lets create references!</h2>
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{main.userName}}</span>, lets create references!</h2>
 
         <div class="panel-body">
             <div class="table-filters ">
@@ -29,13 +29,14 @@
 										data-ng-if="teachers.$resolved"
                                         data-placeholder="Select or enter a teacher"
                                         data-ng-model="selected.teacher"
-										data-ng-change="selected.teacher?onSelectedTeacher():''"
+										data-ng-change="onSelectedTeacher()"
                                         data-ng-options="s as 
 											(s.FirstName +' '+s.LastName )
 											for s in teachers  track by s.id"
 									>
 											<option value=''></option>
 								</select>
+								
                                 
                             </form>
                         </li >
@@ -45,18 +46,22 @@
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
-										ng-disabled='false'
-										data-ng-if="teacherStudents.$resolved"
+										data-ng-if='selected.teacher && teacherStudents.$resolved'
                                         data-placeholder="Select or enter a student"
                                         data-ng-model="selected.student"
-										data-ng-change="selected.student?onSelectedStudent():''"
+										data-ng-change="onSelectedStudent()"
                                         data-ng-options="s as 
 											(s.user.FirstName +' '+s.user.LastName+' '+s.user.student.StudentId+' '+s.user.student.Grade )
 											for s in teacherStudents  track by s.Id"
 									>
 											<option value=''></option>
 								</select>
-                                
+                                <select  
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="!selected.teacher"
+									data-placeholder="Select a teacher first">
+								</select>
                             </form>
                         </li >
                         <!--
@@ -64,36 +69,49 @@
                             <button type="button" class="btn  bg-green">Add</button>
                         </li>
                         -->
-                      
-                    </ul>
-					 
-					 <ul class='list-inline list-group'>
-						   <li style="width:25%;">
+                       <li style="width:25%;">
                             <form>
                                 <select 
 								multiple chosen
 								class="chosen-select form-control"
-								data-ng-if="assignments.$resolved"
-								data-placeholder="Select a homework"
+								data-ng-if="selected.teacher && teachers.$resolved"
+								data-placeholder="Select an assignment"
 								data-ng-model="selected.assignments"
-								data-ng-options="assign as (assign.Name) for assign in  assignments track by assign.Id">
+								data-ng-options="assign as (assign.Name) for assign in  selected.teacher.assignments track by assign.Id">
 									<option value=''></option>
 									
+								</select>
+								<select 
+								multiple chosen
+								class="chosen-select form-control"
+								data-ng-if="!selected.teacher"
+								data-placeholder="Select a teacher first">
+									<option value=''></option>
 								</select>
                             </form>
                             
                         </li>
+						
+                    </ul>
+					 
+					 <ul class='list-inline list-group'>
+						
+						 <li class="">
+							<button type="button" class="btn btn-primary" data-ng-click="addAssignment()" data-ng-disabled="!selected.teacher" data-ng-hide="showChecks">
+								Add
+							</button>
+						</li>
 						<li class="">
 							<button type="button" class="btn btn-primary" data-ng-click="openCreateNewAssignment()" data-ng-disabled="!selected.teacher" data-ng-hide="showChecks">
 								Create New Assignment
 							</button>
 						</li>
-                        <li class="">
+                        <li data-ng-hide='true' class="">
                             <button type="button" class="btn  btn-primary" data-ng-click="assignToAll()" data-ng-hide='showChecks'
 									data-ng-disabled="!selected.assignments || selected.assignments.length ==0 || refTable.length == 0  ">Assign to All</button>
                         </li>
 
-                        <li class="">
+                        <li  data-ng-hide='true' class="">
                             <button type="button" class="btn  btn-primary" data-ng-click="showChecks?assignSpecific2():assignSpecific()"
 									data-ng-disabled="!selected.assignments || selected.assignments.length ==0 || refTable.length == 0 ">Assign{{showChecks?'':' Specific'}}</button>
                         </li>
@@ -108,6 +126,7 @@
                 <thead>
                     <tr>
 						<th>Remove</th>
+						<th>Teacher</th>
                         <th data-toggle="true">First Name</th>
                         <th>Last Name</th>
                         <th>ID</th>
@@ -117,19 +136,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-ng-repeat="stu in refTable track  by stu.id">
+                    <tr data-ng-repeat="stu in refTable track  by $index">
 						<td> <button data-ng-click='refTable.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
+						<td>{{stu.teacher.FirstName + ", " +stu.teacher.LastName}}</td>
                         <td>{{stu.FirstName}}</td>
                         <td>{{stu.LastName}}</td>
                         <td>{{stu.student.StudentId}}</td>
-                        <td>{{stu.student.Grade}}</td>
-                        <td>
+                        <td >{{stu.student.Grade}}</td>
+                        <td >
                              <select multiple chosen
+								width="'100%'"	 
 								class="chosen-select form-control"
-								data-ng-if="assignments"
+								data-ng-if="refTable"
 								data-placeholder="Select a homework"
 								data-ng-model="stu.referred"
-								data-ng-options="a as (a.Name) for a in assignments track by a.Name">
+								data-ng-options="a as (a.Name) for a in stu.teacher.assignments track by a.Name">
 								 <option value=''></option>
 								 
 							 </select>

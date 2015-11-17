@@ -33,12 +33,14 @@ class StudentsController extends Controller
 
 		// if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
 		
+		$requestor = User::find($this->getUserId($request));
 		// requesting the students of a given teacher
 		if($request->has('teacherId')){
 			$id = $request->input('teacherId');
+		}else if($request->has('admin')){
+			return Students::with('user.activitiesAffected')->get()->all();
 		}else{
 			$id = $this->getUserId($request);
-			//$id = isset($this->userId)? $this->userId: '00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b';
 		}
 		
 		//$userId = isset($this->userId) ? $this->userId : $request->input('userId');
@@ -77,6 +79,7 @@ class StudentsController extends Controller
     public function show($id)
     {
         //
+		return Students::with('user.activitiesAffected', 'professorClasses' )->findOrFail($id);
     }
 
     /**

@@ -9,15 +9,15 @@
                 <div class="widget-head-color-box bg-primary p-lg text-center">
                     <div class="m-b-md">
                         <h2 class="font-bold no-margins">
-                            {{student.fn + " " + student.ln}}
+                            {{student.user.FirstName + " " + student.user.LastName}}
                         </h2>
                         <small>class of 2015</small>
                     </div>
-                    <img src="../Client/Images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile">
+                    <img src="images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile">
 
                     <div>
-                        <span>ID {{student.ID}}</span> |
-                        <span>Grade Level {{student.GR}}</span> |
+                        <span>ID {{student.StudentId}}</span> |
+                        <span>Grade Level {{student.Grade}}</span> |
                         <span></span>
                     </div>
                 </div>
@@ -80,7 +80,8 @@
                                 <i class="fa fa-ticket "></i>
                                 Create a Pass
                             </tab-heading>
-                                <div data-ng-controller="MultiplePassesController">
+							<!--data-ng-disabled="active==max"-->
+                                <div>
                                     <table class="table ">
                                         <tr class=" no-borders">
                                             <td style="border-top:0">
@@ -139,7 +140,14 @@
                             <!--
                     <input type="checkbox" data-ng-model="filter[act]" data-ng-click="changeBool($index)"><strong data-ng-class="checks[$index]?colors[$index%3]:''">{{act}}</strong> -->
                             <div class="btn-group">
-                                <label data-ng-repeat="act in getActivities()" class="btn btn-default ng-pristine ng-untouched ng-valid" ng-model="filter[act]" btn-checkbox="">{{act}} <i data-ng-show="filter[act]"class="badge">5</i></label>
+                                <label data-ng-repeat="act in getActivities()" 
+									   class="btn btn-default ng-pristine ng-untouched ng-valid" 
+									   ng-model="filter[act]" btn-checkbox="">
+											{{act}}
+<!--										<i data-ng-show="filter[act]"class="badge">
+											{{activities.length}}
+										</i>-->
+								</label>
                                 
                             </div>
                             

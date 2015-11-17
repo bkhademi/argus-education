@@ -27,6 +27,12 @@ class AssignmentsController extends Controller
     public function index(Request $request)
     {
         $userId = isset($this->userId)? $this->userId : $request->input('userId') ;
+		if($request->has('teacherId')){
+			// if teacherId passed then grab only the content of the Assignments Table
+			// dont check if the file exists
+			$userId = $request->input('teacherId');
+			return Assignments::with('teacher')->whereTeacherid($userId)->get();
+		}
         $userFolder = "UsersFiles/$userId/";
     
         $files = Storage::allFiles($userFolder);
@@ -56,13 +62,25 @@ class AssignmentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store()//works
+    public function store(Request $request)//works
     {
-        $userId = $this->userId;
+        $userId = $this->getUserId($request);
         $file = Input::file('file');
         
-        if(!$file)
+        if(!$file){
+			// a file was not posted.. check if an assignment name was posted
+			if($request->has('assignment')){
+				// an assignment was posted.. only save its name 
+				$teacher = $request->input('teacher');
+				$teacherId = $teacher['id'];
+				//get the classes the current professor is teaching
+				$defaultProfessorClass = Professorclasses::where('UserId',$teacherId)->first();
+				$assignment = Assignments::create(['Name'=>$request->input('assignment')['assignment'], 'TeacherId'=>$teacherId, 'ProfessorClassId'=>$defaultProfessorClass->Id]);
+				return ["message"=>'assignment was saved with teachername '.$teacher['FirstName']."  ".$teacher['LastName'], "assignment"=>$assignment];
+				
+			}
             return response()->json(["no_file_posted"],500);
+		}
         
         $extension = $file->getClientOriginalExtension();
         $filePath = "UsersFiles/$userId/";

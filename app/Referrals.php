@@ -11,7 +11,9 @@ class Referrals extends Model
 
 	protected $table = 'refferals';
 
-     protected $guarded  =  [];
+	public $primaryKey = 'Id';
+	
+    protected $guarded  =  [];
     // protected $fillable = ['StudentId'];
     // protected $fillable = ['AssignmentId'];
     // protected $fillable = ['RefferalStatus'];

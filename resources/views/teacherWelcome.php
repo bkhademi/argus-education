@@ -30,7 +30,7 @@
 
 <!-- ControllerAs syntax -->
 <!-- Main controller with serveral data used in Inspinia theme on diferent view -->
-<body ng-controller="MainCtrl as main">
+<body ng-controller="MainCtrl as main"  class="{{$state.current.data.specialClass}}" >
 
 <!-- Main view  -->
 <div ui-view></div>
@@ -64,11 +64,13 @@
 <script src="js/app.js"></script>
 <script src="js/config.js"></script>
 <script src="js/directives.js"></script>
-<script src="js/controllers.js"></script>
+
 
 <script src="js/arguscontrollers.js"></script>
+
 <script src="js/argusdirectives.js"></script>
 <script src="js/argusservices.js"></script>
+<script src="js/controllers.js"></script>
 <!--<script src="js/Data.js"></script>
 <script src="js/serverDataModel.js"></script></body>-->
 

@@ -39,8 +39,8 @@ Route::group(array('prefix'=>'api'), function(){
         Route::resource('printAssignments', 'PrintAssignmentsController');
         Route::resource('printPasses', 'PrintPassesController');
         
-        Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-        Route::post('authenticate', 'AuthenticateController@authenticate');
+    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
+	Route::post('authenticate', 'AuthenticateController@authenticate');
 	Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
 
 	

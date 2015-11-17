@@ -22,7 +22,7 @@ class TeachersController extends Controller
 		
 		// get all the teachers of the requestor's school
 		$currentUser =  User::find($userId);
-		$teachers  = User::where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($query){
+		$teachers  = User::with('assignments', 'classstudents.user')->where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($query){
 			$query->where('aspnetroles.Name', 'teacher');
 		})->get();
 		return $teachers;
@@ -58,7 +58,7 @@ class TeachersController extends Controller
      */
     public function show($id)
     {
-        //
+        return User::with('assignments')->findOrFail($id);
     }
 
     /**

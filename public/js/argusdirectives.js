@@ -48,7 +48,7 @@
     app
     .directive('autoResize',function(){
         return {
-            restrict:"C",
+            restrict:"CA",
             link: function (scope, element) {
                 element = element[0];
                 element.addEventListener('keyup',function(event){
@@ -848,7 +848,7 @@
     app.directive('logout', function(){
         var controller = ['$scope', '$auth', '$rootScope', '$state', function($scope, $auth, $rootScope,$state){
            $scope.logout = function(){
-               debugger
+              
                $auth.logout().then(function(){
                    debugger
                    localStorage.removeItem('user');

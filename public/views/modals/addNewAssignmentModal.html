@@ -4,16 +4,30 @@
 </div>
 <div class="modal-body">
     <div class="row text-left">
-        <form role="form" class="col-lg-offset-3">
-            <!--  data-ng-show="!presentClicked" -->
-            <div class='checkbox' data-ng-repeat="assignment in student.referred" style="">
-                <label> <input type="checkbox" data-ng-model="assignment.selected"> {{assignment.Name}} </label>
-            </div>
+		<!--  data-ng-show="!presentClicked" -->
+		<div class="form-group col-sm-8" >			
+			<label  >  Assignment</label>
+			<input class=" form-control" type="text" placeholder="Enter Assignment Name" data-ng-model="assignment" />
+		</div>
+		<select 
+			multiple chosen
+			class="chosen-select form-control"
+			data-ng-if="teacherClasses.$resolved"
+			data-placeholder="Select an assignment"
+			data-ng-model="teacherClass"
+			data-ng-options="class as (class.Name) for class in  techerClasses track by assign.Id">
+			<option value=''></option>
 
-        </form>
+		</select>
+		<select 
+			multiple chosen
+			class="chosen-select form-control"
+			data-ng-if="teacherClasses.$resolved"
+			data-placeholder="Select a teacher first">
+		</select>
     </div>
 </div>
 <div class="modal-footer">
-    <button class="btn  bg-green" data-ng-click="$close({student:student})">Submit</button>
+    <button class="btn  bg-green" data-ng-click="$close({assignment: assignment})">Submit</button>
     <button class="btn btn-danger" data-ng-click="$dismiss()">Cancel</button>
 </div>

@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Professorclasses extends Model
 {
     protected $table = 'professorclasses';
-
+	protected $primaryKey = 'Id';
+	public $timestamps = false;
+	public $guarded = [];
     // Eloquent relationship that says one user belongs to each time entry
     // public function user()
     // {
@@ -34,7 +36,7 @@ class Professorclasses extends Model
     }
     
     public function students(){
-        return $this->hasMany('App\students', 'ProfessorClass_Id','Id');
+        return $this->hasMany('App\Students', 'ProfessorClass_Id','Id');
     }
     
 }
