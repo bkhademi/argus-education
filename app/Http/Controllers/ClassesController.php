@@ -6,8 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Classes;
 
+use App\Classes;
+use App\Classstudents;
 class ClassesController extends Controller
 {
     /**
@@ -45,13 +46,17 @@ class ClassesController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     *$id =studentId
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         //
+		$classes = Classstudents::with('professor_class.classs', 'professor_class.user', 'professor_class.period','professor_class.room' )->where('StudentId',$id)->whereHas('professor_class.classs', function($q){
+			$q->where('Term','S1');
+		})->get();
+		return $classes;
     }
 
     /**

@@ -374,7 +374,7 @@ function CalendarCtrl($scope) {
     $scope.eventSources = [$scope.events];
 }
 
-function DashAdmin1Ctrl($scope, $modal) {
+function DashAdmin1Ctrl($scope, $modal,referrals) {
     var path = "../Client/Views/dashItems/";
     $scope.tabs = [
        {
@@ -418,6 +418,11 @@ function DashAdmin1Ctrl($scope, $modal) {
 //        }
     ]; 
     $scope.openAverageAttendance = function () {
+		$scope.studentsToday  = 0;
+		$scope.FollowUp = 0;
+		$scope.averageAttendance = 0;
+		$scope.rating = 0;
+		
         var averageAttendanceModal = $modal.open({
             templateUrl: 'averageAttendanceModal.html',
             size: 'lg',
@@ -476,7 +481,7 @@ function DashAdmin1Ctrl($scope, $modal) {
                 pointStrokeColor: "#fff",
                 pointHighlightFill: "#fff",
                 pointHighlightStroke: "rgba(220,220,220,1)",
-                data: [65, 59, 80, 81, 56, 55, 40]
+                data: [0, 0, 0, 0, 0, 0, 0]
             }
         ]
     };
@@ -1267,7 +1272,7 @@ angular
     .module('Argus')
     .controller('MainCtrl',["$rootScope","$auth", "$state", MainCtrl])
     .controller('DashTeacherCtrl', ["$scope", "$modal","referrals", DashTeacherCtrl])
-    .controller('DashAdmin1Ctrl', ["$scope", "$modal", DashAdmin1Ctrl])
+    .controller('DashAdmin1Ctrl', ["$scope", "$modal","referrals", DashAdmin1Ctrl])
     .controller('DashAdmin2Ctrl', ["$scope", "$modal", DashAdmin2Ctrl])
     .controller('DashAdmin3Ctrl', ["$scope", "$modal", DashAdmin3Ctrl])
     .controller('DashAdmin4Ctrl', ["$scope", "$modal", DashAdmin4Ctrl])

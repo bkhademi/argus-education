@@ -45,6 +45,7 @@ class PrintPassesController extends Controller
      */
     public function store(Request $request)
     {
+		
         // $dataIn = $request->input('data');
 
         // error_log(print_R($request,TRUE) );

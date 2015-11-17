@@ -256,6 +256,29 @@ function formatDate(date) {
 
     }])
 }(angular.module("Argus")));
+(function(app){
+	app.factory("PassesService",["$resource", function($resource){
+		return $resource(api+"printPasses/:id",{},{
+			pdf:{
+				method:'POST',
+				headers:{accept:'application/pdf'},
+				responseType:'arraybuffer',
+				cache:true,
+				transformResponse:function(data){
+					console.log(data);
+					var pdf;
+					if(data){
+						pdf = new Blob([data],{type:'application/pdf'})
+					}
+					return {
+						response:pdf
+					}
+				}
+			}
+		} )	
+	}]);
+}(angular.module("Argus")));
+
 /* Assignments File */
 (function (app) {
     app.factory("assignmentsService", [ "$resource", function ( $resource) {

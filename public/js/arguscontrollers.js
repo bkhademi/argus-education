@@ -205,8 +205,8 @@
 
 (function (app) {
     app
-    .controller("manageAECController", ["$scope",  "$filter", "$modal", "referrals",
-	function ($scope,  $filter, $modal,  referrals) {
+    .controller("manageAECController", ["$scope",  "$filter", "$modal", "referrals","PassesService",
+	function ($scope,  $filter, $modal,  referrals,  passes) {
         $scope.AEC = true;
 		$scope.selected = {};
         $scope.selected2; // student input field model
@@ -216,7 +216,14 @@
         $scope.currentUser = "Montes"
         $scope.selectedStudent;
 
-        
+		$scope.getPasses = function(){
+			passes.pdf({date:$scope.currentDate}, function(data){
+				console.log(data);
+				var fileURL = URL.createObjectURL(data.response);
+				window.open(fileURL);
+			})
+			
+		};
 
         $scope.$watch('form.date.$viewValue', function (newVal) {
             
@@ -250,7 +257,8 @@
             }
         });
 
-
+		
+		
         /******** MANAGE AEC **********/
         // for the next submit functions remove student from list self-reducing list
         var submitPresent = function (data) {
@@ -452,7 +460,8 @@
 }(angular.module("Argus")));
 (function (app) {
     app
-    .controller("manageAECAbsenceController", ["$scope",  "$modal", "referrals", function ($scope, $modal,referrals) {
+    .controller("manageAECAbsenceController", ["$scope",  "$modal", "referrals","PassesService",
+	function ($scope, $modal,referrals, passes) {
         $scope.selected = {};
         $scope.refTable = [];// table model
         $scope.currentDate = new Date(); // date on the date picker
@@ -483,7 +492,16 @@
         });
       
 
-
+		$scope.getPasses = function(){
+			$scope.getPasses = function(){
+			passes.pdf({date:$scope.currentDate}, function(data){
+				console.log(data);
+				var fileURL = URL.createObjectURL(data.response);
+				window.open(fileURL);
+			})
+			
+		};
+		}
  
 
         /******** MANAGE AEC Absence **********/
@@ -1337,7 +1355,7 @@
 /************************** ProfileController *****************************/
 (function (app) {
     app
-    .controller("ProfileCtrl", ["$scope","students", function ($scope, students) {
+    .controller("ProfileCtrl", ["$scope","students","$http", function ($scope, students, $http) {
         $scope.schedule = []; // holds  student's schedule
         $scope.activities = []; // holds student'activities
         $scope.checks = [];
@@ -1350,8 +1368,35 @@
         //console.log($scope.student)// contains the student to display
 
         $scope.$watch('student', function (newVal, oldVal) {
-            //console.info('student changed')
-
+            console.info('student changed')
+			console.log(newVal);
+			$scope.schedule = newVal.professor_classes;
+			var parentName = newVal.GuardianName?newVal.GuardianName.split(',') :["No", " name"] ;
+				$scope.parents = [{fn:parentName[0], ln: parentName[1], phone:newVal.phoneNumber  ||"none" , mphone:'None', email:'None' }]
+			$http.get('api/classes/'+newVal.Id).then(function(response){
+				$scope.schedule = response.data;
+				console.log($scope.schedule);
+			})
+			$scope.activities = newVal.user.activities_affected;
+			angular.forEach($scope.activities, function(act){
+				switch(act.ActionType){
+					case 0:
+						act.activity = 'Referred';
+						break;
+					case 1:
+						act.activity = 'Present';
+						break;
+					case 2:
+						act.activity = 'Reschedule';
+						break;
+					case 3: 
+						act.activity = 'Referral Done';
+						break;
+					case 4:
+						act.activity = 'Absent';
+						break;
+				}
+			})
         })
 //        studentActivitiesService.getAll()
 //        .then(function (data) {
@@ -2307,13 +2352,14 @@
         $scope.onEnter = function () {
 			// get more information of the selected student 
 			students.getStudent({id:$scope.selected.student.Id}, function(data){
-				$scope.selectedStudent = data;
+				$scope.selected.student = data;
+				$scope.toShow.push($scope.selected.student)
+				$scope.active++; // increase number of active profiles
+				$scope.selected.student = null; // clear search field
 			});
 			
             //$scope.profiles[$scope.active] = $item; //
-            $scope.toShow.push($scope.selected.student)
-            $scope.active++; // increase number of active profiles
-            $scope.selected.student = null; // clear search field
+          
 			
 			
         };

@@ -14,4 +14,8 @@ class Classstudents extends Model
     public function user(){
         return $this->belongsTo('App\User', 'StudentId');
     }
+	
+	public function professor_class(){
+		return $this->belongsTo('App\ProfessorClasses', 'ProfessorClassId');
+	}
 }
