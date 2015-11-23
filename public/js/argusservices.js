@@ -126,7 +126,27 @@ function formatDate(date) {
 
     angular
         .module('Argus')
-        .factory('useractions', referrals);
+        .factory('BbyArgusGeneralDBService', referrals);
+
+        function referrals($resource) {
+            var teachers = $resource('api/bbyargus/generaldb/:id', {}, {
+                update: {
+                    method: 'PUT'
+                }
+            });
+
+            return teachers;
+        }
+})();
+
+
+(function() {
+    
+    'use strict';
+
+    angular
+        .module('Argus')
+        .factory('UserActionsService', referrals);
 
         function referrals($resource) {
             var teachers = $resource('api/useractions/:id', {}, {
@@ -415,47 +435,20 @@ function formatDate(date) {
 }(angular.module("Argus")));
 /* Students */
 (function (app) {
-    var studentsService = function ($http) {
-        return {
-
-            getTeachers: function () {
-                return $http.get("/teachers")
-            },
-
-            getAll: function () {
-                return $http.get("/students");
-
-            },
-
-            getByTeacher: function () {
-                return $http.get("/api/students");
-            },
-
-            getById: function (Id) {
-                return $http.get("/api/students")
-            },
-
-
-            getByClass: function (classId) {// get all students e
-
-                return $http.get("/api/students/" + ID);
-            },
-
-            update: function (student) {// update student information 
-                return $http.put("api/students/" + student.ID);
-            },
-
-            create: function (student) {// create a new student in the database 
-                return $http.post("api/studenst/", student.ID);
-            },
-
-            delete: function (ID) {  // delete a student from the database 
-                return $http.delete("api/students/" + ID);
-            }
-        }
-
-    };
-    app.factory("studentsService", studentsService);
+	'use strict';
+	
+    angular
+	.module('Argus')
+	.factory('StudentsService', ['$resource',function ($resource) {
+		var students = $resource('api/students/:id', {}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+		
+		return students;
+	}]);
+    
 }(angular.module("Argus")));
 /* Teachers  */
 (function (app) {

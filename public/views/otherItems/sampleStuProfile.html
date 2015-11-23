@@ -1,7 +1,7 @@
 ﻿<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="ProfileCtrl" style="">
 
     <div class="left" style="float:left;width:49% ">
-        <div class="ibox float-e-margins ">
+        <div class="ibox float-e-margins" >
             <div class="ibox-title">
                 <div ibox-tools></div>
             </div>
@@ -13,8 +13,8 @@
                         </h2>
                         <small>class of 2015</small>
                     </div>
-                    <img src="images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile">
-
+                    <!-- <img src="images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile"> -->
+					<i class="fa fa-user fa-5x"></i>
                     <div>
                         <span>ID {{student.StudentId}}</span> |
                         <span>Grade Level {{student.Grade}}</span> |
@@ -164,7 +164,7 @@
                         </tr>
                     </thead>
                 </table>
-                <div style="height: 200px;overflow-y: auto;">
+                <div style="height: 300px;overflow-y: auto;">
                     <table class="table table-striped table-bordered" id="dateSpecificActivity" data-ng-hide="showDetail">
                         <tbody>
                             <tr data-ng-repeat="activity in filtered=(activities | filter:filterByCategory)" data-ng-click="toggleShowDetail($index)">
@@ -206,7 +206,7 @@
                     </thead>
                 </table>
 
-                <div style="height: 200px;overflow-y: auto;">
+                <div style="height: 300px;overflow-y: auto;">
 
                     <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
                         <tbody>
@@ -215,7 +215,7 @@
                                 close="closeAlert($index)">
                                 <td> {{com.ActionDate.split(' ')[0]}} </td>
                                 <td>{{com.Comment}} </td>
-                                <td> {{com.user.Firstname + ', ' + com.user.LastName}}</td>
+                                <td> {{com.user.FirstName + ', ' + com.user.LastName}}</td>
                             </tr>
                         </tbody>
                     </table>

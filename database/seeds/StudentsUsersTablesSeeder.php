@@ -18,6 +18,7 @@ class StudentsUsersTablesSeeder extends Seeder
      */
     public function run()
     {
+		DB::beginTransaction();
         $schoolId = Schools::where('Name', 'Estacado High School')->first()->Id;
 		$role= Roles::where('Name','Student')->first();
 		$usersJson = File::get(storage_path().'/jsondata/students.json');
@@ -33,25 +34,36 @@ class StudentsUsersTablesSeeder extends Seeder
 			$parentPhone = array_key_exists(2,$parentInfo)?$parentInfo[2]:'';
 			
 			//$user = User::where('UserName', $user->ID)->first()->roles()->attach($role->Id);
-			$newUser = User::create([
-				"Id"=>str_random(128),
-				'FirstName'=>trim(isset($names[1])?$names[1]:'' ),
-				'LastName'=>trim(isset($names[0])?$names[0]:'' ),
-				'BirthDate'=>$user->BirthDate,
-				'Gender'=>$user->Gender,
-				'Ethnicity'=>$user->Ethnicity,
-				'UserName'=>$user->ID,
-				'SchoolId'=>$schoolId
-				])->roles()->attach($role->Id);
-			$student = Students::create([
-				'Id'=>$newUser->Id,
-				'StudentId'=>$user->ID,
-				'Grade'=>$user->Grade,
-				'GuardianPhone'=>$parentPhone,
-				'GuardianName'=>$parentName,
-				
-			]);
+			
+//			$newUser = User::create([
+//				"Id"=>str_random(128),
+//				'FirstName'=>trim(isset($names[1])?$names[1]:'' ),
+//				'LastName'=>trim(isset($names[0])?$names[0]:'' ),
+//				'BirthDate'=>$user->BirthDate,
+//				'Gender'=>$user->Gender,
+//				'Ethnicity'=>$user->Ethnicity,
+//				'UserName'=>$user->ID,
+//				'SchoolId'=>$schoolId
+//				])->roles()->attach($role->Id);
+			$student = Students::where('StudentId', $user->ID);
+			if(!$student){
+				echo 'student not found';
+				return;
+			}else{
+				$student->update(['GuardianPhone'=>$parentPhone, 'GuardianName'=>$parentName]);
+			}
+//			$student = Students::create([
+//				'Id'=>$newUser->Id,
+//				'StudentId'=>$user->ID,
+//				'Grade'=>$user->Grade,
+//				'GuardianPhone'=>$parentPhone,
+//				'GuardianName'=>$parentName,
+//				
+//			]);
 			
 		}
+		
+		DB::commit();
+
     }
 }

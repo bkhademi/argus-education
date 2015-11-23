@@ -6,7 +6,7 @@
     -->
 
 <div class="modal-header text-center">
-    <button class="close" data-ng-click="cancel()">&times;</button>
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
     <h4 class="modal-title">Parent Notified - {{student.FirstName + " " + student.LastName}}</h4>
 </div>
 <div class="modal-body ">
@@ -18,7 +18,7 @@
             <div class="switch col-lg-offset-1">
                 <div class="onoffswitch">
                     <input type="checkbox" class="onoffswitch-checkbox" id="parentSupportive" 
-						   data-ng-model="student.parentSupportive">
+						   data-ng-model="student.student.ParentSupportive">
                     <label class="onoffswitch-label" for="parentSupportive">
                         <span class="onoffswitch-inner yesno"></span>
                         <span class="onoffswitch-switch yesno"></span>
@@ -34,6 +34,30 @@
 				Reschedule
 			</label>
         </div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div  class=' col-lg-12' >
+					<label> Guardian Name : </label> {{student.student.GuardianName}}
+				</div>
+				<div  class=' col-lg-8' >
+					<label > Phone: </label> <input type="text" data-ng-model="student.student.GuardianPhone" /> 
+				</div>
+			</div>
+			<div class=" col-sm-4 ">
+				<label>Valid Number</label>
+					<div class="switch col-lg-offset-1">
+						<div class="onoffswitch">
+						<input type="checkbox" class="onoffswitch-checkbox" id="ValidNumber" 
+						data-ng-model="student.student.ValidNumber">
+						<label class="onoffswitch-label" for="ValidNumber">
+						<span class="onoffswitch-inner yesno"></span>
+						<span class="onoffswitch-switch yesno"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		
         <div data-ng-if="reschedule" class="form-group col-lg-offset-3 col-sm-12 col-md-6">
             <label>Select new date </label>
             <div class="input-group date" style="margin:0 auto">
@@ -48,7 +72,7 @@
             <textarea id="addComment" type="text"
                       placeholder="Add details"
                       class="form-control auto-resize"
-                      data-ng-model="student.parentNotifiedComment"
+                      data-ng-model="student.student.ParentNotifiedComment"
                       data-ng-keyup=""></textarea>
         </div>
         <br />
@@ -58,6 +82,6 @@
 <div class="modal-footer">
     <button class="btn  bg-green" 
 			data-ng-click="$close({student:student, reschedule:reschedule, newDate:date})">Submit</button>
-    <button class="btn btn-danger" data-ng-click="cancel()">Cancel</button>
+    <button class="btn btn-danger" data-ng-click="$dismiss()">Cancel</button>
 </div>
 

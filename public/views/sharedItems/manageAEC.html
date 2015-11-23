@@ -1,6 +1,6 @@
-<section class="wrapper wrapper-content animated fadeInRight" data-ng-controller="manageAECController">
+<section class="wrapper wrapper-content animated fadeInRight" >
     <div class="panel panel-default">
-        <h2 style="text-align:center"> Hello <span class="bg-primary">{{main.userName}}</span>, let's manage AEC! </h2>
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName +' ' + currentUser.LastName}}</span>, let's manage AEC! </h2>
 
 
         <div class="panel-body">
@@ -77,7 +77,12 @@
 						<i class="fa fa-ticket"></i> Print Passes
 					</button>
 				</div>
-				<table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
+				<div  class="form-group">
+                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListCSV()">
+                        <i class="fa fa-list"></i> AEC List
+                    </button>
+                </div>
+				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="70">
 					<thead>
 						<tr>
 							<th data-toggle="true">First Name</th>
@@ -85,11 +90,14 @@
 							<th>ID</th>
 							<th>Grade</th>
 							<th class="col-sm-6">Assignment</th>
-							<th>Notified </th>
+							<th class="col-sm-2">Notified </th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr data-ng-repeat="stu in refTable track  by stu.id" data-ng-show="stu.referred.length">
+						<tr data-ng-repeat="stu in refTable track  by stu.id" 
+							data-ng-show="stu.referred.length"
+							data-ng-click="onSelect($index)"
+							>
 							<td>{{stu.FirstName}}</td>
 							<td>{{stu.LastName}}</td>
 							<td>{{stu.student.StudentId}}</td>
@@ -109,8 +117,8 @@
 
 							</td>
 							<td>
-								<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
-								<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+								<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.ParentNotified" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+								<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.Notified" btn-checkbox="" data-ng-click="submitStudentNotified(stu,$index)"><i class="fa fa-user"></i></label>
 							</td>
 						</tr>
 					</tbody>

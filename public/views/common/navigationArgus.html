@@ -1,29 +1,29 @@
-﻿<nav class="navbar-default navbar-static-side" role="navigation">
+﻿<nav class="navbar-default navbar-static-side" role="navigation" data-ng-controller="NavigationCtrl as navigation">
     <div class="sidebar-collapse">
-        <ul side-navigation class="nav metismenu" id="side-menu">
+        <ul data-side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
-                <div class="dropdown profile-element" dropdown>
+                <div class="dropdown profile-element" data-dropdown>
 					<img alt='Estacado High School' class='' src='images/estacado_logo.png'  height="86" width="86" >
-                    <a class="dropdown-toggle" dropdown-toggle href>
+                    <a class="dropdown-toggle" data-dropdown-toggle href="">
                         <span class="clear">
                             <span class="block m-t-xs">
-                                <strong class="font-bold">{{main.userName}}</strong>
+                                <strong class="font-bold">{{currentUser.FirstName +', ' + currentUser.LastName}}</strong>
                             </span>
                             <span class="text-muted text-xs block">option<b class="caret"></b></span>
 
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a  data-logout></a></li>
+                        <li><a   data-ng-click='main.logout()'> Logout</a></li>
                     </ul>
                 </div>
                 <div class="logo-element">
-                    IN+
+                    AR
                 </div>
             </li>
              
-            <li data-ng-repeat="item in tabs" ui-sref-active="active">
-                <a ui-sref="{{item.link}}">
+            <li data-ng-repeat="item in navigation.tabs" ui-sref-active="active">
+                <a data-ui-sref="{{item.link}}">
                     <i class="fa fa-{{item.icon}} "></i>
                     <span class="nav-label">{{item.id}}</span>
                 </a>

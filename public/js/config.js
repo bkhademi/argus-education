@@ -55,7 +55,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
 
 	$ocLazyLoadProvider.config({
 		// Set to true if you want to see what and when is dynamically loaded
-		debug: false
+		debug: true
 	});
 
 	$stateProvider
@@ -283,7 +283,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $authPr
 							insertBefore: '#loadBefore',
 							name: 'localytics.directives',
 							files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+						},
+						{
+							name: 'cgNotify',
+							files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
 						}
+						
 					]);
 				}
 			}

@@ -1,3 +1,4 @@
+/* A-G Controller */
 (function (app) {
     app.controller("A-GCtrl", ["$scope", "$http", function ($scope, $http) {
         $scope.tabs = [
@@ -17,6 +18,7 @@
     }])
 
 }(angular.module("Argus")));
+/*  A-GProfile Controller */
 (function (app) {
     app
     .controller("A-GProfileCtrl", ["$scope","$modal", function ($scope,$modal) {
@@ -111,12 +113,14 @@
     }])
        
 }(angular.module("Argus")));
+/*  APTesting Controller */
 (function (app) {
     app
     .controller("APTestingCtrl", ["$scope", "$http", function ($scope, $http) {
 
     }])
 }(angular.module("Argus")));
+/*  PrintAssignments Controller */
 (function (app) {
     app
     .controller("printAssignmentsController", ["$scope","$http", function ($scope, $http) {
@@ -135,6 +139,7 @@
     }])
 
 }(angular.module("Argus")));
+/*  FileManager Controller */
 (function (app) {
     var fileManagerController = function ($scope,fileUpload, assignmentsService) {
         $scope.dropzoneConfig = {
@@ -202,11 +207,11 @@
 
 
 }(angular.module("Argus")));
-
+/*  ManageAEC Controller */
 (function (app) {
     app
-    .controller("manageAECController", ["$scope",  "$filter", "$modal", "referrals","PassesService",
-	function ($scope,  $filter, $modal,  referrals,  passes) {
+    .controller("manageAECController", ["$scope",  "$filter", "$modal", "referrals","PassesService","StudentsService","notify",
+	function ($scope,  $filter, $modal,  referrals,  passes,students, notify) {
         $scope.AEC = true;
 		$scope.selected = {};
         $scope.selected2; // student input field model
@@ -231,16 +236,28 @@
                 $scope.currentDate = newVal;
                 console.log("newVal = " + $scope.form.date.$viewValue);
 				
-				
 				//var data = ServerDataModel.getAECList(formatDate(newVal));
+				var valids = [];
                 $scope.refTable = referrals.query({id:newVal},function(data){
 					// adjust the returned referrals 
 				   for(var i = 0; i < data.length ; i++){
 					   for(var j = 0 ; j < data[i].referred.length ; j++){
 						   data[i].referred[j].id = data[i].referred[j].Id;
 						   angular.extend(data[i].referred[j], data[i].referred[j].assignment);
+						
 					   }
+					   if(data[i].referred.length !== 0 ){
+							valids.push(data[i])
+					   }
+					   
+					   data[i].student.ParentNotified = data[i].student.ParentNotified==="1"?true:false;
+					   data[i].student.Notified = data[i].student.Notified==="1"?true:false;
+					   
 				   }
+				   console.log(valids);
+				   valids.$promise = data.$promise;
+				   valids.$resolved = data.$resolved;
+				   data = valids;
 					 if (!data.length) {
 						$scope.refTable = [];
 						alert("No students for current date");
@@ -258,6 +275,29 @@
         });
 
 		
+		var download = function (text) {
+			
+            //console.log(text);
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', 'info.csv');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        };
+		$scope.AECListCSV = function(){		
+			var text = 'TeacherFirst,TeacherLast,FirstName,LastName,StudentId, Grade, Assignment\n';
+			angular.forEach($scope.refTable,  function(item){
+				angular.forEach(item.referred, function(referred){
+					text +=    referred.user.FirstName +', ' + referred.user.LastName+","+item.FirstName + ',' + item.LastName + ',' + item.student.StudentId;
+					text +=   item.student.Grade +', '+ referred.assignment.Name;  
+					text +=  ' \n';
+				});
+			})
+			download(text);
+		};
+		
 		
         /******** MANAGE AEC **********/
         // for the next submit functions remove student from list self-reducing list
@@ -272,7 +312,10 @@
             // submit information of student  '$scope.selected.student'  to the database
 			angular.forEach(student.referred, function(item){
 				referrals.update({'param':'present','id':item.id, 'Reprint':item.reprint, 'Completed':item.selected},{data:item}, function(response){
-					console.log(response);
+					
+				}, function(response){
+					notify({message: "Present Submited Successfully",
+					classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
 				});
 			})
 			//referrals.update({'param':'present','id':student.id},{ data:completedAssignments });
@@ -323,13 +366,31 @@
 				submitReschedule(data);
 				
             }else{
-				// only add the data to the student object and when the student
-				// is submited by present, reschedule, or clear submit
-				// the server would add that data 
+				// Make A post to update the student parent's information 
+				var student = data.student.student;
+				
+				students.update({id:data.student.id}, {
+					ParentNotified:student.ParentNotified?1:0,
+					ParentNotifiedComment:student.ParentNotifiedComment,
+					ValidNumber:student.ValidNumber?1:0,
+					ParentSupportive:student.ParentSupportive?1:0,
+					GuardianPhone : student.GuardianPhone
+				});
+				
+				
 			}
             
            
         }
+		
+		$scope.submitStudentNotified = function(ref, $index){
+			
+			var studentNotified =ref.student.Notified;
+			students.update({id:ref.id}, {Notified:!studentNotified?1:0},function(response){
+				console.log(response);
+			})
+			console.log($scope.refTable[$index]);
+		};
 		
 		$scope.finishManageAEC = function(){
 			angular.forEach($scope.refTable, function(student){
@@ -341,7 +402,11 @@
 			$scope.refTable = [];
 		}
         /********** MODALS   **********/
-
+		/*** select the student that's clicked so that user doesn't have to type *******/
+		$scope.onSelect = function($index){
+			$scope.selected.student = $scope.refTable[$index];
+		};
+		
         /* Present Modal  */
         $scope.openPresent = function () {
             var modalInstance = $modal.open({
@@ -358,7 +423,9 @@
                 }
             }) // End modalInstace
 
-            modalInstance.result.then(submitPresent);
+            modalInstance.result.then(submitPresent, function(){
+				
+			});
 
         }
 
@@ -423,7 +490,8 @@
 
                     // Restore the parent notified button 
                     $scope.cancel = function () {
-                        $scope.student.status[0] = false;
+						debugger;
+                        $scope.student.student.parentNotified = false;
                         $modalInstance.dismiss('cancel');
                     }
                     $scope.submit = function () {
@@ -443,7 +511,7 @@
             parentModal.result.then(submitParentNotified,
 				function () {
 					// change parent notified button it back to what it was
-					$scope.selected.student.status[0] = !$scope.selected.student.status[0];
+					stu.student.ParentNotified = !stu.student.ParentNotified;
 				});
 
         }
@@ -456,12 +524,15 @@
 					}
 				$scope.selected.student = null;
 			}
-    }])
+    
+	}])
 }(angular.module("Argus")));
+/*  ManageAECAbsence Controller */
 (function (app) {
     app
-    .controller("manageAECAbsenceController", ["$scope",  "$modal", "referrals","PassesService",
-	function ($scope, $modal,referrals, passes) {
+    .controller("manageAECAbsenceController", 
+	["$scope",  "$modal", "referrals","PassesService","UserActionsService",
+	function ($scope, $modal,referrals, passes, useractions) {
         $scope.selected = {};
         $scope.refTable = [];// table model
         $scope.currentDate = new Date(); // date on the date picker
@@ -494,16 +565,42 @@
 
 		$scope.getPasses = function(){
 			$scope.getPasses = function(){
-			passes.pdf({date:$scope.currentDate}, function(data){
-				console.log(data);
-				var fileURL = URL.createObjectURL(data.response);
-				window.open(fileURL);
-			})
-			
-		};
+				passes.pdf({date:$scope.currentDate, param:'absence'}, function(data){
+					console.log(data);
+					var fileURL = URL.createObjectURL(data.response);
+					window.open(fileURL);
+				})
+			};
 		}
  
-
+	 /*** select the student that's clicked so that user doesn't have to type *******/
+		$scope.onSelect = function($index){
+			$scope.selected.student = $scope.refTable[$index];
+		};
+		var download = function (text) {
+			
+            //console.log(text);
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', 'info.csv');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        };
+		$scope.oRoomListCSV = function(){
+			useractions.query({param:'ORoom'}, function(data){
+				//headings
+				var text = 'FirstName,LastName,StudentId\n';
+				angular.forEach(data,  function(item){
+					text +=  item.student.FirstName + ',' + item.student.LastName + ',' + item.student.UserName;
+					
+					text +=  ' \n';
+				})
+				download(text);
+			})
+		};
+		
         /******** MANAGE AEC Absence **********/
         var submitReschedule = function (data) {
             console.log(data);
@@ -516,12 +613,16 @@
             $scope.comment = '';
         };
 
-        var submitComment = function (data) {// data.student , data.comment
-
-            // submit info of student '$scope.selected.student' to database
-			referrals.update({id:data.student.Id}, {param:'AbsentComment', comment:data.comment})
+        var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
+		debugger;
+			var student = $scope.selected.student;
+			var status = data.noShow?0:data.walkOut?1:data.sentOut?2:data.schoolAbsent?3:data.disciplinary?4:data.clear?5:-1;
 			
-            var indexOfStudent = $scope.refTable.indexOf($scope.selected2);
+            // submit info of student '$scope.selected.student' to database
+			var dataToSent = {param:'AbsentComment', comment:data.comment, status:status}
+			referrals.update({id:student.id}, dataToSent);
+			
+            var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
             $scope.refTable.splice(indexOfStudent, 1);
             $scope.selected.student = null;
         }
@@ -578,6 +679,7 @@
 
     }])
 }(angular.module("Argus")));
+/*  ManageARC Controller */
 (function (app) {
     app
     .controller("ManageARCCtrl", ["$scope", "$modal", "ARCListService", "ARCAbsenceListService", "studentsService", "ServerDataModel", function ($scope, $modal, ARCListService, ARCAbsenceListService, studentsService, ServerDataModel) {
@@ -868,6 +970,7 @@
 
     }])
 }(angular.module("Argus")));
+/*  ManageARCAbsence Controller */
 (function (app) {
     app
     .controller("manageARCAbsenceController", ["$scope", "studentsService", "ARCListService", "$filter", "$modal", "ServerDataModel", function ($scope, studentsService, ARCListService, $filter, $modal, ServerDataModel) {
@@ -991,6 +1094,7 @@
 
     }])
 }(angular.module("Argus")));
+/*  ManageSaturdaySchool Controller */
 (function (app) {
     app
     .controller("manageSaturdaySchoolController", ["$scope", "studentsService", "$http", function ($scope, studentsService, $http) {
@@ -1063,6 +1167,7 @@
 
 
 }(angular.module("Argus")));
+/*  MultiplePassesController Controller */
 (function (app) {
     app
     .controller("MultiplePassesController", ["$scope", "studentsService", "$http", "ServerDataModel", function ($scope, studentsService, $http, ServerDataModel) {
@@ -1183,6 +1288,7 @@
 
     }])
 }(angular.module("Argus")));
+/*  PdfExtraction  Controller */
 (function (app) {
     app
     .controller("PdfExtractionController", ["$scope", "$http", function ($scope, $http) {
@@ -1352,7 +1458,7 @@
     }])
 }(angular.module("Argus")));
 
-/************************** ProfileController *****************************/
+/************************** Profile Controller *****************************/
 (function (app) {
     app
     .controller("ProfileCtrl", ["$scope","students","$http", function ($scope, students, $http) {
@@ -1372,13 +1478,14 @@
 			console.log(newVal);
 			$scope.schedule = newVal.professor_classes;
 			var parentName = newVal.GuardianName?newVal.GuardianName.split(',') :["No", " name"] ;
-				$scope.parents = [{fn:parentName[0], ln: parentName[1], phone:newVal.phoneNumber  ||"none" , mphone:'None', email:'None' }]
+				$scope.parents = [{fn:parentName[0], ln: parentName[1], phone:newVal.GuardianPhone  ||"none" , mphone:'None', email:'None' }]
 			$http.get('api/classes/'+newVal.Id).then(function(response){
 				$scope.schedule = response.data;
 				console.log($scope.schedule);
 			})
 			$scope.activities = newVal.user.activities_affected;
 			angular.forEach($scope.activities, function(act){
+				act.ActionType = parseInt(act.ActionType);
 				switch(act.ActionType){
 					case 0:
 						act.activity = 'Referred';
@@ -1395,6 +1502,14 @@
 					case 4:
 						act.activity = 'Absent';
 						break;
+					case 5:
+						act.activity = 'Absent Processed';
+						break;
+					case 6:
+						act.activity = 'Parent Notified';
+						break;
+					default:
+						act.activity = 'unknown' + act.ActionType;
 				}
 			})
         })
@@ -1504,6 +1619,7 @@
 
     }])
 }(angular.module("Argus")));
+/************************** Referrals Controller *****************************/
 (function (app) {
     app.
     controller("referalController", ["$scope", "assignmentsListService",  "referrals", "students", "$http",
@@ -1685,11 +1801,11 @@
 
 }(angular.module("Argus")));
 
-/************************** admin1referalController ***************************/
+/************************** Admin1Referral Controller *****************************/
 (function (app) {
     app.
-    controller("admin1referalController",["$scope", "assignmentsListService",  "teachers", "referrals", "students", "$http",'$modal',
-	function ($scope, assignmentsService,teachers, referrals,students, $http, $modal) {
+    controller("admin1referalController",["$scope", "assignmentsListService",  "teachers", "referrals", "StudentsService", "$http",'$modal',"$timeout",
+	function ($scope, assignmentsService,teachers, referrals,students, $http, $modal, $timeout) {
 		$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
         $scope.showChecks = false; // to use with assignSpecific function
         $scope.currentDate = new Date(); // date on the datepicker
@@ -1720,6 +1836,7 @@
 			 });
 		 }
 		getTeachers();
+		
         // check for changes in the date to retrieve that date's AEC list 
         $scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
             if (newVal) {//when date has a valid date request the List from that date
@@ -1787,11 +1904,6 @@
             }
         });
 
-
-//        $scope.assignments = assignmentsService.query(function(data){
-//			console.log("Returned assignments");
-//            console.log(data);
-//		});
 		
         /* REFER A STUDENT LOGIC */
 
@@ -1818,15 +1930,14 @@
 		};
 		
 		$scope.onSelectedTeacher  = function(){
-			if(!$scope.selected.teacher){
+			if(!$scope.selected.teacher){// if teacher deselected 
 				$scope.teacherStudents = null;
 				return;
 			}
 			var teacherId = $scope.selected.teacher.id;
-			students.getStudents(teacherId).then(function(results) {
+			students.query({teacherId:teacherId},function(results) {
 				console.log("Teacher students");
 				console.log(results);
-				
 				
 				$scope.teacherStudents = results;
 			  }, function(error) {
@@ -1851,10 +1962,13 @@
 
             modalInstance.result.then(function(data){
 				assignmentsService.save({teacher:$scope.selected.teacher, assignment:data}, function(response){
+					debugger;
+					var teacher = $scope.selected.teacher;
+					response.assignment.Id = response.assignment.Id + "";
 					 $scope.selected.teacher.assignments.push(response.assignment);
-					 $scope.teachers.$resolved = false;
-					 $scope.teachers.$resolved = true;
+					 
 					console.log('assignment successfully added');
+					console.log($scope.selected.teacher.assignments)
 				}, function(response){
 					console.warn('assignment unseccessfuly added');
 				});
@@ -1874,7 +1988,9 @@
 		$scope.addAssignment = function(){
 			debugger;
 			var selectedAssignments  = $scope.selected.assignments;
-			var referralToAdd = $scope.selected.student.user;
+			var referralToAdd = $scope.selected.student;
+			var selectedTeacher = $scope.selected.teacher;
+			
 			
 			addAssignmentsToStudent(selectedAssignments, referralToAdd);
 			referralToAdd.teacher = $scope.selected.teacher;
@@ -1964,7 +2080,7 @@
 
 }(angular.module("Argus")));
 
-
+/************************** ReferralARC Controller *****************************/
 (function (app) {
     app
     .controller("referalARCController", ["$scope", "studentsService", "ARCListService", "ServerDataModel", function ($scope, studentsService, ARCListService, ServerDataModel) {
@@ -2097,6 +2213,7 @@
     }])
 
 }(angular.module("Argus")));
+/************************** Saturday Controller *****************************/
 (function (app) {
     app
     .controller("saturdaySchoolController", ["$scope", "studentsService", "saturdaySchoolService", "$modal", function ($scope, studentsService, saturdaySchoolService, $modal) {
@@ -2243,7 +2360,7 @@
 
     }])
 }(angular.module("Argus")));
-/*statistics controllers */
+/************************** Usage Controller *****************************/
 (function (app) {
     app
     .controller("usageChartCtrl",["$scope", function ($scope) {
@@ -2332,7 +2449,7 @@
 
 }(angular.module('Argus')));
 
-/************************** StudentInfoController *****************************/
+/************************** StudentInfo Controller *****************************/
 (function (app) {
     app
     .controller("studentInfoCtrl", ["$scope", "students",  function ($scope, students) {
@@ -2374,6 +2491,7 @@
     }])
 
 }(angular.module("Argus")));
+/************************** tables Controller *****************************/
 (function (app) {
     app
     .controller("tablesCtrl", ["$scope", "$http", "$filter", function ($scope, $http, $filter) {
@@ -2439,6 +2557,7 @@
 
     }]) // end tablesCtrl
 }(angular.module("Argus")));
+/************************** WelcomeWizard Controller *****************************/
 (function (app) {
     app
     .controller("welcomeWizardController", ["$scope", "$http", function ($scope, $http) {
@@ -2463,6 +2582,7 @@
     }])
 
 }(angular.module("Argus")));
+/************************** Chartist Controller *****************************/
 (function (app) {
     app
     .controller("chartistCtrl", ["$scope", function ($scope) {
@@ -2590,7 +2710,7 @@
     }])
 
 }(angular.module("Argus")));
-
+/************************** Auth Controller *****************************/
 (function(app){
 	'use strict';
 	

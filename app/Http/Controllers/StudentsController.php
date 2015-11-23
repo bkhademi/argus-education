@@ -10,6 +10,8 @@ use App\Students;
 use App\ClassStudents;
 use App\Professorclasses;
 use App\User;
+use App\Useractions;
+use Carbon\Carbon ;
 
 class StudentsController extends Controller
 {
@@ -45,7 +47,9 @@ class StudentsController extends Controller
 		
 		//$userId = isset($this->userId) ? $this->userId : $request->input('userId');
         $teacherWithClassStudents = User::with('classstudents.user.student')->find($id);
-		return $teacherWithClassStudents->classstudents;
+		$uniqueIDs = $teacherWithClassStudents->classStudents->unique('StudentId')->pluck('StudentId');
+		$teacherWithClassStudents = User::with('student')->wherein('id', $uniqueIDs)->get();
+		return $teacherWithClassStudents;
       
     }
 
@@ -104,7 +108,20 @@ class StudentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+		$student = Students::find($id);
+		$student->update($request->all());
+		
+		$action = Useractions::create(['ActionDate'=>Carbon::today(),
+		'ActionByUserId'=>$this->userId,'ActionToUserId'=>$id,'ActionType'=>6,
+		//'Comment'=>'Student was Rescheduled from '.$request->oldDate.' to '.$request->newDate,
+		'Comment'=>$request->ParentNotifiedComment,
+		'ParentNotified'=>$request->ParentNotified,
+		'StudentNotified'=>$request->ParentNotified,
+		//'Excused'=> $request->excused?1:0
+		]);
+		
+		return $student;
+        return $request->all();
     }
 
     /**

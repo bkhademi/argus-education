@@ -10,6 +10,15 @@ use mikehaertl\pdftk\Pdf;
 use mikehaertl\pdftk\FdfFile;
 use Carbon\Carbon;
 
+use App\Referrals;
+
+use App\Students;
+use App\Useractions;
+
+use App\ClassStudents;
+use App\Professorclasses;
+use App\User;
+use App\Assignments;
 
 
 
@@ -50,21 +59,58 @@ class PrintPassesController extends Controller
 
         // error_log(print_R($request,TRUE) );
 
-
-
-        $count = 3;
-
+		//$referrals = Referrals::with('studentUser.student','user', 'assignment')
+		//	->where('Date', Carbon::today())
+		//	->where('RefferalStatus',0)
+		//	->get();
+		if($request->param === "AECList"){
+        $referrals = User::with(['referred'=>function($query){
+				$query->where('Date', Carbon::today());
+		}], 'student')->whereHas('referred', function($query){
+					$query->where('Date', Carbon::today());
+				})->get();
+		}else{
+			$referrals = User::with(['referred'=>function($query){
+				$query->where('Date', Carbon::today());
+				}], 'student')->whereHas('referred', function($query){
+				$query->where('RefferalStatus',4);
+			})->get();
+		}
+		
         // $command =  "pdfjam "; 
         $command =  "pdftk "; 
         $files = "rm ";
 
         //Iterate though the whole array making the files
-        for($i = 0; $i<$count ; $i++){
-            $pdf = new Pdf('PassV3.pdf');
-            $pdf->fillForm(array('Name'=>'Atl', 'Grade'=>'6th', 'Period'=>$i, 
-                'AtOnce'=>'Yes','Date' => Carbon::now(), 'EndOfPeriod'=>'Yes',
-                'AtTeachersConvenience'=>'Yes', 'RoomInNow'=>'C130', 'GoTo'=>'ElAdrian',
-                'PersonSending'=>'ElAtl'))
+        for($i = 0; $i<count($referrals) ; $i++){
+			$obj = $referrals[$i]->toArray();
+            $pdf = new Pdf('PassV4.pdf');
+			$schedule  = Classstudents::with('professor_class.period','professor_class.room' )
+			->where('StudentId',$obj['id'])
+			->whereHas('professor_class.classs', function($q){
+				$q->where('Term','S1');
+			})->get();
+			$schedule1 = '';
+			$schedule2 = '';
+			$k= 0;
+			forEach($schedule as $class){
+				$schedule1 .= "Per ".($k+1).":Rm ".$class->professor_class['room']['Name'].' |';
+				$k++;
+			}
+			$classes = explode('|',$schedule1);
+			$schedule1 = '';
+			for($j = 0; $j <  $k; $j++ ){
+				if($j < ($k/2)){
+					$schedule1 .= $classes[$j].' |';
+				}else{
+					$schedule2 .= $classes[$j].' |';
+				}
+			}
+			
+            $pdf->fillForm(array('Student Name'=>$obj['FirstName'].', '.$obj['LastName']
+			,'AECReferrals'=>count($obj['referred']), 'Now' => Carbon::now()->toFormattedDateString(), 
+				'RefDate'=>Carbon::now()->toFormattedDateString(),
+               'Schedule1'=>$schedule1, 'Schedule2'=>$schedule2))
             ->flatten()
             ->saveAs($i .".pdf");
 

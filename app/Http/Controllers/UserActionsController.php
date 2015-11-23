@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Collection;
 use App\Useractions;
+use App\User;
+use \Carbon\Carbon;
 
 class UserActionsController extends Controller
 {
@@ -22,6 +24,39 @@ class UserActionsController extends Controller
     {
         //
 		$userId = $this->getUserId($request);
+		
+		if($request->has('param') && $request->param === 'ORoom'){
+			$date = Carbon::today();
+			
+			$users =  User::with('activitiesAffected')->whereHas('activitiesAffected', function($q)use($date){
+				$q->where('ActionDate', $date);
+			})->get();
+			
+			$arr  = [];
+			$k =0;
+			for($i = 0; $i < count($users); $i++){
+				 $exists = false;
+				 $activities = $users[$i]->toArray()['activities_affected'];
+				for($j = 0; $j < count($activities); $j++){
+					if($activities[$j]['ActionType'] === '3'){
+						$exists = true;
+					}
+				}
+				if(!$exists){
+					$arr[$k++] = $users[$i];
+				}
+			}
+			
+			return $arr;
+			
+			$actions = UserActions::with('student')
+				->where('ActionDate',$date)
+				->Where('ActionType','<>', 3)
+				->wherein('AbsenceStatus',[0,1,2])
+				
+				->get();
+			return $actions;
+		}
 		
 		if($request->has('ActionByUserId')){
 			return  Useractions::with('student', 'user')->where('ActionByUserId', $request->ActionByUserId)->get();

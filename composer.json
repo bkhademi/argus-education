@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.1.*",
 		"tymon/jwt-auth": "0.5.*",
-        "mikehaertl/php-pdftk": "^0.2.4"
+        "mikehaertl/php-pdftk": "^0.2.4",
+		 "guzzlehttp/guzzle": "~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

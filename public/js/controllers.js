@@ -3,38 +3,7 @@
  *
  */
 
-/**
- * MainCtrl - controller
- */
-function MainCtrl($rootScope,$auth, $state) {
-	
-	var user = JSON.parse(localStorage.getItem('user'));
-	$rootScope.currentUser=  user;
-	// var user = $rootScope.currentUser;
-   if($rootScope.currentUser || JSON.parse(localStorage.getItem('user')) ){
-	  
-    this.userName = $rootScope.currentUser.FirstName +', ' 
-		+ $rootScope.currentUser.LastName;//user.name;
 
-   }
-   else{
-       this.userName = "Please Log In"
-   }
-
-//    this.userName = 'Brandon Hernandez';
-//    this.helloText = 'Welcome in SeedProject';
-//    this.descriptionText = 'It is an application skeleton for a typical AngularJS web app. You can use it to quickly bootstrap your angular webapp projects and dev environment for these projects.';
-	this.logout = function(){
-		 $auth.logout().then(function(){
-			localStorage.removeItem('user');
-
-		$rootScope.authenticated = false;
-
-		$rootScope.currentUser  = null;
-		$state.go('auth'); 
-		});
-	}
-};
 
 function DashTeacherCtrl($scope, $modal, referrals) {
     var path = "../Client/Views/dashItems/";

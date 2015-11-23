@@ -63,6 +63,17 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
+		'bbyArgus'=> [
+            'driver'    => 'mysql',
+            'host'      => env('DB2_HOST', 'localhost'),
+            'database'  => env('DB2_DATABASE', 'bbyargusdb'),
+			'username'  => env('DB2_USERNAME', 'root'),
+			'password'  => env('DB2_PASSWORD', ''),
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+			'strict'    => false,
+		],
 
         'pgsql' => [
             'driver'   => 'pgsql',
