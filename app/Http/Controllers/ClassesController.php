@@ -53,8 +53,10 @@ class ClassesController extends Controller
     public function show($id)
     {
         //
-		$classes = Classstudents::with('professor_class.classs', 'professor_class.user', 'professor_class.period','professor_class.room' )->where('StudentId',$id)->whereHas('professor_class.classs', function($q){
-			$q->where('Term','S1');
+		$classes = Classstudents::with('professor_class.classs', 'professor_class.user', 'professor_class.period','professor_class.room' )
+			->where('StudentId',$id)
+			->whereHas('professor_class.classs', function($q){
+				$q->where('Term','S1');
 		})->get();
 		return $classes;
     }
