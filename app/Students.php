@@ -15,7 +15,7 @@ class Students extends Model
     // Eloquent relationship that says one user belongs to each time entry
     public function classes()
     {// link not well established
-        return $this->belongsTo('App\Professorclasses','ProfessorClass_Id','Id');
+        return $this->hasMany('App\ClassStudents','StudentId','Id');
     }
 	
 	//  get all the classsttudents for this user (many to many throurgh

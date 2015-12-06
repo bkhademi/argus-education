@@ -58,10 +58,12 @@ class professorsAndClasses extends Seeder
         $school = Schools::where('Name', 'Estacado High School')->First();
 		//grab S1 (fall)
 		$term = 'S1'; // current term
-		$defaultDepartment = Departments::find(17);
+		$defaultDepartment = Departments::find(17); // default department
+		// load json file and parse
 		$teacherClassesJson = File::get(storage_path().'/jsondata/ProfessorsAndClasses.json');
 		$teacherClasses = json_decode($teacherClassesJson);
 		
+		// get the 2 roles 
 		$studentRole= Roles::where('Name','Student')->first();
 		$teacherRole = Roles::where('Name', 'Teacher')->first();
 		
@@ -73,10 +75,16 @@ class professorsAndClasses extends Seeder
 		foreach($teacherClasses  as $obj){
 		
 			//print($obj->Course);
+			
+			// separate teacher name by FirstName and Last Name
 			$teacherName = explode(',',$obj->Teacher);
 			$first = trim(array_key_exists(1, $teacherName)?$teacherName[1]:'');
 			$last = trim($teacherName[0]);
+			
 			//print_r([$first, $last]);
+			
+			// if current row doesnt have a studentID then we are dealing with the same student as the last iteration
+			// so check if the field is not null,then there is  a student, get its information. 
 			if($obj->StudentID !== null){
 
 				$studentId = $obj->StudentID;
@@ -86,14 +94,15 @@ class professorsAndClasses extends Seeder
 				$studentGrade = $obj->Grade;
 				//print_r([$studentFirst, $studentLast, $studentGrade]);
 			}
-			
+			//  this is  "S1 or S2  /   T / PeriodNumber' ; extract both
 			$termPeriod = explode('/', $obj->TermPeriod);
 			$periodNo = $termPeriod[2];
-			
 			$term  = $termPeriod[0];
+			
 			$course = $obj->Course;
 			$classDb = Classes::firstOrCreate(['Name'=>$course, 'Term'=>$term, 'DepartmentId'=>17] );
 			//print_r([$periodNo, $term, $course, $classDb->toArray()]);
+			// get the period (possible the error is here)
 			$period = Periods::where('Number',$periodNo)
 				->where('DayType', 'regular')
 				->OrWhere('DayType', 'regularA')
@@ -137,6 +146,7 @@ class professorsAndClasses extends Seeder
 				print_r($teacher->toArray());
 				return;
 			}
+			// this is wrong.. it should be first or create **** 
 			$professorClass = Professorclasses::create(['UserId'=>$teacher->id,'ClassId'=>$classDb->Id,
 				'PeriodId'=>$period->Id, 'RoomId'=>$room->Id]);
 			

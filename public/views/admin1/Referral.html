@@ -122,18 +122,20 @@
                         <th>Last Name</th>
                         <th>ID</th>
                         <th>Grade</th>
+						<th>Student 8th Period</th>
                         <th class="col-sm-6">Assignment</th>
 						<th data-ng-if='showChecks'></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr data-ng-repeat="stu in refTable track  by $index">
-						<td> <button data-ng-click='refTable.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
+						<td> <button data-ng-click='refTable.splice($index,1);eightPeriods.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
 						<td>{{stu.teacher.FirstName + ", " +stu.teacher.LastName}}</td>
                         <td>{{stu.FirstName}}</td>
                         <td>{{stu.LastName}}</td>
                         <td>{{stu.student.StudentId}}</td>
                         <td >{{stu.student.Grade}}</td>
+						<td> {{ eightPeriods[$index].professor_class.classs.Name + ' - ' +eightPeriods[$index].professor_class.room.Name}}</td>
                         <td >
                              <select multiple chosen
 								width="'100%'"	 

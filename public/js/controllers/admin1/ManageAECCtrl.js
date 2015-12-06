@@ -103,7 +103,7 @@
 				var text = 'TeacherFirst,TeacherLast,FirstName,LastName,StudentId, Grade, Assignment\n';
 				angular.forEach($scope.refTable,  function(item){
 					angular.forEach(item.referred, function(referred){
-						text +=    referred.user.FirstName +', ' + referred.user.LastName+","+item.FirstName + ',' + item.LastName + ',' + item.student.StudentId;
+						text +=    referred.user.FirstName +', ' + referred.user.LastName+","+item.FirstName + ',' + item.LastName + ',' + item.student.StudentId + ',';
 						text +=   item.student.Grade +', '+ referred.assignment.Name;  
 						text +=  ' \n';
 					});

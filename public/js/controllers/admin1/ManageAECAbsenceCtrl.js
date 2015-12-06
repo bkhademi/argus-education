@@ -87,7 +87,7 @@
 					//headings
 					var text = 'FirstName,LastName,StudentId\n';
 					angular.forEach(data,  function(item){
-						text +=  item.student.FirstName + ',' + item.student.LastName + ',' + item.student.UserName;
+						text +=  item.FirstName + ',' + item.LastName + ',' + item.UserName;
 						
 						text +=  ' \n';
 					})

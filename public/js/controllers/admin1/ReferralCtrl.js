@@ -2,13 +2,14 @@
 	"use strict";
 	app.
 	controller("admin1referalController",
-	["$scope", "assignmentsListService",  "teachers", "referrals", "StudentsService", '$modal','notify',
-		function ($scope, assignmentsService,teachers, referrals,students,$modal, notify) {
+	["$scope", "assignmentsListService",  "teachers", "referrals", "StudentsService", '$modal','notify','$http',
+		function ($scope, assignmentsService,teachers, referrals,students,$modal, notify, $http) {
 			$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
 			$scope.currentDate = new Date(); // date on the datepicker
 			$scope.teacherStudents = []; // model for autocomplete  
 			$scope.refTable = []; // model for dynamic table 
 			$scope.edits = [];  
+			$scope.eightPeriods = [];
 			
 			function getTeachers(){
 				$scope.teachers = teachers.query(function(data){
@@ -175,7 +176,11 @@
 				var selectedAssignments  = $scope.selected.assignments;
 				var referralToAdd = $scope.selected.student;
 				var selectedTeacher = $scope.selected.teacher;
-				
+				$http.get('api/classes/'+$scope.selected.student.id).then(function(response){
+					var last = response.data.pop();
+					$scope.eightPeriods.push(last)
+					console.log($scope.eightPeriods);
+				})
 				
 				addAssignmentsToStudent(selectedAssignments, referralToAdd);
 				referralToAdd.teacher = $scope.selected.teacher;
