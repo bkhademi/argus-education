@@ -505,7 +505,7 @@
 				var referralToAdd = $scope.selected.student;
 				var selectedTeacher = $scope.selected.teacher;
 				$http.get('api/classes/'+$scope.selected.student.id).then(function(response){
-					var last = response.data.pop();
+					var last = response.data[7];
 					$scope.eightPeriods.push(last)
 					console.log($scope.eightPeriods);
 				})

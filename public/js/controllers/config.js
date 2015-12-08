@@ -27,7 +27,7 @@
 								
 								// Send the user to the auth state so they can login
 								$state.go('auth');
-							}
+							}    
 						});
 						return $q.reject(rejection);
 					}
@@ -52,10 +52,11 @@
 			
 			// $stateChangeStart is fired whenever the state changes. We can use some parameters
 			// such as toState to hook into details about the state as it is changing
+			// stateChangeStart
 			$rootScope.$on('$stateChangeStart', function (event, toState) {
 				// Grab the user from local storage and parse it to an object
 				var user = JSON.parse(localStorage.getItem('user'));
-				
+				debugger;
 				console.log("USER: ");
 				console.log(user);
 				// If there is any user data in local storage then the user is quite
@@ -83,10 +84,11 @@
 						var userRole = $rootScope.currentUser.role.toLowerCase();
 						var go = userRole + ".dashboard";
 						// go to the "main" state which in our case is users
-						$state.go(go);//$rootScope.currentUser.role+".dashboard");
+						debugger;
+						$state.go('admin1');//$rootScope.currentUser.role+".dashboard");
 					}
 				}
 			})
-			$rootScope.$state = $state;
+			//$rootScope.$state = $state;
 		})
 }(angular.module('Argus')));
