@@ -25,7 +25,7 @@ class TeachersController extends Controller
 		$teachers  = User::with('assignments')->where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($query){
 			$query->where('aspnetroles.Name', 'teacher');
 		})->get();
-		return $teachers;
+		return response($teachers);
 		
     }
 

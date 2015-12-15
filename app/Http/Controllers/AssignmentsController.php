@@ -33,11 +33,11 @@ class AssignmentsController extends Controller
 			$userId = $request->input('teacherId');
 			return Assignments::with('teacher')->whereTeacherid($userId)->get();
 		}
-        $userFolder = "UsersFiles/$userId/";
+      //  $userFolder = "UsersFiles/$userId/";
     
-        $files = Storage::allFiles($userFolder);
-        if(!$files)
-            return response()->json(["no_files_found_for_'".$user->FirstName.' '.$user->LastName."'"], 404);
+///        $files = Storage::allFiles($userFolder);
+   //     if(!$files)
+     //       return response()->json(["no_files_found_for_'".$user->FirstName.' '.$user->LastName."'"], 404);
        
         //return $files;
         

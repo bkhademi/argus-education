@@ -46,6 +46,18 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::post('authenticate', 'AuthenticateController@authenticate');
 	Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
 
+	
+	Route::post('generaldb', 'generaldbController@store');
+	Route::get('generaldb', 'generaldbController@index');
+	
+	Route::post('generaldb2', 'generaldb2Controller@store');
+	Route::get('generaldb2', 'generaldb2Controller@index');
+	
+	
+	Route::post('activities', 'activitiesController@store');
+	Route::get('activities', 'activitiesController@index');
+	Route::delete('activities','activitiesController@destroy');	
+
 	Route::resource('/bbyargus/generaldb', 'BbyArgusGeneralDBController');
 //		function(){
 //		$client = new GuzzleHttp\Client();
