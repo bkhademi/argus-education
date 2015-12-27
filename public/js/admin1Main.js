@@ -1,165 +1,4 @@
 (function(app){
-"use strict";
-	app.config(['$stateProvider','$urlRouterProvider', '$ocLazyLoadProvider','$provide', 
-	function($stateProvider,$urlRouterProvider, $ocLazyLoadProvider,  $provide){
-		$ocLazyLoadProvider.config({
-			// Set to true if you want to see what and when is dynamically loaded
-			debug: false
-		});
-		$urlRouterProvider.otherwise('/auth');
-		$stateProvider
-		.state('auth', {
-			url: '/auth',
-			templateUrl: 'views/login.html',
-			controller: 'AuthController as auth',
-			data: {pageTitle: "Login", specialClass: "white-bg"}
-		})
-		.state('admin1', {
-			abstract: true,
-			url: "/admin1",
-			templateUrl: "views/common/contentArgus.html",
-			resolve: { 
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-						},
-						{
-							name: 'angles',
-							files: ['js/plugins/chartJs/angles.js']
-						},
-						{
-							files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-						},
-						{
-							name: 'ui.footable',
-							files: ['js/plugins/footable/angular-footable.js']
-							}, {
-							insertBefore: '#loadBefore',
-							files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
-						},
-						{
-							name: 'ui.calendar',
-							files: ['js/plugins/fullcalendar/calendar.js']
-						},
-						{
-							insertBefore: '#loadBefore',
-							name: 'localytics.directives',
-							files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-						},
-						{
-							name: 'cgNotify',
-							files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-						},
-						{
-							name: 'ui.slimscroll',
-							files: ['js/plugins/slimscroll/angular.slimscroll.js']
-						}
-						
-					]);
-				}
-			}
-		})
-		.state('admin1.dashboard', {
-			url: "/dashboard",
-			templateUrl: 'views/admin1/dashboard.html',
-			data: {pageTitle: 'Dashboard'},
-			controller: "DashAdmin1Ctrl",
-			resolve: {
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
-						},
-						{
-							name: 'datePicker',
-							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-						}
-					]);
-				}
-			}
-		})
-		.state('admin1.referral', {
-			url: "/adminReferral",
-			templateUrl: 'views/admin1/Referral.html',
-			data: {pageTitle: 'Referral'},
-			controller: 'admin1referalController',
-			resolve: {
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							name: 'datePicker',
-							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-						}
-					]);
-				}
-			}
-			
-		})
-		.state('admin1.AECList', {
-			url: "/AECList",
-			templateUrl: 'views/sharedItems/manageAEC.html',
-			data: {pageTitle: 'AEC List'},
-			controller : 'manageAECController',
-			resolve: {
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							name: 'datePicker',
-							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-						},
-						{
-							name: 'BarcodeGenerator',
-							files: ['css/plugins/barcode/barcode.css', 'js/plugins/barcode/barcode.js']
-						}
-					]);
-				}
-			}
-			
-		})
-		.state('admin1.pending', {
-			url: "/pending",
-			templateUrl: 'views/sharedItems/manageAECabsence.html',
-			data: {pageTitle: 'Pending'},
-			controller: 'manageAECAbsenceController',
-			resolve: {
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							name: 'datePicker',
-							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-						}
-					]);
-				}
-			}
-		})
-		.state('admin1.studentData', {
-			url: "/studentData",
-			templateUrl: 'views/sharedItems/studentInfo.html',
-			data: {pageTitle: 'Student Data'},
-			controller: 'studentInfoCtrl',
-			resolve: {
-				loadPlugin: function ($ocLazyLoad) {
-					return $ocLazyLoad.load([
-						{
-							name: 'datePicker',
-							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-						}
-					]);
-				}
-			}
-		})
-		.state('admin1.createStudentPass', {
-			url: "/createStudentPass",
-			templateUrl: 'views/sharedItems/multiplePasses.html',
-			data: {pageTitle: 'Create Pass'}
-		})
-
-	
-	}])
-	
-}(angular.module('Argus')));
-(function(app){
 	"use strict";  
 	app.controller('DashAdmin1Ctrl', ['$scope', '$modal', 'referrals', 'notify',
 	function($scope, $modal, referrals, notify){
@@ -328,264 +167,148 @@
 }(angular.module('Argus')));
 (function(app){
 	"use strict";
-	app.
-	controller("admin1referalController",
-	["$scope", "assignmentsListService",  "teachers", "referrals", "StudentsService", '$modal','notify','$http',
-		function ($scope, assignmentsService,teachers, referrals,students,$modal, notify, $http) {
-			$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
-			$scope.currentDate = new Date(); // date on the datepicker
-			$scope.teacherStudents = []; // model for autocomplete  
-			$scope.refTable = []; // model for dynamic table 
-			$scope.edits = [];  
-			$scope.eightPeriods = [];
-			
-			function getTeachers(){
-				$scope.teachers = teachers.query(function(data){
-					console.log('the teachers')
-					console.log(data);
-				});
-			}
-			getTeachers();
+	app
+	.controller("manageAECAbsenceController", 
+	["$scope",  "$modal", "referrals","PassesService","UserActionsService",'BbyArgusGeneralDBService',
+		function ($scope, $modal,referrals, passes, useractions, generaldb) {
+			$scope.selected = {};
+			$scope.refTable = [];// table model
+			$scope.currentDate = new Date(); // date on the date picker
 			
 			/**
-			 * Watch for changes in the datepicker to add students to that date's
-			 * AEC List
+			 * Watch for changes in the datepicker then load the AECAbsence list
 			 */
 			$scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
+				
 				if (newVal) {//when date has a valid date request the List from that date
-					var processReceivedReferrals  = function(results) {
-						console.log("Returned  refferals");
-						console.log(results);
+					$scope.currentDate = newVal;
+					console.log("newVal = " + $scope.form.date.$viewValue);
+					
+					referrals.query({id:newVal, absence:true},function(data){
 						
-						// adjust the returned referrals 
-						
-						
-						var AlluniqueTeachers = {};
-						var results_length = results.length;
-						var referrals=[];
-						for(var i = 0; i < results_length; i++){
-							var student  = results[i];
-							var uniqueTeachers = {};
-							angular.forEach(student.referred, function(referral, $index2){
-								uniqueTeachers[referral.UserId] =  referral.user;
-								delete referral.user;
-								//AlluniqueTeachers[referral.StudentId] = uniqueTeachers;
-							});
-							var teachersNo =  Object.keys(uniqueTeachers).length;
-							var teachersKeys = Object.keys(uniqueTeachers);
-							for(var j = 0; j < teachersNo; j++){
-								var studentCopy= angular.copy(student);
-								var studentReferrals = [];
-								studentCopy.teacher = uniqueTeachers[teachersKeys[j]];
-								for(var k =0; k < student.referred.length; k++){
-									
-									var referral = student.referred[k];
-									if(referral.assignment.TeacherId === teachersKeys[j])
-									studentReferrals.push(referral.assignment);
-								}
-								studentCopy.referred = studentReferrals;
-								studentCopy.old = true;
-								referrals.push(studentCopy);
-							}
-							
-						}
-						results = referrals
-						console.log(results);
-						var data = results;
-						console.log("Data For the ref table");
-						console.log(results);
-						// console.log(data);
-						if (!data) {
+						if (!data.length) {
 							$scope.refTable = [];
 							alert("No students for current date");
 							
 							} else {
 							$scope.refTable = data;
+							$scope.passesTable = data;
+							angular.forEach($scope.refTable, function (student) {
+								
+								student.status = [false, true];
+								
+							})
 						}
-					}
-					//                referrals.query({id:newVal},processReceivedReferrals, function(error) {
-					//                    console.log(error);
-					//                });
-					
-					
-					
-					console.log("New Date : " +newVal );
-					console.log("Old Date : " +oldVal );
-					//console.log("New Date : " +formatDate(newVal) );
-					$scope.currentDate = newVal;
-					
+						
+						generaldb.query(function(data){
+							console.log(data);
+						})
+					})
 				}
 			});
 			
-			/* REFER A STUDENT LOGIC */
-	
-			
 			/**
-			 * Called when a student is selected or deselected 
-			 * no action for now 
+			 * Makes API call to get a pdf of the AECAbsence passes for the students
+			 * assigned AEC for the current date
 			 */
-			$scope.onSelectedStudent = function(){
-				return;
-				// add to the list
-				var alreadyInList = false;
-				for(var  i = 0 ; i < $scope.refTable.length; i++){
-					if($scope.refTable[i].id === $scope.selected.student.user.id){
-						alreadyInList = true;
-					}
-				}
-				if(!alreadyInList)
-				$scope.refTable.push($scope.selected.student.user);
-				else
-				alert('student is already in the list');
-				// clear the field
-				//$scope.selected.student = null;
-			};
-			
-			/**
-			 * Called when teacher is selected or deselected. Retrieves the selected
-			 * teacher's students if a teacher is selected.  If deselected
-			 * set teacherStudents to null
-			 */
-			$scope.onSelectedTeacher  = function(){
-				if(!$scope.selected.teacher){// if teacher deselected 
-					$scope.teacherStudents = null;
-					return;
-				}
-				var teacherId = $scope.selected.teacher.id;
-				students.query({teacherId:teacherId},function(results) {
-					console.log("Teacher students");
-					console.log(results);
-					
-					$scope.teacherStudents = results;
-					}, function(error) {
-					console.log(error);
-				});
-				
+			$scope.getPasses = function(){
+				$scope.getPasses = function(){
+					passes.pdf({date:$scope.currentDate, param:'absence'}, function(data){
+						var fileURL = URL.createObjectURL(data.response);
+						window.open(fileURL);
+					})
+				};
 			}
 			
-			
-			/** New Assignment Modal
-			 * Opens the New Assignment modal and passes in the teacher selected to be available
-			 * in the modal context, on submit makes a post call to assignments
-			 * to add the current assignment to the teacher 
+			/**
+			 * Select the student that is clicked in the table so that the user doesn't 
+			 * have to type it 
+			 * @param {int} $index: reftable index of the clicked student 
 			 */
-			$scope.openCreateNewAssignment = function(){
-				var modalInstance = $modal.open({
-					templateUrl: 'views/modals/addNewAssignmentModal.html',
-					size: 'md',
-					controller: function ($scope, teacher) {
-						$scope.teacher = teacher;
-					},
-					resolve: { // variables that get injected into the controller (taken from current $scope)
-						teacher: function () { return $scope.selected.teacher; },
-					}
-				}) // End modalInstace
-				
-				modalInstance.result.then(function(data){
-					assignmentsService.save({teacher:$scope.selected.teacher, assignment:data}, function(response){
-						debugger;
-						var teacher = $scope.selected.teacher;
-						response.assignment.Id = response.assignment.Id + "";
-						$scope.selected.teacher.assignments.push(response.assignment);
-						
-						console.log('assignment successfully added');
-						console.log($scope.selected.teacher.assignments)
-						}, function(response){
-						console.warn('assignment unseccessfuly added');
-					});
-				});		
+			$scope.onSelect = function($index){
+				$scope.selected.student = $scope.refTable[$index];
 			};
 			
 			/**
-			 * Adds selected.student with selected.assignments to the refTable
-			 * then clears selected.student
+			 * Makes a download prompt of the current AEC list as a csv file
+			 * @param {string} text
 			 */
-			$scope.addToList = function(){
-				var selectedAssignments  = $scope.selected.assignments;
-				var referralToAdd = $scope.selected.student;
-				var selectedTeacher = $scope.selected.teacher;
-				$http.get('api/classes/'+$scope.selected.student.id).then(function(response){
-					var last = response.data[7];
-					$scope.eightPeriods.push(last)
-					console.log($scope.eightPeriods);
-				})
+			var download = function (text) {
 				
-				addAssignmentsToStudent(selectedAssignments, referralToAdd);
-				referralToAdd.teacher = $scope.selected.teacher;
-				$scope.refTable.push(referralToAdd);
-				console.log($scope.refTable);
+				var element = document.createElement('a');
+				element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+				element.setAttribute('download', 'info.csv');
+				element.style.display = 'none';
+				document.body.appendChild(element);
+				element.click();
+				document.body.removeChild(element);
+			};
+			
+			/**
+			 * Converts the Kids that were marked with SentOut or Walkout  into a csv text 
+			 * format so it can downloaded and Referred to O-Room
+			 * be passed to the download method 
+			 */
+			$scope.oRoomListCSV = function(){
+				useractions.query({param:'ORoom'}, function(data){
+					//headings
+					var text = 'FirstName,LastName,StudentId\n';
+					angular.forEach(data,  function(item){
+						text +=  item.FirstName + ',' + item.LastName + ',' + item.UserName;
+						
+						text +=  ' \n';
+					})
+					download(text);
+				})
+			};
+			
+			/******** MANAGE AEC Absence **********/
+			// for the next submit functions remove student from list self-reducing list.
+			// To avoid duplicate profile entries only 1 entry should be created in
+			// useractions table and all referrals must be changed in referrals 
+			// table (see backend implementation)
+			/**
+			 * PUT API call to change the referral status to referred (ReferralStatus 0)
+			 * as well as loggin it in the user actions for the profile 
+			 * @param {object} data: information returned by modal 
+			 * 	(noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
+			 */
+			var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
+				var student = $scope.selected.student;
+				var status = data.noShow?0:data.walkOut?1:data.sentOut?2:data.schoolAbsent?3:data.disciplinary?4:data.clear?5:-1;
+				
+				// submit info of student '$scope.selected.student' to database
+				var dataToSent = {param:'AbsentComment', comment:data.comment, status:status}
+				referrals.update({id:student.id}, dataToSent);
+				
+				var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
+				$scope.refTable.splice(indexOfStudent, 1);
 				$scope.selected.student = null;
 			}
 			
-			/**
-			 * Adds assignments to the student object 
-			 * @param  {[objects]} assignments	: list of assignment objects to be added
-			 * @param 	{object} 	student		: 
+			/********** MODALS   **********/		
+			/** Comment Modal
+			 * Opens the Comment modal and passes in the student selected to be available
+			 * in the modal context, calls the SubmitComment function when modal
+			 * submit button is clicked, does nothing otherwise
 			 */
-			function addAssignmentsToStudent(assignments, student){
-				
-				if(!student.referred){// current student doesnt have any assignments, add all the selected assignments	
-					//  copy assignments into referred
-					student.referred = assignments.slice();
-					return;
-				}
-				
-				for (var i = 0; i < assignments.length; i++) {
-					var j = false;
-					for (j = 0; j < student.referred.length; j++) {
-						if (student.referred[j].Id === assignments[i].Id)
-						break;
+			$scope.openComment = function (studentInfo) {
+				var commentModal = $modal.open({
+					templateUrl: 'views/modals/CommentAbsenceModal.html',
+					size: 'md',
+					controller: function ($scope, student) {
+						$scope.title = "Comment";
+						$scope.student = student;
+					},
+					resolve: {
+						student: function () { return $scope.selected.student; },
 					}
-					
-					if (j === student.referred.length)// assignment is not already in the student
-					student.referred.unshift(assignments[i]);
-				}
+				})// End commentModal
 				
-				
-				delete student.selected; // delete the selected property;
-				
+				commentModal.result.then(submitComment)
 			}
 			
-			/**
-			 * POST API call to referrals. adds all the students in the refTable to the 
-			 * current date's AEC list.
-			 * Despite the number of assignmets only 1 entry should be loged in 
-			 * into user activities with information containig the assignments
-			 */
-			$scope.submitReferedStudents = function () {
-				// format the data so it an be easily insterted in the database
-				var studentsReferred = [];
-				angular.forEach($scope.refTable, function(student){
-					angular.forEach(student.referred, function(assignment){
-						if(student.old)
-						return;
-						
-						var referral = {
-							StudentId:student.id, 
-							UserId:assignment.TeacherId,
-							AssignmentId:assignment.Id,
-							RefferalStatus : 0,
-							Date :$scope.currentDate,
-							ParentNotified : false,
-							StudentNotified : false
-						};
-						studentsReferred.push(referral);
-					})
-				})
-				if(studentsReferred.length )
-					referrals.save({data:studentsReferred, date:$scope.currentDate}, function(response){
-
-						}, function(response){
-							notify({message: "Submit Failed, Please Contact The Admin",
-							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-						});
-				//ServerDataModel.createAECList($scope.currentDate, $scope.refTable);
-				$scope.refTable = [];
-				
-			}
-			
-		}])
-		
+		}])	
 }(angular.module('Argus')));
 (function (app) {
 	"use strict";
@@ -991,191 +714,67 @@
 			}]);
 	
 }(angular.module('Argus')));						
-(function(app){
+(function (app) {
 	"use strict";
-	app
-	.controller("manageAECAbsenceController", 
-	["$scope",  "$modal", "referrals","PassesService","UserActionsService",'BbyArgusGeneralDBService',
-		function ($scope, $modal,referrals, passes, useractions, generaldb) {
-			$scope.selected = {};
-			$scope.refTable = [];// table model
-			$scope.currentDate = new Date(); // date on the date picker
-			
+	app.controller('NavigationCtrl', function () {
+			var path = "../Client/Views/dashItems/";
+			var vm = this;
 			/**
-			 * Watch for changes in the datepicker then load the AECAbsence list
+			 * Navigation bar places with their links and icons
 			 */
-			$scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
-				
-				if (newVal) {//when date has a valid date request the List from that date
-					$scope.currentDate = newVal;
-					console.log("newVal = " + $scope.form.date.$viewValue);
-					
-					referrals.query({id:newVal, absence:true},function(data){
-						
-						if (!data.length) {
-							$scope.refTable = [];
-							alert("No students for current date");
-							
-							} else {
-							$scope.refTable = data;
-							$scope.passesTable = data;
-							angular.forEach($scope.refTable, function (student) {
-								
-								student.status = [false, true];
-								
-							})
-						}
-						
-						generaldb.query(function(data){
-							console.log(data);
-						})
-					})
+			vm.tabs = [ 
+				{
+					id: 'Dashboard',
+					text: ['Dashboard', 'System'],
+					route: path + 'referal.html',
+					link: "admin1.dashboard",
+					icon: 'dashboard fa-2x'
+				}, {
+					id: 'Referral System',
+					text: ['Referral', 'System'],
+					route: path + 'referral.html',
+					link: "admin1.referral",
+					icon: 'eye fa-2x'
+				},
+				{
+					id: 'AEC List',
+					text: ['AEC', 'List'],
+					route: path + 'manageAEC.html',
+					link: "admin1.AECList",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'Absence List',
+					text: ['Absence', 'List'],
+					route: path + 'manageAECAbsence.html',
+					link: "admin1.pending",
+					icon: 'exclamation fa-2x'
+				}, {
+					id: 'Student Data',
+					text: ['Student', 'Data'],
+					route: path + 'studentInfo.html',
+					link: "admin1.studentData",
+					icon: 'user fa-2x'
+				},{
+					id: 'ORoom Activity Log Admin',
+					text: ['Oroom', 'Activity', 'log'],
+					link: "admin1.oroomActivityLogAdmin",
+					icon: 'user fa-2x'
+				},{
+					id: 'ORoom Activity Log',
+					text: ['Oroom', 'Activity', 'log'],
+					link: "admin1.oroomActivitiLog",
+					icon: 'user fa-2x'
 				}
-			});
-			
-			/**
-			 * Makes API call to get a pdf of the AECAbsence passes for the students
-			 * assigned AEC for the current date
-			 */
-			$scope.getPasses = function(){
-				$scope.getPasses = function(){
-					passes.pdf({date:$scope.currentDate, param:'absence'}, function(data){
-						var fileURL = URL.createObjectURL(data.response);
-						window.open(fileURL);
-					})
-				};
-			}
-			
-			/**
-			 * Select the student that is clicked in the table so that the user doesn't 
-			 * have to type it 
-			 * @param {int} $index: reftable index of the clicked student 
-			 */
-			$scope.onSelect = function($index){
-				$scope.selected.student = $scope.refTable[$index];
-			};
-			
-			/**
-			 * Makes a download prompt of the current AEC list as a csv file
-			 * @param {string} text
-			 */
-			var download = function (text) {
 				
-				var element = document.createElement('a');
-				element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-				element.setAttribute('download', 'info.csv');
-				element.style.display = 'none';
-				document.body.appendChild(element);
-				element.click();
-				document.body.removeChild(element);
-			};
-			
-			/**
-			 * Converts the Kids that were marked with SentOut or Walkout  into a csv text 
-			 * format so it can downloaded and Referred to O-Room
-			 * be passed to the download method 
-			 */
-			$scope.oRoomListCSV = function(){
-				useractions.query({param:'ORoom'}, function(data){
-					//headings
-					var text = 'FirstName,LastName,StudentId\n';
-					angular.forEach(data,  function(item){
-						text +=  item.FirstName + ',' + item.LastName + ',' + item.UserName;
-						
-						text +=  ' \n';
-					})
-					download(text);
-				})
-			};
-			
-			/******** MANAGE AEC Absence **********/
-			// for the next submit functions remove student from list self-reducing list.
-			// To avoid duplicate profile entries only 1 entry should be created in
-			// useractions table and all referrals must be changed in referrals 
-			// table (see backend implementation)
-			/**
-			 * PUT API call to change the referral status to referred (ReferralStatus 0)
-			 * as well as loggin it in the user actions for the profile 
-			 * @param {object} data: information returned by modal 
-			 * 	(noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
-			 */
-			var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
-				var student = $scope.selected.student;
-				var status = data.noShow?0:data.walkOut?1:data.sentOut?2:data.schoolAbsent?3:data.disciplinary?4:data.clear?5:-1;
-				
-				// submit info of student '$scope.selected.student' to database
-				var dataToSent = {param:'AbsentComment', comment:data.comment, status:status}
-				referrals.update({id:student.id}, dataToSent);
-				
-				var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-				$scope.refTable.splice(indexOfStudent, 1);
-				$scope.selected.student = null;
-			}
-			
-			/********** MODALS   **********/		
-			/** Comment Modal
-			 * Opens the Comment modal and passes in the student selected to be available
-			 * in the modal context, calls the SubmitComment function when modal
-			 * submit button is clicked, does nothing otherwise
-			 */
-			$scope.openComment = function (studentInfo) {
-				var commentModal = $modal.open({
-					templateUrl: 'views/modals/CommentAbsenceModal.html',
-					size: 'md',
-					controller: function ($scope, student) {
-						$scope.title = "Comment";
-						$scope.student = student;
-					},
-					resolve: {
-						student: function () { return $scope.selected.student; },
-					}
-				})// End commentModal
-				
-				commentModal.result.then(submitComment)
-			}
-			
-		}])	
-}(angular.module('Argus')));
-(function(app){
-	"use strict";
-	app
-	.controller("studentInfoCtrl", ["$scope", "students",  function ($scope, students) {
-		$scope.students;  // model for autocomplete
-		$scope.toShow = []; //list of profiles to show on the view
-		//student information from the database 
-		students.getAllStudents(function(data){
-			$scope.students = data;
+				//		, {
+				//            id: 'Create Student Pass',
+				//            text: ['Create', 'Pass'],
+				//            route: path + "multiplePasses.html",
+				//            link: "admin1.createStudentPass",
+				//            icon: 'file fa-2x'
+				//        }
+			];
 		});
-		
-		$scope.studentInfo = { name: 'naomi', address: '1600ffdf' }
-		;
-		$scope.max = 4;
-		$scope.profiles = ['', '', '', ''];
-		$scope.selected = {};
-		$scope.active = 0;
-		$scope.onEnter = function () {
-			// get more information of the selected student 
-			students.getStudent({id:$scope.selected.student.Id}, function(data){
-				$scope.selected.student = data;
-				$scope.toShow.push($scope.selected.student)
-				$scope.active++; // increase number of active profiles
-				$scope.selected.student = null; // clear search field
-			});
-			
-			//$scope.profiles[$scope.active] = $item; //
-			
-			
-			
-		};
-		$scope.remove = function ($index) {
-			$scope.toShow.splice($index, 1);
-			//$scope.profiles[$index] = '';
-			$scope.active--;
-		};
-		
-		
-		
-	}])	
 }(angular.module('Argus')));
 (function(app){
 	app
@@ -1338,55 +937,720 @@
 	}])
 	
 }(angular.module('Argus')));
+(function(app){
+	"use strict";
+	app.
+	controller("admin1referalController",
+	["$scope", "assignmentsListService",  "teachers", "referrals", "StudentsService", '$modal','notify','$http',
+		function ($scope, assignmentsService,teachers, referrals,students,$modal, notify, $http) {
+			$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
+			$scope.currentDate = new Date(); // date on the datepicker
+			$scope.teacherStudents = []; // model for autocomplete  
+			$scope.refTable = []; // model for dynamic table 
+			$scope.edits = [];  
+			$scope.eightPeriods = [];
+			
+			function getTeachers(){
+				$scope.teachers = teachers.query(function(data){
+					console.log('the teachers')
+					console.log(data);
+				});
+			}
+			getTeachers();
+			
+			/**
+			 * Watch for changes in the datepicker to add students to that date's
+			 * AEC List
+			 */
+			$scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
+				if (newVal) {//when date has a valid date request the List from that date
+					var processReceivedReferrals  = function(results) {
+						console.log("Returned  refferals");
+						console.log(results);
+						
+						// adjust the returned referrals 
+						
+						
+						var AlluniqueTeachers = {};
+						var results_length = results.length;
+						var referrals=[];
+						for(var i = 0; i < results_length; i++){
+							var student  = results[i];
+							var uniqueTeachers = {};
+							angular.forEach(student.referred, function(referral, $index2){
+								uniqueTeachers[referral.UserId] =  referral.user;
+								delete referral.user;
+								//AlluniqueTeachers[referral.StudentId] = uniqueTeachers;
+							});
+							var teachersNo =  Object.keys(uniqueTeachers).length;
+							var teachersKeys = Object.keys(uniqueTeachers);
+							for(var j = 0; j < teachersNo; j++){
+								var studentCopy= angular.copy(student);
+								var studentReferrals = [];
+								studentCopy.teacher = uniqueTeachers[teachersKeys[j]];
+								for(var k =0; k < student.referred.length; k++){
+									
+									var referral = student.referred[k];
+									if(referral.assignment.TeacherId === teachersKeys[j])
+									studentReferrals.push(referral.assignment);
+								}
+								studentCopy.referred = studentReferrals;
+								studentCopy.old = true;
+								referrals.push(studentCopy);
+							}
+							
+						}
+						results = referrals
+						console.log(results);
+						var data = results;
+						console.log("Data For the ref table");
+						console.log(results);
+						// console.log(data);
+						if (!data) {
+							$scope.refTable = [];
+							alert("No students for current date");
+							
+							} else {
+							$scope.refTable = data;
+						}
+					}
+					//                referrals.query({id:newVal},processReceivedReferrals, function(error) {
+					//                    console.log(error);
+					//                });
+					
+					
+					
+					console.log("New Date : " +newVal );
+					console.log("Old Date : " +oldVal );
+					//console.log("New Date : " +formatDate(newVal) );
+					$scope.currentDate = newVal;
+					
+				}
+			});
+			
+			/* REFER A STUDENT LOGIC */
+	
+			
+			/**
+			 * Called when a student is selected or deselected 
+			 * no action for now 
+			 */
+			$scope.onSelectedStudent = function(){
+				return;
+				// add to the list
+				var alreadyInList = false;
+				for(var  i = 0 ; i < $scope.refTable.length; i++){
+					if($scope.refTable[i].id === $scope.selected.student.user.id){
+						alreadyInList = true;
+					}
+				}
+				if(!alreadyInList)
+				$scope.refTable.push($scope.selected.student.user);
+				else
+				alert('student is already in the list');
+				// clear the field
+				//$scope.selected.student = null;
+			};
+			
+			/**
+			 * Called when teacher is selected or deselected. Retrieves the selected
+			 * teacher's students if a teacher is selected.  If deselected
+			 * set teacherStudents to null
+			 */
+			$scope.onSelectedTeacher  = function(){
+				if(!$scope.selected.teacher){// if teacher deselected 
+					$scope.teacherStudents = null;
+					return;
+				}
+				var teacherId = $scope.selected.teacher.id;
+				students.query({teacherId:teacherId},function(results) {
+					console.log("Teacher students");
+					console.log(results);
+					
+					$scope.teacherStudents = results;
+					}, function(error) {
+					console.log(error);
+				});
+				
+			}
+			
+			
+			/** New Assignment Modal
+			 * Opens the New Assignment modal and passes in the teacher selected to be available
+			 * in the modal context, on submit makes a post call to assignments
+			 * to add the current assignment to the teacher 
+			 */
+			$scope.openCreateNewAssignment = function(){
+				var modalInstance = $modal.open({
+					templateUrl: 'views/modals/addNewAssignmentModal.html',
+					size: 'md',
+					controller: function ($scope, teacher) {
+						$scope.teacher = teacher;
+					},
+					resolve: { // variables that get injected into the controller (taken from current $scope)
+						teacher: function () { return $scope.selected.teacher; },
+					}
+				}) // End modalInstace
+				
+				modalInstance.result.then(function(data){
+					assignmentsService.save({teacher:$scope.selected.teacher, assignment:data}, function(response){
+						debugger;
+						var teacher = $scope.selected.teacher;
+						response.assignment.Id = response.assignment.Id + "";
+						$scope.selected.teacher.assignments.push(response.assignment);
+						
+						console.log('assignment successfully added');
+						console.log($scope.selected.teacher.assignments)
+						}, function(response){
+						console.warn('assignment unseccessfuly added');
+					});
+				});		
+			};
+			
+			/**
+			 * Adds selected.student with selected.assignments to the refTable
+			 * then clears selected.student
+			 */
+			$scope.addToList = function(){
+				var selectedAssignments  = $scope.selected.assignments;
+				var referralToAdd = $scope.selected.student;
+				var selectedTeacher = $scope.selected.teacher;
+				$http.get('api/classes/'+$scope.selected.student.id).then(function(response){
+					var last = response.data[7];
+					$scope.eightPeriods.push(last)
+					console.log($scope.eightPeriods);
+				})
+				
+				addAssignmentsToStudent(selectedAssignments, referralToAdd);
+				referralToAdd.teacher = $scope.selected.teacher;
+				$scope.refTable.push(referralToAdd);
+				console.log($scope.refTable);
+				$scope.selected.student = null;
+			}
+			
+			/**
+			 * Adds assignments to the student object 
+			 * @param  {[objects]} assignments	: list of assignment objects to be added
+			 * @param 	{object} 	student		: 
+			 */
+			function addAssignmentsToStudent(assignments, student){
+				
+				if(!student.referred){// current student doesnt have any assignments, add all the selected assignments	
+					//  copy assignments into referred
+					student.referred = assignments.slice();
+					return;
+				}
+				
+				for (var i = 0; i < assignments.length; i++) {
+					var j = false;
+					for (j = 0; j < student.referred.length; j++) {
+						if (student.referred[j].Id === assignments[i].Id)
+						break;
+					}
+					
+					if (j === student.referred.length)// assignment is not already in the student
+					student.referred.unshift(assignments[i]);
+				}
+				
+				
+				delete student.selected; // delete the selected property;
+				
+			}
+			
+			/**
+			 * POST API call to referrals. adds all the students in the refTable to the 
+			 * current date's AEC list.
+			 * Despite the number of assignmets only 1 entry should be loged in 
+			 * into user activities with information containig the assignments
+			 */
+			$scope.submitReferedStudents = function () {
+				// format the data so it an be easily insterted in the database
+				var studentsReferred = [];
+				angular.forEach($scope.refTable, function(student){
+					angular.forEach(student.referred, function(assignment){
+						if(student.old)
+						return;
+						
+						var referral = {
+							StudentId:student.id, 
+							UserId:assignment.TeacherId,
+							AssignmentId:assignment.Id,
+							RefferalStatus : 0,
+							Date :$scope.currentDate,
+							ParentNotified : false,
+							StudentNotified : false
+						};
+						studentsReferred.push(referral);
+					})
+				})
+				if(studentsReferred.length )
+					referrals.save({data:studentsReferred, date:$scope.currentDate}, function(response){
+
+						}, function(response){
+							notify({message: "Submit Failed, Please Contact The Admin",
+							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
+						});
+				//ServerDataModel.createAECList($scope.currentDate, $scope.refTable);
+				$scope.refTable = [];
+				
+			}
+			
+		}])
+		
+}(angular.module('Argus')));
+(function(app){
+	"use strict";
+	app
+	.controller("studentInfoCtrl", ["$scope", "students",  function ($scope, students) {
+		$scope.students;  // model for autocomplete
+		$scope.toShow = []; //list of profiles to show on the view
+		//student information from the database 
+		students.getAllStudents(function(data){
+			$scope.students = data;
+		});
+		
+		$scope.studentInfo = { name: 'naomi', address: '1600ffdf' }
+		;
+		$scope.max = 4;
+		$scope.profiles = ['', '', '', ''];
+		$scope.selected = {};
+		$scope.active = 0;
+		$scope.onEnter = function () {
+			// get more information of the selected student 
+			students.getStudent({id:$scope.selected.student.Id}, function(data){
+				$scope.selected.student = data;
+				$scope.toShow.push($scope.selected.student)
+				$scope.active++; // increase number of active profiles
+				$scope.selected.student = null; // clear search field
+			});
+			
+			//$scope.profiles[$scope.active] = $item; //
+			
+			
+			
+		};
+		$scope.remove = function ($index) {
+			$scope.toShow.splice($index, 1);
+			//$scope.profiles[$index] = '';
+			$scope.active--;
+		};
+		
+		
+		
+	}])	
+}(angular.module('Argus')));
+(function(app){
+"use strict";
+	app.config(['$stateProvider','$urlRouterProvider', '$ocLazyLoadProvider','$provide', 
+	function($stateProvider,$urlRouterProvider, $ocLazyLoadProvider,  $provide){
+		$ocLazyLoadProvider.config({
+			// Set to true if you want to see what and when is dynamically loaded
+			debug: false
+		});
+		$urlRouterProvider.otherwise('/auth');
+		$stateProvider
+		.state('auth', {
+			url: '/auth',
+			templateUrl: 'views/login.html',
+			controller: 'AuthController as auth',
+			data: {pageTitle: "Login", specialClass: "white-bg"}
+		})
+		.state('admin1', {
+			abstract: true,
+			url: "/admin1",
+			templateUrl: "views/common/contentArgus.html",
+			resolve: { 
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+						},
+						{
+							name: 'angles',
+							files: ['js/plugins/chartJs/angles.js']
+						},
+						{
+							files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+						},
+						{
+							name: 'ui.footable',
+							files: ['js/plugins/footable/angular-footable.js']
+							}, {
+							insertBefore: '#loadBefore',
+							files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
+						},
+						{
+							name: 'ui.calendar',
+							files: ['js/plugins/fullcalendar/calendar.js']
+						},
+						{
+							insertBefore: '#loadBefore',
+							name: 'localytics.directives',
+							files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+						},
+						{
+							name: 'cgNotify',
+							files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+						},
+						{
+							name: 'ui.slimscroll',
+							files: ['js/plugins/slimscroll/angular.slimscroll.js']
+						}
+						
+					]);
+				}
+			}
+		})
+		.state('admin1.dashboard', {
+			url: "/dashboard",
+			templateUrl: 'views/admin1/dashboard.html',
+			data: {pageTitle: 'Dashboard'},
+			controller: "DashAdmin1Ctrl",
+			resolve: {
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+						},
+						{
+							name: 'datePicker',
+							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+						}
+					]);
+				}
+			}
+		})
+		.state('admin1.referral', {
+			url: "/adminReferral",
+			templateUrl: 'views/admin1/Referral.html',
+			data: {pageTitle: 'Referral'},
+			controller: 'admin1referalController',
+			resolve: {
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							name: 'datePicker',
+							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+						}
+					]);
+				}
+			}
+			
+		})
+		.state('admin1.AECList', {
+			url: "/AECList",
+			templateUrl: 'views/sharedItems/manageAEC.html',
+			data: {pageTitle: 'AEC List'},
+			controller : 'manageAECController',
+			resolve: {
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							name: 'datePicker',
+							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+						},
+						{
+							name: 'BarcodeGenerator',
+							files: ['css/plugins/barcode/barcode.css', 'js/plugins/barcode/barcode.js']
+						}
+					]);
+				}
+			}
+			
+		})
+		.state('admin1.pending', {
+			url: "/pending",
+			templateUrl: 'views/sharedItems/manageAECabsence.html',
+			data: {pageTitle: 'Pending'},
+			controller: 'manageAECAbsenceController',
+			resolve: {
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							name: 'datePicker',
+							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+						}
+					]);
+				}
+			}
+		})
+		.state('admin1.studentData', {
+			url: "/studentData",
+			templateUrl: 'views/sharedItems/studentInfo.html',
+			data: {pageTitle: 'Student Data'},
+			controller: 'studentInfoCtrl',
+			resolve: {
+				loadPlugin: function ($ocLazyLoad) {
+					return $ocLazyLoad.load([
+						{
+							name: 'datePicker',
+							files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+						}
+					]);
+				}
+			}
+		})
+		.state('admin1.createStudentPass', {
+			url: "/createStudentPass",
+			templateUrl: 'views/sharedItems/multiplePasses.html',
+			data: {pageTitle: 'Create Pass'}
+		})
+	
+	}])
+	
+}(angular.module('Argus')));
 (function (app) {
 	"use strict";
-	app.controller('NavigationCtrl', function () {
-			var path = "../Client/Views/dashItems/";
-			var vm = this;
-			/**
-			 * Navigation bar places with their links and icons
-			 */
-			vm.tabs = [ 
-				{
-					id: 'Dashboard',
-					text: ['Dashboard', 'System'],
-					route: path + 'referal.html',
-					link: "admin1.dashboard",
-					icon: 'dashboard fa-2x'
-				}, {
-					id: 'Referral System',
-					text: ['Referral', 'System'],
-					route: path + 'referral.html',
-					link: "admin1.referral",
-					icon: 'eye fa-2x'
-				},
-				{
-					id: 'AEC List',
-					text: ['AEC', 'List'],
-					route: path + 'manageAEC.html',
-					link: "admin1.AECList",
-					icon: 'list-alt fa-2x'
-				}, {
-					id: 'Absence List',
-					text: ['Absence', 'List'],
-					route: path + 'manageAECAbsence.html',
-					link: "admin1.pending",
-					icon: 'exclamation fa-2x'
-				}, {
-					id: 'Student Data',
-					text: ['Student', 'Data'],
-					route: path + 'studentInfo.html',
-					link: "admin1.studentData",
-					icon: 'user fa-2x'
-				}
-				//		, {
-				//            id: 'Create Student Pass',
-				//            text: ['Create', 'Pass'],
-				//            route: path + "multiplePasses.html",
-				//            link: "admin1.createStudentPass",
-				//            icon: 'file fa-2x'
-				//        }
+	app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
+		function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
+			$ocLazyLoadProvider.config({
+				// Set to true if you want to see what and when is dynamically loaded
+				debug: false
+			});
+			$urlRouterProvider.otherwise('/auth');
+			$stateProvider
+				.state('admin2	', {
+					abstract: true,
+					url: "/admin2",
+					templateUrl: "views/common/contentArgus.html",
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'angles',
+									files: ['js/plugins/chartJs/angles.js']
+								},
+								{
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
+								},
+								{
+									name: 'ui.calendar',
+									files: ['js/plugins/fullcalendar/calendar.js']
+								},
+								{
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								},
+								{
+									name: 'ui.slimscroll',
+									files: ['js/plugins/slimscroll/angular.slimscroll.js']
+								}
+
+							]);
+						}
+					}
+				})
+				.state('admin2.dashboard', {
+					url: "/dashboard",
+					templateUrl: 'views/admin2/dashboard.html',
+					data: {pageTitle: 'Dashboard'},
+					controller: "DashAdmin2Ctrl",
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+								},
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}
+							]);
+						}
+					}
+				})
+				.state('admin1.oroomActivityLogAdmin', {
+					url: "/OroomActivityLogA",
+					templateUrl: 'views/admin2/oroomActivityLogAdmin.html',
+					data: {pageTitle: 'Oroom Activity Log'},
+					controller: 'oRoomActivityLogAdminCtrl',
+					resolve: {
+					}
+				})
+				.state('admin1.oroomActivitiLog', {
+					url: "/OroomActivityLog",
+					templateUrl: 'views/admin2/oroomActivityLog.html',
+					data: {pageTitle: 'Oroom Activity Log'},
+					controller: 'oRoomActivityLogCtrl',
+					resolve: {
+					}
+				});
+				
+		}]);
+
+
+}(angular.module('Argus')));
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+(function (app) {
+	app.controller('oRoomActivityLogAdminCtrl', ['$scope', 'notify', 'StudentsService', 'teachers', '$modal', '$interval',
+		function ($scope, notify, students, teachers, $modal, $interval) {
+			$scope.selected = {student: null};
+			$scope.refTable1 = [];
+			$scope.refTable2 = [];
+			$scope.activities = [
+				{name: "In O-Room", value: 0},
+				{name: "Assign ISS", value: 1},
+				{name: "Walked-Out", value: 2},
+				{name: "Other", value: 3},
 			];
-		});
+			
+			
+			
+			$interval(function(){
+				var now = new Date();
+				$scope.currentTime = formatAMPM(now);
+				$scope.currentDate = formatDate(now);
+				// check time and change period accordingly 
+				$scope.currentPeriod = 3;
+				
+			},1000);
+			
+			
+			
+			 
+
+			students.query({admin: true, light: true}, function (results) {
+				console.log("Teacher students");
+				console.log(results);
+
+				$scope.schoolStudents = results;
+				//testing 
+				$scope.selected.student = results[0];
+				$scope.onSelectedStudent();
+			}, function (error) {
+				console.log(error);
+			});
+
+			$scope.teachers = teachers.query(function (data) {
+				console.log('the teachers');
+				console.log(data);
+			});
+
+			$scope.onSelectedStudent = function () {
+				$scope.selected.student.activity = $scope.activities[0];
+				$scope.refTable1.unshift($scope.selected.student);
+				$scope.selected.student = null;
+				//request the teachers of this student: no
+
+			};
+			$scope.onActivitySelected = function (student, oldActivity) {
+				console.log(student.activity);
+				console.log(oldActivity);
+				if (student.activity.value !== 1) {
+					return;
+				}
+				var modalInstance = $modal.open({
+					templateUrl: 'views/modals/ISSReferralModal.html'  ,
+					//template: '<div> MODAL: assignISS selected</div>',
+					size: 'lg',
+					controller: function ($scope, student) {
+						$scope.student = student;
+					},
+					resolve: {
+						student: function () {
+							return student;
+						}
+					}
+				});
+				
+				modalInstance.result.then(function () {//on SUBMIT
+					// post the ISS referral to the database 
+
+					//change switch  to static 
+					//student.staticRef = true;
+					
+					// change teacher to static
+					//student.staticTeacher = true;
+					
+					// change row to non removable
+					student.nonRemovable = true;
+					
+					student.staticActivity = true;
+
+				});
+			};
+			$scope.onReferralInTrue = function (student) {
+				if (student.referralIn === false) {
+					return;
+				}
+				if (!student.sentOutBy) {
+					notify({message: 'Please Select A Teacher First'});
+					student.referralIn = false;
+					return;
+				}
+
+				var modalInstance = $modal.open({
+					templateUrl: 'views/modals/oRoomReferralModal.html',
+					//template:'<div> MODAL : true in Referral IN </div>',
+					size: 'lg',
+					controller: function ($scope, student) {
+						$scope.student = student;
+					},
+					resolve: {
+						student: function () {
+							return student;
+						}
+					}
+				});
+
+				modalInstance.result.then(function () {// on SUBMIT
+					// post the comment and other things to the database 
+
+					//add student to the list on the right
+					$scope.refTable2.unshift(student);
+
+					//change switch  to static 
+					student.staticRef = true;
+					// change teacher to static
+					student.staticTeacher = true;
+					// change row to non removable
+					student.nonRemovable = true;
+
+				});
+
+			}
+
+			function formatAMPM(date) {
+				var hours = date.getHours();
+				var minutes = date.getMinutes();
+				var seconds = date.getSeconds();
+				var ampm = hours >= 12 ? 'pm' : 'am';
+				hours = hours % 12;
+				hours = hours ? hours : 12; // the hour '0' should be '12'
+				minutes = minutes < 10 ? '0' + minutes : minutes;
+				var strTime = hours + ':' + minutes +':'+seconds+ ' ' + ampm;
+				return strTime;
+			}
+			
+			function formatDate(date){
+				var month = date.getMonth();
+				var day = date.getDate();
+				var year = date.getFullYear();
+				var strDate = month + '/'+ day + "/" + year;
+				return strDate;
+			}
+			
+		}]);
 }(angular.module('Argus')));
 //# sourceMappingURL=admin1Main.js.map

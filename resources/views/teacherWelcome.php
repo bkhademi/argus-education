@@ -25,6 +25,8 @@
 		<link href="css/animate.css" rel="stylesheet">
 		<link id="loadBefore" href="css/style.css" rel="stylesheet">
 		
+		<!-- cgNotify -->
+		<link  href='css/plugins/angular-notify/angular-notify.min.css' rel="stylesheet"> 
 		
 	</head>
 	
@@ -34,16 +36,16 @@
 		
 		<!-- Main view  -->
 		
-		<script>
-			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+ 		<script>
+		/*	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 			
 			ga('create', 'UA-70697324-1', 'auto');
 			ga('send', 'pageview');
-			
-		</script>
+			*/
+		</script> 
 		
 		<div ui-view></div>
 		
@@ -66,21 +68,20 @@
 		
 		<!-- Main Angular scripts-->
 		<script src="js/angular/angular.min.js"></script>
+		<!-- <script src="js/angular/angular-storage.min.js"></script> -->
 		<script src="js/plugins/oclazyload/dist/ocLazyLoad.min.js"></script>
 		<script src="js/ui-router/angular-ui-router.min.js"></script>
 		<script src="js/bootstrap/ui-bootstrap-tpls-0.12.0.min.js"></script>
 		<script src="js/angular/angular-resource.min.js"></script>
 		<script src="js/angular/satellizer.min.js"></script>
+		<script src= 'js/plugins/angular-notify/angular-notify.min.js'></script>
 		
 		<!-- Anglar App Script -->
 		<script src="js/app.js"></script>
-		<script src="js/directives.js"></script>
-		
-		<script src="js/admin1Main.js"></script>
-		
+		<script src="js/directives.js"></script>	
 		<script src="js/argusdirectives.js"></script>
 		<script src="js/argusservices.js"></script>
-
+		<script src="js/admin1Main.js"></script>
 		
 		
 		

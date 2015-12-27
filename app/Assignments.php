@@ -17,6 +17,6 @@ class Assignments extends Model
     }
 	
 	public function teacher(){
-		return $this->belongsTo('App\User', 'id', 'TeacherId');
+		return $this->belongsTo('App\User', 'id', 'TeacherId'); 
 	}
 }

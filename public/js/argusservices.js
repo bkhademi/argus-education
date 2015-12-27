@@ -302,7 +302,7 @@ function formatDate(date) {
 /* Assignments File */
 (function (app) {
     app.factory("assignmentsService", [ "$resource", function ( $resource) {
-            return $resource(api+"assignments/:id",{id:'@id'}, {
+            return $resource("/api/assignments/:id",{id:'@id'}, {
                 pdf:{
                     method:'GET',
                     headers:{  accept:'application/pdf'},
@@ -326,7 +326,7 @@ function formatDate(date) {
 /* Assignments List */
 (function (app) {
     app.factory("assignmentsListService", [ "$resource", function ( $resource) {
-            return $resource(api+"assignments/:id?userId=00d02dc6-4aa7-41a0-afdd-e0772ae4ba4b",{id:'@id'}, {
+            return $resource("/api/assignments/:id",{id:'@id'}, {
                 pdf:{
                     method:'GET',
                     headers:{  accept:'application/pdf'},

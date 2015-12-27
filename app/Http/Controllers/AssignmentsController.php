@@ -67,7 +67,7 @@ class AssignmentsController extends Controller
         $userId = $this->getUserId($request);
         $file = Input::file('file');
         
-        if(!$file){
+         if(!$file){
 			// a file was not posted.. check if an assignment name was posted
 			if($request->has('assignment')){
 				// an assignment was posted.. only save its name 
@@ -80,7 +80,7 @@ class AssignmentsController extends Controller
 				
 			}
             return response()->json(["no_file_posted"],500);
-		}
+		} 
         
         $extension = $file->getClientOriginalExtension();
         $filePath = "UsersFiles/$userId/";
@@ -152,6 +152,7 @@ class AssignmentsController extends Controller
     public function update(Request $request, $id)
     {
         //
+		return 'not Implemented';
     }
 
     /**

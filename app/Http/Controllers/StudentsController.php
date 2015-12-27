@@ -40,7 +40,11 @@ class StudentsController extends Controller
 		if($request->has('teacherId')){
 			$id = $request->input('teacherId');
 		}else if($request->has('admin')){
-			return Students::with('user.activitiesAffected')->get()->all();
+			if($request->has('light')){
+				return Students::with('user')->get()->all();
+			}else{
+				return Students::with('user.activitiesAffected')->get()->all();
+			}
 		}else{
 			$id = $this->getUserId($request);
 		}

@@ -176,7 +176,7 @@
 	}]);
 })();
 
-var api = "api/";
+var api = "/api/";
 
 
 
