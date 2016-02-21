@@ -1,0 +1,22 @@
+<div class="modal-header text-center">
+    <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">{{title}} - {{student.student_user.FirstName  + ", " + student.student_user.LastName}} 
+		- {{student.student_user.UserName}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div class="text-center">
+        <div>
+            <form>
+                <textarea id="addComment" type="text"
+                          placeholder="Describe The Situation"
+                          class="form-control auto-resize"
+                          data-ng-model="student.comment"
+                          data-ng-keyup="search()"></textarea>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" data-ng-click="$close()">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>

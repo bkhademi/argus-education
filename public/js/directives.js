@@ -1,3 +1,5 @@
+/* global angular */
+
 /**
  * INSPINIA - Responsive Admin Theme
  *
@@ -7,7 +9,7 @@
 /**
  * pageTitle - Directive for set Page title - mata title
  */
-function pageTitle($rootScope, $timeout) {
+var pageTitle = ['$rootScope','$timeout',function ($rootScope, $timeout) {
     return {
         link: function(scope, element) {
             var listener = function(event, toState, toParams, fromState, fromParams) {
@@ -21,13 +23,13 @@ function pageTitle($rootScope, $timeout) {
             };
             $rootScope.$on('$stateChangeStart', listener);
         }
-    }
-};
+    };
+}];
 
 /**
  * sideNavigation - Directive for run metsiMenu on sidebar navigation
  */
-function sideNavigation($timeout) {
+var sideNavigation = ['$timeout' ,function ($timeout) {
     return {
         restrict: 'A',
         link: function(scope, element) {
@@ -37,12 +39,12 @@ function sideNavigation($timeout) {
             });
         }
     };
-};
+}];
 
 /**
  * iboxTools - Directive for iBox tools elements in right corner of ibox
  */
-function iboxTools($timeout) {
+var iboxTools = ['$timeout', function ($timeout) {
     return {
         restrict: 'A',
         scope: true,
@@ -66,15 +68,15 @@ function iboxTools($timeout) {
                 $scope.closebox = function () {
                     var ibox = $element.closest('div.ibox');
                     ibox.remove();
-                }
+                };
         }
     };
-};
+}];
 
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
 */
-function minimalizaSidebar($timeout) {
+var minimalizaSidebar = ['$timeout', function ($timeout) {
     return {
         restrict: 'A',
         template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
@@ -99,10 +101,10 @@ function minimalizaSidebar($timeout) {
                     // Remove all inline style from jquery fadeIn function to reset menu state
                     $('#side-menu').removeAttr('style');
                 }
-            }
+            };
         }
     };
-};
+}];
 
 
 
@@ -115,4 +117,4 @@ angular
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
-    .directive('minimalizaSidebar', minimalizaSidebar)
+    .directive('minimalizaSidebar', minimalizaSidebar);

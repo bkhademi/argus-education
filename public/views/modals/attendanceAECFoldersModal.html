@@ -1,0 +1,53 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">AEC Attendance - Name: {{student.user.FirstName + " " + student.user.LastName}} - ID:{{student.StudentId}}</h4>
+</div>
+<div class="modal-body ">
+	<div class="row"> 
+		<div class="col-sm-4 col-sm-offset-2">
+			<label> Guardian Name : </label> {{student.GuardianName}}				
+		</div>
+		<div class="col-sm-4">
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+		</div>
+	</div>
+
+	
+	<div class='row text-left' >
+		<h3 class='text-center'> Assignments </h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th>Completed</th>
+				<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr  data-ng-repeat="ref in student.referred">
+					<td><input type="checkbox" data-ng-model="ref.HasFolder"></td>
+					<td> <label>{{ref.assignment.Name}}</label> </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	 
+	<div class="form-group">
+		<textarea id="addComment" type="text"
+				  placeholder="Add Description And Comments Here"
+				  class="form-control auto-resize"
+				  data-ng-model="student.comment"
+				  data-ng-keyup=""></textarea>
+	</div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close({student:student})">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>

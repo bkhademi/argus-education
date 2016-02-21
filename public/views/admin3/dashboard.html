@@ -1,369 +1,119 @@
 ﻿<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
+<!--    <div class="row">
         <div class="col-lg-12">
             <h1>Admin3 Dashboard</h1>
         </div>
+    </div>-->
+
+	<div class="row">
+
+        <div class="col-lg-6">
+            <div class="btn btn-primary block widget " data-ui-sref="admin3.attendanceRosters.oroom">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Students Today </span>
+
+                        <h2 class="font-bold">{{counters.oroom}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="col-lg-3">
+            <div class="btn btn-info block widget" ui-sref="admin2.pending">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-folder-open-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> # Follow up </span>
+
+                        <h2 class="font-bold">{{counters.aecAbsent}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <div class="col-lg-6">
+            <div class="btn btn-info block widget" data-ng-click="openAverageAttendance()">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-sort-amount-asc fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> % Avg. Attendance </span>
+
+                        <h2 class="font-bold">{{counters.average}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="col-lg-3">
+            <div class="btn btn-info block widget" data-ng-click="openRating()">
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <i class="fa fa-star fa-5x"></i>
+                    </div>
+                    <div class="col-xs-8 text-right">
+                        <span> Rating </span>
+
+                        <h2 class="font-bold">{{counters.rating}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
     </div>
-
-    <div class="row">
-       
-        <div class="col-lg-3" data-ng-click="openDFPercentagesModal()">
-            <div class="btn btn-primary block widget" >
-                <div class=" row">
-                <div class="col-xs-4">
-                    <i class="fa fa-edit fa-5x"></i>
-                </div>
-                <div class="col-xs-8 text-right">
-                    <span> D's &amp; F's Percentage </span>
-
-
-                    <h2 class="font-bold">13</h2>
-                </div>
-            </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="btn btn-info block widget" data-ng-click="openAGOnTrack()">
-                <div class="row">
-                    <div class="col-xs-4">
-                        <i class="fa fa-institution fa-5x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <span> # A-G on Track </span>
-
-                        <h2 class="font-bold">45</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="btn-primary widget style1 navy-bg" data-ng-click="openHighschoolGradTrack()">
-                <div class="row">
-                    <div class="col-xs-4">
-                        <i class="fa fa-graduation-cap fa-5x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <span> % High-School Graduation on track </span>
-
-                        <h2 class="font-bold">46</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3">
-            <div class="btn btn-info block widget" data-ng-click="openASP()">
-                <div class="row">
-                    <div class="col-xs-4">
-                        <i class="fa fa-child fa-5x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <span> ASP </span>
-
-                        <h2 class="font-bold">26</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    
-    <div class="row">
+	
+	<div class="row">
         <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Grade Growth</h5>
+                    <h5>
+                        Teacher (ALL) Usage
+                        <small>.</small>
+                    </h5>
                     <div ibox-tools></div>
                 </div>
                 <div class="ibox-content">
                     <div>
-                        <canvas barchart options="barOptions" data="barData1" height="140" responsive=true></canvas>
+                        <canvas linechart options="lineOptions" data="lineData" height="140" responsive=true></canvas>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Grade Decay</h5>
+                    <h5>
+                        Assignment Completion Rate
+                        <small>.</small>
+                    </h5>
                     <div ibox-tools></div>
                 </div>
-                <div class="ibox-content">
-                    <div>
-                        <canvas barchart options="barOptions" data="barData2" height="140" responsive=true></canvas>
+
+                <div class="ibox-content text-center">
+
+
+                    <strong> Overall performance </strong>
+
+                    <div id="overAllGauge" class="gauge">
+                        <div class="category poor"> <span class="char">P</span><span class="char">o</span><span class="char">o</span><span class="char">r</span></div>
+                        <div class="category fair"> <span class="char">F</span><span class="char">a</span><span class="char">i</span><span class="char">r</span></div>
+                        <div class="category good"><span class="char">G</span><span class="char">o</span><span class="char">o</span><span class="char">d</span></div>
+                        <div class="category excellent"><span class="char">E</span><span class="char">x</span><span class="char">c</span><span class="char">e</span><span class="char">l</span><span class="char">l</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></div>
+                        <div class="needle"></div>
+
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
-
-    <div class="row">
-        <div class="col-lg-6" >
-            <div class="widget style1 navy-bg">
-                <div class="row">
-                    <div class="col-xs-4">
-
-                        <i class="fa fa-paint-brush fa-5x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-
-                        <span class="size-h1">
-                           
-                        </span>
-                        <h3>
-                            "From the moment I began to Fail, I began to Succeed”
-                        </h3>
-                            <br />
-                            - Brandon Hernandez
-                       
-
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-6" data-ng-click="openCalendar()">
-            <div class="btn btn-info block widget">
-                <div class="row">
-                    <div class="col-xs-4">
-                        <i class="fa fa-edit fa-5x"></i>
-                    </div>
-                    <div class="col-xs-8 text-right">
-                        <span># Days Till Next Progress Report</span>
-                        <h2 class="font-bold">24</h2>
-                    </div>
-                </div>
-            </div> 
-        </div>
-    </div>
-
 </div>
 
 
-<!-- modal 1-->
-<script type="text/ng-template"  id="DFsPercentagesModal.html">
-    <div class="modal-header text-center">
-        <button type="button" class="close" data-ng-click="close()">&times;</button>
-        <h4 class="modal-title">D's and F's Percentage</h4>
-    </div>
-    <div class="modal-body ">
-
-            <canvas data-ng-if="state==1" data-ng-click="onGraphClick()" barchart options="graphOptions" data="graphData1" responsive=true></canvas>
-
-        <canvas data-ng-if="state==2" data-ng-click="onGraphClick()" barchart options="graphOptions" data="graphData2" height="140" responsive=true></canvas>
-
-        <canvas data-ng-if="state==3" data-ng-click="onGraphClick()" barchart options="graphOptions" data="graphData3" height="140" responsive=true></canvas>
-                
-        <div data-ng-if="state==4">
-            <table class="footable table table-stripped  table-hove rftable-bordered toggle-arrow-tiny" data-page-size="8">
-                <thead>
-                    <tr>
-
-                        <th data-toggle="true">First Name</th>
-                        <th>Last Name</th>
-                        <th>ID</th>
-                        <th>Grade</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="stu in refTable" data-ng-click="onGraphClick2(stu)">
-                        <td>{{stu.fn}}</td>
-                        <td>{{stu.ln}}</td>
-                        <td>{{stu.ID}}</td>
-                        <td>{{stu.GR}}</td>
-
-
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="5">
-                            <ul class="pagination pull-right"></ul>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-                <div data-ng-if="state == 5">
-                    <student student="toShow"></student> 
-                </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-success pull-left"  data-ng-click="onPrevClick()" data-ng-hide="state==1">
-            <i class="fa  fa-arrow-left"></i>
-            prev
-        </button>
-        <!--
-        <button class="btn btn-success pull-left"  >
-            <i class="fa fa-arrow-right"></i>
-            next
-        </button>
-         -->
-        <button class="btn btn-info" data-ng-click="close()">Dismiss</button>
-    </div>
-</script>
-
-<!-- modal 2-->
-<script type="text/ng-template" id="AGOnTrackModal.html">
-    <div class="modal-header text-center">
-        <button type="button" class="close" data-ng-click="close()">&times;</button>
-        <h4 class="modal-title">A-G On Track</h4>
-    </div>
-    <div class="modal-body text-center"  >
-
-
-        
-        <div morris-chart data-ng-show="state==1" data-ng-click="onGraphClick()"
-             data-data="graphData1"
-             data-type="donut"
-             data-xkey="year"
-             data-formatter="return   y +'%';"
-             data-colors='["#B92322", "rgba(220,220,220,0.5)","#B92322", "rgba(220,220,220,0.5)"]'></div>
-        
-        <canvas data-ng-show="state==2" data-ng-click="onGraphClick()" barchart options="graphOptions" data="graphData2" height="140" responsive="true"></canvas>
-
-
-    </div>
-    <div class="text-center">
-        <h2 class="font-bold"> Total {{statePercent[state-1]}}%</h2>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-success pull-left" data-ng-click="onPrevClick()" data-ng-hide="state==1">
-            <i class="fa  fa-arrow-left"></i>
-            prev
-        </button>
-        <button class="btn btn-success pull-left" data-ng-click="onGraphClick()" data-ng-hide="state==2">
-            <i class="fa fa-arrow-right"></i>
-            next
-        </button>
-
-        <button class="btn btn-info" data-ng-click="close()">Dismiss</button>
-    </div>
-</script>
-
-<!-- modal 3 -->
-<script type="text/ng-template" id="HighschoolGradTrackModal.html">
-    <div class="modal-header text-center">
-        <button type="button" class="close" data-ng-click="close()">&times;</button>
-        <h4 class="modal-title"> Highschool Graduation on Track</h4>
-    </div>
-    <div class="modal-body text-center">
-
-        <div morris-chart data-ng-show="state==1" data-ng-click="onGraphClick()"
-             data-data="graphData1"
-             data-type="donut"
-             data-xkey="year"
-             data-formatter="return   y +'%';"
-             data-colors='["#B92322", "rgba(220,220,220,0.5)","#B92322", "rgba(220,220,220,0.5)"]'></div>
-
-        <canvas data-ng-show="state==2" data-ng-click="onGraphClick()" barchart options="graphOptions" data="graphData2" height="140" responsive="true"></canvas>
-        
-    </div>
-
-
-
-    <div class="text-center">
-        <h2 class="font-bold"> 46%</h2>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-info" data-ng-click="close()">Dismiss</button>
-    </div>
-</script>
-
-<!-- modal 4-->
-<script type="text/ng-template" id="ASPModal.html">
-    <div class="modal-header text-center">
-        <button type="button" class="close" data-ng-click="close()">&times;</button>
-        <h4 class="modal-title">ASP</h4>
-    </div>
-    <div class="modal-body ">
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="widget style1 lazur-bg">
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <i class="fa fa-folder-open-o fa-5x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> # Students Helped </span>
-
-                            <h2 class="font-bold">45</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="widget style1 navy-bg" >
-                    <div class="row">
-                        <div class="col-xs-4">
-                            <i class="fa fa-calendar fa-5x"></i>
-                        </div>
-                        <div class="col-xs-8 text-right">
-                            <span> %  Average Attendance  </span>
-
-                            <h2 class="font-bold">46</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>
-                            Teacher (ALL) Usage
-                            <small>.</small>
-                        </h5>
-                        <div ibox-tools></div>
-                    </div>
-                    <div class="ibox-content">
-                        <div>
-                            <canvas data-ng-if="drawGraph" linechart options="lineOptions" data="lineData" height="200" responsive=true></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>
-                            Assignment Completion Rate
-                            <small>.</small>
-                        </h5>
-                        <div ibox-tools></div>
-                    </div>
-                    <div class="ibox-content">
-                        <div id="overAllGauge" class="gauge">
-                            <div class="category poor"> <span class="char">P</span><span class="char">o</span><span class="char">o</span><span class="char">r</span></div>
-                            <div class="category fair"> <span class="char">F</span><span class="char">a</span><span class="char">i</span><span class="char">r</span></div>
-                            <div class="category good"><span class="char">G</span><span class="char">o</span><span class="char">o</span><span class="char">d</span></div>
-                            <div class="category excellent"><span class="char">E</span><span class="char">x</span><span class="char">c</span><span class="char">e</span><span class="char">l</span><span class="char">l</span><span class="char">e</span><span class="char">n</span><span class="char">t</span></div>
-                            <div class="needle"></div>
-
-                        </div>
-                       
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-info" data-ng-click="close()">Dismiss</button>
-    </div>
-</script>
-
-<script type="text/ng-template" id="calendarModal.html">
-    <div class="modal-header text-center">
-        <button type="button" class="close" data-ng-click="cancel()">&times;</button>
-        <h4 class="modal-title">Days to next Progress Report</h4>
-    </div>
-    <div class="modal-body text-center" data-ng-controller="CalendarCtrl">
-        <div ui-calendar="uiConfig.calendar" calendar="myCalendar1" class="calendar" ng-model="eventSources"></div>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-info" data-ng-click="cancel()">Dismiss</button>
-    </div>
-</script>

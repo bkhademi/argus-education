@@ -1,0 +1,80 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4>Update Student
+		- Name: {{student.user.FirstName + ', ' + student.user.LastName }}
+		- ID:{{student.user.UserName}}</h4>
+</div>
+<div class="modal-body ">
+
+
+	<div class="form">
+		<div class="col-lg-offset-2 col-sm-6 col-lg-4">
+			<label> Referred By : </label> {{ student.teacher.FirstName + ' ' + student.teacher.LastName }}
+		</div>
+		<div  class='col-sm-6 col-lg-4' >
+			<label > Referral Type : </label> Change & Comment
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group col-sm-3 ">
+				<label for="ORMdays" > O-Room Days : </label>
+					<input type="number" class="form-control" id="ORMdays" data-ng-model="student.counters.ORoomsToBeServed" /> 
+				
+		</div>
+		<div class=" form-group col-sm-3">
+			<label> O-Room Referrals : </label> 
+			<input type="number" class="form-control" id="ORMreferrals" data-ng-model="student.counters.ORMReferrals" > 
+		</div>
+		<div class=" form-group col-sm-3 ">
+			<label> ISS Days : </label> 
+			<input type="number" class="form-control" id="ISSdays" data-ng-model="student.counters.ISSDays" > 
+		</div>
+		<div class=" form-group col-sm-3 ">
+			<label> ISS Referrals : </label> 
+			<input type="number" class="form-control" id="ISSreferrals" data-ng-model="student.counters.ISSReferrals" > 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 form-group">
+			<label for="LunchDays"> Lunch Detention Days : </label>
+			<input type="number" class="form-control"  id="LunchDays" data-ng-model="student.counters.LunchDetentionsToBeServed" > 
+		</div>
+		<div class="col-sm-4 form-group">
+			<label> OSS Parent Meeting : </label> 
+			<input type="number" class="form-control"   id="OSSparentMeeting" data-ng-model="student.counters.OSSPMP" > 
+		</div>
+		<div class="col-sm-4 form-group">
+			<label> Cycles: </label> 
+			<input type="number" class="form-control"  id="ISSdays" data-ng-model="student.counters.Cycles" > 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 form-group">
+			<label for="LunchDays"> Debt : </label>
+			<input type="number" class="form-control"  id="debt" data-ng-model="student.counters.debt" > 
+		</div>
+		
+	</div>
+
+	<br />
+	<div class="form-group">
+		<textarea id="addComment" type="text"
+				  placeholder="Add Description And Comments Here"
+				  class="form-control auto-resize"
+				  data-ng-model="student.comment"
+				  data-ng-keyup=""></textarea>
+	</div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close()">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>
+

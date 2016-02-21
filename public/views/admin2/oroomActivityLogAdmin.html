@@ -1,178 +1,246 @@
 <section class="wrapper wrapper-content animated fadeInRight" >
     <div class="panel panel-default">
         <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, This is the Oroom Activity Log</h2>
-
-        <div class="panel-body">
-            <div class="table-filters ">
-                <div class="text-center">
-
-
-					<!-- Buttons and Inputs  <strong>'+stu.GR+ -->
-                    <ul class="list-group list-inline "> 
-
-                        <li style="width:60%;" >
-                            <form>
-
-                                <select chosen 
-                                        class=" chosen-select form-control"
-										allow-single-deselect="true"
-										data-ng-if='schoolStudents'
-                                        data-placeholder="Select or enter a student"
-                                        data-ng-model="selected.student"
-										data-ng-change="onSelectedStudent()"
-                                        data-ng-options="s as 
-										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
-										for s in schoolStudents track by s.Id "
-										>
-									<option value=''></option>
-								</select>
-                                <select  
-									multiple chosen
-									class="chosen-select form-control"
-									data-ng-if="!schoolStudents"
-									data-placeholder="Loading Students">
-								</select>
-                            </form>
-                        </li >
+		<h1 class="col-sm-6 col-sm-offset-4 "  style="font-weight:900; font-size: 500%">Time: {{currentTime}} </h1> 
+		<div class="table-filters ">
+			<div class="text-center">
 
 
+				<!-- Buttons and Inputs  <strong>'+stu.GR+ -->
+				<ul class="list-group list-inline "> 
 
-                    </ul>
+					<li style="width:60%;" >
+						<form>
 
-					<ul class='list-inline list-group'>
+							<select chosen 
+									class=" chosen-select form-control"
+									allow-single-deselect="true"
+									data-ng-if='schoolStudents'
+									data-placeholder="Select or enter a student"
+									data-ng-model="selected.student"
+									data-ng-change="onSelectedStudent()"
+									data-ng-options="s as 
+									(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+									for s in schoolStudents track by s.Id "
+									>
+								<option value=''></option>
+							</select>
+							<select  
+								multiple chosen
+								class="chosen-select form-control"
+								data-ng-if="!schoolStudents"
+								data-placeholder="Loading Students">
+							</select>
+						</form>
+					</li>
 
-						<!--						 <li class="">
-													<button type="button" class="btn btn-primary" data-ng-click="addToList()" data-ng-disabled="!selected.teacher" data-ng-hide="showChecks">
-														Add
-													</button>
-												</li>-->
 
-					</ul>
-                </div>
-            </div>
 
-			<div class="row"> 
-				<div class="col-sm-6"> 
-					<div class="text-center">
-						<h3>Time: {{currentTime}} |  Period: {{currentPeriod}}</h3>
+				</ul>
+
+			</div>
+		</div>
+
+		<div class="row" > 
+			<div class="col-sm-12 col-lg-6"> 
+				<div class="text-center">
+					<div class="row">
+
+						<h3 class="col-sm-6 col-sm-offset-3 form-inline" > Current Period:
+							{{ currentPeriod.Number}}
+							<!--							<select chosen
+																width="'40%'"	 
+																class="chosen-select form-control form"
+																data-placeholder="Select Period"
+																data-ng-disabled="true"
+																data-ng-if="periods"
+																data-ng-model="currentPeriod"
+																data-ng-change="changePeriodTables(currentPeriod)"
+																allow-single-deselect="true"
+																data-ng-options="p as (p.Number + ' ' + p.PeriodType) for p in periods track by p.Id">
+															<option value=''></option>
+							
+														</select>-->
+						</h3>
 					</div>
-					<table id="refTable1" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
-						<thead>
-							<tr>
-								<th>Remove</th>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Sent Out By</th>
-								<th >Activity</th>
-								<th> Referral in </th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in refTable1 track  by $index">
-								<td> <button data-ng-hide="item.nonRemovable" data-ng-click='refTable1.splice($index, 1); eightPeriods.splice($index, 1)'class="btn btn-primary fa fa-times"></button></td>
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>
-									<div>
-										<select chosen
-												width="'100%'"	 
-												class="chosen-select form-control"
-												data-ng-if="true || item.teachers"
-												data-placeholder="Select Teacher"
-												data-ng-disabled="item.staticTeacher"
-												data-ng-model="item.sentOutBy"
-												data-ng-options="a as (a.FirstName + ' ' + a.LastName) for a in teachers track by a.id">
-											<option value=''></option>
+					<!--{{currentPeriod.Number + currentPeriod.PeriodType}}-->
+				</div>
+				<table id="refTable1" class="footable table table-bordered table-responsive toggle-arrow-tiny"
+					   data-page-size="1000"
+					   data-ng-mouseover="mouseOnTable = true"  data-ng-mouseleave="mouseOnTable = false"
+					   >
+					<thead>
+						<tr>
+							<!--<th>Remove</th>-->
+							<th data-toggle="true">Name</th>
+							<th>ID</th>
+							<th> Period </th>
+							<th>Sent Out By</th>
+							<th >Activity</th>
+							<th> Referral in </th>
+						</tr>
+					</thead>
+					<tbody> 
+						<tr data-ng-repeat="item in refTable1 track  by $index"
+							data-ng-mouseover="item.mouseover = true;" 
+							data-ng-mouseleave="item.mouseover = false"
 
-										</select>
-									</div>
-
-
-								</td>
-								<td>
+							>
+							<!--<td> <button data-ng-hide="item.nonRemovable" data-ng-click='refTable1.splice($index, 1); eightPeriods.splice($index, 1)'class="btn btn-primary fa fa-times"></button></td>-->
+							<td>{{item.student.FirstName + ', ' + item.student.LastName}}</td>
+							<td>{{item.student.UserName}}</td>
+							<td> {{item.period.Number}} </td>
+							<td>
+								<div data-ng-show="!item.ReferralIn">
 									<select chosen
 											width="'100%'"	 
 											class="chosen-select form-control"
-											data-placeholder="Select Activity"
-											data-ng-disabled="item.staticActivity"
-											data-ng-model="item.activity"
-											data-ng-change="onActivitySelected(item, '{{item.activity}}')"
-											data-ng-options="a as (a.name) for a in activities track by a.value">
+											data-ng-if="true || item.teachers"
+											data-placeholder="Select Teacher"
+											data-ng-disabled="item.staticTeacher"
+											data-ng-change="onTeacherChanged(item)"
+											data-ng-model="item.teacher"
+											allow-single-deselect="true"
+											data-ng-options="a as (a.FirstName + ' ' + a.LastName) for a in teachers track by a.id">
 										<option value=''></option>
 
 									</select>
-								</td>
-								<td>
-									<div class="switch " data-ng-hide="item.staticRef">
-										<div class="onoffswitch">
-											<input type="checkbox" class="onoffswitch-checkbox" id="referredIn{{$index}}" 
-												   data-ng-model="item.referralIn" data-ng-change="onReferralInTrue(item)">
-											<label class="onoffswitch-label" for="referredIn{{$index}}">
-												<span class="onoffswitch-inner yesno"></span>
-												<span class="onoffswitch-switch yesno"></span>
-											</label>
-										</div>
-									</div>
-									<div data-ng-show="item.staticRef" >
-										{{item.referralIn?'YES': 'NO';}}
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="7">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<div class="col-sm-6">
-					<div class="text-center">
-						<h3>Today's {{currentDate}} |  O-Room List</h3>
-					</div>
-					<table id="refTable2" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
-						<thead>
-							<tr>
-								<th>Remove</th>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Pending Days</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in refTable2 track  by $index">
-								<td> <button data-ng-click='refTable2.splice($index, 1); eightPeriods.splice($index, 1)'class="btn btn-primary fa fa-times"></button></td>
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>{{item.counters.pendingDays}}</td>
+								</div>
 
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="5">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
+								<div data-ng-hide="!item.ReferralIn">
+									{{item.teacher.FirstName + ' , ' + item.teacher.LastName}}
+								</div>
+
+							</td>
+							<td>
+								<div class="switch " data-ng-hide="item.activity.Id === 2 || item.period.Number !== currentPeriod.Number" >
+									<select chosen
+											width="'100%'"
+											class="chosen-select form-control"
+											data-placeholder="Select Activity"
+											data-ng-disabled="true"
+											data-ng-model="item.activity"
+											data-ng-click='dropdownActive = !dropdownActive'
+											allow-single-deselect="true"
+											data-ng-change="onActivitySelected(item, '{{item.activity}}')"
+											data-ng-options="a as (a.Name) for a in activities track by a.Id">
+										<option value=''></option>
+
+									</select>
+								</div>
+								<span data-ng-show="item.activity.Id === 2" >
+									{{item.activity.Name}}
+								</span>
+								<span data-ng-show="item.activity.Id === 1 && item.period.Number !== currentPeriod.Number" >
+									Was Present
+								</span>
+								<span data-ng-show="item.activity.Id === 3 && item.period.Number !== currentPeriod.Number" >
+									Arrived. & Walk-out
+								</span>
+								<span data-ng-show="item.activity.Id === 4 && item.period.Number !== currentPeriod.Number" >
+									No Show
+								</span>
+								<span data-ng-show="item.activity.Id === 5 && item.period.Number !== currentPeriod.Number" >
+									Arrived. & Other
+								</span>
+
+							</td>
+							<td>
+								<div class="switch " data-ng-hide="item.ReferralIn">
+									<div class="onoffswitch">
+										<input type="checkbox" class="onoffswitch-checkbox" id="referredIn{{$index}}" 
+											   data-ng-model="item.ReferralIn" data-ng-change="onReferralInTrue(item)">
+										<label class="onoffswitch-label" for="referredIn{{$index}}">
+											<span class="onoffswitch-inner yesno"></span>
+											<span class="onoffswitch-switch yesno"></span>
+										</label>
+									</div>
+								</div>
+								<span data-ng-show="item.ReferralIn" >
+									{{item.ReferralIn?'YES': 'NO';}}
+								</span>
+
+							</td>
+							<td style="border:0;margin:0 auto; padding:0 auto; position: fixed; right:51%"
+								data-ng-show="item.mouseover && !item.ReferralIn" 
+								data-ng-click='onDeleteTable1($index)'>
+								<i class="btn btn-primary fa fa-times delete-btn" 
+								   ></i>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="6">
+								<ul class="pagination pull-right"></ul>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
 			</div>
-        </div>
-    </div>
-	
-	
+			<div class="col-sm-12 col-lg-6">
+				<div class="text-center">
+					<h3 >Today's {{currentDate}} |  O-Room List <i class="badge badge-info"> {{refTable2.length}} </i></h3>
+				</div>
+				<table id="refTable2" class="table footable  table-responsive table-bordered" 
+					   data-ng-mouseover="mouseOnTable = true"  data-ng-mouseleave="mouseOnTable = false"
+					   data-page-size="1000">
+					<thead>
+						<tr>
+							<!--<th>Remove</th>-->
+							<th data-toggle="true">Name</th>
+							<th>ID</th>
+							<th>Pending Days</th>
+							<!--<th> 8th Per.</th>-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="item in refTable2 track  by $index"
+							data-ng-mouseenter="item.mouseover2 = true;"
+							data-ng-mouseleave="item.mouseover2 = false"
+							class="{{item.class}}"
+							>
+							<!--<button data-ng-click='onDeleteTable2($index)'class="btn btn-primary fa fa-times"></button></td>-->
+							<td>{{item.user.FirstName + ', ' + item.user.LastName}}</td>
+							<td>{{item.user.UserName}}</td>
+							<td>{{item.counters.ORoomsToBeServed}}</td>
+							<!--<td>{{item.classes[7].professor_class.room.Name}}</td>-->
+							<td style="border:0;margin:0; padding:0; position: fixed; right:17px;" data-ng-show="item.mouseover2" >
+								<i class="btn btn-primary fa fa-times delete-btn" data-ng-click='onDeleteTable2($index)'
+								   ></i>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="3">
+								<ul class="pagination pull-right"></ul>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
 </section>
 
 <style>
-		
-		#refTable1 tr td{
-			vertical-align: middle;
-		}
-	</style>
+
+	#refTable1 tr td{
+		vertical-align: middle;
+	}
+	h1 {
+		font-size: 20pt;
+	}
+	.delete-btn{
+		opacity: 0.4 
+	}
+
+	.delete-btn:hover{
+		opacity: 1.0;
+	}
+
+
+</style>

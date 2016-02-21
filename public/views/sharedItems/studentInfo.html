@@ -41,7 +41,7 @@
         <ul class="col-lg-12 list-inline list-group">
             <li data-ng-repeat="pro in toShow" class='col-lg-{{12/active}}'
                 data-ng-hide="!toShow[$index]">
-                <student student="toShow[$index]"></student>
+                <student data-student="toShow[$index]"></student>
             </li>
 
         </ul>

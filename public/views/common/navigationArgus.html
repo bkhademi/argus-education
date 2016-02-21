@@ -1,14 +1,17 @@
-﻿<nav class="navbar-default navbar-static-side" role="navigation" data-ng-controller="NavigationCtrl as navigation">
+﻿<nav class="navbar-default navbar-static-side" role="navigation" >
     <div class="sidebar-collapse">
         <ul data-side-navigation class="nav metismenu" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element" data-dropdown>
-					<img alt='Estacado High School' class='' src='images/estacado_logo.png'  height="86" width="86" >
+					<img alt='{{currentUser.school.Name}}School' class='' src='{{currentUser.logo}}'  height="86" width="86" >
                     <a class="dropdown-toggle" data-dropdown-toggle href="">
                         <span class="clear">
-                            <span class="block m-t-xs">
+                            <div class="block m-t-xs">
                                 <strong class="font-bold">{{currentUser.FirstName +', ' + currentUser.LastName}}</strong>
-                            </span>
+                            </div>
+							<div>
+								{{currentUser.role}}
+							</div>
                             <span class="text-muted text-xs block">option<b class="caret"></b></span>
 
                         </span>
@@ -22,13 +25,16 @@
                 </div>
             </li>
              
+			
+			
             <li data-ng-repeat="item in navigation.tabs" ui-sref-active="active">
                 <a data-ui-sref="{{item.link}}">
                     <i class="fa fa-{{item.icon}} "></i>
                     <span class="nav-label">{{item.id}}</span>
                 </a>
             </li>
-           
+			
+			
         </ul>
     </div>
 </nav>

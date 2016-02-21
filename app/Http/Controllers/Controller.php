@@ -10,9 +10,21 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Carbon\Carbon;
 
 abstract class Controller extends BaseController
 {
+	public $oroomReferralTypes = [1,2,3,16,19];
+	public $issReferralTypes = [5,6,7,10,11,15,17];
+	public $ossReferralType = 11;
+	public $aecReferralType = 12;
+	public $aecAbsenceStatus = 4;
+	public $reteachReferralType = 18;
+	public $reteachAbsenseStatis = 8;
+	public $schoolId = ['Estacado'=>1, 'Dunbar'=>2, 'Ervin'=>3, 'Adrian'=>4];
+	
+	
+	
     public function __construct(){
 		// apply the jwt.auth middleware to all methods in thiscontroller
 		// except for the authenticate method. We don't want to prevent
@@ -29,9 +41,19 @@ abstract class Controller extends BaseController
 	public function getUserId(Request $request){
 		return isset($this->userId)? $this->userId : $request->input('userId');
 	}
+	
+	public function getDate(Request $request){
+		return $request->has('Date')? new Carbon($request->Date): Carbon::today();
+	}
+	
+	public function notImplemented(){
+		return response(['msg'=>'Not Implemented Yet'], 500);
+	}
+	
 	public function stored(){
 		return response('successfully_saved',200);
 	}
+	
 	
 	public function updated(){
 		return response("successfully_updated", 200);

@@ -7,7 +7,7 @@
 
 <div class="modal-header text-center">
     <button class="close" data-ng-click="$dismiss()">&times;</button>
-    <h4 class="modal-title">Re-Schedule - {{student.FirstName + ", " + student.LastName}}</h4>
+    <h4 class="modal-title">Re-Schedule - {{student.user.FirstName + ", " + student.user.LastName}}</h4>
 </div>
 <div class="modal-body ">
     
@@ -16,7 +16,7 @@
             <label >Select a Date to Re-Schedule </label>
             <div class="input-group date" style="margin:0 auto">
                 
-                <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
             </div>
         </div>
@@ -45,8 +45,8 @@
     </form>
 </div>
 <div class="modal-footer">
-    <button class="btn  bg-green" 
+    <button class="btn  btn-info" 
 			data-ng-click="$close({date:date, comment:comment, student:student, excused:excused})">Submit</button>
-    <button class="btn btn-danger" data-ng-click="$dismiss()">Cancel</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
 </div>
 

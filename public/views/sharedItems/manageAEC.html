@@ -11,7 +11,8 @@
                         <div class="form-group">
                             <label class="font-noraml">Select AEC List Date</label>
                             <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
-                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" 
+									   view="date" min-view="date" auto-close="true" format="MMM DD YYYY"> 
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
@@ -26,27 +27,48 @@
 										allow-single-deselect="true"
 										data-ng-if="refTable.$resolved"
                                         data-placeholder="Select or enter a student"
+										focus-me="!!!selected.student"
                                         data-ng-model="selected.student"
-										data-ng-change="selected.student?onSelectedStudent():''"
+										data-ng-change="onSelectedStudent(selected.student)"
+										
                                         data-ng-options="s as 
-										(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
-										for s in refTable  track by s.id"
+										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+										for s in refTable  track by s.Id"
 										>
 									<option value=''></option>
 								</select>
+								<span data-ng-if="!refTable.$resolved">
+									<div class="sk-spinner sk-spinner-wave">
+										<div class="sk-rect1"></div>
+										<div class="sk-rect2"></div>
+										<div class="sk-rect3"></div>
+										<div class="sk-rect4"></div>
+										<div class="sk-rect5"></div>
+									</div>
+								</span>
+<!--								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="!refTable.$resolved"
+                                        data-placeholder="No Students For Current Date"
+										no-results-text="'No Students For Current Date'"
+                                        
+										>
+									<option value=''></option>
+								</select>-->
                             </form>
                         </li>
                         <!-- Present Button -->
-                        <li>
-                            <button type="button" class="btn  btn-primary " data-ng-click="openPresent(selected)" data-ng-disabled="!selected.student">Present</button>
+						 <li>
+                            <button type="button" class="btn  btn-primary " data-ng-click="AECAttendance(selected.student)" data-ng-disabled="!selected.student">Attendance</button>
                         </li>
-                        <!-- Reschedule Button -->
+
                         <li>
-                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected)" data-ng-disabled="!selected.student">Re-Schedule</button>
+                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected.student)" data-ng-disabled="!selected.student">Re-Schedule</button>
                         </li>
                         <!-- Clear Button -->
                         <li>
-                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected)" data-ng-disabled="!selected.student">Clear</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected.student)" data-ng-disabled="!selected.student">Clear</button>
                         </li>
                     </ul>
 
@@ -57,53 +79,53 @@
 
             <br />
             <!--  Table Start -->
-			<div id="printSection">
-				<div data-barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
-			</div>
+			
 			<div style="float:none; margin:0 auto;" class="col-sm-12">
-				<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
-									<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
-										<i class="fa fa-print"></i>Print Assignments
-									</button>
-								</div>
-								<div class="form-group">
-									<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
-										<i class="fa fa-barcode"></i> Print Barcodes
-									</button>
-								</div>-->
-				<!--data-ng-controller="MultiplePassesController"--> 
+				
 				<div class="form-group">
-					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="reftable.length">
+					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="!refTable.length">
 						<i class="fa fa-ticket"></i> Print Passes
 					</button>
 				</div>
 				<div  class="form-group">
-                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListCSV()">
-                        <i class="fa fa-list"></i> AEC List
+                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListToCSV()">
+                        <i class="fa fa-download"></i> AEC List <i class="badge badge-white">{{refTable.length}}</i>
                     </button>
                 </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="70">
+				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
 					<thead>
 						<tr>
 							<th data-toggle="true">First Name</th>
 							<th>Last Name</th>
 							<th>ID</th>
 							<th>Grade</th>
+							<th data-ng-show='{{currentUser.SchoolId === 2}}' >9th Per.</th>
 							<th class="col-sm-6">Assignment</th>
-							<th class="col-sm-2">Notified </th>
+							<th>Overlap</th>
+							<th>Attendance</th> 
+							
+							<!--<th class="col-sm-2">Notified </th>-->
 						</tr>
 					</thead>
 					<tbody>
-						<tr data-ng-repeat="stu in refTable track  by stu.id" 
+						<tr data-ng-repeat="stu in refTable track  by stu.Id" 
 							data-ng-show="stu.referred.length"
 							data-ng-click="onSelect($index)"
+							data-ng-dblclick="AECAttendance(stu,$index)"
+							class="{{stu.overlap.class}} {{stu.status.class}}"
 							>
-							<td>{{stu.FirstName}}</td>
-							<td>{{stu.LastName}}</td>
-							<td>{{stu.student.StudentId}}</td>
-							<td>{{stu.student.Grade}}</td>
+							<td>{{stu.user.FirstName}}</td>
+							<td>{{stu.user.LastName}}</td>
+							<td>{{stu.StudentId}}</td>
+							<td>{{stu.Grade}}</td>
+							<td data-ng-show='{{currentUser.SchoolId === 2}}' >
+								{{stu.classes[8].professor_class.room.Name}}
+							</td>
 							<td>
-								{{stu.referred[0].Name}}<span data-ng-show="stu.referred.length > 1" style="font-weight:700">...</span>
+								{{stu.referred[0].assignment.Name}}
+								,{{stu.referred[1].assignment.Name}}
+								, {{stu.referred[2].assignment.Name}}
+								<span data-ng-show="stu.referred.length > 3" style="font-weight:700">...</span>
 
 								<!--								<select multiple chosen
 																		class="chosen-select form-control"
@@ -116,15 +138,17 @@
 																</select>-->
 
 							</td>
-							<td>
+							<td>{{stu.overlap.place}}</td>
+							<td>{{stu.status.action}}</td>
+<!--							<td>
 								<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.ParentNotified" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
 								<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.Notified" btn-checkbox="" data-ng-click="submitStudentNotified(stu,$index)"><i class="fa fa-user"></i></label>
-							</td>
+							</td>-->
 						</tr>
 					</tbody>
 					<tfoot>
 						<tr>
-							<td colspan="6">
+							<td colspan="7">
 								<ul class="pagination pull-right"></ul>
 							</td>
 						</tr>

@@ -19,7 +19,6 @@ class RolesController extends Controller
     public function index()
     {
         //
-		return Carbon::now();
 		$roles = Roles::all();
 		
 		return $roles;

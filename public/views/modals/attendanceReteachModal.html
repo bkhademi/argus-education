@@ -1,0 +1,71 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">AEC Attendance - Name: {{student.user.FirstName + " " + student.user.LastName}} - ID:{{student.StudentId}}</h4>
+</div>
+<div class="modal-body ">
+	<div class="row"> 
+		<div class="col-sm-4 col-sm-offset-2">
+			<label> Guardian Name : </label> {{student.GuardianName}}				
+		</div>
+		<div class="col-sm-4">
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+		</div>
+	</div>
+	<br />
+	<div class="row text-center">
+		<div class="btn-group">
+			<label class="btn btn-success" ng-model="student.radioModel" btn-radio="'64'" style="margin:5px"> Present</label>
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'52'" style="margin:5px"> No Show</label>-->
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'53'"  style="margin:5px"> Left School</label>-->
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'54'" style="margin:5px" > School Absent</label>-->
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'75'" style="margin:5px"> Sent Out</label>
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'70'" style="margin:5px"> Walked Out</label>
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'57'" style="margin:5px"> Other</label>-->
+		</div>
+	</div> 
+<!--	
+	<div class='row text-left' data-ng-show="student.radioModel === '49'">
+		<h3 class='text-center'> Assignments </h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th>Completed</th>
+				<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr  data-ng-repeat="ref in student.referred">
+					<td><input type="checkbox" data-ng-model="ref.AssignmentCompleted"></td>
+					<td> <label>{{ref.assignment.Name}}</label> </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>-->
+	<br />
+<!--	<div class="row">
+		<div class="col-sm-4 col-sm-offset-4">
+			<label> Referred By : </label> {{ student.user.FirstName + ' ' + student.user.LastName}}
+		</div>
+	</div>-->
+
+	<br />
+	<div class="form-group">
+		<textarea id="addComment" type="text"
+				  placeholder="Add Description And Comments Here"
+				  class="form-control auto-resize"
+				  data-ng-model="student.comment"
+				  data-ng-keyup=""></textarea>
+	</div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close({student:student})">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>

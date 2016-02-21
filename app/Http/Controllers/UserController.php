@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use Hash;
 use App\User;
 
 class UserController extends Controller
@@ -41,7 +41,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+		return $request->session()->all();
+         //
+		$user = $request->userInfo;
+		$user['id'] = str_random(128);
+		if($user['Password'])
+			$user['Password'] = Hash::make($user['Password']);
+		$newUser = \App\User::create($user);
+		
+		$userrole = \App\Userroles::create(['UserId'=>$newUser->id, 'RoleId'=>$request->role['Id']]);
+		
+		return ['msg'=>'successfully added'];
     }
 
     /**

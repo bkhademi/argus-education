@@ -1,0 +1,192 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, let's manage ASP! </h2>
+
+
+        <div class="panel-body">
+            <div class="table-filters">
+                <div class="text-center">
+
+                    <form role="form" name="form">
+                        <div class="form-group">
+                            <label class="font-noraml">Select ASP List Date</label>
+                            <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" 
+									   view="date" min-view="date" auto-close="true" format="MMM DD YYYY"
+									   date-change="dateChanged"
+									   > 
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Buttons and Inputs  -->
+					<div data-ng-if="currentUser.schoolId === 3">
+						<ul class="list-group list-inline">
+							<!-- AutoComplete Input Field -->
+							<li style="width:15%">
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="rotations"
+                                        data-placeholder="Select or enter a rotation"
+                                        data-ng-model="selected.rotation"
+										data-ng-change="onSelectedRotation(selected.rotation)"
+                                        data-ng-options="s as 
+										(s.Name  )
+										for s in rotations  track by s.Value"
+										>
+									<option value=''></option>
+								</select>
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="!rotations"
+                                        data-placeholder="No Students For Current Date"
+										no-results-text="'No Students For Current Date'"
+
+										>
+								</select>
+							</li>
+							<li style="width:35%">
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="programs && selected.rotation"
+                                        data-placeholder="Select or enter a program"
+                                        data-ng-model="selected.program"
+										data-ng-change="onSelectedProgram(selected.program, selected.rotation)"
+
+                                        data-ng-options="s as 
+										(s.Name  )
+										for s in programs  track by s.Id"
+										>
+									<option value=''></option>
+								</select>
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="!(programs && selected.rotation)" 
+                                        data-placeholder="Select A Rotation First"
+										no-results-text="'Select A ROtation First'"
+
+										>
+								</select>
+							</li>
+							
+						</ul>
+					</div>
+<!--					<div data-ng-if="currentUser.schoolId === 2">
+						<button class="btn btn-primary"
+							data-ng-click="getStudents()"
+							>GetList
+						</button>
+					</div>-->
+
+
+                </div>
+            </div>
+
+            <br />
+            <!--  Table Start -->
+
+			<div style="float:none; margin:0 auto;" class="col-sm-12">
+				<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
+									<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
+										<i class="fa fa-print"></i>Print Assignments
+									</button>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
+										<i class="fa fa-barcode"></i> Print Barcodes
+									</button>
+								</div>-->
+				<!--data-ng-controller="MultiplePassesController"--> 
+				<!--				<div class="form-group">
+									<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="!refTable.length">
+										<i class="fa fa-ticket"></i> Print Passes
+									</button>
+								</div>-->
+				<div  class="form-group">
+                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="listCSV()">
+                        <i class="fa fa-list"></i> Download List <i class="badge badge-info">{{refTable.length}}</i>
+                    </button>
+                </div>
+				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+					<thead>
+						<tr>
+							<th data-toggle="true">First Name</th>
+							<th>Last Name</th>
+							<!--<th>ID</th>-->
+							<th>Grade</th>
+							<th>Group</th>
+							<th>Overlap</th>
+							<th>Attendance</th> 
+
+						</tr>
+					</thead>
+					<tbody> 
+						<tr data-ng-repeat="stu in refTable track  by stu.StudentId" 
+							class="{{stu.overlap.class}} {{stu.status.class}}"
+							>
+							<td>{{stu.student.user.FirstName}}</td>
+							<td>{{stu.student.user.LastName}}</td>
+							<!--<td>{{stu.StudentId}}</td>-->
+							<td>{{stu.student.Grade}}</td>
+							<td>{{stu.group.Name}}</td>
+							<td>{{stu.overlap.msg}}</td>
+							<td>
+								<label tooltip-popup-delay='300' tooltip='Student is present' 
+									   class="btn {{stu.student.asp_attendance[0].Attendance === 1? 'btn-present':'' }} "
+									   ng-model="stu.student.asp_attendance[0].Attendance" btn-radio="1"
+									   data-ng-click="changeAttendance(stu.student.asp_attendance[0], 1)"> <i class="fa fa-check"></i>
+								</label>
+								<label tooltip-popup-delay='300' tooltip='absent' 
+									   class="btn  {{stu.student.asp_attendance[0].Attendance === 2? 'btn-absent':'' }} " 
+									   ng-model="stu.student.asp_attendance[0].Attendance" btn-radio="2" 
+									   data-ng-click="changeAttendance(stu.student.asp_attendance[0], 2)"><i class="fa fa-times"></i>
+								</label>
+								<label tooltip-popup-delay='300' tooltip='Student is in GTM'  data-ng-if="currentUser.role === 3"
+									   class="btn  {{stu.student.asp_attendance[0].Attendance === 3? 'btn-gtm':'' }} " 
+									   ng-model="stu.student.asp_attendance[0].Attendance" btn-radio="3" 
+									   data-ng-click="changeAttendance(stu.student.asp_attendance[0], 3)">GTM
+								</label>
+							</td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="7">
+								<ul class="pagination pull-right"></ul>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+		</div>
+
+    </div>
+	<style>
+
+
+		.btn-present, .btn-present.active, .btn-present:focus{
+			background-color: #3DBC20;
+			border-color: #3DBC20;
+			color: #FFFFFF;
+		}
+		.btn-absent, .btn-absent.active, .btn-absent:focus{
+			background-color: #DF2929;
+			border-color: #DF2929;
+			color: #FFFFFF;
+		}
+		.btn-gtm, .btn-gtm.active, .btn-gtm:focus{
+			background-color: #DF2929;
+			border-color: #DF2929;
+			color: #FFFFFF;
+		}
+	</style>
+
+</section
+
+
+
+

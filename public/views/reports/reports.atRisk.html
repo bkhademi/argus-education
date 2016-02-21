@@ -1,0 +1,66 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">	
+				<div class="col-sm-12 text-center">
+					<label > Please Select An At Risk Report Type</label>
+				</div>
+				<div class="col-sm-12 text-center">
+					<select 
+						id='selectReport'
+						data-chosen
+						class="chosen-select form-control col-sm-6 "
+						data-placeholder="EOD Report Types"
+						no-results-text="'notFound'"
+						data-ng-model="eod.selected"
+						data-ng-change="reportChanged(eod.type)"
+						allow-single-deselect="true"
+						data-ng-options="r as (r.name) for r in eodReports track by r.value  "
+						>
+						<option value=''></option>
+					</select>
+				</div>
+			
+				
+			</div>
+
+			<div class='row' data-ng-show='eod.selected.value === 4 '>
+				<div class='col-sm-12'>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Attendance</th>
+								<th>Progression</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents" class='{{stu.class}}' >
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Attendance}}</td>
+								<td>{{stu.Progression}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+</div>
+
+<style>
+	.bg-green{
+		background-color: #C3ECC8;
+	}
+	.bg-gray{
+		    background-color: #DCDCDC;
+	}
+</style>

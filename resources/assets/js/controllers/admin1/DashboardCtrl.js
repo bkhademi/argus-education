@@ -1,10 +1,12 @@
+/* global angular */
+
 (function(app){
 	"use strict";  
-	app.controller('DashAdmin1Ctrl', ['$scope', '$modal', 'referrals', 'notify',
-	function($scope, $modal, referrals, notify){
+	app.controller('DashAdmin1Ctrl', ['$scope', '$modal', 'referrals', 'notify','OroomService',
+	function($scope, $modal, referrals, notify, orooms){
 		
 		 
-		$scope.studentsToday =0;
+		$scope.studentsToday = 0;
 		var date = Date();
 		var dateStr = date.substring(4,7) + ' '+date.substring(8,10) + ' '+date.substring(11,15);
 		referrals.query({id:dateStr},function(data){
@@ -21,6 +23,9 @@
 		});;
 		$scope.followUp  = 0;
 		referrals.query({id:dateStr, absence:true},function(data){$scope.followUp = data.length;});
+		orooms.get({count:true}, function(data){
+			$scope.studentsToday = data.OroomList;
+		});
 		
 		$scope.downloadEODReport =function(){
 			notify({message:'Now Doing, hold on'});
@@ -41,20 +46,20 @@
 				size: 'lg',
 				controller: function ($scope, $modalInstance, graphOptions, graphData, $timeout) {
 					$scope.graphOptions = graphOptions;
-					$scope.graphData = graphData
+					$scope.graphData = graphData;
 					
 					$timeout(function () {
 						$scope.drawGraph = true;
 					}, 100);
 					
 					
-					$scope.cancel = function () { $modalInstance.dismiss('cancel'); }
+					$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 				},
 				resolve: {
-					graphOptions : function () { return $scope.lineOptions },
-					graphData: function () { return $scope.lineData }
+					graphOptions : function () { return $scope.lineOptions; },
+					graphData: function () { return $scope.lineData; }
 				}
-			})// End assignmentsModal
+			});// End assignmentsModal
 		};
 		/**
 		 * Opens Modal for Rating's Modal
@@ -71,13 +76,13 @@
 						$scope.drawGraph = true;
 					}, 100);
 					
-					$scope.cancel = function () { $modalInstance.dismiss('cancel'); }
+					$scope.cancel = function () { $modalInstance.dismiss('cancel'); };
 				},
 				resolve: {
-					graphOptions : function () { return $scope.lineOptions },
-					graphData: function () { return $scope.lineData }
+					graphOptions : function () { return $scope.lineOptions; },
+					graphData: function () { return $scope.lineData; }
 				}
-			})// End assignmentsModal
+			});// End assignmentsModal
 		};
 		
 		/**
@@ -160,8 +165,8 @@
 		$scope.teachersTeam = [
 			{fn:"Adrian Omar", ln:"Galicia Mendez", subjects:["Math", "Physics","Spanish"], days:["M","W", "Sat"], rate:9.5},
 			{fn:"Brandon", ln:"Hernandez", subjects:["Math", "Physics","Chemistry", "Biology"], days:["T","Th", "F"], rate:8.9},
-			{fn:"Jose", ln:"Martinez", subjects:["Math", "Physics","Computer Science"], days:["M","W", "Sat"], rate:2.1},
-		]
+			{fn:"Jose", ln:"Martinez", subjects:["Math", "Physics","Computer Science"], days:["M","W", "Sat"], rate:2.1}
+		];
 		
 	}]);
 }(angular.module('Argus')));

@@ -3,19 +3,54 @@
     comment -> text inside comment box - $scope.comment
     student -> object of student, usually, full Name, ID, GR ... - $scope.student
 
-    -->
+-->
 <div class="modal-header text-center">
     <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
-    <h4 class="modal-title">{{title}} - {{student.FirstName  + ", " + student.LastName}}</h4>
+    <h4 class="modal-title">{{title}} - {{student.FirstName + ", " + student.LastName}}</h4>
 </div>
 <div class="modal-body">
+
+	<div class="row text-center">
+		<div class="btn-group">
+			<!--<label class="btn btn-success" ng-model="student.radioModel" btn-radio="'49'" style="margin:5px"> Present</label>-->
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'52'" style="margin:5px"> No Show</label>
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'53'"  style="margin:5px"> Left School</label>
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'54'" style="margin:5px" > School Absent</label>
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'55'" style="margin:5px"> Sent Out</label>-->
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'56'" style="margin:5px"> Walked Out</label>-->
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'57'" style="margin:5px"> Other</label>
+			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'51'" style="margin:5px"> Clear</label>
+ 
+		</div>
+	</div> 
+	
+	<div class='row text-left' data-ng-show="student.radioModel && student.radioModel != '51' ">
+		<h3 class='text-center'> Assignments </h3>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th>Has Folder? Resubmit?</th>
+				<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr  data-ng-repeat="ref in student.referred">
+					<td><input type="checkbox" data-ng-model="ref.selected"></td>
+					<td> <label>{{ref.assignment.Name}}</label> </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+
+<!--
 	<div class="row" > 
 		<div class="col-sm-3">
 			<label>No Show</label>
             <div class="switch ">
                 <div class="onoffswitch">
                     <input type="checkbox" class="onoffswitch-checkbox" id="noShow" 
-					data-ng-model="modalInfo.noShow">
+						   data-ng-model="modalInfo.noShow">
                     <label class="onoffswitch-label" for="noShow">
                         <span class="onoffswitch-inner yesno"></span>
                         <span class="onoffswitch-switch yesno"></span>
@@ -28,7 +63,7 @@
 			<div class="switch ">
 				<div class="onoffswitch">
 					<input type="checkbox" class="onoffswitch-checkbox" id="sentOut" 
-					data-ng-model="modalInfo.sentOut">
+						   data-ng-model="modalInfo.sentOut">
 					<label class="onoffswitch-label" for="sentOut">
 						<span class="onoffswitch-inner yesno"></span>
 						<span class="onoffswitch-switch yesno"></span>
@@ -41,7 +76,7 @@
 			<div class="switch ">
 				<div class="onoffswitch">
 					<input type="checkbox" class="onoffswitch-checkbox" id="walkOut" 
-					data-ng-model="modalInfo.walkOut">
+						   data-ng-model="modalInfo.walkOut">
 					<label class="onoffswitch-label" for="walkOut">
 						<span class="onoffswitch-inner yesno"></span>
 						<span class="onoffswitch-switch yesno"></span>
@@ -54,7 +89,7 @@
 			<div class="switch ">
 				<div class="onoffswitch">
 					<input type="checkbox" class="onoffswitch-checkbox" id="schoolAbsent" 
-					data-ng-model="modalInfo.schoolAbsent">
+						   data-ng-model="modalInfo.schoolAbsent">
 					<label class="onoffswitch-label" for="schoolAbsent">
 						<span class="onoffswitch-inner yesno"></span>
 						<span class="onoffswitch-switch yesno"></span>
@@ -67,7 +102,7 @@
 			<div class="switch ">
 				<div class="onoffswitch">
 					<input type="checkbox" class="onoffswitch-checkbox" id="disciplinary" 
-					data-ng-model="modalInfo.disciplinary">
+						   data-ng-model="modalInfo.disciplinary">
 					<label class="onoffswitch-label" for="disciplinary">
 						<span class="onoffswitch-inner yesno"></span>
 						<span class="onoffswitch-switch yesno"></span>
@@ -80,7 +115,7 @@
 			<div class="switch ">
 				<div class="onoffswitch">
 					<input type="checkbox" class="onoffswitch-checkbox" id="clear" 
-					data-ng-model="modalInfo.clear">
+						   data-ng-model="modalInfo.clear">
 					<label class="onoffswitch-label" for="clear">
 						<span class="onoffswitch-inner yesno"></span>
 						<span class="onoffswitch-switch yesno"></span>
@@ -89,6 +124,8 @@
 			</div>
 		</div>
 	</div>
+	-->
+	
 	<br />
 	<div class="row">
 		<div class="text-center col-sm-12">
@@ -97,14 +134,14 @@
 					<textarea id="addComment" type="text"
 							  placeholder="Add Comment"
 							  class="form-control auto-resize"
-							  data-ng-model="modalInfo.comment"></textarea>
+							  data-ng-model="student.comment"></textarea>
 				</form>
 			</div>
 		</div>
 	</div>
 </div>
 <div class="modal-footer">
-    <button class="btn  bg-green" data-ng-click="$close(modalInfo)">Submit</button>
-    <button class="btn btn-danger" data-ng-click="$dismiss()">Cancel</button>
+    <button class="btn  btn-info" data-ng-click="$close(modalInfo)">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
 </div>
-                   
+

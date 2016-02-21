@@ -1,0 +1,63 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">O-Room Referral - Name: {{student.user.FirstName + " " + student.user.LastName}} - ID:{{student.StudentId}}</h4>
+</div>
+<div class="modal-body ">
+
+
+	<div class="row">
+		<div class="col-sm-4">
+			<label> Guardian Name : </label> {{student.GuardianName}}				
+		</div>
+		<div class="col-sm-4">
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+		</div>
+		<div  class=' col-sm-4' >
+			<!-- changes according to student status, better make the backend return this value -->
+			<label > Referral Type : </label> FirstTime - Teacher 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+			<div style=" margin-top:10px"> 
+				<span style="vertical-align: middle"> Referred By : </span>
+				<span> 
+					<select chosen
+							width="'50%'"	 
+							class="chosen-select form-control"
+							data-placeholder="Select Teacher"
+							data-ng-model="student.teacher"
+							allow-single-deselect="true"
+							data-ng-options="a as (a.FirstName + ' ' + a.LastName) for a in teachers track by a.id">
+						<option value=''></option>
+
+					</select>
+				</span>
+			</div> 
+
+		</div>
+		
+	</div>
+
+	<br />
+	<div class="form-group">
+		<textarea id="addComment" type="text"
+				  placeholder="Add Description And Comments Here"
+				  class="form-control auto-resize"
+				  data-ng-model="student.comment"
+				  data-ng-keyup=""></textarea>
+	</div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close()">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>
+

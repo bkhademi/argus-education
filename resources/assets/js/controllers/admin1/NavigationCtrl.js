@@ -1,62 +1,64 @@
+/* global angular */
+
 (function (app) {
 	"use strict";
-	app.controller('NavigationCtrl', function () {
-			var path = "../Client/Views/dashItems/";
-			var vm = this;
-			/**
-			 * Navigation bar places with their links and icons
-			 */
-			vm.tabs = [ 
-				{
-					id: 'Dashboard',
-					text: ['Dashboard', 'System'],
-					route: path + 'referal.html',
-					link: "admin1.dashboard",
-					icon: 'dashboard fa-2x'
-				}, {
-					id: 'Referral System',
-					text: ['Referral', 'System'],
-					route: path + 'referral.html',
-					link: "admin1.referral",
-					icon: 'eye fa-2x'
-				},
-				{
-					id: 'AEC List',
-					text: ['AEC', 'List'],
-					route: path + 'manageAEC.html',
-					link: "admin1.AECList",
-					icon: 'list-alt fa-2x'
-				}, {
-					id: 'Absence List',
-					text: ['Absence', 'List'],
-					route: path + 'manageAECAbsence.html',
-					link: "admin1.pending",
-					icon: 'exclamation fa-2x'
-				}, {
-					id: 'Student Data',
-					text: ['Student', 'Data'],
-					route: path + 'studentInfo.html',
-					link: "admin1.studentData",
-					icon: 'user fa-2x'
-				},{
-					id: 'ORoom Activity Log Admin',
-					text: ['Oroom', 'Activity', 'log'],
-					link: "admin1.oroomActivityLogAdmin",
-					icon: 'user fa-2x'
-				},{
-					id: 'ORoom Activity Log',
-					text: ['Oroom', 'Activity', 'log'],
-					link: "admin1.oroomActivitiLog",
-					icon: 'user fa-2x'
-				}
-				
-				//		, {
-				//            id: 'Create Student Pass',
-				//            text: ['Create', 'Pass'],
-				//            route: path + "multiplePasses.html",
-				//            link: "admin1.createStudentPass",
-				//            icon: 'file fa-2x'
-				//        }
-			];
-		});
+	app.controller('NavigationAdmin1Ctrl', function () {
+		var vm = this;
+		/**
+		 * Navigation bar places with their links and icons
+		 */
+		vm.tabs = [
+			{
+				id: 'Dashboard',
+				link: "admin1.dashboard",
+				icon: 'dashboard fa-2x'
+			}, {
+				id: 'AEC Referral System',
+				link: "admin1.referral",
+				icon: 'eye fa-2x'
+			},
+			{
+				id: 'AEC List',
+				link: "admin1.AECList",
+				icon: 'list-alt fa-2x'
+			}, {
+				id: 'Follow-up List',
+				link: "admin1.pending",
+				icon: 'exclamation fa-2x'
+			} 
+//			{
+//				id: 'Student Data',
+//				link: "admin1.studentData",
+//				icon: 'user fa-2x'
+//			}
+			, {
+				id: 'ORoom Activity Log',
+				link: "admin1.oroomActivityLogAdmin",
+				icon: 'tasks fa-2x'
+			}
+//			, {
+//				id: 'Live Activity Log',
+//				link: "admin1.oroomActivitiLog.oroom",
+//				icon: 'user fa-2x'
+//			}
+			,{
+				id: 'ORoom Coordinator Referral',
+				link: "admin1.CoordinatorReferralSystem",
+				icon: 'pencil-square-o fa-2x'
+			},{
+				id: 'Attendance Rosters',
+				link: "admin1.attendanceRosters.oroom",
+				icon: 'list-alt fa-2x'
+			},{
+				id: 'Parent Meeting Followup List',
+				link: "admin1.issFollowup",
+				icon: 'list-alt fa-2x'
+			},
+			 {
+				id: 'Reports',
+				link: 'admin1.reports',
+				icon: 'area-chart fa-2x'
+			}
+		];
+	});
 }(angular.module('Argus')));

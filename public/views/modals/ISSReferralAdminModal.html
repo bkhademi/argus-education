@@ -1,0 +1,47 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">ISS Referral 
+		- Name: {{student.user.FirstName + ', ' + student.user.LastName }}
+		- ID:{{student.user.UserName}}</h4>
+</div>
+<div class="modal-body ">
+
+
+	<div class="row"> 
+		<div class="col-sm-4">
+			<label> Guardian Name : </label> {{student.GuardianName}}				
+		</div>
+		<div class="col-sm-4">
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+		</div>
+		<div  class=' col-sm-4' >
+			<label > Referral Type : </label> ISS - Admin
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4 col-sm-offset-4">
+			<label> Referred By : </label> {{ currentUser.FirstName + ' ' + currentUser.LastName }}
+		</div>
+	</div>
+
+	<br />
+	<div class="form-group">
+		<textarea id="addComment" type="text"
+				  placeholder="Add Description And Comments Here"
+				  class="form-control auto-resize"
+				  data-ng-model="student.comment"
+				  data-ng-keyup=""></textarea>
+	</div>
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close()">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>

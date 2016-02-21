@@ -8,7 +8,7 @@ class Useractions extends Model
 {
     //
 	public $guarded = [];
-	public $timestamps = false;
+	public $timestamps = true;
 	public $primaryKey = 'Id';
 	public function student(){
 		return $this->belongsTo('App\User', 'ActionToUserId');	
@@ -16,5 +16,8 @@ class Useractions extends Model
 	
 	public function user(){
 		return $this->belongsTo('App\User', 'ActionByUserId');	
+	}
+	public function activity(){
+		return $this->hasOne('App\Activities',  'Id' ,'ActionType');
 	}
 }

@@ -1,6 +1,6 @@
 <section class="wrapper wrapper-content animated fadeInRight" >
     <div class="panel panel-default">
-        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName +' ' + currentUser.LastName}}</span>, lets create references!</h2>
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, lets create references!</h2>
 
         <div class="panel-body">
             <div class="table-filters ">
@@ -11,18 +11,21 @@
                             <label class="font-noraml">Select AEC List Date</label>
                             <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
 
-                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <input type="datetime" class="form-control" 
+									   date-time ng-model="currentDate" 
+									   name="date" view="date" min-view="date"
+									   auto-close="true" format="MMM DD YYYY">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
 
                         </div>
                     </form>
-                    <br />
-                     <!-- Buttons and Inputs  <strong>'+stu.GR+ -->
+
+					<!-- Buttons and Inputs  <strong>'+stu.GR+ -->
                     <ul class="list-group list-inline "> 
-						 <li style="width:25%;" >
+						<li style="width:25%;" >
                             <form>
-                                  
+
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
@@ -31,18 +34,23 @@
                                         data-ng-model="selected.teacher"
 										data-ng-change="onSelectedTeacher()"
                                         data-ng-options="s as 
-											(s.FirstName +' '+s.LastName )
-											for s in teachers  track by s.id"
-									>
-											<option value=''></option>
+										(s.FirstName +' '+s.LastName )
+										for s in teachers  track by s.id"
+										>
+									<option value=''></option>
 								</select>
-								
-                                
+								<select  
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="!teachers.$resolved"
+									data-placeholder="Loading Teachers">
+								</select>
+
                             </form>
                         </li >
                         <li style="width:25%;" >
                             <form>
-                                  
+
                                 <select chosen 
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
@@ -51,10 +59,10 @@
                                         data-ng-model="selected.student"
 										data-ng-change="onSelectedStudent()"
                                         data-ng-options="s as 
-											(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
-											for s in teacherStudents track by s.id "
-									>
-											<option value=''></option>
+										(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade )
+										for s in teacherStudents track by s.id "
+										>
+									<option value=''></option>
 								</select>
                                 <select  
 									multiple chosen
@@ -62,6 +70,21 @@
 									data-ng-if="!selected.teacher"
 									data-placeholder="Select a teacher first">
 								</select>
+<!--								<select  
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="!teacherStudents.$resolved && selected.teacher"
+									data-placeholder="Loading Teacher Students">
+								</select >-->
+								<span data-ng-if="!teacherStudents.$resolved && selected.teacher">
+									<div class="sk-spinner sk-spinner-wave">
+										<div class="sk-rect1"></div>
+										<div class="sk-rect2"></div>
+										<div class="sk-rect3"></div>
+										<div class="sk-rect4"></div>
+										<div class="sk-rect5"></div>
+									</div>
+								</span>
                             </form>
                         </li >
                         <!--
@@ -69,34 +92,34 @@
                             <button type="button" class="btn  bg-green">Add</button>
                         </li>
                         -->
-                       <li style="width:25%;">
+						<li style="width:25%;">
                             <form>
                                 <select 
-								multiple chosen
-								class="chosen-select form-control"
-								data-ng-if="selected.teacher && teachers.$resolved"
-								data-placeholder="Select an assignment"
-								data-ng-model="selected.assignments"
-								data-ng-options="assign as (assign.Name) for assign in  selected.teacher.assignments track by assign.Id">
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="selected.teacher && teachers.$resolved"
+									data-placeholder="Select an assignment"
+									data-ng-model="selected.assignments"
+									data-ng-options="assign as (assign.Name) for assign in  selected.teacher.assignments track by assign.Id">
 									<option value=''></option>
-									
+
 								</select>
 								<select 
-								multiple chosen
-								class="chosen-select form-control"
-								data-ng-if="!selected.teacher"
-								data-placeholder="Select a teacher first">
+									multiple chosen
+									class="chosen-select form-control"
+									data-ng-if="!selected.teacher"
+									data-placeholder="Select a teacher first">
 									<option value=''></option>
 								</select>
                             </form>
-                            
+
                         </li>
-						
+
                     </ul>
-					 
-					 <ul class='list-inline list-group'>
-						
-						 <li class="">
+
+					<ul class='list-inline list-group'>
+
+						<li class="">
 							<button type="button" class="btn btn-primary" data-ng-click="addToList()" data-ng-disabled="!selected.teacher" data-ng-hide="showChecks">
 								Add
 							</button>
@@ -106,14 +129,14 @@
 								Create New Assignment
 							</button>
 						</li>
-                       
-					 </ul>
+
+					</ul>
                 </div>
             </div>
 
             <br />
-            
-            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
+
+            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="1000">
                 <thead>
                     <tr>
 						<th>Remove</th>
@@ -122,31 +145,42 @@
                         <th>Last Name</th>
                         <th>ID</th>
                         <th>Grade</th>
-						<th>Student 8th Period</th>
+						<th data-ng-if='currentUser.SchoolId === 1'>Student 8th Period</th>
+
+						<th data-ng-if='currentUser.SchoolId === 2'>Student 9th Period</th>
+
                         <th class="col-sm-6">Assignment</th>
 						<th data-ng-if='showChecks'></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr data-ng-repeat="stu in refTable track  by $index">
-						<td> <button data-ng-click='refTable.splice($index,1);eightPeriods.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
-						<td>{{stu.teacher.FirstName + ", " +stu.teacher.LastName}}</td>
+						<td> <button data-ng-click='refTable.splice($index, 1);
+								eightPeriods.splice($index, 1)'class="btn btn-primary fa fa-times"></button></td>
+						<td>{{stu.teacher.FirstName + ", " + stu.teacher.LastName}}</td>
                         <td>{{stu.FirstName}}</td>
                         <td>{{stu.LastName}}</td>
                         <td>{{stu.student.StudentId}}</td>
                         <td >{{stu.student.Grade}}</td>
-						<td> {{ eightPeriods[$index].professor_class.classs.Name + ' - ' +eightPeriods[$index].professor_class.room.Name}}</td>
+						<td data-ng-if='currentUser.SchoolId === 1'> 
+
+							{{ eightPeriods[$index].professor_class.classs.Name + ' - ' + eightPeriods[$index].professor_class.room.Name}}
+						</td>
+						<td data-ng-if='currentUser.SchoolId === 2'> 
+
+							{{ stu.student.classes[0].professor_class.classs.Name + ' - ' + stu.student.classes[0].professor_class.room.Name}}
+						</td>
                         <td >
-                             <select multiple chosen
-								width="'100%'"	 
-								class="chosen-select form-control"
-								data-ng-if="refTable"
-								data-placeholder="Select a homework"
-								data-ng-model="stu.referred"
-								data-ng-options="a as (a.Name) for a in stu.teacher.assignments track by a.Id">
-								 <option value=''></option>
-								 
-							 </select>
+							<select multiple chosen
+									width="'100%'"	 
+									class="chosen-select form-control"
+									data-ng-if="refTable"
+									data-placeholder="Select a homework"
+									data-ng-model="stu.referred"
+									data-ng-options="a as (a.Name) for a in stu.teacher.assignments track by a.Id">
+								<option value=''></option>
+
+							</select>
 
                         </td>
 						<td data-ng-if='showChecks'> <input type='checkbox' data-ng-model='stu.selected'></td>
@@ -154,15 +188,15 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="7">
+                        <td colspan="9">
                             <ul class="pagination pull-right"></ul>
                         </td>
                     </tr>
                 </tfoot>
             </table>
-            
 
-            
+
+
             <div class="col-md-12 text-center">
                 <button style="width:25%" type="button" data-ng-click='submitReferedStudents()' class="btn btn-info btn-lg">Submit</button>
             </div>

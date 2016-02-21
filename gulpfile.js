@@ -1,5 +1,6 @@
 var elixir = require('laravel-elixir');
-
+var gulp = require('gulp');
+//elixir.config.sourcemaps = false;
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -11,23 +12,56 @@ var elixir = require('laravel-elixir');
  |
  */
 
-elixir(function(mix) {
-    mix.sass('app.scss');
-	mix.scripts([
-		'controllers/admin1/',
-		'controllers/admin2/routingadmin2.js',
-		'controllers/admin2/oRoomActivityLogAdminCtrl.js',
-		'controllers/admin2/oRoomActivityLogCtrl.js' 
-/* 		'../../../public/js/controllers/admin1/routing.js',
-		'../../../public/js/controllers/admin1/DashboardCtrl.js',
-		'../../../public/js/controllers/admin1/ReferralCtrl.js',
-		'../../../public/js/controllers/admin1/ManageAECCtrl.js',
-		'../../../public/js/controllers/admin1/ManageAECAbsenceCtrl.js', 
-		'../../../public/js/controllers/admin1/StudentDataCtrl.js',
-		'../../../public/js/controllers/admin1/ProfileCtrl.js',
-		'../../../public/js/controllers/admin1/NavigationCtrl.js', */
-		], 'public/js/admin1Main.js');
-	mix.scripts([
-		'controllers/admin2/'
-		],'public/js/admin2Main.js');
+elixir(function (mix) {
+	mix.sass('app.scss');
+	mix
+		.scripts([
+			'controllers/admin1/',
+			'controllers/admin2/',
+			'controllers/admin3/',
+			'controllers/live',
+			'controllers/student/',
+			'controllers/supportstaff/',
+			'controllers/teacher/',
+			'controllers/attendanceRosters/',
+			'controllers/reports',
+			'controllers/iss',
+			'controllers/dataStaff',
+			'controllers/sysadmin',
+			'controllers/reteach',
+			'controllers/aspcoordinator',
+			'controllers/manageAEC',
+			'controllers/manageORM',
+			'controllers/commons'
+
+		], 'public/js/admin1Main.js')
+
+		.scripts([
+			'../../../public/js/app.js',
+			'../../../public/js/argusdirectives.js',
+			'../../../public/js/argusservices.js'
+		], 'public/js/argusCore.min.js')
+		
+//		.scripts([
+//			'../../../public/js/directives.js'
+//		], 'public/js/angular-inspinia-directives.min.js')
+//	
+//		   
+//		.scripts(['../../../public/js/inspinia.js'], 'public/js/inspinia.min.js')
+		;
+
+
+
+
+//	mix.scripts([
+//		'controllers/admin2/'
+//		],'public/js/admin2Main.js');
+//	mix.scripts([
+//		'controllers/admin3/'
+//		],'public/js/admin3Main.js');
 });
+
+gulp.task('mincore', function (mix) {
+	mix.scripts('../../../public/js/app.js', 'public/js/app.min.js');
+
+}); 

@@ -11,7 +11,7 @@
                         <h2 class="font-bold no-margins">
                             {{student.user.FirstName + " " + student.user.LastName}}
                         </h2>
-                        <small>class of 2015</small>
+                        <small>class of {{graduationYear}}</small>
                     </div>
                     <!-- <img src="images/bran.jpeg" class="img-circle circle-border m-b-md" alt="profile"> -->
 					<i class="fa fa-user fa-5x"></i>
@@ -38,7 +38,7 @@
                                 <i class="fa fa-dashcube "></i>
                                 Class Schedule
                             </tab-heading>
-                            <table class=" table table-striped table-bordered">
+                            <table class=" table table-striped table-bordered table-responsive">
                                 <tr>
                                     <th>Period</th>
                                     <th>Class Name</th>
@@ -46,12 +46,28 @@
                                     <th>Room</th>
                                 </tr>
                                 <!-- Data -->
-                                <tr data-ng-repeat="class in schedule ">
+                                <tr data-ng-repeat="class in schedule">
                                     <!-- <td>{{class.professor_class.period.Number}}</td> -->
 									<td> {{$index + 1}} </td>
                                     <td>{{class.professor_class.classs.Name}}</td>
-                                    <td>{{class.professor_class.user.FirstName +', '+class.professor_class.user.LastName }}</td>
-                                    <td>{{class.professor_class.room.Name}}</td>
+                                    <td>{{class.professor_class.user.FirstName + ', ' + class.professor_class.user.LastName}}</td>
+                                    <td>
+										<span data-ng-hide="role === 'Lead GTM Coordinator'">
+											{{class.professor_class.room.Name}}
+										</span>
+										<span data-ng-show="role === 'Lead GTM Coordinator'">
+											<select chosen
+													width="'100%'"	 
+													class="chosen-select form-control"											
+													data-placeholder="Select Room"
+													data-ng-change="onRoomChanged(class.professor_class)"
+													data-ng-model="class.professor_class.room"
+													data-ng-options="r as ( r.Name ) for r in rooms track by r.Id">
+												<option value=''></option>
+											</select>
+										</span>
+									</td>
+
                                 </tr>
                             </table>
                         </tab>
@@ -67,13 +83,31 @@
                                     <th>mphone</th>
                                     <th>email</th>
                                 </tr>
-                                <!-- Data -->
-                                <tr data-ng-repeat="parent in parents">
-                                    <td>{{parent.fn + parent.ln}}</td>
-                                    <td>{{parent.phone}}</td>
-                                    <td>{{parent.mphone}}</td>
-                                    <td style="text-overflow:ellipsis;">{{parent.email}}</td>
-                                </tr>
+
+								<tr data-ng-hide="role === 'Lead GTM Coordinator'" data-ng-repeat="parent in parents">
+									<td>
+										{{parent.fn + parent.ln}}</td>
+									<td>{{parent.phone}}</td>
+									<td>{{parent.mphone}}
+
+									</td>
+									<td style="text-overflow:ellipsis;">{{parent.email}}</td>
+
+								</tr>
+								<tr data-ng-show="role === 'Lead GTM Coordinator'">
+									<td>
+										<input type="text" class="form-control" data-ng-model="student.GuardianName" data-ng-change="updateStudent()"/>
+									</td>
+									<td>
+										<input type="text" class="form-control"data-ng-model="student.GuardianPhone" data-ng-change="updateStudent()"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" data-ng-model="student.GuardianMPhone" data-ng-change="updateStudent()"/>
+									</td>
+									<td>
+										<input type="text" class="form-control" data-ng-model="student.GuardianEmail" data-ng-change="updateStudent()"/>
+									</td>
+								</tr>
                             </table>
                         </tab>
                         <tab>
@@ -82,30 +116,30 @@
                                 Create a Pass
                             </tab-heading>
 							<!--data-ng-disabled="active==max"-->
-                                <div>
-                                    <table class="table ">
-                                        <tr class=" no-borders">
-                                            <td style="border-top:0">
-                                                <label>Go To <input data-ng-model="location" type="text" /> </label>
-                                            </td>
-                                        </tr>
-                                        <tr >
-                                            <td style="border-top:0" class="radio" data-ng-repeat="time in whenToSend">
-                                                <label data-ng-click="onRadioSelect($index)">
-                                                    <input type="radio" name="when" />{{time}}
-                                                </label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="border-top:0">
-                                                <button class="btn btn-success" value="Create" data-ng-click="generatePass(student)">
-                                                    <i class="fa fa-print"></i>
-                                                    Create
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+							<div>
+								<table class="table ">
+									<tr class=" no-borders">
+										<td style="border-top:0">
+											<label>Go To <input data-ng-model="location" type="text" /> </label>
+										</td>
+									</tr>
+									<tr >
+										<td style="border-top:0" class="radio" data-ng-repeat="time in whenToSend">
+											<label data-ng-click="onRadioSelect($index)">
+												<input type="radio" name="when" />{{time}}
+											</label>
+										</td>
+									</tr>
+									<tr>
+										<td style="border-top:0">
+											<button class="btn btn-success" value="Create" data-ng-click="generatePass(student)">
+												<i class="fa fa-print"></i>
+												Create
+											</button>
+										</td>
+									</tr>
+								</table>
+							</div>
                         </tab>
                     </tabset>
                 </div>
@@ -130,7 +164,7 @@
                         <div class="form-group text-center" id="data_1">
                             <label class="font-noraml">Select a date</label>
                             <div class="input-group date col-md-6 col-sm-12" style="margin:0 auto">
-                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM dd yyyy">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
@@ -144,14 +178,14 @@
                                 <label data-ng-repeat="act in getActivities()" 
 									   class="btn btn-default ng-pristine ng-untouched ng-valid" 
 									   ng-model="filter[act]" btn-checkbox="">
-											{{act}}
-<!--										<i data-ng-show="filter[act]"class="badge">
-											{{activities.length}}
-										</i>-->
+									{{act}}
+									<!--										<i data-ng-show="filter[act]"class="badge">
+																				{{activities.length}}
+																			</i>-->
 								</label>
-                                
+
                             </div>
-                            
+
                         </form>
                     </div>
                 </div>
@@ -161,30 +195,34 @@
                         <tr>
                             <th> Date </th>
                             <th>Activity </th>
-                            <th> Status</th>
+                            <!--<th> Status</th>-->
                         </tr>
                     </thead>
                 </table>
+				
                 <div style="height: 300px;overflow-y: auto;">
                     <table class="table table-striped table-bordered" id="dateSpecificActivity" data-ng-hide="showDetail">
                         <tbody>
-                            <tr data-ng-repeat="activity in filtered=(activities | filter:filterByCategory)" data-ng-click="toggleShowDetail($index)">
+                            <tr data-ng-repeat="activity in filtered = (activities | filter:filterByCategory)" data-ng-click="toggleShowDetail($index)">
                                 <td>{{activity.ActionDate.split(' ')[0]}}</td>
-                                <td>{{activity.activity}}</td>
-                                <td>
+                                <td>{{activity.activity.Name}}</td>
+<!--                                <td>
                                     <label class="btn btn-primary  ng-valid" ng-model="activity.parentNotified" btn-checkbox=""> <i class="fa fa-home"></i></label>
                                     <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.studentNotified" btn-checkbox=""><i class="fa fa-user"></i></label>
                                     <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.finished" btn-checkbox=""><i class="fa fa-check"></i></label>
-                            
-                                </td>
+
+                                </td>-->
                             </tr>
                         </tbody>
                     </table>
                     <div id="activityContainer" data-ng-show="showDetail" data-ng-click="toggleShowDetail()">
-                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html' ">
+                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html'">
                         </span>
                     </div>
                 </div>
+				<div class="text-center">
+					<button class="btn btn-primary" data-ng-click="downloadActivity()" > Download Activity </button>
+				</div>
             </div>
         </div>
 
@@ -211,7 +249,7 @@
 
                     <table class="table table-striped table-bordered" id="comments " data-ng-hide="showComment">
                         <tbody>
-                            <tr ng-repeat="com in  filtered=(activities | filter:filterByCategory)" data-ng-click="toggleShowComment($index)"
+                            <tr ng-repeat="com in  filtered = (activities| filter:filterByCategory)" data-ng-click="toggleShowComment($index)"
                                 class="warning"
                                 close="closeAlert($index)">
                                 <td> {{com.ActionDate.split(' ')[0]}} </td>
@@ -222,25 +260,25 @@
                     </table>
 
                     <div id="commentContainer" data-ng-show="showComment" data-ng-click="toggleShowComment()">
-                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html' ">
+                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html'">
                         </span>
                     </div>
                 </div>
-                    <div class="form-group">
+				<div class="form-group">
 
-                        <div class="row">
-                            <form class="col-sm-8">
-                                <textarea style="float:left;" id="addComment" type="text"
-                                          placeholder="Student"
-                                          class="form-control auto-resize"
-                                          data-ng-model="comment"
-                                          data-ng-keyup="search()"></textarea>
-                            </form>
-                            <button class='btn profilebtn col-sm-4 btn-lg' data-ng-click="addComment()">Add</button>
-                        </div>
-                        
+					<div class="row">
+						<form class="col-sm-8">
+							<textarea style="float:left;" id="addComment" type="text"
+									  placeholder="Student"
+									  class="form-control auto-resize"
+									  data-ng-model="comment"
+									  data-ng-keyup="search()"></textarea>
+						</form>
+						<button class='btn profilebtn col-sm-4 btn-lg' data-ng-click="addComment()">Add</button>
+					</div>
 
-                    </div>
+
+				</div>
             </div>
         </div>
 
@@ -254,12 +292,12 @@
         background-color: rgb(253,215,92);
     }
 
-        .profilebtn:active {
-            background-color: rgb(255, 120, 87);
-        }
+	.profilebtn:active {
+		background-color: rgb(255, 120, 87);
+	}
 
-        .profilebtn:hover {
-            background-color: rgb(16,160,72);
-        }
+	.profilebtn:hover {
+		background-color: rgb(16,160,72);
+	}
 
 </style>

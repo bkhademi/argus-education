@@ -1,12 +1,31 @@
-<div class="row border-bottom">
+<div class="row border-bottom" data-ng-controller="TopNavCtrl as topnav">
     <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
         <div class="navbar-header">
-            <span minimaliza-sidebar></span>
-<!--            <form role="search" class="navbar-form-custom" method="post" action="">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+            <span data-minimaliza-sidebar></span>
+
+            <form role="search" class="navbar-form-custom" style="width:500px">
+
+
+                <div class="form-group-lg" style="margin-top: 13px;">
+					
+					<select chosen
+							class=" chosen-select form-control"
+							allow-single-deselect="true"
+							data-placeholder="Select or enter a student"
+							data-ng-model="topnav.student"
+							data-ng-change="topnav.selectedStudent($item, $model, $label)"
+							data-ng-options="s as 
+							(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+							for s in topnav.schoolStudents  track by s.Id"
+							>
+						<option value=''></option>
+					</select>
+
                 </div>
-            </form>-->
+            </form>
+			<div style="float:left; margin-top: 13px; margin-left: 8px" data-ng-show="currentUser.role === 'Lead GTM Coordinator'">
+				<button class="btn btn-primary" data-ng-click="topnav.openCreateNewStudent()"> Create New Student</button>
+			</div>
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
@@ -14,6 +33,6 @@
                     <i class="fa fa-sign-out"></i> Log out
                 </a>
             </li>
-        </ul>
+        </ul> 
     </nav>
 </div>

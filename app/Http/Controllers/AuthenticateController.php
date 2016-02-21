@@ -60,7 +60,12 @@ class AuthenticateController extends Controller
 
         // the token is valid and we have found uservia the sub claim
         $roleId =  Userroles::where('userId', $user->id)->first()->RoleId;
-        $user->role = roles::where('Id', $roleId)->first()->Name;
+		$role = Roles::where('Id', $roleId)->first();
+		$school = \App\Schools::find($user->SchoolId);
+        $user->role = $role->Name;
+		$user->route = $role->Route;
+		$user->schoolId = $school->Id;
+		$user->logo = $school->ImageReference;
         return response()->json(compact('user'));
     }
 

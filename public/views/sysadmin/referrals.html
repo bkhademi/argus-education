@@ -1,0 +1,290 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-4">
+					<select chosen 
+							class=" chosen-select form-control"
+							allow-single-deselect="true"
+							data-ng-if='schools'
+							data-placeholder="Select or enter school"
+							data-ng-change="getSchoolStudents(selected.school)"
+							data-ng-model="selected.school"
+							data-ng-options="s as 
+							(s.Name )
+							for s in schools track by s.Id "
+							>
+						<option value=''></option>
+					</select>
+				</div>
+				<div class="col-sm-4">
+					<select chosen 
+							class=" chosen-select form-control"
+							allow-single-deselect="true"
+							data-ng-if='students'
+							data-placeholder="Select or enter student"
+							data-ng-change="getAll(selected.student)"
+							data-ng-model="selected.student"
+							data-ng-options="s as 
+							(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+							for s in students track by s.Id "
+							>
+						<option value=''></option>
+					</select>
+				</div>
+				<div class="col-sm-offset-2 col-sm-2">
+					<button class="btn btn-primary fa fa-plus pull-right">Create New</button> 
+				</div>
+				<!--				<div class="col-sm-2">
+				
+								</div>-->
+			</div>
+			<div >
+				StudentID : {{selected.student.StudentId}}
+			</div>
+			<div>
+				userId : {{selected.student.Id}}
+			</div>
+		
+			<div class="row">
+
+				<div class="col-sm-12">
+					<div >
+						<h2 class="pull-left">Student Referrals</h2>
+						<button class=" btn btn-primary pull-right" data-ng-click="getReferrals()"><i class="fa fa-refresh"></i>Refresh<i class="badge badge-black">{{referrals.length}}</i></button>
+						<!--<button class=" btn btn-primary pull-right" data-ng-click="deleteAll()"><i class="fa fa-refresh"></i>DeleteAll</button>-->
+					</div>
+					<table class="table table-bordered table-responsive">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>User</th>
+								<!--<th>Student</th>-->
+								<th>Teacher</th>
+								<th>Assignment</th>
+								<th>Ref. Type</th>
+								<th>Act. Type</th>
+								<th>Ref. Status</th>
+
+								<th>Time</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="item in referrals track by $index"
+								data-ng-mouseover="item.mouseover = true" 
+								data-ng-mouseleave="item.mouseover = false"
+								>
+								<td>
+									<div class="input-group date " style='width:180px' >
+										<input type="datetime" class="form-control" 
+											   ng-model="item.Date" 
+											   date-change="referralUpdate"
+											   data-ng-change="referralUpdate(item)"
+											   name="date" view="date" min-view="date" 
+											   auto-close="true" format="MMM DD YYYY">
+										<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									</div>
+
+								</td>
+								<td>{{item.user.LastName}}</td>
+								<!--								<td>{item.}}</td>-->
+								<td>{{item.teacher.LastName}}</td>
+								<td>{{item.assignment.Name}}</td>
+								<td>
+									<select chosen 
+											class=" chosen-select form-control col-sm-3"
+											width="100%" 
+											allow-single-deselect="true"
+											data-ng-if='referraltypes'
+											data-ng-change="referralUpdate(item)"
+											data-placeholder="Select or enter ref. Type"
+											data-ng-model="item.referral_type"
+											data-ng-options="s as 
+											(s.Name )
+											for s in referraltypes track by s.Id "
+											>
+										<option value=''></option>
+									</select>
+								</td>
+								<td>
+									<select chosen 
+											class=" chosen-select form-control"
+											width="100%" 
+											allow-single-deselect="true"
+											data-ng-if='activities'
+											data-placeholder="Select or enter activity Type"
+											data-ng-change="referralUpdate(item)"
+											data-ng-model="item.activity"
+											data-ng-options="s as 
+											(s.Name )
+											for s in activities track by s.Id "
+											>
+										<option value=''></option>
+									</select>
+								</td>
+								<td>
+									<input type="number" min="0" class="form-control" 
+										   data-ng-model="item.RefferalStatus"
+										   data-ng-change="referralUpdate(item)"
+										   />
+
+								</td>
+
+								<td>{{item.Time}}</td>
+								<td style="vertical-align: middle; padding:0; position: fixed; right:22px;" data-ng-show="item.mouseover" >
+									<i class="btn btn-primary fa fa-times delete-btn" data-ng-click='onDeleteReferral($index, true, true)'
+									   ></i>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div>
+						<h2 class="pull-left">Student Actions</h2>
+						<button class=" btn btn-primary pull-right" data-ng-click="getActions()"><i class="fa fa-refresh"></i>Refresh<i class="badge badge-black">{{actions.length}}</i></button>
+						<!--<button class=" btn btn-primary pull-right" data-ng-click="deleteAllActions()"><i class="fa fa-refresh"></i>DeleteAll</button>-->
+					</div>
+					<table class="table table-bordered table-responsive">
+						<thead>
+							<tr>
+								<th>Date</th>
+								<th>Action By</th>
+								<th>Action Type</th>
+								<th>Absence Status</th>
+								<th>Comment</th>
+								<th>Completed</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="item in actions track by $index"
+								data-ng-mouseover="item.mouseover2 = true" 
+								data-ng-mouseleave="item.mouseover2 = false"
+								>
+								<td>
+									<div class="input-group date " style='width:180px' >
+										<input type="datetime" class="form-control" 
+											   ng-model="item.ActionDate" 
+											   date-change="referralUpdate"
+											   data-ng-change="actionUpdate(item)"
+											   name="date" view="date" min-view="date" 
+											   auto-close="true" format="MMM DD YYYY">
+										<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									</div>
+								</td>
+								<td>
+									{{item.user.FirstName + ', ' + item.user.LastName}}
+								</td>
+								<td> 
+									<select chosen 
+											class=" chosen-select form-control"
+											width="100%" 
+											allow-single-deselect="true"
+											data-ng-if='activities'
+											data-placeholder="Select or enter activity Type"
+											data-ng-change="actionUpdate(item)"
+											data-ng-model="item.activity"
+											data-ng-options="s as 
+											(s.Name )
+											for s in activities track by s.Id "
+											>
+										<option value=''></option>
+									</select>
+								</td>
+								<td>
+									<input type="number" data-ng-model="item.AbsenceStatus" data-ng-change="actionUpdate(item)" >
+								</td>
+								<td> 
+									<textarea data-auto-grow data-ng-model="item.Comment" data-ng-change="actionUpdate(item)"></textarea>
+								</td>
+								<td>
+									<input type="number" data-ng-model="item.Completed" data-ng-change="actionUpdate(item)" />
+								</td>
+								<td style="vertical-align: middle; padding:0; position: fixed; right:22px;" data-ng-show="item.mouseover2" >
+									<i class="btn btn-primary fa fa-times delete-btn" data-ng-click='onDeleteAction($index, true, true)'
+									   ></i>
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="row" data-ng-if="selected.student">
+				<div class="col-sm-12">
+					<div>
+						<h2 class="pull-left">Student Counters</h2>
+						<button class=" btn btn-primary pull-right" data-ng-click="getCounters()"><i class="fa fa-refresh"></i>Refresh</button>
+						<!--<button class=" btn btn-primary pull-right" data-ng-click="deleteAllActions()"><i class="fa fa-refresh"></i>DeleteAll</button>-->
+					</div>
+					<table class="table table-bordered table-responsive">
+						<thead>
+							<tr>
+								<th>ORM Days</th>
+								<th>ORM Refs</th>
+								<th>LD Days</th>
+								<th>LD Refs</th>
+								<th>ISS Days</th>
+								<th>ISS Refs</th>
+								<th>OSS PMP</th>
+								<th>Debt</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr >
+								<td>
+									<input type="number" data-ng-model="counters.ORoomsToBeServed" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.ORMReferrals" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.LunchDetentionsToBeServed" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.LDReferrals" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.ISSDays" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.ISSReferrals" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.OSSPMP" data-ng-change="counterUpdate(item)" >
+								</td>
+								<td>
+									<input type="number" data-ng-model="counters.debt" data-ng-change="counterUpdate(item)" >
+								</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+
+	#refTable1 tr td{
+		vertical-align: middle;
+	}
+	h1 {
+		font-size: 20pt;
+	}
+	.delete-btn{
+		opacity: 0.4 
+	}
+
+	.delete-btn:hover{
+		opacity: 1.0;
+	}
+
+
+</style>

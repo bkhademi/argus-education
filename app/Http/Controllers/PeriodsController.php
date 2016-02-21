@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 
 use App\Periods;
 
+
 class PeriodsController extends Controller
 {
     /**
@@ -17,7 +18,12 @@ class PeriodsController extends Controller
      */
     public function index()
     {
-        $periods = Periods::all();
+		$userSchoolId = $this->user->SchoolId;
+		
+		
+		$periods = Periods::with('school')->whereHas('school', function($q)use($userSchoolId){
+			$q->whereId($userSchoolId);
+		})->get();
 		
 		return $periods;
     }

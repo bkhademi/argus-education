@@ -111,6 +111,10 @@ class UserActionsController extends Controller
      */
     public function show(Request $request, $id)
     {
+		return Useractions::with('activity','user','student')
+			->where('ActionToUserId',$id)
+			->orderBy('ActionDate','DESC')
+			->get();
         return Useractions::findOrFail($id);
     }
 
@@ -145,6 +149,6 @@ class UserActionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Useractions::destroy($id);
     }
 }

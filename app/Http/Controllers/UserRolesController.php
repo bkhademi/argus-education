@@ -41,7 +41,7 @@ class UserRolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**

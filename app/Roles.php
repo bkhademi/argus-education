@@ -11,7 +11,7 @@ class Roles extends Model
 	
 	protected $guarded = [];
 	
-	public $primaryKey = 'Id';
+	//public $primaryKey = 'Id';
 	
 	public $timestamps = false;
 }

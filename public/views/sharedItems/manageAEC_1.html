@@ -1,0 +1,168 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName +' ' + currentUser.LastName}}</span>, let's manage AEC! </h2>
+
+
+        <div class="panel-body">
+            <div class="table-filters">
+                <div class="text-center">
+
+                    <form role="form" name="form">
+                        <div class="form-group">
+                            <label class="font-noraml">Select AEC List Date</label>
+                            <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" 
+									   view="date" min-view="date" auto-close="true" format="MMM DD YYYY"> 
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Buttons and Inputs  -->
+                    <ul class="list-group list-inline">
+                        <!-- AutoComplete Input Field -->
+                        <li style="width:35%">
+                            <form>
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="refTable.$resolved"
+                                        data-placeholder="Select or enter a student"
+                                        data-ng-model="selected.student"
+										data-ng-change="onSelect(selected.student)"
+                                        data-ng-options="s as 
+										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+										for s in refTable  track by s.Id"
+										>
+									<option value=''></option>
+								</select>
+								<select chosen 
+                                        class=" chosen-select form-control"
+										allow-single-deselect="true"
+										data-ng-if="!refTable.$resolved"
+                                        data-placeholder="No Students For Current Date"
+										no-results-text="'No Students For Current Date'"
+                                        
+										>
+									<option value=''></option>
+								</select>
+                            </form>
+                        </li>
+                        <!-- Present Button -->
+						 <li>
+                            <button type="button" class="btn  btn-primary " data-ng-click="AECAttendance(selected.student)" data-ng-disabled="!selected.student">Attendance</button>
+                        </li>
+
+                        <li>
+                            <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected.student)" data-ng-disabled="!selected.student">Re-Schedule</button>
+                        </li>
+                        <!-- Clear Button -->
+                        <li>
+                            <button type="button" class="btn btn-primary" data-ng-click="openClear(selected.student)" data-ng-disabled="!selected.student">Clear</button>
+                        </li>
+                    </ul>
+
+
+
+                </div>
+            </div>
+
+            <br />
+            <!--  Table Start -->
+			<div id="printSection">
+				<div data-barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
+			</div>
+			<div style="float:none; margin:0 auto;" class="col-sm-12">
+				<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
+									<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
+										<i class="fa fa-print"></i>Print Assignments
+									</button>
+								</div>
+								<div class="form-group">
+									<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
+										<i class="fa fa-barcode"></i> Print Barcodes
+									</button>
+								</div>-->
+				<!--data-ng-controller="MultiplePassesController"--> 
+				<div class="form-group">
+					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="!refTable.length">
+						<i class="fa fa-ticket"></i> Print Passes
+					</button>
+				</div>
+				<div  class="form-group">
+                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListCSV()">
+                        <i class="fa fa-list"></i> AEC List <i class="badge badge-info">{{refTable.length}}</i>
+                    </button>
+                </div>
+				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+					<thead>
+						<tr>
+							<th data-toggle="true">First Name</th>
+							<th>Last Name</th>
+							<th>ID</th>
+							<th>Grade</th>
+							<th data-ng-show='{{currentUser.SchoolId === 2}}' >9th Per.</th>
+							<th class="col-sm-6">Assignment</th>
+							<th>Overlap</th>
+							<th>Attendance</th> 
+							
+							<!--<th class="col-sm-2">Notified </th>-->
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="stu in refTable track  by stu.Id" 
+							data-ng-show="stu.referred.length"
+							data-ng-click="onSelect($index)"
+							data-ng-dblclick="AECAttendance(stu,$index)"
+							class="{{stu.overlap.class}} {{stu.status.class}}"
+							>
+							<td>{{stu.user.FirstName}}</td>
+							<td>{{stu.user.LastName}}</td>
+							<td>{{stu.StudentId}}</td>
+							<td>{{stu.Grade}}</td>
+							<td data-ng-show='{{currentUser.SchoolId === 2}}' >
+								{{stu.classes[8].professor_class.room.Name}}
+							</td>
+							<td>
+								{{stu.referred[0].assignment.Name}}
+								,{{stu.referred[1].assignment.Name}}
+								, {{stu.referred[2].assignment.Name}}
+								<span data-ng-show="stu.referred.length > 3" style="font-weight:700">...</span>
+
+								<!--								<select multiple chosen
+																		class="chosen-select form-control"
+																		data-ng-disabled
+																		data-placeholder="Select a homework"
+																		data-ng-model="stu.referred"
+																		data-ng-options="a as (a.Name) for a in assignments track by a.Name">
+																	<option value=''></option>
+								
+																</select>-->
+
+							</td>
+							<td>{{stu.overlap.place}}</td>
+							<td>{{stu.status.action}}</td>
+<!--							<td>
+								<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.ParentNotified" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+								<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.Notified" btn-checkbox="" data-ng-click="submitStudentNotified(stu,$index)"><i class="fa fa-user"></i></label>
+							</td>-->
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="7">
+								<ul class="pagination pull-right"></ul>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+
+				<div class="col-md-12 text-center">
+					<button style="width:25%" type="button" data-ng-click="finishManageAEC()" class="btn btn-info btn-lg">Finish</button>
+				</div>
+			</div>
+		</div>
+
+    </div>
+
+</section>
+

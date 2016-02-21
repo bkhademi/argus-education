@@ -1,0 +1,56 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, This is all the program activity</h2>
+
+        <div class="panel-body">
+			<div class="row">
+
+				<div class="col-lg-6">
+					<div class="btn btn-primary block widget " data-ui-sref-active='active' data-ui-sref="admin3.oroomActivitiLog.oroom">
+
+						<div class="row">
+							<div class="col-xs-4">
+								<i class="fa fa-group fa-5x"></i>
+							</div>
+							<div class="col-xs-8 text-right">
+								<span> O-Room </span>
+
+								<h2 class="font-bold">{{studentsToday}}</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="btn btn-info block widget" data-ui-sref-active='active' data-ui-sref="admin3.oroomActivitiLog.lunchDetention">
+
+						<div class="row">
+							<div class="col-xs-4">
+								<i class="fa fa-cutlery fa-5x"></i>
+							</div>
+							<div class="col-xs-8 text-right">
+								<span> Lunch Detention </span>
+
+								<h2 class="font-bold">{{followUp}}</h2>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+
+			</div>
+
+			<div data-ui-view></div>
+        </div>
+
+
+    </div>
+
+
+</section>
+
+<style>
+
+	#refTable1 tr td{
+		vertical-align: middle;
+	}
+</style>

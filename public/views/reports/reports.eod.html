@@ -1,0 +1,158 @@
+<div class="">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">	
+				<div class="col-sm-6 text-center">
+					<label > Please Select An EOD Report Type</label>
+
+					<div class="text-center">
+						<select 
+							id='selectReport'
+							data-chosen
+							class="chosen-select form-control col-sm-6 "
+							data-placeholder="EOD Report Types"
+							no-results-text="'notFound'"
+							data-ng-model="eod.selected"
+							data-ng-change="reportChanged(eod.type)"
+							allow-single-deselect="true"
+							data-ng-options="r as (r.name) for r in eodReports track by r.value  "
+							>
+							<option value=''></option>
+						</select>
+					</div>
+				</div>
+				<div class="col-sm-6 text-center">
+					<form role="form" name="date">
+                        <div class="form-group">
+                            <label > Please Select A  Date</label>
+                            <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </form>
+				</div>
+			</div>
+			<br />
+			<div class='row'>
+				<div  class="col-sm-12">
+					<table class='table table-bordered table-responsive table-selected'>
+						<thead>
+							<tr class='text-center'>
+								<td colspan="8">
+									Totals
+								</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Expected</td>
+								<td>Present</td>
+								<td>No Show's</td>
+								<td>Sent Out's</td>
+								<td>Walked Out's</td>
+								<td>School Absent</td>
+								<td>Left School</td>
+								<td>Other</td>
+							</tr>
+							<tr>
+								<td>{{eodCounters.expected}}</td>
+								<td>{{eodCounters.present}}</td>
+								<td>{{eodCounters.noShows}}</td>
+								<td>{{eodCounters.sentOuts}}</td>
+								<td>{{eodCounters.walkedOuts}}</td>
+								<td>{{eodCounters.schoolAbsent}}</td>
+								<td>{{eodCounters.leftSchool}}</td>
+								<td>{{eodCounters.other}}</td>
+							</tr>
+							<tr>
+								<td colspan="3"> Today's Attendance %</td>
+								<td colspan="3"> Average Attendance Thus Far</td>
+								<td colspan="2"> Above/Below</td>
+							</tr>
+							<tr>
+								<td colspan="3">{{(eodCounters.present / eodCounters.expected) * 100 | number : 2}}%</td>
+								<td colspan="3">{{percentages.averageThusFar | number : 2}}</td>
+								<td colspan="3">{{percentages.difference | number : 2}}</td>
+							</tr>
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class='row'>
+				<div  class="col-sm-12">
+					<h2> Break Down</h2>
+					<div class='col-sm-6 col-sm-offset-3'>
+						<div class="flot-chart">
+							<div data-flot class="flot-chart-content" data-dataset="flotPieData" data-options="flotPieOptions"></div>
+						</div>	
+					</div>
+				</div>
+			</div>
+			<div class='row'>
+				<div  class="col-sm-12">
+					<h2> {{ }}List </h2>
+				</div>
+				<div class='col-sm-12'>
+					<table class='table footable table-responsive table-bordered' data-page-size="1000">
+						<thead>
+							<tr>
+								<th>Student Name</th>
+								<th>Student ID</th>
+								<th> Attendance</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat='item in orooms track by $index'>
+								<td>{{item.student.FirstName + ', ' + item.student.LastName}}</td>
+								<td>{{item.student.UserName}}</td>
+								<td>{{item.activity.Name}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class='row' data-ng-show='eod.selected.value === 4'>
+				<div class='col-sm-12'>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Attendance</th>
+								<th>Progression</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents" class='{{stu.class}}' >
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Attendance}}</td>
+								<td>{{stu.Progression}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+</div>
+
+<style>
+	.bg-green{
+		background-color: #C3ECC8;
+	}
+	.bg-gray{
+		background-color: #DCDCDC;
+	}
+</style>
+

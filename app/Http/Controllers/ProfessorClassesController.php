@@ -18,7 +18,13 @@ class ProfessorClassesController extends Controller
     public function index()
     {
         //
-		$professorClasses = Professorclasses::with('classStudents')->get();
+		$schoolId = $this->user->SchoolId;
+		$professorClasses = Professorclasses
+			::with('room', 'user','classs', 'period' )
+			->whereHas('user', function($q)use($schoolId){
+				$q->where('SchoolId', $schoolId);
+			})
+			->get();
 		
 		return $professorClasses;
     }
@@ -76,6 +82,10 @@ class ProfessorClassesController extends Controller
     public function update(Request $request, $id)
     {
         //
+		$class = Professorclasses::find($id)->update(['RoomId'=>$request->RoomId]);
+		
+		return $this->updated();
+		
     }
 
     /**

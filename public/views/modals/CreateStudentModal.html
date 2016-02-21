@@ -1,0 +1,79 @@
+<div class="modal-header text-center">
+	<button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+	<h4 class="modal-title">Create student</h4>
+</div>
+<div class="modal-body ">
+	<div class="row ">
+		<div class="col-sm-6 form-group">
+			<label> First Name </label> 
+			<input type="text" class="form-control"  data-ng-model="student.UserInfo.FirstName" > 			
+		</div>
+		<div class="col-sm-6 form-group">
+			<label> Last Name </label> 
+			<input type="text" class="form-control" data-ng-model="student.UserInfo.LastName" > 
+		</div>
+		<div class="col-sm-4 form-group">
+			<label> Student Id </label> 
+			<input type="text" class="form-control" data-ng-model="student.UserInfo.UserName" > 
+		</div>
+		<div class="col-sm-4 form-group">
+			<label> Lunch Type </label> 
+			<input type="text" class="form-control" data-ng-model="student.StuInfo.LunchType" > 
+		</div>
+		<div class="col-sm-4 form-group">
+			<label> Grade </label> 
+			<input type="text" class="form-control" data-ng-model="student.StuInfo.Grade" > 
+		</div>
+		<div class="col-sm-offset-3 col-sm-6 form-group text-center">
+			<label> School </label> 
+			<span> 
+				<select chosen
+						width="'90%'"	 
+						class="chosen-select form-control"
+						data-placeholder="Select School"
+						data-ng-model="student.UserInfo.SchoolId"
+						allow-single-deselect="true"
+						data-ng-options="a as (a.Name ) for a in schools track by a.Id">
+					<option value=''></option>
+
+				</select>
+			</span>
+		</div>
+	</div>
+	<div class="row ">
+		<h2> Classes <button class="btn btn-primary"  data-ng-click="student.ProfessorClasses.push({})">Add Class</button> </h2>
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>
+						Period : Class Name - Teacher  - Room 
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in student.ProfessorClasses">
+					<td>
+						<span> 
+							<select chosen
+									class="chosen-select form-control"
+									data-placeholder="Select School"
+									split_word_search='true'
+									data-ng-classes="classes"
+									data-ng-model="item.ProfessorClass"
+									allow-single-deselect="true"
+									enable_split_word_search='true'
+									data-ng-options="a as (a.period.Number+': '+a.classs.Name+' - '+a.user.FirstName+', '+a.user.LastName+' - '+a.room.Name ) for a in classes track by a.Id">
+								<option value=''></option>
+
+							</select>
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="modal-footer"> 
+	<button class="btn  btn-info"data-ng-click="$close()">Submit</button>
+	<button class="btn " data-ng-click="$dismiss()">Dismiss</button>
+</div>

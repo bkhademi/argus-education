@@ -1,0 +1,24 @@
+﻿<!-- 
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+
+    -->
+<div class="modal-header text-center">
+    <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">{{student.user.FirstName  + ", " + student.user.LastName}}</h4>
+</div>
+<div class="modal-body text-center">
+    <div class="text-center">
+        <div>
+            <form>
+				<p> Attendance unavailable </p>
+				<p> Student Has : {{activity}}</p>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-info " data-ng-click="$dismiss()">Dismiss</button>
+</div>
+                   

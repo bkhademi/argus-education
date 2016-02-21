@@ -1,0 +1,51 @@
+﻿<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+-->
+
+<div class="modal-header text-center">
+    <button class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">O-Room Referral - Name: {{student.user.FirstName + " " + student.user.LastName}} - ID:{{student.StudentId}}</h4>
+</div>
+<div class="modal-body ">
+
+
+	<div class="row">
+		<div class="col-sm-4 col-lg-offset-2">
+			<label class=" form-inline"> Period:
+				<select chosen
+						width="'70%'"	 
+						class="chosen-select form-control"
+						data-placeholder="Select Period"
+						data-ng-if="periods"
+						data-ng-model="student.period"
+						data-ng-change="changePeriodTables(currentPeriod)"
+						allow-single-deselect="true"
+						data-ng-options="p as (p.Number + ' ' + p.PeriodType) for p in periods track by p.Id">
+					<option value=''></option>
+
+				</select>
+			</label>
+		</div>
+		<div class="col-sm-4">
+			<label class='form-inline'> Tardy Time : 
+				<span class="input-group col-sm-5" clock-picker data-autoclose="true">
+					<input type="text" class="form-control" data-ng-model="student.tardyTime"  value="09:30">
+					<span class="input-group-addon">
+						<span class="fa fa-clock-o"></span>
+					</span>
+				</span>
+			</label> 				
+		</div>
+
+	</div>
+
+
+</div>
+<div class="modal-footer">
+    <button class="btn  btn-info" 
+			data-ng-click="$close()">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>
+

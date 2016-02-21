@@ -1,0 +1,131 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">	
+				<div class="col-sm-12 text-center">
+					<label > Choose Starting Point</label>
+				</div>
+				<div class="col-sm-12 text-center">
+					<select 
+						id='selectReport'
+						data-chosen
+						class="chosen-select form-control col-sm-6 "
+						data-placeholder="EOD Report Types"
+						no-results-text="'notFound'"
+						data-ng-model="starting"
+						data-ng-change="reportChanged(eod.type)"
+						allow-single-deselect="true"
+						data-ng-options="r as (r.name) for r in startingPoints track by r.value  "
+						>
+						<option value=''></option>
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-12 text-center">
+				<label> Select a student </label>
+					<select 
+						id='selectReport'
+						data-chosen
+						class="chosen-select form-control col-sm-6 "
+						data-placeholder="Student To Track"
+						no-results-text="'notFound'"
+						data-ng-model="selected"
+						data-ng-change="reportChanged(eod.type)"
+						allow-single-deselect="true"
+						data-ng-options="s as (s.StudentId + ' ' + s.FirstName + ',  ' + s.LastName  ) 
+						for s in eod.issStudents1   "
+						>
+						<option value=''></option>
+					</select>
+				</div>
+			<br />
+			<div class='row' data-ng-show='starting  && starting.value != 0'>
+				<div class='col-sm-3' data-ng-hide='starting.value > 1'>
+					<h3 class='text-center'> AEC </h3>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents1" class="{{stu.class}}" >
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class='col-sm-3' data-ng-hide='starting.value > 2'>
+					<h3 class='text-center'> O-Room </h3>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents2" class="{{stu.class}}">
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class='col-sm-3' data-ng-hide='starting.value > 3'>
+					<h3 class='text-center'> O-Room + 1 </h3>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents3"  class="{{stu.class}}">
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class='col-sm-3' data-ng-hide='starting.value > 4'>
+					<h3 class='text-center'> ISS </h3>
+					<table class='table table-dynamic table-bordered table-responsive  table-selected'>
+						<thead>
+							<tr>
+								<th>Student ID</th>
+								<th>Student Name</th>
+								<th>Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="stu in eod.issStudents4" class="{{stu.class}}" >
+								<td >{{stu.StudentId}}</td>
+								<td >{{stu.FirstName + ', ' + stu.LastName}}</td>
+								<td >{{stu.Date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				
+				
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+</div>

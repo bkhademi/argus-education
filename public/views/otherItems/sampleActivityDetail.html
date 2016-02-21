@@ -2,19 +2,20 @@
     <table class="table table-dynamic tab">
         <tr>
             <th >Date:</th>
-            <td style="text-align:left;">   <p>{{selected.date}}</p></td> 
+            <td style="text-align:left;">   <p>{{selected.ActionDate.split(' ')[0]}}</p></td> 
 
             <th>Activity:</th>
             <td>
 
-                {{selected.activity}}
+                {{selected.activity.Name}}
 
             </td>
-            <th>staff:</th>
-        
-            <td>Mr. {{selected.Staff}}</td>
-           
         </tr>
+		<tr>
+			 <th>staff:</th>
+        
+            <td> {{selected.user.FirstName + ' ' + selected.user.LastName}}</td>
+		</tr>
         <tr >
             <th>
                 Comment:
@@ -25,14 +26,14 @@
                 </p>
             </td>
         </tr>
-        <tr>
+<!--        <tr>
             <th>Status</th>
             <td colspan="4" style="text-align:left">
                 <label class="btn btn-primary  ng-valid" ng-model="activity.parentNotified" btn-checkbox=""> <i class="fa fa-home"></i></label>
                 <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.studentNotified" btn-checkbox=""><i class="fa fa-user"></i></label>
                 <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.finished" btn-checkbox=""><i class="fa fa-check"></i></label>
             </td>
-        </tr>
+        </tr>-->
     </table>
 
 </div>

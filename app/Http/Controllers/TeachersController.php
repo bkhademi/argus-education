@@ -18,12 +18,14 @@ class TeachersController extends Controller
     public function index()
     {
         //
-		$userId = isset($this->userId)? $this->userId : '4663c614-c31d-451d-af9c-2b2c45ace8b2';
+		
 		
 		// get all the teachers of the requestor's school
-		$currentUser =  User::find($userId);
-		$teachers  = User::with('assignments')->where('SchoolId', $currentUser->SchoolId)->whereHas('roles',function($query){
-			$query->where('aspnetroles.Name', 'teacher');
+		$schoolId =  $this->user->SchoolId;
+		$teachers  = User::with('assignments', 'roles')
+			->where('SchoolId', $schoolId)
+			->whereHas('roles',function($query){
+			$query->whereIn('Name', ['Teacher','O-Room Coordinator', 'AEC Coordinator','Lead GTM Coordinator','Supporting Staff', 'ISS Coordinator' ]);
 		})->get();
 		return response($teachers);
 		

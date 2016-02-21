@@ -1,0 +1,115 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-4" style='vertical-align: bottom'>
+					<label >Select User Type</label>
+					<select chosen 
+							class=" chosen-select form-control"
+							allow-single-deselect="true"
+							data-ng-if='roles'
+							data-placeholder="Select or enter a user type"
+							data-ng-change="onRoleChanged()"
+							data-ng-model="selected.role"
+							data-ng-options="s as 
+							(s.Name )
+							for s in roles track by s.Id "
+							>
+						<option value=''></option>
+					</select>
+				</div>
+				<div class="col-sm-4">
+					<label > First Name</label>
+					<input class='form-control'  type='text' placeholder="First Name" data-ng-model='userInfo.FirstName' />
+				</div>
+				<div class="col-sm-4">
+					<label > Last Name</label>
+					<input class='form-control'  type='text' placeholder="Last Name" data-ng-model='userInfo.LastName' />
+				</div>
+
+				<div class="col-sm-offset-3 col-sm-6">
+					<label> School </label> 
+					<select chosen	 
+							class="chosen-select form-control"
+							data-placeholder="Select School"
+							data-ng-model="userInfo.SchoolId"
+							allow-single-deselect="true"
+							data-ng-options="a as (a.Name ) for a in schools track by a.Id">
+						<option value=''></option>
+
+					</select>
+				</div>
+
+			</div>
+			<div class="row" data-ng-if="showLoginFields">
+				<div class="col-sm-6" >
+					<label > E-Mail/Login</label>
+					<input class='form-control'  type='email' placeholder="Email" data-ng-model='userInfo.email' />
+				</div>
+				<div class="col-sm-6">
+					<label >Password</label>
+					<input class="form-control" type="password" placeholder="Password" data-ng-model="userInfo.Password" />
+
+				</div>
+			</div>
+
+			<div class="row" data-ng-if="showStudentFields">
+
+				<div class="col-sm-4 form-group">
+					<label> Student Id </label> 
+					<input type="text" class="form-control" data-ng-model="userInfo.UserName" > 
+				</div>
+				<div class="col-sm-4 form-group">
+					<label> Lunch Type </label> 
+					<input type="text" class="form-control" data-ng-model="stuInfo.LunchType" > 
+				</div>
+				<div class="col-sm-4 form-group">
+					<label> Grade </label> 
+					<input type="text" class="form-control" data-ng-model="stuInfo.Grade" > 
+				</div>
+
+				<div class="col-sm-12">
+					<h2> Classes <button class="btn btn-primary"  data-ng-click="stuInfo.ProfessorClasses.push({})">Add Class</button> </h2>
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th>
+									Period : Class Name - Teacher  - Room 
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="item in student.ProfessorClasses">
+								<td>
+									<span> 
+										<select chosen
+												class="chosen-select form-control"
+												data-placeholder="Select School"
+												split_word_search='true'
+												data-ng-classes="classes"
+												data-ng-model="item.ProfessorClass"
+												allow-single-deselect="true"
+												enable_split_word_search='true'
+												data-ng-options="a as 
+												(a.period.Number+': '+a.classs.Name+' - '+a.user.FirstName+', '+a.user.LastName+' - '+a.room.Name ) for a in classes track by a.Id">
+											<option value=''></option>
+
+										</select>
+									</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class="col-sm-offset-5 col-sm-2">
+					<button class="btn btn-primary fa fa-plus" data-ng-click="createUser()">Create </button> 
+				</div>
+			</div>
+
+		</div>
+	</div>
+</section>
+

@@ -1,0 +1,73 @@
+<div class="row">
+	<div class="col-sm-12"> 
+		<div class="text-center">
+			<h3> Confirm ISS</h3>
+			<button class='btn btn-primary pull-right fa fa-refresh' data-ng-click='getList()'>
+				Refresh List
+			</button>
+			<button class='btn btn-primary pull-right fa fa-file-excel-o' data-ng-click='printList()'>
+				Download List
+			</button>
+		</div>
+		<table id="ISS" class="footable table  table-bordered toggle-arrow-tiny" data-page-size="1000">
+			<thead>
+				<tr>
+					<th data-toggle="true">First Name</th>
+					<th>Last Name</th>
+					<th>ID</th>
+					<th data-ng-if='currentUser.SchoolId === 1'>1st Per.</th>
+					<th data-ng-if='currentUser.SchoolId === 1'>2nd Per.</th>
+					<th data-ng-if='currentUser.SchoolId === 2'>3st Per.</th>
+					<th data-ng-if='currentUser.SchoolId === 2'>4nd Per.</th>
+					<!--<th>Attendance</th>-->
+					<th>Referral Type</th>
+					<th>ISS Days</th>
+					<th >O-Room Days</th>
+					<th> Overlap</th>
+					<th> Attendance</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="item in iss track  by $index"
+					data-ng-dblclick="issAttendance(item, $index)"
+					class="{{item.overlap.class}}"
+					>
+					<td>{{item.user.FirstName}}</td>
+					<td>{{item.user.LastName}}</td>
+					<td>{{item.StudentId}}</td>
+					<td data-ng-if='currentUser.SchoolId === 1'>{{item.classes[0].professor_class.room.Name}}</td>
+					<td data-ng-if='currentUser.SchoolId === 1'>{{item.classes[1].professor_class.room.Name}}</td>
+					<td data-ng-if='currentUser.SchoolId === 2'>{{item.classes[2].professor_class.room.Name}}</td>
+					<td data-ng-if='currentUser.SchoolId === 2'>{{item.classes[3].professor_class.room.Name}}</td>
+					<td>{{item.referred[0].referral_type.Name}}</td>
+					<td>{{item.counters.ISSDays}}</td>
+					<td>{{item.counters.ORoomsToBeServed}}</td>
+					<td>{{item.overlap.msg}}</td>
+					<td>{{item.referred[0].activity.Name}}</td>
+					<!--					<td>
+											<div>
+												<select chosen
+														width="'100%'"	 
+														class="chosen-select form-control"
+														data-placeholder="Select Attendance"
+														data-ng-model="item.activity" 
+														allow-single-deselect="true"
+														data-ng-change="ossAttendance(item, $index)"
+														data-ng-options="a as (a.name) for a in activities track by a.Id">
+													<option value=''></option>
+					
+												</select>
+											</div>
+										</td>-->  
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="9">
+						<ul class="pagination pull-right"></ul>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+</div>

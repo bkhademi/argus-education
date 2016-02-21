@@ -10,7 +10,7 @@ class Student extends Model
 	protected $connection = 'bbyArgus';
 	public $timestamps = false;
     
-	protected $guarded = ['id'];
+	
 	
 	public function school(){
 		return $this->belongsTo('App\School', 'schools_id');
@@ -22,4 +22,5 @@ class Student extends Model
 	public function generaldb2(){
 		return $this->hasMany('App\Generaldb2', 'students_id');
 	}
+	
 }

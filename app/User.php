@@ -27,8 +27,8 @@ class User extends Model implements AuthenticatableContract,
 	 * The primary key of this model's table
 	 * @var string
 	 */
-	 public $primaryKey = 'id';
-	 
+	 protected $primaryKey = 'id';
+	 public $incrementing = false;
 	  /**
      * Indicates if the model should  be timestamped.
      *
@@ -49,7 +49,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password','EmailConfirmed','IntroStep', 'SecurityStamp','TwoFactorEnabled','PhoneNumberConfirmed', 'LockoutEndDateUtc', 'LockoutEnabled', 'AccessFailedCount', ];
+    protected $hidden = ['password','EmailConfirmed','IntroStep', 'SecurityStamp','TwoFactorEnabled','PhoneNumberConfirmed', 'LockoutEndDateUtc', 'LockoutEnabled', 'AccessFailedCount' ];
     
     // many to one
     public function school(){
@@ -75,15 +75,17 @@ class User extends Model implements AuthenticatableContract,
         return $this->belongsToMany('App\Classes', 'professorclasses', 'UserId', 'ClassId' );
     }
     
-    // get all assignments froma teacher 
+    // get all assignments from a teacher 
     public function assignments(){
         return $this->hasMany('App\Assignments', 'TeacherId');
     }
     
+	// get all referrals from a teacher  or user
     public function referrals(){
         return $this->hasMany('App\Referrals', 'UserId');
     }
     
+	// get all referrals made to a student 
 	public function referred(){
 		return $this->hasMany('App\Referrals', 'StudentId');
 	}
