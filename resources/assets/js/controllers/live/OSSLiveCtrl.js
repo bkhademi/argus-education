@@ -7,22 +7,13 @@
 /* global angular */
 
 (function (app) {
-	app.controller('OSSLiveCtrl', ['$scope', '$interval','notify', 'OSSService',
-		function ($scope, $interval, notify, osss) {
-			
-			var intervalPromise = $interval(function () {
-				getOSSList(); 
-			}, 2000);
-			
-			$scope.$on('$destroy', function(){
-				$interval.cancel(intervalPromise);
-			});
-			
-			function getOSSList(date){
-				osss.query({date:date}, function (data) {
-					$scope.oss = data;
-				});
+	app.controller('OSSLiveCtrl', ['$scope', '$interval', 'OSSService',
+		function ($scope, $interval, osss) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+			$scope.getList = function(date) {
+				$scope.oss = osss.getOSSList(date);
 			};
-			
+			$scope.getList($scope.currentDate);
 		}]);
 }(angular.module('Argus')));

@@ -16,40 +16,21 @@
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([
 								{
-									files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'angles',
-									files: ['js/plugins/chartJs/angles.js']
-								},
-								{
 									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
+								}, {
 									name: 'ui.footable',
 									files: ['js/plugins/footable/angular-footable.js']
 								}, {
-									insertBefore: '#loadBefore',
-									files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
-								},
-								{
-									name: 'ui.calendar',
-									files: ['js/plugins/fullcalendar/calendar.js']
-								},
-								{
+									name: 'ui.slimscroll',
+									files: ['js/plugins/slimscroll/angular.slimscroll.js']
+								}, {
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								},
-								{
-									name: 'ui.slimscroll',
-									files: ['js/plugins/slimscroll/angular.slimscroll.js']
 								}
-
 							]);
 						}
 					}
@@ -78,8 +59,21 @@
 					templateUrl: 'views/admin2/oroomActivityLogSupport.html',
 					data: {pageTitle: 'Oroom Activity Log'},
 					controller: 'oRoomActivityLogCtrl',
-					resolve: {
-					}
+					resolve: {}
+				})
+				.state('supportstaff.oroomActivitiLog.aec', {
+					url: "/AEC",
+					templateUrl: 'views/live/aec.html',
+					data: {pageTitle: 'OSS'},
+					controller: 'AECLiveCtrl',
+					resolve: {}
+				})
+				.state('supportstaff.oroomActivitiLog.reteach', {
+					url: "/Reteach",
+					templateUrl: 'views/live/reteach.html',
+					data: {pageTitle: 'OSS'},
+					controller: 'ReteachCtrl',
+					resolve: {}
 				})
 				.state('supportstaff.oroomActivitiLog.oroom', {
 					url: "/Oroom",

@@ -35,7 +35,9 @@ class User extends Model implements AuthenticatableContract,
      * @var bool
      */
     public $timestamps = false;
-	
+
+
+    protected $appends = ['Name'];
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +51,12 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password','EmailConfirmed','IntroStep', 'SecurityStamp','TwoFactorEnabled','PhoneNumberConfirmed', 'LockoutEndDateUtc', 'LockoutEnabled', 'AccessFailedCount' ];
+    protected $hidden = ['password','EmailConfirmed',
+        'IntroStep', 'SecurityStamp','TwoFactorEnabled',
+        'PhoneNumberConfirmed', 'LockoutEndDateUtc',
+        'LockoutEnabled', 'AccessFailedCount', 'email',
+        'BirthDate', 'Ethnicity', 'Hometown', 'Gender', 'PhoneNumber'
+    ];
     
     // many to one
     public function school(){
@@ -99,5 +106,9 @@ class User extends Model implements AuthenticatableContract,
 	public function activitiesAffected(){
 		return $this->hasMany('App\Useractions', 'ActionToUserId');
 	}
-	
+
+    public function getNameAttribute(){
+        return " $this->FirstName  $this->LastName ";
+    }
+
 }

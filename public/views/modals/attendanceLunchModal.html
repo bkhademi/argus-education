@@ -9,26 +9,26 @@
     <h4 class="modal-title">Lunch Attendance - Name: {{student.user.FirstName + " " + student.user.FirstName}} - ID:{{student.StudentId}}</h4>
 </div>
 <div class="modal-body ">
-	<div class="row"> 
+	<div class="row">
 		<div class="col-sm-4 col-sm-offset-2">
-			<label> Guardian Name : </label> {{student.GuardianName}}				
+			<label> Guardian Name : </label> {{student.GuardianName}}
 		</div>
 		<div class="col-sm-4">
-			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}
 		</div>
 	</div>
 	<br />
 	<div class="row text-center">
 		<div class="btn-group">
-			<label class="btn btn-success" ng-model="student.radioModel" btn-radio="'31'" style="margin:5px"> Present</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'32'" style="margin:5px"> No Show</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'33'"  style="margin:5px"> Left School</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'34'" style="margin:5px" > School Absent</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'35'" style="margin:5px"> Sent Out</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'36'" style="margin:5px"> Walked Out</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'37'" style="margin:5px"> Other</label>
+			<label class="btn btn-success" ng-model="student.ActivityTypeId" btn-radio="31" style="margin:5px"> Present</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="32" style="margin:5px"> No Show</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="33"  style="margin:5px"> Left School</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="34" style="margin:5px" > School Absent</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="35" style="margin:5px"> Sent Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="36" style="margin:5px"> Walked Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="37" style="margin:5px"> Other</label>
 		</div>
-	</div> 
+	</div>
 	<br />
 	<div class="row">
 		<div class="col-sm-4 col-sm-offset-4">
@@ -47,7 +47,7 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn  btn-info" 
+    <button class="btn  btn-info"
 			data-ng-click="$close()">Submit</button>
     <button class="btn " data-ng-click="$dismiss()">Cancel</button>
 </div>

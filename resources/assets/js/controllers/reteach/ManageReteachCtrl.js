@@ -4,12 +4,23 @@
 	"use strict";
 	app
 		.controller("ManageReteachCtrl", ["$scope", "$filter", "$modal", "referrals", "PassesService",
-			"StudentsService", "notify", "ReteachListService",'UtilService',
-			function ($scope, $filter, $modal, referrals, passes, students, notify, aec,utils) {
+			"StudentsService", "notify", "ReteachListService",'UtilService','$rootScope',
+			function ($scope, $filter, $modal, referrals, passes, students, notify, aec,utils, $rootScope) {
 				$scope.selected = {};
 				$scope.refTable = [];// table model
 				$scope.currentDate = new Date();
 
+				function getListSuccessCallback(data){
+					if (!data.length) {
+						notify({message: "No students for current date",
+							classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
+					}
+				};
+
+				$scope.getList = function(date){
+					date = date || $scope.currentDate;
+					$scope.refTable = aec.getList(date, getListSuccessCallback);
+				};
 				/**
 				 * Watch for changes in the datepicker then load the AECList 
 				 * For the selected Date. Also adjusts data received
@@ -20,51 +31,7 @@
 					if (newVal) {//when date has a valid date request the List from that date
 						$scope.currentDate = newVal;
 						console.log("newVal = " + $scope.form.date.$viewValue);
-						$scope.refTable = aec.query({id: newVal}, function (data) {
-							angular.forEach(data, function (student) {
-								student.status = {classs: '', action: ''};
-								student.ActivityTypeId = 0;
-								angular.forEach(student.referred, function (ref) {
-									var counters = student.counters;
-
-									if (counters && counters.ORoomsToBeServed > 0) {
-										student.overlap = {place: 'Has Oroom', class: 'bg-danger'};
-									}
-									if (counters && counters.ISSDays > 0) {
-										student.overlap = {place: 'Has ISS', class: 'bg-danger'};
-									}
-									// check for present
-
-									student.ActivityTypeId = ref.ActivityTypeId;
-
-
-								});
-
-								if (student.ActivityTypeId === 64) {// present , check what assignments were completed
-									student.status.action = 'Present: ';
-									student.status.class = 'bg-green';
-									student.status.action += 'complete';
-
-								} else if (student.ActivityTypeId === 75) { // sent out
-									student.status.action = 'Sent Out: Oroom-today';
-									student.status.class = 'bg-danger';
-								} else if (student.ActivityTypeId === 70) { // walked out
-									console.log('walked out');
-									student.status.action = 'Walked Out: Oroom-tomorrow';
-									student.status.class = 'bg-danger';
-								} else if (student.ActivityTypeId === 65) { // rescheduled
-									student.status = {action: 'Rescheduled', class: 'bg-green'};
-								} else if (student.ActivityTypeId === 66) {
-									student.status = {action: 'Cleared', class: 'bg-green'};
-								}
-
-							});
-
-							if (!data.length) {
-								notify({message: "No students for current date",
-									classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
-							} 
-						});
+						$scope.getList($scope.currentDate)
 					}
 				});
 
@@ -75,7 +42,7 @@
 				 */
 				$scope.getPasses = function () {
 					notify({message: "Now Generating Passes",
-						classes: 'alert-successs', templateUrl: 'views/common/notify.html'});
+						classes: 'alert-success', templateUrl: 'views/common/notify.html'});
 					passes.pdf({date: $scope.currentDate, param: 'AECList'}, function (data) {
 						console.log(data);
 						var fileURL = URL.createObjectURL(data.response);
@@ -134,9 +101,9 @@
 				 * into user actions for the profile 
 				 * @param {object} data: information returned by modal (date,comment,student,excused)
 				 */
-				var submitReschedule = function (data) {
-					var student = data.student;
-					// get info from comment box and DatePicker       
+				var submitReschedule = function (student) {
+					var data;
+					// get info from comment box and DatePicker
 					// submit information of student '$scope.selected.student' to the database
 					student.status = {action: 'Rescheduled',
 						class: 'bg-green'};
@@ -147,10 +114,10 @@
 					var urlEncoded = {id: student.Id};
 					var payload = {
 						param: 'reschedule',
-						Comment: data.comment,
-						newDate: data.date,
+						Comment: student.comment,
+						newDate: student.rescheduleDate,
 						ReferralIds: referrals,
-						excused: data.excused
+						excused: student.excused
 					};
 
 					aec.update(urlEncoded, payload, function (data) {
@@ -160,7 +127,7 @@
 							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
 					});
 
-					removeSelectedStudentFromTableAndClear();
+					clearSelectStudentField();
 				};
 
 				/**
@@ -169,10 +136,8 @@
 				 * into user actions for the profile 
 				 * @param {object} data: information returned by modal (comment, student)
 				 */
-				var submitClear = function (data) {
-					var student = data.student;
-					student.status = {action: 'Cleared',
-						class: 'bg-green'};
+				var submitClear = function (student) {
+					student.status = {action: 'Cleared', class: 'bg-green'};
 
 					// submit information of student '$scope.selected.student' to the database
 
@@ -182,7 +147,7 @@
 					var urlEncoded = {id: student.Id};
 					var payload = {
 						param: 'clear',
-						Comment: data.comment,
+						Comment: student.comment,
 						ReferralIds: referralsIds,
 						Date: $scope.currentDate
 					};
@@ -193,115 +158,62 @@
 							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
 					});
 
-					removeSelectedStudentFromTableAndClear();
+					clearSelectStudentField();
 				};
 
-				/**
-				 * PUT API call to log parent notified information for current student
-				 * into user actions for the profile. 
-				 * In the case that parent requested a reschedule $scope.selected student 
-				 * is changed to the current student and submit reschedule is 
-				 * on that student, preprocess of data needed(line 193)
-				 * to provide necessary info for sumit Reschedule 
-				 * @param {object} data: information returned by modal (student,reschedule,newDate)
-				 */
-				var submitParentNotified = function (data) {
-					var rescheduleComment = "Parent Requested Reschedule";
-					console.log(data.student);
-
-
-					// Remove Student if reschedule
-					if (data.reschedule) {
-						// sent a post to the reschedule api point
-						angular.extend(data, {comment: rescheduleComment, excused: true, oldDate: $scope.currentDate, date: data.newDate});
-						$scope.selected.student = data.student;
-						submitReschedule(data);
-
-					} else {
-						// Make A post to update the student parent's information 
-						var student = data.student.student;
-
-						students.update({id: data.student.id}, {
-							ParentNotified: student.ParentNotified ? 1 : 0,
-							ParentNotifiedComment: student.ParentNotifiedComment,
-							ValidNumber: student.ValidNumber ? 1 : 0,
-							ParentSupportive: student.ParentSupportive ? 1 : 0,
-							GuardianPhone: student.GuardianPhone
-						}, function (response) {
-
-						}, function (response) {
-							notify({message: "Parent Notified Failed, Please Contact The Admin",
-								classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
+				function submitAttendance(data){
+					var student = data.student;
+					debugger;
+					aec.updateAttendance($scope.currentDate, student).then(function (data) {
+						clearSelectStudentField();
+						notify(data.msg);
+					}, function (err) {
+						notify({
+							message: "Present  Failed, Please Contact The System Admin Before Continuing",
+							classes: 'alert-danger', templateUrl: 'views/common/notify.html'
 						});
-
-
-					}
-
-
-				}
-
-
-
-				/**
-				 * PUT API call to log student notified information for student clicked
-				 * 
-				 * @param {object} ref: student selected
-				 * @param {int} $index: refTable index of student selected
-				 */
-				$scope.submitStudentNotified = function (ref, $index) {
-
-					var studentNotified = ref.student.Notified;
-					students.update({id: ref.id}, {Notified: !studentNotified ? 1 : 0}, function (response) {
-						console.log(response);
 					});
-					console.log($scope.refTable[$index]);
-				};
+				}
 
 				/**
 				 * PUT API call to change the all unprocessed referrals to absent(ReferralStatus 4)
 				 * as well as logging the absent into user actions for the profile 
 				 */
 				$scope.finishManageAEC = function () {
-					angular.forEach($scope.refTable, function (student) {
-						// if no overlap and not action taken by user then send to absent list
-						if ( !student.status.action && !student.overlap  ) {
-							
-							angular.forEach(student.referred, function (ref) {
-							
-								aec.update({'id': ref.Id},
-								{'param': 'absent', Date: $scope.currentDate},
-								function (response) {
-
-								}, function (response) {
-									notify({message: "Finish Failed, Please Contact The Admin",
-										classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-								});
-							});
-						}
+					// confirm before submit
+					var submit = confirm("IF YOU SUBMIT THIS LIST ALL THE CHANGES MADE WILL BE RECORDED AND YOU WILL BE UNABLE TO CHANGE THEM AGAIN");
+					if(!submit)
+						return;
+					debugger;
+					var prom = aec.submitList($scope.refTable, $scope.currentDate);
+					prom.then(function(data){
+						notify(data.msg);
+					}, function(err){
+						notify("Error Submitting,  Please Contact the System Admin before continuing ")
 					});
-					$scope.refTable = [];
+					return;
 				};
 
 				function isOverlap(student) {
 					var overlap = false;
 					var overlapPlace = '';
 
-					if (student.counters.ORoomsToBeServed > 0) {
+					if (student.overlap.hasorm ) {
 						overlapPlace = 'O-Room';
 						overlap = true;
 					}
-					if (student.counters.ISSDays > 0) {
+					if (student.hasiss ) {
 						overlapPlace = 'ISS';
 						overlap = true;
 					}
-					if (student.counters.OSSPMP > 0) {
+					if (student.overlap.hasoss) {
 						overlapPlace = 'OSS';
 						overlap = true;
 					}
 					//
 					overlap = false;
 					if (overlap) {
-						modalInstance = $modal.open({
+						var modalInstance = $modal.open({
 							templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
 							//template:'<div> MODAL : true in Referral IN </div>',
 							size: 'lg',
@@ -332,17 +244,26 @@
 				 */
 				$scope.AECAttendance = function (student, $index) {
 
+
+					if(student.referred[0].RefferalStatus === 2 ||  student.referred[0].RefferalStatus  == 8) {
+						notify('Action Unavailable : Attendance  Already taken and submitted.','warning');
+						return;
+					}
+
 					if (isOverlap(student)) {
 						return;
 					}
 
-					console.log(student);
+					console.log('Reteach attendance: student \n', student);
 					var modalInstance = $modal.open({
 						templateUrl: 'views/modals/attendanceReteachModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
 						size: 'lg',
 						controller: function ($scope, student) {
 							$scope.student = student;
+							$scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
+								student.rescheduleDate = newValue || student.rescheduleDate;
+
+							});
 						},
 						resolve: {
 							student: function () {
@@ -350,72 +271,13 @@
 							}
 						}
 					});
-					modalInstance.result.then(function (data) {// on SUBMIT
-						var student = data.student;
-						// check what buttons were present  and what assignments were completed
-						// to set the color and the attendance 
-
-						var status = {class: '', action: ''};
-						if (student.radioModel == 64 ) {// present , check what assignments were completed
-							//
-
-							status.action = 'Present: ';
-							status.class = 'bg-green';
-							status.action += 'complete';
-
-
-						} else if (student.radioModel == 75) {
-							console.log('sent out');
-							status.action = 'Sent Out: Oroom-today';
-							status.class = 'bg-danger';
-						} else if (student.radioModel == 70) {
-							console.log('walked out');
-							status.action = 'Walked Out: Oroom-tomorrow';
-							status.class = 'bg-danger';
-						}
-						student.status = status;
-
-
-
-						// post the comment and other things to the database 
-
-						console.log(student);
-						// sent when present
-						var referrals = student.referred.map(function (o) {
-							return {Id: o.Id, AssignmentCompleted: o.AssignmentCompleted}
-						});
-						// sent otherwhise
-						var referralIds = student.referred.map(function (o) {
-							return o.Id;
-						});
-						var urlEncoded = {id: student.Id};
-						var payload = {
-							param: 'attendance',
-							ActionType: student.radioModel,
-							Comment: student.comment,
-							Date: $scope.currentDate,
-							Referrals: student.radioModel == 64 ? referrals : referralIds
-						};
-
-						aec.update(urlEncoded, payload, function (data) {
-							notify(data.msg);
-						}, function (err) {
-							notify('error, Before continuing please contact an admin');
-						});
-
-
-
-						// Do Not Remove From List
-//						if ($index)
-//							$scope.refTable.splice($index, 1);
-//						else
-//						
-						// only clears the field
-						$scope.selected.student = null;
-					}, function () {// on modal DISMISS
-
+					modalInstance.result.then(function(data){
+						if(student.ActivityTypeId == 66)
+							return submitClear(student);
+						else if(student.ActivityTypeId ==65 )
+							return submitReschedule(student);
+						submitAttendance(data);
 					});
-
 				};
 
 
@@ -435,8 +297,8 @@
 							$scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
 								if (newValue) { //when date has a valid date request the List from that date
 									$scope.date = newValue;
-									console.log('date changed');
-								}
+								console.log('date changed');
+							}
 							});
 
 						},
@@ -518,12 +380,7 @@
 				 * sets it to null (clear field)
 				 * 
 				 */
-				var removeSelectedStudentFromTableAndClear = function () {
-//					for (var i = 0; i < $scope.refTable.length; i++)
-//						if ($scope.selected.student.id === $scope.refTable[i].id) {
-//							$scope.refTable.splice(i, 1);
-//							break;
-//						}
+				var clearSelectStudentField = function () {
 					$scope.selected.student = null;
 				};
 			}]);

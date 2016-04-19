@@ -15,7 +15,7 @@
 
 			});
 
-			lunchs.query({roster: true}, function (data) {
+			lunchs.query({roster: true,count:true}, function (data) {
 				$scope.counters.oroom += data.length;
 
 			});

@@ -3,7 +3,8 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="col-sm-4">
-					<select chosen 
+					<select chosen
+							width="'100%'"
 							class=" chosen-select form-control"
 							allow-single-deselect="true"
 							data-ng-if='schools'
@@ -18,7 +19,8 @@
 					</select>
 				</div>
 				<div class="col-sm-4">
-					<select chosen 
+					<select chosen
+							width="'100%'"
 							class=" chosen-select form-control"
 							allow-single-deselect="true"
 							data-ng-if='students'
@@ -91,7 +93,7 @@
 								<td>{{item.teacher.LastName}}</td>
 								<td>{{item.assignment.Name}}</td>
 								<td>
-									<select chosen 
+									<select chosen
 											class=" chosen-select form-control col-sm-3"
 											width="100%" 
 											allow-single-deselect="true"
@@ -109,7 +111,7 @@
 								<td>
 									<select chosen 
 											class=" chosen-select form-control"
-											width="100%" 
+											width="'100%'"
 											allow-single-deselect="true"
 											data-ng-if='activities'
 											data-placeholder="Select or enter activity Type"
@@ -181,7 +183,7 @@
 								<td> 
 									<select chosen 
 											class=" chosen-select form-control"
-											width="100%" 
+											width="'100%'"
 											allow-single-deselect="true"
 											data-ng-if='activities'
 											data-placeholder="Select or enter activity Type"

@@ -1,0 +1,1002 @@
+[
+  {
+    "FIELD1":"Student Name",
+    "FIELD2":"StudentId",
+    "FIELD3":"Teacher"
+  },
+  {
+    "FIELD1":"Allen, Ka'Vadrion",
+    "FIELD2":"100141231",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Avery, Ba'Canan La'Vant",
+    "FIELD2":"100131404",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Barrientos, Abigail Soledad",
+    "FIELD2":"100130598",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Brown, Zyquavia Serenity Faye",
+    "FIELD2":"100124362",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Chandler, Nathaniel David",
+    "FIELD2":"100124470",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Childress, Zy'Kerra Shy'Ray",
+    "FIELD2":"100126171",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Davila, David Senovio",
+    "FIELD2":"100127009",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Davis, Vamora Lanae",
+    "FIELD2":"100129794",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"De la Cerda, Noelia Marie",
+    "FIELD2":"100114417",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Finney, Sir Jashawn Nazario",
+    "FIELD2":"100153886",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Foust, Tyra Shain",
+    "FIELD2":"100130493",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Franco, Reyna Mia",
+    "FIELD2":"100123980",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Green, Audreyanna Dashanae",
+    "FIELD2":"100116045",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Gutierrez, Faith Jasmine",
+    "FIELD2":"100149974",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Horton-Carlock, Ireshia Jaisonet",
+    "FIELD2":"100131407",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Humphrey, Zaniyah Bra'Shaye",
+    "FIELD2":"100131344",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Johnson, Zachary D'Angelo",
+    "FIELD2":"100113623",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Johnson, Zane Dionte",
+    "FIELD2":"100113621",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Jones, Destiny Antwanay",
+    "FIELD2":"100110227",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Kyles, Juleius Dewayne",
+    "FIELD2":"100127429",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Lopez, Ariyanna Maylene",
+    "FIELD2":"100097781",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Machado, Ana Nicole",
+    "FIELD2":"100122118",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Marmolejo, Gary",
+    "FIELD2":"100124398",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Miller, Tramond Trashai",
+    "FIELD2":"100130526",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Mitchell, A'Miracle Tejanae",
+    "FIELD2":"100131129",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Mitchell, Jossiah Javarie Joseph",
+    "FIELD2":"100132257",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Nelson-Newman, Dionte Tiquan",
+    "FIELD2":"100124367",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Newman, J'Shanay Sydai",
+    "FIELD2":"100131165",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Palmer, James Lamont",
+    "FIELD2":"100149723",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Perez, Savion",
+    "FIELD2":"100103257",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Quigley, Jeremiah Dwayne",
+    "FIELD2":"100128594",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Quintana, Bianca Elena",
+    "FIELD2":"100113907",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Riggins, Jermaal Dekindrick",
+    "FIELD2":"100104465",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Rivera, Izabella Marie",
+    "FIELD2":"100132250",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Rodriguez, Mary Jane",
+    "FIELD2":"100113761",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Rosemond, Tameka Audrea",
+    "FIELD2":"100130235",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Santos, Akasha Antwonyea",
+    "FIELD2":"100153211",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Sims, Taniya Shundrea",
+    "FIELD2":"100131167",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Stancell, Kaitlyn Caricia",
+    "FIELD2":"100096496",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Stevenson, Craivondrick",
+    "FIELD2":"100131345",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Taylor, Aniah Lashae",
+    "FIELD2":"100130441",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Thompson, Devon Elijah",
+    "FIELD2":"100131355",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Torres, Gregory Abel",
+    "FIELD2":"100092881",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Torrez, Jazilyn Aaliyan",
+    "FIELD2":"100124161",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Trevino, Nathan Rene",
+    "FIELD2":"100145022",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Vaughn, Isaiah Victor",
+    "FIELD2":"100146078",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Walton, Tyrenee Jelyse",
+    "FIELD2":"100115537",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Williams, Ja'Kobe Deshone",
+    "FIELD2":"100127589",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Wright, Ca'Myrea Renea",
+    "FIELD2":"100123594",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Zapata, Arianna Icis",
+    "FIELD2":"100128963",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Alcorte, Mercedes Angel",
+    "FIELD2":"100090582",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Anderson, Jamequa Elaine",
+    "FIELD2":"100090749",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Anzley, Claytron J'Sean",
+    "FIELD2":"100125230",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Banda, Jonathan Israel",
+    "FIELD2":"100115243",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Blackwell, Hayleigh Somone",
+    "FIELD2":"100125798",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Bradley, Mirakle",
+    "FIELD2":"100117797",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Briley, Demodric Dejuan",
+    "FIELD2":"100125811",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Bryand, Brandon Jeremy",
+    "FIELD2":"100122494",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Carr, Toni Aalanah",
+    "FIELD2":"100114607",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Castro, Ryan Luke",
+    "FIELD2":"100128163",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Chiles, Detreaviean, Detreaviean",
+    "FIELD2":"100122904",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Conor, Ty'Trice Ladasha",
+    "FIELD2":"100125955",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Cortez, Jacob Lee",
+    "FIELD2":"100114861",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Dial, Briasia",
+    "FIELD2":"100122776",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Diaz, Robert Matthew",
+    "FIELD2":"100114827",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Dunn, La'Devin Tyrell",
+    "FIELD2":"100124953",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Eddington, Devinn Quashawn",
+    "FIELD2":"100106469",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Flemons, Darius",
+    "FIELD2":"100122600",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Flores, Jesus Enrigue",
+    "FIELD2":"100095808",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Freeman, Skki",
+    "FIELD2":"100124530",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Frutis, Gabriel Gregory",
+    "FIELD2":"100116855",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Garza, Justin Rudy",
+    "FIELD2":"100103682",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Giddens, Markel Antwaine",
+    "FIELD2":"100104485",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Haskin, Lee Anthony",
+    "FIELD2":"100114739",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Hawkins, Anthony Deshawn",
+    "FIELD2":"100115639",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Hawkins, Arquise Tavion Cornelious",
+    "FIELD2":"100115131",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Hendrix, Kevin R",
+    "FIELD2":"100125965",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Hernandez, Jenifer Ann",
+    "FIELD2":"100100525",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Hunter, Ja'Iris James",
+    "FIELD2":"100125897",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Irvin, Enoch Charles",
+    "FIELD2":"100121508",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Jimenez, Marisol Briana",
+    "FIELD2":"100126310",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Johns, Jacquelynn Makavia",
+    "FIELD2":"100103683",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Johnson, Keyvon Dashawn",
+    "FIELD2":"100115709",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Johnson, Nakia Nicole",
+    "FIELD2":"100116755",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Jones, Antwoine Jermaine",
+    "FIELD2":"100106093",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Lawrence, Da'Vion Kyree-Ahmad",
+    "FIELD2":"100103799",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Marquez, Jose Armando",
+    "FIELD2":"100126286",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"McClure, Kennyetti Michael",
+    "FIELD2":"100125919",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Melgoza, Angel Domingo",
+    "FIELD2":"100123274",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Mercado, Desirea Neveah",
+    "FIELD2":"100114931",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Montiel-Flores, Xavier Isiah",
+    "FIELD2":"100131451",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Morris, Daviand Donnel",
+    "FIELD2":"100152362",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Natal, Noel Elishia",
+    "FIELD2":"100106499",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Newman, Hailey Paris",
+    "FIELD2":"100103438",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Newton, Marvin Eric",
+    "FIELD2":"100141040",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"O'Neal, Jeremyah Ashaun",
+    "FIELD2":"100160144",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Ramirez, Angel Enrique",
+    "FIELD2":"100159604",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Ramirez, Chauncey keegan",
+    "FIELD2":"100159598",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Ramirez, Joe Angel",
+    "FIELD2":"100114115",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Rodriguez, Alexis Nicole",
+    "FIELD2":"100104497",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Rollison, Shawntavia Makayla",
+    "FIELD2":"100116079",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Ross, Henry Edward",
+    "FIELD2":"100125891",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Sarinana, Juan Noe",
+    "FIELD2":"100104337",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Sierra, Precious Manuelita",
+    "FIELD2":"100125701",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Sims, Isaiah Joe",
+    "FIELD2":"100123114",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Smith, Jalen",
+    "FIELD2":"100118375",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Smith, Keun Dewright",
+    "FIELD2":"100113745",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Steele, Rj",
+    "FIELD2":"100107365",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Steele, TJ Stephon",
+    "FIELD2":"100107359",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Taylor, Reginald Deshan",
+    "FIELD2":"100125801",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Torres, John Michael",
+    "FIELD2":"100140226",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Vaughn, Vincent Elijah",
+    "FIELD2":"100146076",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Villarreal, Adam Kyne",
+    "FIELD2":"100140184",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Washington, Reginald Sh'Mar",
+    "FIELD2":"100116729",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Watson, Lakandra Renee",
+    "FIELD2":"100103668",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"William, De'Shon La'Charles",
+    "FIELD2":"100115489",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Zavala, Natalie Nicole",
+    "FIELD2":"100124387",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Adame, Kirsten Belle",
+    "FIELD2":"100101069",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Bascus, Jevaushaune Kiara",
+    "FIELD2":"100103374",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Bates, Torriyon Dyshawn",
+    "FIELD2":"100115671",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Belgara, Jose Rafael",
+    "FIELD2":"100103807",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Bell, Serenity Charnice",
+    "FIELD2":"100103703",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Bluitt, Za'Korrian Tre'Baughan",
+    "FIELD2":"100117927",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Bradley, A'Laysha Lachelle",
+    "FIELD2":"100098702",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Bryant, Rodney Glenn",
+    "FIELD2":"100141584",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Builtron, Federico",
+    "FIELD2":"100098705",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Cabrera, Juan Jose",
+    "FIELD2":"100106941",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Cade, Ariel Bricole Marie",
+    "FIELD2":"100104431",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Campos, Reina Jai",
+    "FIELD2":"100103350",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Casias, Issac Henry",
+    "FIELD2":"100118099",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Chase-Bowman, Eushandria Shada",
+    "FIELD2":"100106383",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Childress, Mahkai Ka'Von",
+    "FIELD2":"100115143",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Conor, David Antwan",
+    "FIELD2":"100099457",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Cortez, Gabriel David",
+    "FIELD2":"100092910",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Delacruz, Nikolas Alfredo",
+    "FIELD2":"100103435",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Diaz, Isaiah",
+    "FIELD2":"100116661",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Dobbins, Jermiah Darun",
+    "FIELD2":"100125970",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Doss, Viclencia Lizabeth",
+    "FIELD2":"100106493",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Eddington, Trimeka",
+    "FIELD2":"100106937",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Essix, Rashaad Tyvore",
+    "FIELD2":"100082853",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Fierro, Samuel Torres",
+    "FIELD2":"100085715",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Flores, Jericho Emanuel",
+    "FIELD2":"100117089",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Flores, Zackary Isaiah",
+    "FIELD2":"100099073",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Francis, Devin Kayshawn",
+    "FIELD2":"100116643",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Gallardo, Kenzie Marie",
+    "FIELD2":"100120534",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Garcia, Samantha Marie",
+    "FIELD2":"100151449",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Glaspie, Kelvondre Ke'shaun",
+    "FIELD2":"100146378",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Gonzales, Shelbi Leann",
+    "FIELD2":"100085723",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Gordon, Isis Tamara",
+    "FIELD2":"100119206",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Gutierrez, Alexandria",
+    "FIELD2":"100106205",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Harris, Caylupp Lamont",
+    "FIELD2":"100086057",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Harris, Zykeria Damiya",
+    "FIELD2":"100104287",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Hernandez-Mungia, Aaliyah Lyann",
+    "FIELD2":"100103532",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Herrera, Zack Anthony",
+    "FIELD2":"100103712",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Hyer, Jacob Ethan",
+    "FIELD2":"100115171",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Ibarra, Victor Davil",
+    "FIELD2":"100085730",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Irlas, Michael Guadalupe",
+    "FIELD2":"100131360",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Isaac, Tyson Ladon",
+    "FIELD2":"100107579",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Jenkins, Jasmine Mikayla",
+    "FIELD2":"100121076",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Jones, Ermeshia La' Deen",
+    "FIELD2":"100138250",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Lara, Stephanie Marie",
+    "FIELD2":"100117587",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Ledezma, Desiree Alyzah",
+    "FIELD2":"100098223",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Lee, Ry'Brianna Earlshae",
+    "FIELD2":"100098235",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Martinez, Destiny",
+    "FIELD2":"100106341",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Martinez, Issac Matthew",
+    "FIELD2":"100108729",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Melgoza, Juliann Randi",
+    "FIELD2":"100114069",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Mims, Shydai",
+    "FIELD2":"100117523",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Minjarez, Sammie Madison",
+    "FIELD2":"100117091",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Murray, Ke'Zadrick Laquan",
+    "FIELD2":"100117975",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Ntazika, Freddy",
+    "FIELD2":"100150883",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Owens, Keyishia Teenee",
+    "FIELD2":"100103673",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Owens, Za'Kireyel",
+    "FIELD2":"100116763",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Pollard, Dashae Darice",
+    "FIELD2":"100103784",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Powers, Madison Paige",
+    "FIELD2":"100099008",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Puente, Rickey",
+    "FIELD2":"100098659",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Ramirez, Andrew Junior",
+    "FIELD2":"100106419",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Rangel, Kaylee Ann",
+    "FIELD2":"100103749",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Rosemond, Chariqwaind Lashawn",
+    "FIELD2":"100098976",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ruth, De'Quairious Tyrell",
+    "FIELD2":"100109263",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Salazar, Kayden Dewayne",
+    "FIELD2":"100085865",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Sanchez, Elijah Inocente",
+    "FIELD2":"100099215",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Sanchez, Nathan Izaiah",
+    "FIELD2":"100130198",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Shoup-Wesson, Christian Damar",
+    "FIELD2":"100081818",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Silvas,, Anthony Sabas Miguel",
+    "FIELD2":"100098758",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Spence, Latrell Treshone",
+    "FIELD2":"100103761",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Tijerina, Tomas Anthony",
+    "FIELD2":"100126304",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Torres, Starr Paige",
+    "FIELD2":"100105769",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Upshaw, Gary Pernell",
+    "FIELD2":"100116997",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Valdez, Antonia Ylianna",
+    "FIELD2":"100101299",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Valdez, Korrina Rene",
+    "FIELD2":"100082958",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Vasquez, Angelina Renee",
+    "FIELD2":"100106791",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Vidaurre, Cierra Renae",
+    "FIELD2":"100103561",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Villarreal, Elizabeth Lee",
+    "FIELD2":"100140172",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Whitfield, Michael Deshone",
+    "FIELD2":"100103547",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Williams, Kevon Bernard",
+    "FIELD2":"100103583",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Wilson, Antawn Dwayne",
+    "FIELD2":"100107597",
+    "FIELD3":"106"
+  },
+  {
+    "FIELD1":"Wilson, Ja'Corien Lamar",
+    "FIELD2":"100117869",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Wright, Dezavion Daejion",
+    "FIELD2":"100117483",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Wright, Vaughntray Jordan",
+    "FIELD2":"100077457",
+    "FIELD3":"111"
+  }
+]

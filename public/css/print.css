@@ -1,0 +1,112 @@
+html {
+    font-family: sans-serif;
+    font-size:65%;
+}
+body {
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+table {
+    background-color: transparent;
+}
+
+th {
+    text-align: left;
+}
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+.table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+    border: 1px solid #ddd;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td {
+    border-bottom-width: 2px;
+}
+
+.bg-primary, .navy-bg {
+    background-color: #D9212B;
+    border-color: #D9212B;
+
+}
+
+
+.bg-gray{
+    background-color: #C2C3C5;
+    color: #000000;
+}
+.bg-danger{
+    background-color: #CA423F;
+    border-color:#CA423F;
+    color:#000000;
+}
+.bg-warning{
+    background-color: #FFB757;
+    border-color:#FFB757;
+    color:#000000;
+}
+
+.bg-success, .bg-green{
+    background-color: #6FA45A;
+    border-color: #6FA45A;
+    color:#000000;
+}
+
+.text-left {
+    text-align: left;
+}
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+.text-justify {
+    text-align: justify;
+}

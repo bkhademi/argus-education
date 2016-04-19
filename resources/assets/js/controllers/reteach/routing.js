@@ -9,7 +9,7 @@
 				.state('reteach', {
 					abstract: true,
 					url: "/reteach",
-					templateUrl: "views/common/contentArgus.html",
+					templateUrl: "views/common/contentArgusReteachCoordinator.html",
 					controller: "NavigationReteachCtrl",
 					controllerAs: 'navigation',
 					resolve: {
@@ -73,7 +73,7 @@
 						}
 					}
 				})
-				.state('reteach.referral', {
+				.state('reteach.reteachReferral', {
 					url: "/ReteachReferral",
 					templateUrl: 'views/reteach/Referral.html',
 					data: {pageTitle: 'Referral'},
@@ -90,7 +90,7 @@
 					}
 
 				})
-				.state('reteach.reteachlist', {
+				.state('reteach.reteachList', {
 					url: "/ReteachList",
 					templateUrl: 'views/reteach/manageReteach.html',
 					data: {pageTitle: 'List'},
@@ -111,7 +111,7 @@
 					}
 
 				})
-				.state('reteach.pending', {
+				.state('reteach.reteachPending', {
 					url: "/ReteachFollowup",
 					templateUrl: 'views/reteach/manageReteachabsence.html',
 					data: {pageTitle: 'Pending'},
@@ -142,10 +142,60 @@
 							]);
 						}
 					}
-				});
+				})
 
-
-
+				.state('reteach.reports', {
+					url: '/Reports',
+					templateUrl: 'views/reports/reports.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ReportsCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}
+							])
+								;
+						}
+					}
+				})
+				.state('reteach.reports.eod', {
+					url: '/EOD',
+					templateUrl: 'views/reports/reports.eod.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ReportsEODCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									serie: true,
+									name: 'angular-flot',
+									files: [
+										'js/plugins/flot/jquery.flot.js',
+										'js/plugins/flot/jquery.flot.time.js',
+										'js/plugins/flot/jquery.flot.tooltip.min.js',
+										'js/plugins/flot/jquery.flot.spline.js',
+										'js/plugins/flot/jquery.flot.resize.js',
+										'js/plugins/flot/jquery.flot.pie.js',
+										'js/plugins/flot/curvedLines.js',
+										'js/plugins/flot/angular-flot.js']
+								}
+							]);
+						}
+					}
+				})
+			;
 
 		}]);
 

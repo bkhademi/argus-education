@@ -1,46 +1,47 @@
 <div class="modal-header text-center">
-	<button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
-	<h4 class="modal-title">Assignments rejected for :  {{student.FirstName + ', '+ student.LastName}}</h4>
+    <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">Assignments rejected for : {{student.FirstName + ', '+ student.LastName}}</h4>
 </div>
-<div class="modal-body " >
-	<div class='row '>
-		<div class="col-sm-11">
-			<table class='table'>
-				<thead>
-					<tr>
-						<th>Assignment Name</th>
-						<th >Reason</th>
-						<th >Comment</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr data-ng-repeat='item in student.referred' data-ng-if='!item.Accepted && item.RefferalStatus ==1' >
-						<td>{{item.Name}}</td>
-						<td >
-							 <select chosen 
-                                        class="chosen-select form-control"
-										allow-single-deselect="true"
-                                        data-placeholder="Reason for rejection"
-                                        data-ng-model="item.Reason"
-                                        data-ng-options="s as 
+<div class="modal-body ">
+    <div class='row '>
+        <div class="col-sm-11">
+            <table class='table'>
+                <thead>
+                <tr>
+                    <th>Assignment Name</th>
+                    <th>Reason</th>
+                    <th>Comment</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat='item in student.referred' data-ng-if='!item.Accepted && item.RefferalStatus ==1'>
+                    <td>{{item.Name}}</td>
+                    <td>
+                        <select chosen
+                                width="'100%'"
+                                class="chosen-select form-control"
+                                allow-single-deselect="true"
+                                data-placeholder="Reason for rejection"
+                                data-ng-model="item.Reason"
+                                data-ng-options="s as
 											(s.name )
 											for s in reasons  track by s.value"
-									>
-											<option value='None'></option>
-								</select>
-						</td>
-						<td>
+                        >
+                            <option value='None'></option>
+                        </select>
+                    </td>
+                    <td>
 							<textarea auto-resize class="form-control"
-								data-ng-model='item.RejectedComment'>
+                                      data-ng-model='item.RejectedComment'>
 									
 							</textarea>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <div class="modal-footer">
-	<button class='btn btn-info' data-ng-click='$close({student:student})'>Save</button>
+    <button class='btn btn-info' data-ng-click='$close({student:student})'>Save</button>
 </div>

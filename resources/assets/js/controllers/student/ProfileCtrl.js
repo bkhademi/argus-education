@@ -35,10 +35,10 @@
 						var heading = 'Date,ActionBy,Activity,Comment \n';
 						text += heading;
 						angular.forEach($scope.activities, function (act) {
-							text += act.ActionDate.split(' ')[0] + ',';
-							text += act.user.FirstName + ' ' + act.user.LastName + ',';
-							text += act.activity.Name + ',';
-							text += act.Comment + ',';
+							text += '"' + act.ActionDate.split(' ')[0] + '",';
+							text += '"' + act.user.FirstName + ', ' + act.user.LastName + '",';
+							text += '"' + act.activity.Name + '",';
+							text += '"' + (act.Comment || '')  + '",';
 							text += "\n";
 						});
 
@@ -49,7 +49,7 @@
 
 						//console.log(text);
 						var element = document.createElement('a');
-						element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+						element.setAttribute('href', 'data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURI(text));
 						element.setAttribute('download', 'ActivityFor-' + student.user.FirstName + '_' + student.user.LastName + '.csv');
 						element.style.display = 'none';
 						document.body.appendChild(element);

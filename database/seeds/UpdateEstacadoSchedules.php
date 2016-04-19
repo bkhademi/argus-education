@@ -25,7 +25,7 @@ class UpdateEstacadoSchedules extends Seeder {
 		$term = 'S2'; // current term
 		$defaultDepartment = Departments::find(1); // default department
 
-		$scheduleJson = File::get(storage_path() . '/2016_spring_json/1-27EstacadoSchedule.json');
+		$scheduleJson = File::get(storage_path() . '/2016_spring_json/3-24EstacadoSchedule.json');
 		$schedule = json_decode($scheduleJson);
 
 		// get the 2 roles 
@@ -228,7 +228,7 @@ class UpdateEstacadoSchedules extends Seeder {
 				//print_r($stu->toArray());
 				//dd($obj);
 			}
-		}
+	}
 		dd($diffClasses);
 		//DB::commit();
 	}

@@ -48,7 +48,7 @@
 						$scope.selected.rotation = null;
 						$scope.refTable = [];
 						console.log($rootScope.schoolId);
-						if ($rootScope.currentUser.schoolId === 2) {
+						if ($rootScope.currentUser.schoolId === 2 || $rootScope.currentUser.schoolId === 5) {
 							$scope.refTable = asp.query({Date: $scope.currentDate}, markOverlaps);
 						}
 					}
@@ -64,8 +64,8 @@
 					$scope.refTable = null;
 					asp.query({select: 1, rotation: rotation.Value, Date: $scope.currentDate},
 					function (data) {
-						// check for date and group all the PE into 1 PE 
-						
+						// check for date and group all the PE into 1 PE
+
 						$scope.programs = data;
 					}, function (err) {
 

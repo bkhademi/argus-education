@@ -31,7 +31,7 @@ class StudentsController extends Controller {
 
 		$adminRoleId = 'ZSkug3NklRxA2SyJlo3IaQfs2bvkdyXXG3jPGzEfZ0b0pXHafuLwJM77FdZIO3iklYqBRit5qXJXmajNY4WWCX4sFYogV7ekzfrKiH4LKB8VJr1THRZ0si4fcCaiQF7q';
 
-		if ($this->user->roles[0]->Id === $adminRoleId) {
+		if ($request->has('allStudents') && $this->user->roles[0]->Id === $adminRoleId) {
 			$schoolId = $request->schoolId;
 			return Students
 					::with(['user' => function($q)use($schoolId) {
@@ -61,6 +61,7 @@ class StudentsController extends Controller {
 		}
 
 		//$userId = isset($this->userId) ? $this->userId : $request->input('userId');
+		
 		$teacherWithClassStudents = User::with('classstudents.user.student')->find($id);
 		$uniqueIDs = $teacherWithClassStudents->classStudents->unique('StudentId')->pluck('StudentId');
 		$teacherWithClassStudents = User::with('student')

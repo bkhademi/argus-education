@@ -8,21 +8,44 @@
 
 (function (app) {
 	app.controller('oRoomActivityLogCtrl',
-		['$scope', 'notify','$interval','FormatTimeService',
-			function ($scope, notify, $interval, time) {
-				$scope.currentList = 'oroom';
-				$scope.currentList = 'oroom';
-				$scope.refTable = [];
-				$scope.lunchTableA = [];
-				$scope.lunchTableB = [];
-				$scope.iss = [];
-				$scope.oss = [];
+		['$scope', '$interval','FormatTimeService','OroomService', 'LunchService','ISSService','OSSService','ReteachListService','AECListService',
+			function ($scope,  $interval, time, orooms, lunchs, isss, osss,reteach,aec) {
+
 				$scope.currentDate = formatDate(new Date());
-				
-				$interval(function(){
+				$scope.child = {};
+				$scope.count  = {};
+				$scope.$watch('form.date.$viewValue',function(n,o){
+					if(n){
+						$scope.currentDate = n;
+						console.log('new date ',n);
+						$scope.child.getList($scope.currentDate);
+					}
+
+				});
+
+					var intervalPromise = $interval(function () {
+						$scope.child.getList($scope.currentDate);
+					}, 5000);
+					$scope.$on('$destroy', function(){
+						$interval.cancel(intervalPromise);
+					});
+
+
+				// clock
+				var intervalPromise2 = $interval(function(){
 					$scope.currentTime = time.formatAMPM(new Date());
 				}, 1000);
-				
+				$scope.$on('$destroy', function(){
+					$interval.cancel(intervalPromise2);
+				});
+
+				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
+				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
+				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
+				reteach.get({count:true,roster:true},function(data){$scope.count.reteach = data.reteachCount;});
+				aec.get({count:true,roster:true},function(data){$scope.count.aec = data.aecCount;});
+
 				
 			}]);
 }(angular.module('Argus')));

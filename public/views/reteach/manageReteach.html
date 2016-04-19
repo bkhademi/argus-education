@@ -19,9 +19,10 @@
                     <!-- Buttons and Inputs  -->
                     <ul class="list-group list-inline">
                         <!-- AutoComplete Input Field -->
-                        <li style="width:35%">
+                        <li style="width:45%">
                             <form>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="refTable.$resolved"
@@ -34,7 +35,8 @@
 										>
 									<option value=''></option>
 								</select>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="!refTable.$resolved"
@@ -47,16 +49,16 @@
                         </li>
                         <!-- Present Button -->
 						<li>
-                            <button type="button" class="btn  btn-primary " data-ng-click="AECAttendance(selected.student)" data-ng-disabled="!selected.student">Attendance</button>
+                            <button type="button" class="btn  btn-primary" data-ng-click="AECAttendance(selected.student)" data-ng-disabled="!selected.student">Attendance</button>
                         </li>
 
-                        <li>
+                        <!--<li>
                             <button type="button" class="btn btn-info " data-ng-click="openReschedule(selected.student)" data-ng-disabled="!selected.student">Re-Schedule</button>
                         </li>
-                        <!-- Clear Button -->
+                        &lt;!&ndash; Clear Button &ndash;&gt;
                         <li>
                             <button type="button" class="btn btn-primary" data-ng-click="openClear(selected.student)" data-ng-disabled="!selected.student">Clear</button>
-                        </li>
+                        </li>-->
                     </ul>
 
 
@@ -66,21 +68,18 @@
 
             <br />
             <!--  Table Start -->
-			<div id="printSection">
-				<div data-barcode-generator="que onda jose" id="barcode" style="height:208px;"></div>
-			</div>
+
 			<div style="float:none; margin:0 auto;" class="col-sm-12">
-				<!--				<div data-ng-controller="printAssignmentsController" class="form-group">
-									<button class="btn  btn-primary pull-right" data-ng-click="printAssignments(reftable)" data-ng-disabled="reftable.length">
-										<i class="fa fa-print"></i>Print Assignments
-									</button>
-								</div>
-								<div class="form-group">
-									<button class="btn btn-primary pull-right " data-ng-print print-element-id="barcode"  style="margin-right:8px" data-ng-click="printBarCodes()" data-ng-disabled="reftable.length">
-										<i class="fa fa-barcode"></i> Print Barcodes
-									</button>
-								</div>-->
-				<!--data-ng-controller="MultiplePassesController"--> 
+				<div class="form-group">
+					<button class='btn btn-primary pull-right ' style="margin-right:8px;" data-ng-click='getList()'>
+						<i class="fa fa-refresh"></i> Refresh List
+					</button>
+				</div>
+				<div  class="form-group">
+					<button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListCSV()" data-ng-disabled="reftable.length">
+						<i class="fa fa-download"></i> Download List <i class="badge btn-info">{{refTable.length}}</i>
+					</button>
+				</div>
 				<div class="form-group">
 					<button class="btn btn-primary pull-right "  style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="reftable.length">
 						<i class="fa fa-ticket"></i> Print Passes
@@ -91,12 +90,8 @@
 						<i class="fa fa-ticket"></i> Print Labels
 					</button>
 				</div>
-				<div  class="form-group">
-                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="AECListCSV()" data-ng-disabled="reftable.length">
-                        <i class="fa fa-download"></i> Download List <i class="badge btn-info">{{refTable.length}}</i>
-                    </button>
-                </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+
+				<table class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
 					<thead>
 						<tr>
 							<th>Teacher</th>
@@ -106,7 +101,8 @@
 							<th>Grade</th>
 							<!--<th class="col-sm-6">Assignment</th>-->
 							<th>Overlap</th>
-							<th>Attendance</th> 
+							<th>Attendance</th>
+							<th>Progression</th>
 							<!--<th class="col-sm-2">Notified </th>-->
 						</tr>
 					</thead>
@@ -115,7 +111,7 @@
 							data-ng-show="stu.referred.length"
 							data-ng-click="onSelect($index)"
 							data-ng-dblclick="AECAttendance(stu, $index)"
-							class="{{stu.overlap.class}} {{stu.status.class}}"
+							class="{{stu.overlap.class}} {{stu.status.class}} "
 							>
 							<td>{{stu.referred[0].teacher.FirstName + ', ' + stu.referred[0].teacher.LastName}}</td>
 							<td>{{stu.user.FirstName}}</td>
@@ -139,8 +135,10 @@
 																							</select>
 							
 														</td>-->
-							<td>{{stu.overlap.place}}</td>
-							<td>{{stu.status.action}}</td>
+							<td>{{stu.overlap.msg}}</td>
+							<td>{{stu.activity.Name}}</td>
+							<td>{{stu.referred[0].consequence.referral_type.Name}}</td>
+
 							<!--							<td>
 															<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.ParentNotified" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
 															<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.student.Notified" btn-checkbox="" data-ng-click="submitStudentNotified(stu,$index)"><i class="fa fa-user"></i></label>

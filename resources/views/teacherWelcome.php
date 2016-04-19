@@ -193,7 +193,8 @@
 		border-color: #D9212B;
 	}
 
-	.btn-primary, btn-primary {
+	/*btn  primary */
+	.btn-primary {
 		background-color: #D9212B;
 		border-color: #D9212B;
 	}
@@ -204,8 +205,8 @@
 	}
 
 	.btn-primary[disabled] {
-		background-color: #D9212B;
-		border-color: #D9212B;
+		background-color: rgba(217, 33, 43, 0.70);
+		border-color: rgba(217, 33, 43, 0.70);
 		opacity: .7;
 	}
 
@@ -214,12 +215,13 @@
 		border-color: #3E0C0C;
 	}
 
+	/* label primary */
+
 	label.btn-primary {
 		background-color: #6385A8;
 		border-color: #6385A8;
 
 	}
-
 	label.btn-primary.active {
 		background-color: #D9212B;
 		border-color: #D9212B;
@@ -250,17 +252,40 @@
 	.bg-primary, .navy-bg {
 		background-color: #D9212B;
 		border-color: #D9212B;
+
 	}
 
 
-	.bg-success {
-		background-color: #D9212B;
-		border-color: #D9212B;
+	.bg-gray{
+		background-color: #C2C3C5;
+		color: #000000;
 	}
+	.bg-danger{
+		background-color: #CA423F;
+		border-color:#CA423F;
+		color:#000000;
+	}
+	.bg-warning{
+		background-color: #FFB757;
+		border-color:#FFB757;
+		color:#000000;
+	}
+
+	.bg-success, .bg-green{
+		background-color: #6FA45A;
+		border-color: #6FA45A;
+		color:#000000;
+	}
+	table tr td {
+		color:#000000;
+	}
+
 
 	.bg-info, .lazur-bg {
 		background-color: #6385A8;
 	}
+
+
 
 	.btn-info[disabled] {
 		background-color: #6385A8;
@@ -377,9 +402,7 @@
 			top: 0;
 		}
 	}
-	.bg-green {
-		background-color: #E0F2DE;
-	}
+
 
 </style>
 

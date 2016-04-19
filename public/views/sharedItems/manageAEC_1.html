@@ -22,7 +22,8 @@
                         <!-- AutoComplete Input Field -->
                         <li style="width:35%">
                             <form>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="refTable.$resolved"
@@ -35,7 +36,8 @@
 										>
 									<option value=''></option>
 								</select>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="!refTable.$resolved"
@@ -93,7 +95,7 @@
                         <i class="fa fa-list"></i> AEC List <i class="badge badge-info">{{refTable.length}}</i>
                     </button>
                 </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+				<table class="table footable table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
 					<thead>
 						<tr>
 							<th data-toggle="true">First Name</th>

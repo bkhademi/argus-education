@@ -28,6 +28,10 @@
 				id: 'Student Data',
 				link: "reteach.studentData",
 				icon: 'user fa-2x'
+			}, {
+				id: 'Reports',
+				link: 'reteach.reports.eod',
+				icon: 'area-chart fa-2x'
 			}
 		];
 	});

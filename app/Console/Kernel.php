@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		\App\Console\Commands\Inspire::class,
+		\App\Console\Commands\MorningJobs::class,
 	];
 
 	/**
@@ -27,7 +28,7 @@ class Kernel extends ConsoleKernel {
 	 * @return void
 	 */
 	protected function schedule(Schedule $schedule) {
-		$schedule->call(function() {
+		/*$schedule->call(function() {
 			// create estacado attendance
 			$date = Carbon::today();
 			// restrict to not dunbar
@@ -96,9 +97,45 @@ class Kernel extends ConsoleKernel {
 			})->update(['Date',Carbon::today()])
 		;
 					
-		})->weekdays()->dailyAt('4:30');
-		
+		})->weekdays()->dailyAt('4:30');*/
+
 		
 	}
+
+
+
+	  	/*	// feb 9. ask confirmation
+		$date = new Carbon("Feb 10 2016");
+		$schoolId = $this->user->SchoolId;
+		$aec = Referrals
+			::where('Date', $date)
+			->where('ReferralTypeId', 12)
+			->where('RefferalStatus', 0)
+			->whereHas('user', function($q)use($schoolId) { // from the school the user requested
+				$q->where('SchoolId', $schoolId);
+			})
+			->get();
+
+		foreach ($aec as $ref) {
+			$action = $ref->ActivityTypeId;
+			$studentId = $ref->StudentId;
+			$user = $ref->UserId;
+			$date = $ref->Date;
+			$comment = $ref->Comment;
+			$userAction = Useractions::create([
+					'ActionDate' => $date,
+					'ActionByUserId' => $user,
+					'ActionType' => $action,
+					'ActionToUserId' => $studentId,
+					'Comment' => $comment
+			]);
+
+			if(!$action){
+				$userAction->update(['Comment'=>'Student Had Either Oroom, ISS, or OSS']);
+			}
+		}*/
+
+
+
 
 }

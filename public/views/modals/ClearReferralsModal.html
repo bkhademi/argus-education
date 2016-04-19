@@ -1,0 +1,72 @@
+<!--
+    MODELS
+    comment -> text inside comment box - $scope.comment
+    student -> object of student, usually, full Name, ID, GR ... - $scope.student
+
+    -->
+<div class="modal-header text-center">
+    <button type="button" class="close" data-ng-click="$dismiss()">&times;</button>
+    <h4 class="modal-title">Clearing - {{student.user.FirstName  + ", " + student.user.LastName}}</h4>
+</div>
+<div class="modal-body text-center">
+    <!-- Parent Info -->
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-4">
+            <label> Guardian Name : </label> {{student.GuardianName}}
+        </div>
+        <div class="col-sm-4">
+            <label> Guardian Phone : </label> {{student.GuardianPhone}}
+        </div>
+    </div>
+
+    <!-- Referrals List -->
+
+    <div >
+        <h3 class='text-center'> Referrals Active </h3>
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th >Remove?</th>
+                <th>Date</th>
+                <th>Ref. Type</th>
+                <th>Referred By</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="item in student.referred" data-ng-class="item.remove?'bg-primary':''"
+            >
+                <td data-ng-click='onReferralRemove($index)'>
+                    <div><label> <input icheck type="checkbox" ng-model="item.remove">
+                    </label></div>
+                </td>
+                <td>{{item.Date.split(' ')[0] | date:'longDate'}}</td>
+                <td>{{item.referral_type.Name}}</td>
+                <td>{{item.teacher.FirstName || item.user.FirstName}} , {{item.teacher.LastName || item.user.LastName}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <!-- Comment Box -->
+    <div class=" row text-center">
+        <div class="col-sm-12">
+            <form>
+                <textarea id="addComment" type="text"
+                          placeholder="Add Comment"
+                          class="form-control auto-resize"
+                          data-ng-model="student.comment"
+                          data-ng-keyup="search()"></textarea>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn  btn-info" data-ng-click="$close({comment:comment, student:student})">Submit</button>
+    <button class="btn " data-ng-click="$dismiss()">Cancel</button>
+</div>

@@ -12,6 +12,12 @@ class Schools extends Model
      *
      * @var string
      */
+	public static $estacadoSchoolId = 1;
+	public static $dunbarSchoolId =2;
+	public static $ervinSchoolId = 3;
+	public static $adrianSchoolId = 4;
+	public static $aldersonSchoolId = 5;
+
     protected $table = 'schools';
 
     /**

@@ -24,9 +24,9 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-6 col-sm-offset-3">
-			<div style=" margin-top:10px"> 
-				<span style="vertical-align: middle"> Referred By : </span>
+		<div class="col-sm-6 col-sm-offset-3" >
+			<div style=" margin-top:10px">
+				<label style="vertical-align: middle"> Referred By : </label>
 				<span> 
 					<select chosen
 							width="'50%'"	 
@@ -41,6 +41,19 @@
 				</span>
 			</div> 
 
+		</div>
+		<div class="col-sm-6 col-sm-offset-3" data-ng-show="showFeature()">
+			<form role="form" name="form" style=" margin-top:10px">
+				<div class="form-group" >
+					<label class="form-inline">Assigned on :
+					<div class="input-group date col-sm-7" >
+						<input type="datetime" class="form-control" date-time ng-model="currentDate"
+							   name="date" view="date" min-view="date" auto-close="true" format="MMM DD  YYYY">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+					</div>
+					</label>
+				</div>
+			</form>
 		</div>
 		
 	</div>

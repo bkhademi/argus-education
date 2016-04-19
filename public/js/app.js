@@ -119,8 +119,8 @@
 				$rootScope.$state = $state;
 			}])
 		.controller('AuthController',
-			['$auth', '$state', '$http', '$rootScope',
-				function ($auth, $state, $http, $rootScope) {
+			['$auth', '$state', '$http', '$rootScope','StudentsService',
+				function ($auth, $state, $http, $rootScope,students) {
 					var vm = this;
 
 					vm.loginError = false;
@@ -135,6 +135,8 @@
 							// if login is successful, redirectto the users state
 							//$state.go('users', {});
 							return $http.get('api/authenticate/user').then(function (response) {
+
+
 								// stringify the returned data to prepare it 
 								// to go into local storage
 								var user = JSON.stringify(response.data.user);
@@ -237,6 +239,14 @@
 							$state.go('auth');
 						});
 					};
+
+					$rootScope.showFeature = function(){
+						return $rootScope.currentUser.SchoolId == 4;
+					};
+					$rootScope.showToUser = function(){
+						return $rootScope.currentUser.id == 'QXuR755nL8Fc6IQbseJyS5CPIshpJYQh7z4i6N2eYubqQ6NXtyodg3sdLUW5r8QzIG0lR7X63zJ1Op02UCOiwvKB74yh8xTt2zEupE2bRy1k04KN5mr3QyWw4Aeni6XX'
+							|| $rootScope.currentUser.id == 'QXuR755nL8Fc6IQbseJyS5CPIshpJYQh7z4i6N2eYubqQ6NXtyodg3sdLUW5r8QzIG0lR7X63zJ1Op02UCOiwvKB74yh8xTt2zEupE2bRy1k04KN5mr3QyWw4Aeni6YY';
+					}
 				}])
 		.controller('TopNavCtrl',
 			['StudentsService', '$modal', '$scope', '$rootScope',

@@ -24,7 +24,8 @@
 						<ul class="list-group list-inline">
 							<!-- AutoComplete Input Field -->
 							<li style="width:15%">
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="rotations"
@@ -37,7 +38,8 @@
 										>
 									<option value=''></option>
 								</select>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="!rotations"
@@ -48,7 +50,8 @@
 								</select>
 							</li>
 							<li style="width:35%">
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="programs && selected.rotation"
@@ -62,7 +65,8 @@
 										>
 									<option value=''></option>
 								</select>
-								<select chosen 
+								<select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="!(programs && selected.rotation)" 
@@ -111,7 +115,7 @@
                         <i class="fa fa-list"></i> Download List <i class="badge badge-info">{{refTable.length}}</i>
                     </button>
                 </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+				<table class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
 					<thead>
 						<tr>
 							<th data-toggle="true">First Name</th>
@@ -145,7 +149,7 @@
 									   ng-model="stu.student.asp_attendance[0].Attendance" btn-radio="2" 
 									   data-ng-click="changeAttendance(stu.student.asp_attendance[0], 2)"><i class="fa fa-times"></i>
 								</label>
-								<label tooltip-popup-delay='300' tooltip='Student is in GTM'  data-ng-if="currentUser.role === 3"
+								<label tooltip-popup-delay='300' tooltip='Student is in GTM'
 									   class="btn  {{stu.student.asp_attendance[0].Attendance === 3? 'btn-gtm':'' }} " 
 									   ng-model="stu.student.asp_attendance[0].Attendance" btn-radio="3" 
 									   data-ng-click="changeAttendance(stu.student.asp_attendance[0], 3)">GTM

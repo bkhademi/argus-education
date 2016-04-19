@@ -41,9 +41,9 @@
 					document.body.removeChild(element);
 				};
 				
-				lunchs.query({roster:true},function(data){ $scope.count.lunch = data.length;});
-				orooms.get({count:true}, function(data){ $scope.count.oroom = data.OroomList;});
-				isss.get({roster:true, count:true}, function(data){$scope.count.iss = data.count;});
-				osss.get({roster:true, count:true}, function(data){$scope.count.oss = data.count;});
+				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
+				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
+				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
 			}]);
 }(angular.module('Argus')));

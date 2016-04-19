@@ -15,7 +15,7 @@ use Carbon\Carbon;
 abstract class Controller extends BaseController
 {
 	public $oroomReferralTypes = [1,2,3,16,19];
-	public $issReferralTypes = [5,6,7,10,11,15,17];
+	public $issReferralTypes = [5,6,7,10,15,17];
 	public $ossReferralType = 11;
 	public $aecReferralType = 12;
 	public $aecAbsenceStatus = 4;
@@ -26,14 +26,16 @@ abstract class Controller extends BaseController
 	
 	
     public function __construct(){
-		// apply the jwt.auth middleware to all methods in thiscontroller
-		// except for the authenticate method. We don't want to prevent
-		// the  user from retrieving their token if they don't already have it
+		// apply the jwt.auth middleware to all methods in this controller
+
+		//$this->middleware('jwt.refresh');
+		//$this->middleware('jwt.auth');
 		
-		$this->middleware('jwt.auth');
-		
-               $this->user = JWTAuth::parseToken()->authenticate();
-               $this->userId = $this->user->id;
+		$this->user = JWTAuth::parseToken()->toUser();
+
+		$this->userId = $this->user->id;
+		$this->SchoolId = $this->user->SchoolId;
+
 	}
     
 	// get the userId from the token if using authentication( on deployment )
@@ -41,7 +43,7 @@ abstract class Controller extends BaseController
 	public function getUserId(Request $request){
 		return isset($this->userId)? $this->userId : $request->input('userId');
 	}
-	
+
 	public function getDate(Request $request){
 		return $request->has('Date')? new Carbon($request->Date): Carbon::today();
 	}
@@ -65,7 +67,7 @@ abstract class Controller extends BaseController
 	public function unsuccessful(){
 		return response("unsuccessful operation", 500);
 	}
-	
+
 	
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }

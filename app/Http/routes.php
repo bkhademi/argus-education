@@ -22,10 +22,17 @@ Route::get('blade',function(){
 	return view('child', ['name'=>'samo']);
 });
 
+Route::get('/tena',function() {
+	return view('tena');
+});
 
 
+Route::post('api/authenticate', 'AuthenticateController@authenticate');
+Route::get('api/authenticate', 'AuthenticateController@index')->middleware(['jwt.auth']);
+Route::get('api/authenticate/user', 'AuthenticateController@getAuthenticatedUser')->middleware(['jwt.auth']);
 
-Route::group(array('prefix'=>'api'), function(){
+
+Route::group(['prefix'=>'api', 'middleware'=>['jwt.auth']], function(){
 	Route::resource('user', 'UserController');
 	Route::resource('assignments','AssignmentsController');
 	Route::resource('blobreferences','BlobReferencesController');
@@ -49,7 +56,9 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::resource('oroom', 'ORoomController');
 	Route::resource('lunch', 'LunchDetentionController');
 	Route::resource('iss', 'ISSController');
+	Route::resource('issfollowup', 'ISSFollowupController');
 	Route::resource('oss', 'OSSController');
+	Route::resource('ossfollowup', 'OSSFollowupController');
 	Route::resource('activities', 'ActivitiesController');
 	Route::resource('counters', 'CountersController');
 	Route::resource('aeclist', 'AECController');
@@ -64,7 +73,7 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::post('task_commit_reteach_attendance', 'TestTasksController@commitReteachAttendance', ['middleware' => '']);
 	Route::post('task_submit_aec_attendance','TestTasksController@submitAECAttendance', ['middleware' => '']);
 	Route::post('task_submit_reteach_attendance','TestTasksController@submitReteachAttendance', ['middleware' => '']);
-	Route::post('task_report_demand','TestTasksController@report');
+	Route::get('task_report_demand','TestTasksController@report');
 	
 	
 	Route::resource('reteachlist', 'ReteachController');
@@ -76,7 +85,9 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::resource('admin_activities','ActivitiesADminController');
 	Route::resource('admin_users','UsersADminController');
 	
-	
+	Route::get('report-eod-all-pdf', 'PdfController@printEODReport');
+
+
 	Route::get('report-eod-oroom', 'ReportsController@EODoroom');
 	Route::get('report-eod-lunchd', 'ReportsController@EODlunchD');
 	Route::get('report-eod-iss', 'ReportsController@EODiss');
@@ -85,16 +96,17 @@ Route::group(array('prefix'=>'api'), function(){
 	Route::get('report-eod-asp', 'ReportsController@EODASP');
 	Route::get('report-eod-all', 'ReportsController@EODall');
 	Route::get('report-eod-reteach','ReportsController@EODReteach' );
-	
 	Route::get('report-oroomactivity', 'ReportsController@oroomActivity');
-	
-	
-        Route::resource('printAssignments', 'PrintAssignmentsController');
-        Route::resource('printPasses', 'PrintPassesController');
+
+	Route::post('report-print', 'ReportsController@printHtml');
+
+
+	Route::resource('printAssignments', 'PrintAssignmentsController');
+	Route::resource('printPasses', 'PrintPassesController');
         
-    Route::resource('authenticate', 'AuthenticateController', ['only' => ['index']]);
-	Route::post('authenticate', 'AuthenticateController@authenticate');
-	Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
+/*    Route::get('authenticate', 'AuthenticateController');
+
+	Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');*/
 
 	
 	Route::post('generaldb', 'generaldbController@store');

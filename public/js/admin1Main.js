@@ -174,65 +174,83 @@
 
 (function (app) {
 	"use strict";
-	app.controller('NavigationAdmin1Ctrl', function () {
-		var vm = this;
-		/**
-		 * Navigation bar places with their links and icons
-		 */
-		vm.tabs = [
-			{
-				id: 'Dashboard',
-				link: "admin1.dashboard",
-				icon: 'dashboard fa-2x'
-			}, {
-				id: 'AEC Referral System',
-				link: "admin1.referral",
-				icon: 'eye fa-2x'
-			},
-			{
-				id: 'AEC List',
-				link: "admin1.AECList",
-				icon: 'list-alt fa-2x'
-			}, {
-				id: 'Follow-up List',
-				link: "admin1.pending",
-				icon: 'exclamation fa-2x'
-			} 
+	app.controller('NavigationAdmin1Ctrl', ['ISSFollowupService', 'ISSService', 'LunchService', 'OroomService', 'AECListService', 'AECAbsenceListService','ReteachListService', 'ReteachAbsenceListService','OSSService',
+		function (issfs, isss, lunchs, orooms, aecs, aecfs ,reteachs, reteachfs, osss) {
+			var vm = this;
+			/**
+			 * Navigation bar places with their links and icons
+			 */
+			vm.tabs = [
+				{
+					id: 'Dashboard',
+					link: "admin1.dashboard",
+					icon: 'dashboard fa-2x'
+				}, {
+					id: 'AEC Referral System',
+					link: "admin1.referral",
+					icon: 'eye fa-2x'
+				},
+				{
+					id: 'AEC List',
+					link: "admin1.AECList",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'Follow-up List',
+					link: "admin1.pending",
+					icon: 'exclamation fa-2x'
+				}
 //			{
 //				id: 'Student Data',
 //				link: "admin1.studentData",
 //				icon: 'user fa-2x'
 //			}
-			, {
-				id: 'ORoom Activity Log',
-				link: "admin1.oroomActivityLogAdmin",
-				icon: 'tasks fa-2x'
-			}
+				, {
+					id: 'ORoom Activity Log',
+					link: "admin1.oroomActivityLogAdmin",
+					icon: 'tasks fa-2x'
+				}
 //			, {
 //				id: 'Live Activity Log',
 //				link: "admin1.oroomActivitiLog.oroom",
 //				icon: 'user fa-2x'
 //			}
-			,{
-				id: 'ORoom Coordinator Referral',
-				link: "admin1.CoordinatorReferralSystem",
-				icon: 'pencil-square-o fa-2x'
-			},{
-				id: 'Attendance Rosters',
-				link: "admin1.attendanceRosters.oroom",
-				icon: 'list-alt fa-2x'
-			},{
-				id: 'Parent Meeting Followup List',
-				link: "admin1.issFollowup",
-				icon: 'list-alt fa-2x'
-			},
-			 {
-				id: 'Reports',
-				link: 'admin1.reports',
-				icon: 'area-chart fa-2x'
-			}
-		];
-	});
+				, {
+					id: 'ORoom Coordinator Referral',
+					link: "admin1.CoordinatorReferralSystem",
+					icon: 'pencil-square-o fa-2x'
+				}, {
+					id: 'Attendance Rosters',
+					link: "admin1.attendanceRosters.oroom",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'ISS Followup List',
+					link: "admin1.issFollowup",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'Parent Meeting List',
+					link: "admin1.parentMeetingList",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'Reports',
+					link: 'admin1.reports.eod',
+					icon: 'area-chart fa-2x'
+				}
+			];
+
+			vm.count = {};
+			issfs.get({roster: true, count: true}, function (data) { vm.count.issFollowup = parseInt(data[0]); });
+			isss.get({roster: true, count: true}, function (data) { vm.count.iss = parseInt(data.count); });
+
+			lunchs.get({count: true, roster: true}, function (data) { vm.count.lunch = data.lunchStudentsCount; });
+			orooms.get({count: true, roster: true}, function (data) { vm.count.oroom = data.OroomList; });
+
+			aecs.get({roster: true, count: true}, function (data) { vm.count.aec = data.aecCount; });
+			aecfs.get({roster: true, count: true}, function (data) { vm.count.aecFollowup = data.aecAbsentCount; });
+
+			reteachs.get({roster: true, count: true}, function (data) { vm.count.reteach = data.reteachCount; });
+			reteachfs.get({roster: true, count: true}, function (data) { vm.count.reteachFollowup = data.reteachAbsentCount; });
+			osss.get({count:true, param:'ossList' }, function(data){vm.count.oss = data.count;});
+		}]);
 }(angular.module('Argus')));
 
 /* global angular */
@@ -246,7 +264,7 @@
 				.state('admin1', {
 					abstract: true,
 					url: "/admin1",
-					templateUrl: "views/common/contentArgus.html",
+					templateUrl: "views/common/contentArgusLeadCoordinator.html",
 					controller: "NavigationAdmin1Ctrl",
 					controllerAs: 'navigation',
 					resolve: {
@@ -288,6 +306,7 @@
 						}
 					}
 				})
+				/* AEC */
 				.state('admin1.referral', {
 					url: "/adminReferral",
 					templateUrl: 'views/admin1/Referral.html',
@@ -380,6 +399,103 @@
 						}
 					}
 				})
+
+				/* Reteach */
+				.state('admin1.reteachReferral', {
+					url: "/ReteachReferral",
+					templateUrl: 'views/reteach/Referral.html',
+					data: {pageTitle: 'Referral'},
+					controller: 'ReteachReferralCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
+								}
+							]);
+						}
+					}
+
+				})
+				.state('admin1.reteachList', {
+					url: "/ReteachList",
+					templateUrl: 'views/reteach/manageReteach.html',
+					data: {pageTitle: 'List'},
+					controller: 'ManageReteachCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}
+							]);
+						}
+					}
+
+				})
+				.state('admin1.reteachPending', {
+					url: "/ReteachFollowup",
+					templateUrl: 'views/reteach/manageReteachabsence.html',
+					data: {pageTitle: 'Pending'},
+					controller: 'ManageReteachAbsenceCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}
+							]);
+						}
+					}
+				})
+
 				.state('admin1.studentData', {
 					url: "/studentData",
 					templateUrl: 'views/sharedItems/studentInfo.html',
@@ -423,7 +539,6 @@
 					}
 				})
 
-
 				.state('admin1.CoordinatorReferralSystem', {
 					url: "/OroomCoordinatorReferral",
 					templateUrl: 'views/admin2/referralSystem.html',
@@ -444,6 +559,9 @@
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
 								}
 							]);
 						}
@@ -478,13 +596,6 @@
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}, {
-									name: 'ngGrid',
-									files: ['js/plugins/nggrid/ng-grid-2.0.3.min.js']
-								},
-								{
-									insertBefore: '#loadBefore',
-									files: ['js/plugins/nggrid/ng-grid.css']
 								}
 
 							]);
@@ -534,7 +645,7 @@
 										'js/plugins/flot/jquery.flot.resize.js',
 										'js/plugins/flot/jquery.flot.pie.js',
 										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js' ]
+										'js/plugins/flot/angular-flot.js']
 								}
 							])
 								;
@@ -568,6 +679,75 @@
 								{
 									name: 'ui.footable',
 									files: ['js/plugins/footable/angular-footable.js']
+								}
+							])
+								;
+						}
+					}
+				})
+
+				.state('admin1.parentMeetingList', {
+					url: '/Parent Meeting List',
+					templateUrl: 'views/iss/parentMeeting.html',
+					data: {pageTitle: 'Parent Meeting List'},
+					controller: 'ParentMeetingCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+								}
+							])
+								;
+						}
+					}
+				})
+				.state('admin1.parentMeetingFollowup', {
+					url: '/Parent Meeting Followup',
+					templateUrl: 'views/iss/parentMeetingFollowup.html',
+					data: {pageTitle: 'Parent Meeting List'},
+					controller: 'ParentMeetingFollowupCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
 								}
 							])
 								;
@@ -621,7 +801,7 @@
 										'js/plugins/flot/jquery.flot.resize.js',
 										'js/plugins/flot/jquery.flot.pie.js',
 										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js' ]
+										'js/plugins/flot/angular-flot.js']
 								}
 							]);
 						}
@@ -646,7 +826,7 @@
 										'js/plugins/flot/jquery.flot.resize.js',
 										'js/plugins/flot/jquery.flot.pie.js',
 										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js' ]
+										'js/plugins/flot/angular-flot.js']
 								}
 							]);
 						}
@@ -663,7 +843,10 @@
 					templateUrl: 'views/reports/reports.atRisk.html',
 					data: {pageTitle: 'Reports'},
 					controller: 'ReportsAtRiskCtrl'
-				});
+				})
+
+			;
+
 
 		}]);
 
@@ -826,364 +1009,458 @@
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app.controller('NavigationAdmin2Ctrl', function () {
-		var path = "../Client/Views/dashItems/";
-		var vm = this;
-		/**
-		 * Navigation bar places with their links and icons
-		 */
-		vm.tabs = [
-			{
-				id: 'Dashboard',
-				link: "admin2.dashboard",
-				icon: 'dashboard fa-2x'
-			}, {
-				id: 'Referral System',
-				link: "admin2.referral",
-				icon: 'eye fa-2x'
-			},
-			{
-				id: 'AEC List',
-				link: "admin2.AECList",
-				icon: 'list-alt fa-2x'
-			}, {
-				id: 'Follow-up List',
-				link: "admin2.pending",
-				icon: 'exclamation fa-2x'
-			}, {
-				id: 'Student Data',
-				link: "admin2.studentData",
-				icon: 'user fa-2x'
-			}
-		];
-	});
+    "use strict";
+    app.controller('NavigationAdmin2Ctrl', function () {
+        var path = "../Client/Views/dashItems/";
+        var vm = this;
+        /**
+         * Navigation bar places with their links and icons
+         */
+        vm.tabs = [
+            {
+                id: 'Dashboard',
+                link: "admin2.dashboard",
+                icon: 'dashboard fa-2x'
+            }, {
+                id: 'Referral System',
+                link: "admin2.referral",
+                icon: 'eye fa-2x'
+            },
+            {
+                id: 'AEC List',
+                link: "admin2.AECList",
+                icon: 'list-alt fa-2x'
+            }, {
+                id: 'Follow-up List',
+                link: "admin2.pending",
+                icon: 'exclamation fa-2x'
+            }, {
+                id: 'Student Data',
+                link: "admin2.studentData",
+                icon: 'user fa-2x'
+            }, {
+                id: 'Reports',
+                link: 'admin2.reports.eod',
+                icon: 'area-chart fa-2x'
+            }
+
+        ];
+    });
 }(angular.module('Argus')));
 
 
 /* global angular */
 
 (function (app) {
-	app.controller('ORoomCoordinatorReferralCtrl',
-		['$scope', '$modal', 'notify', 'StudentsService', 'teachers', 'DevService', 'LunchService', 'OroomService', 'ISSService', 'CountersService',
-			function ($scope, $modal, notify, students, teachers, dev, lunchs, orooms, isss, counters) {
-
-				$scope.selected = {};
-				$scope.schoolStudents = students.query({admin: true, light: true}, function () {
-				}, function (error) {
-					dev.openError(error);
-				});
-
-				$scope.teachers = teachers.query();
-
-				$scope.assignLunch = function () {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/lunchDetentionModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, PeriodsService) {
-							$scope.periods = PeriodsService.query();
-							$scope.student = student;
-							
-						},
-						resolve: {
-							student: function () {
+    app.controller('ORoomCoordinatorReferralCtrl',
+        ['$scope', '$modal', 'MyNotify', 'StudentsService', 'teachers', 'DevService', 'LunchService', 'OroomService', 'ISSService', 'CountersService', 'ReferralsService',
+            function ($scope, $modal, notify, students, teachers, dev, lunchs, orooms, isss, counters, referrals) {
+                $scope.currentDate = new Date();
+                $scope.selected = {};
+                $scope.$watch('form.date.$viewValue', function (newVal) {
+                    if (newVal) //when date has a valid date request the List from that date
+                        $scope.currentDate = newVal;
+                });
 
 
-								return $scope.selected.student;
-							}
-						}
-					});
+                $scope.currentDate = new Date();
+                $scope.schoolStudents = students.query({admin: true, light: true}, function () {
+                }, function (error) {
+                    dev.openError(error);
+                });
 
-					modalInstance.result.then(function () {// on SUBMIT
-						// post the comment and other things to the database 
-						var student = $scope.selected.student;
-						var urlParams = {};
-						var payload = {
-							StudentId: student.Id,
-							PeriodId: student.period ? student.period.Id : 0,
-							TardyTime: student.tardyTime
-						};
+                $scope.teachers = teachers.query();
+
+                $scope.assignLunch = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/lunchDetentionModal.html',
+                        size: 'lg',
+                        controller: function ($scope, student, PeriodsService) {
+                            $scope.periods = PeriodsService.query();
+                            $scope.student = student;
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.selected.student;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {// on SUBMIT
+                        // post the comment and other things to the database
+                        lunchs.saveReferral($scope.currentDate,$scope.selected.student).then(function (data) {
+                            notify(data.msg,'success');
+                            $scope.selected.student = null;
+                        }, dev.openError);
+
+                    });
+                };
+
+                $scope.assignORoom = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/assignOroomModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student, teachers) {
+                            $scope.student = student;
+                            $scope.teachers = teachers;
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.selected.student;
+                            },
+                            teachers: function () {
+                                return $scope.teachers;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {// on SUBMIT
+                        var student = $scope.selected.student;
+                        console.log(student);
+                        // post the comment and other things to the database
+
+                        var payload = {
+                            //Date:$scope.currentDate,
+                            StudentId: student.Id,
+                            TeacherId: student.teacher ? student.teacher.id : 0,
+                            ActivityTypeId: 1,
+                            ReferralTypeId: 1,
+                            Comment: student.comment,
+                            Date: $scope.currentDate
+                        };
+
+                        orooms.save({ormlist: true}, payload, function () {
+                            notify('success','success');
+                        }, dev.openError);
+
+                        $scope.selected.student = null;
+                    });
+                };
+
+                $scope.assignISS = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/ISSReferralAdminModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student, PeriodsService) {
+                            $scope.periods = PeriodsService.query();
+                            $scope.student = student;
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.selected.student;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {// on SUBMIT
+                        var student = $scope.selected.student;
+                        // post the comment and other things to the database
+                        isss.save({
+                            StudentId: student.Id,
+                            ReferralTypeId: 10,
+                            ActionType: 21,
+                            Comment: student.comment,
+                            Date: $scope.currentDate
+                        }, function (data) {
+                            notify(data.msg,'success');
+                        }, dev.openError);
+
+                        $scope.selected.student = null;
+                    });
+                };
+
+                $scope.changeAndComment = function () {
+                    var selected = $scope.selected;
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/oRoomCoordinatorUpdateAdminModal.html',
+                        size: 'lg',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                            console.log(student);
+                        },
+                        resolve: {
+                            student: function () {
+                                counters.get({id: $scope.selected.student.Id}, function (data) {
+                                    $scope.selected.student.counters = data;
+                                    return $scope.selected.student;
+                                });
+
+                                return $scope.selected.student;
+
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (data) {// on SUBMIT
+                        var item = $scope.selected.student;
+                        // post the comment and other things to the database
+                        var urlParams = {
+                            id: item.Id
+                        };
+
+                        counters.update(urlParams,
+                            {
+                                counters: item.counters,
+                                Comment: data.comment
+                            }, function () {
+                                notify('success','success');
+                            }, function (error) {
+                                dev.openError(error);
+                            });
+                        $scope.selected.student = null;
+                    });
+                };
+
+                $scope.clear = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/ClearReferralsModal.html',
+                        size: 'lg',
+                        controller: function ($scope, PeriodsService, student, teachers) {
+                            $scope.student = student;
+                            $scope.teachers = teachers;
+                            $scope.onReferralRemove = function ($index) {
+
+                            }
+                        },
+                        resolve: {
+                            student: function () {
+                                referrals.query({StudentId: $scope.selected.student.Id}, function (data) {
+
+                                    $scope.selected.student.referred = data;
+                                    return $scope.selected.student;
+                                });
+                                return $scope.selected.student;
+                            },
+                            teachers: function () {
+                                return $scope.teachers;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {// on SUBMIT
+                        var student = $scope.selected.student;
 
 
-						lunchs.save(urlParams, payload, function (data) {
-							notify('success');
-						}, dev.openError);
+                        referrals.deleteReferralsFromStudent($scope.currentDate, student).then(function (data) {
+                            notify(data.msg, 'success');
+                        }, dev.openError);
 
-						$scope.selected.student = null;
-					});
-				};
-				$scope.assignORoom = function () {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/assignOroomModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, PeriodsService, student, teachers) {
-							$scope.periods = PeriodsService.query();
-							$scope.student = student;
-							$scope.teachers = teachers;
-						},
-						resolve: {
-							student: function () {
-								return $scope.selected.student;
-							},
-							teachers: function () {
-								return $scope.teachers;
-							}
-						}
-					});
+                        $scope.selected.student = null;
+                    });
+                };
 
-					modalInstance.result.then(function () {// on SUBMIT
-						var student = $scope.selected.student;
-						console.log(student);
-						// post the comment and other things to the database 
-
-						var payload = {
-							//Date:$scope.currentDate,
-							StudentId: student.Id,
-							TeacherId: student.teacher ? student.teacher.id : 0,
-							ReferralType: "First Time - Teacher",
-							Comment: student.comment
-						};
-
-						orooms.save({ormlist: true}, payload, function () {
-							notify('success');
-						}, dev.openError);
-
-						$scope.selected.student = null;
-					});
-				};
-				$scope.assignISS = function () {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/ISSReferralAdminModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, PeriodsService) {
-							$scope.periods = PeriodsService.query();
-							$scope.student = student;
-						},
-						resolve: {
-							student: function () {
-								return $scope.selected.student;
-							}
-						}
-					});
-
-					modalInstance.result.then(function () {// on SUBMIT
-						var student = $scope.selected.student;
-						// post the comment and other things to the database 
-						isss.save({
-							StudentId: student.Id,
-							ReferralTypeId: 10,
-							ActionType: 21,
-							Comment: student.comment
-						}, function (data) {
-							notify(data.msg);
-						}, dev.openError);
-
-						$scope.selected.student = null;
-					});
-				};
-				$scope.changeAndComment = function () {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/oRoomCoordinatorUpdateAdminModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student) {
-							$scope.student = student;
-							console.log(student);
-						},
-						resolve: {
-							student: function () {
-								return students.get({id: $scope.selected.student.Id}, function (data) {
-									
-									$scope.selected.student.counters = data.counters;
-									return $scope.selected.student;
-								});
-								return $scope.selected.student;
-							}
-						}
-					});
-
-					modalInstance.result.then(function (data) {// on SUBMIT
-						var item = $scope.selected.student;
-						// post the comment and other things to the database 
-						var urlParams = {
-							id: item.Id
-						};
-
-						counters.update(urlParams,
-							{counters: item.counters,
-								Comment: data.comment
-							}, function () {
-							notify('success');
-						}, function (error) {
-							dev.openError(error);
-						});
-						$scope.selected.student = null;
-					});
-				};
-
-
-			}]);
+            }]);
 }(angular.module('Argus')));
 
 
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
-		function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
+    "use strict";
+    app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
+        function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
 
-			$stateProvider
-				.state('admin2', {
-					abstract: true,
-					url: "/admin2",
-					templateUrl: "views/common/contentArgus.html",
-					controller: "NavigationAdmin2Ctrl",
-					controllerAs: 'navigation',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'angles',
-									files: ['js/plugins/chartJs/angles.js']
-								},
-								{
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
-								},
-								{
-									name: 'ui.calendar',
-									files: ['js/plugins/fullcalendar/calendar.js']
-								},
-								{
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								},
-								{
-									name: 'ui.slimscroll',
-									files: ['js/plugins/slimscroll/angular.slimscroll.js']
-								}
+            $stateProvider
+                .state('admin2', {
+                    abstract: true,
+                    url: "/admin2",
+                    templateUrl: "views/common/contentArgusAECCoordinator.html",
+                    controller: "NavigationAdmin2Ctrl",
+                    controllerAs: 'navigation',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'angles',
+                                    files: ['js/plugins/chartJs/angles.js']
+                                },
+                                {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
+                                },
+                                {
+                                    name: 'ui.calendar',
+                                    files: ['js/plugins/fullcalendar/calendar.js']
+                                },
+                                {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                },
+                                {
+                                    name: 'ui.slimscroll',
+                                    files: ['js/plugins/slimscroll/angular.slimscroll.js']
+                                }
 
-							]);
-						}
-					}
-				})
-				.state('admin2.dashboard', {
-					url: "/dashboard",
-					templateUrl: 'views/admin2/dashboard.html',
-					data: {pageTitle: 'Dashboard'},
-					controller: "DashAdmin2Ctrl",
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
-								},
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('admin2.referral', {
-					url: "/adminReferral",
-					templateUrl: 'views/admin1/Referral.html',
-					data: {pageTitle: 'Referral'},
-					controller: 'admin1referalController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
+                            ]);
+                        }
+                    }
+                })
+                .state('admin2.dashboard', {
+                    url: "/dashboard",
+                    templateUrl: 'views/admin2/dashboard.html',
+                    data: {pageTitle: 'Dashboard'},
+                    controller: "DashAdmin2Ctrl",
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+                                },
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin2.referral', {
+                    url: "/adminReferral",
+                    templateUrl: 'views/admin1/Referral.html',
+                    data: {pageTitle: 'Referral'},
+                    controller: 'admin1referalController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin2.AECList', {
-					url: "/AECList",
-					templateUrl: 'views/sharedItems/manageAEC.html',
-					data: {pageTitle: 'AEC List'},
-					controller: 'manageAECController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								},
-								{
-									name: 'BarcodeGenerator',
-									files: ['css/plugins/barcode/barcode.css', 'js/plugins/barcode/barcode.js']
-								}
-							]);
-						}
-					}
+                })
+                .state('admin2.AECList', {
+                    url: "/AECList",
+                    templateUrl: 'views/sharedItems/manageAEC.html',
+                    data: {pageTitle: 'AEC List'},
+                    controller: 'manageAECController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                },
+                                {
+                                    name: 'BarcodeGenerator',
+                                    files: ['css/plugins/barcode/barcode.css', 'js/plugins/barcode/barcode.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin2.pending', {
-					url: "/pending",
-					templateUrl: 'views/sharedItems/manageAECabsence.html',
-					data: {pageTitle: 'Pending'},
-					controller: 'manageAECAbsenceController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('admin2.studentData', {
-					url: "/studentData",
-					templateUrl: 'views/sharedItems/studentInfo.html',
-					data: {pageTitle: 'Student Data'},
-					controller: 'studentInfoCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('admin2.createStudentPass', {
-					url: "/createStudentPass",
-					templateUrl: 'views/sharedItems/multiplePasses.html',
-					data: {pageTitle: 'Create Pass'}
-				});
+                })
+                .state('admin2.pending', {
+                    url: "/pending",
+                    templateUrl: 'views/sharedItems/manageAECabsence.html',
+                    data: {pageTitle: 'Pending'},
+                    controller: 'manageAECAbsenceController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin2.studentData', {
+                    url: "/studentData",
+                    templateUrl: 'views/sharedItems/studentInfo.html',
+                    data: {pageTitle: 'Student Data'},
+                    controller: 'studentInfoCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin2.createStudentPass', {
+                    url: "/createStudentPass",
+                    templateUrl: 'views/sharedItems/multiplePasses.html',
+                    data: {pageTitle: 'Create Pass'}
+                })
+
+                .state('admin2.reports', {
+                    url: '/Reports',
+                    templateUrl: 'views/reports/reports.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
+                .state('admin2.reports.eod', {
+                    url: '/EOD',
+                    templateUrl: 'views/reports/reports.eod.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsEODCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    serie: true,
+                                    name: 'angular-flot',
+                                    files: [
+                                        'js/plugins/flot/jquery.flot.js',
+                                        'js/plugins/flot/jquery.flot.time.js',
+                                        'js/plugins/flot/jquery.flot.tooltip.min.js',
+                                        'js/plugins/flot/jquery.flot.spline.js',
+                                        'js/plugins/flot/jquery.flot.resize.js',
+                                        'js/plugins/flot/jquery.flot.pie.js',
+                                        'js/plugins/flot/curvedLines.js',
+                                        'js/plugins/flot/angular-flot.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
 
 
-
-
-		}]);
+            ;
+        }]);
 
 
 }(angular.module('Argus')));
@@ -1204,7 +1481,7 @@
 
 			});
 
-			lunchs.query({roster: true}, function (data) {
+			lunchs.query({roster: true,count:true}, function (data) {
 				$scope.counters.oroom += data.length;
 
 			});
@@ -1306,183 +1583,42 @@
 /* global angular */
 
 (function (app) {
-	"use strict";
+    "use strict";
 //	O-Room Coordinator
-	app.controller('NavigationAdmin3Ctrl', function () {
-		var path = "../Client/Views/dashItems/";
-		var vm = this;
-		/**
-		 * Navigation bar places with their links and icons
-		 */
-		vm.tabs = [
-			{
-				id: 'Dashboard',
-				link: "admin3.dashboard",
-				icon: 'dashboard fa-2x'
-			},{
-				id: 'Activity Log',
-				link: 'admin3.oroomActivityLogAdmin',
-				icon: 'tasks fa-2x'
-			},{
-				id: 'Create Referral',
-				link: "admin3.CoordinatorReferralSystem",
-				icon: 'pencil-square-o fa-2x'
-			},{
-				id: 'Attendance Rosters',
-				link: "admin3.attendanceRosters.oroom",
-				icon: 'list-alt fa-2x'
-			},{
-				id: 'Reports',
-				link: 'admin3.reports',
-				icon: 'area-chart fa-2x'
-			}
-		];
-	});
+    app.controller('NavigationAdmin3Ctrl', function () {
+        var path = "../Client/Views/dashItems/";
+        var vm = this;
+        /**
+         * Navigation bar places with their links and icons
+         */
+        vm.tabs = [
+            {
+                id: 'Dashboard',
+                link: "admin3.dashboard",
+                icon: 'dashboard fa-2x'
+            }, {
+                id: 'Activity Log',
+                link: 'admin3.oroomActivityLogAdmin',
+                icon: 'tasks fa-2x'
+            }, {
+                id: 'Create Referral',
+                link: "admin3.CoordinatorReferralSystem",
+                icon: 'pencil-square-o fa-2x'
+            }, {
+                id: 'Attendance Rosters',
+                link: "admin3.attendanceRosters.oroom",
+                icon: 'list-alt fa-2x'
+            }, {
+                id: 'Reports',
+                link: 'admin3.reports.eod',
+                icon: 'area-chart fa-2x'
+            }
+
+        ];
+    });
 }(angular.module('Argus')));
 
-(function (app) {
-	app.controller('Admin1ReportsController', ['$scope'	, function ($scope) {
-			$scope.eod = {};
-			$scope.eod.issStudents = [
-				{StudentId:'100109607', FirstName:'Mark',LastName:'Gonzales', Attendance:'Present', Progression:''  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White', Attendance:'Present', Progression:''  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White', Attendance:'Present', Progression:''  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White', Attendance:'Present', Progression:''  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White', Attendance:'Present', Progression:''  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White', Attendance:'Present', Progression:''  },
-				
-				
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Attendance:'Sent-Out', Progression:'ISS --> OSS'  },
-				
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black', Attendance:'Absent', Progression:'ISS --> Re-ISS'  }
-				
-			];
-		}]);
-}(angular.module('Argus')));
 
-(function (app) {
-	app.controller('Admin1ReportsEODController', ['$scope', "$timeout", function ($scope , $timeout) {
-			$scope.eodReports = [
-				{name:'AEC', value:1},
-				{name:'O-Room', value:2},
-				{name:'Reteach', value:3},
-				{name:'ISS', value:4},
-				{name:'OSS PMP', value:5}
-			];
-			$scope.eod.selected = {name:0, value:0 };
-			
-			
-			
-			
-			angular.forEach($scope.eod.issStudents, function(item){
-				if(item.Attendance === 'Absent')
-					item.class = 'bg-gray';
-				else if(item.Attendance ==='Sent-Out')
-					item.class = 'bg-danger';
-				else 
-					item.class = 'bg-green';
-			});
-			
-		}]);
-}(angular.module('Argus')));
-
-(function (app) {
-	app.controller('Admin1ReportsProgressionController', ['$scope', '$timeout'	, function ($scope, $timeout) {
-			$scope.startingPoints = [
-				{name:'Reteach', value:1},
-				{name:'AEC', value:1},
-				{name:'O-Room', value:2},
-				{name:'O-Room+1', value:3},
-				{name:'ISS', value:4},
-				{name:'OSS PMP', value:5}
-			];
-			
-			
-			
-			$scope.starting = undefined;
-			$scope.eod.issStudents1 = [
-				{StudentId:'100109607', FirstName:'Mark',LastName:'Gonzales', Date:'12/10/2015'  },
-				{StudentId:'100131423', FirstName:'Adrian ',LastName:'Black',  Date:'12/10/2015', class:'bg-warning'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/10/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/10/2015'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez',  Date:'12/10/2015'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black',  Date:'12/10/2015'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/10/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/10/2015'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/10/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/10/2015'  }];
-			
-			$scope.eod.issStudents2 = [
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/11/2015'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez',  Date:'12/11/2015'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black',  Date:'12/11/2015'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/11/2015'  },
-				{StudentId:'100344318', FirstName:'Adrian ',LastName:'Black',  Date:'12/11/2015', class:'bg-warning'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/11/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/11/2015'  }];
-			
-			
-			$scope.eod.issStudents3 = [
-				{StudentId:'100109607', FirstName:'Mark',LastName:'Gonzales', Date:'12/12/2015'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black',  Date:'12/12/2015'  },
-				{StudentId:'100131834', FirstName:'Adrian ',LastName:'Black', Date:'12/12/2015' ,class:'bg-warning'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/12/2015'  },
-				{StudentId:'102234384', FirstName:'Henry ',LastName:'Lopez',  Date:'12/12/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/12/2015'  }];
-			
-			
-			$scope.eod.issStudents4 = [
-				{StudentId:'100109607', FirstName:'Mark',LastName:'Gonzales', Date:'12/13/2015'  },
-				{StudentId:'100131423', FirstName:'Tyron ',LastName:'Black',  Date:'12/13/2015'  },
-				{StudentId:'100131834', FirstName:'Adrian ',LastName:'Black', Date:'12/13/2015', class:'bg-warning'  },
-				{StudentId:'100131834', FirstName:'Sara ',LastName:'Marquez', Date:'12/13/2015'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/13/2015'  }];
-			
-			$scope.eod.issStudents5 = [
-			
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/14/2015'  },
-				{StudentId:'100131834', FirstName:'Adrian ',LastName:'Black', Date:'12/14/2015', class:'bg-warning'  },
-				{StudentId:'100344318', FirstName:'David ',LastName:'White',  Date:'12/14/2015'  }];
-			$scope.selected = $scope.eod.issStudents1[1];
-		}]);
-}(angular.module('Argus')));
-
-(function (app) {
-	app.controller('Admin1ReportsAtRiskController', ['$scope'	, function ($scope) {
-			$scope.eodReports = [
-				{name:'AEC', value:1},
-				{name:'O-Room', value:2},
-				{name:'Reteach', value:3},
-				{name:'ISS', value:4},
-				{name:'OSS PMP', value:5}
-			];
-			$scope.eod.selected = {name:0, value:0 };
-			
-			angular.forEach($scope.eod.issStudents, function(item){
-				item.class = 'bg-danger';
-			});
-		}]);
-}(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
@@ -1494,7 +1630,7 @@
 				.state('admin3', {
 					abstract: true,
 					url: "/admin3",
-					templateUrl: "views/common/contentArgus.html",
+					templateUrl: "views/common/contentArgusOroomCoordinator.html",
 					controller: "NavigationAdmin3Ctrl",
 					controllerAs: 'navigation',
 					resolve: {
@@ -1576,7 +1712,20 @@
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([
 								{
+									files: ['js/plugins/jasny/jasny-bootstrap.min.js']
+								}, {
 									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
 								}
 							]);
 						}
@@ -1593,7 +1742,32 @@
 							return $ocLazyLoad.load([
 								{
 									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								},
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'ngGrid',
+									files: ['js/plugins/nggrid/ng-grid-2.0.3.min.js']
+								},
+								{
+									insertBefore: '#loadBefore',
+									files: ['js/plugins/nggrid/ng-grid.css']
 								}
+
 							]);
 						}
 					}
@@ -1626,18 +1800,37 @@
 					controller: 'OSSLiveCtrl',
 					resolve: {}
 				})
-				
-				
+
 				.state('admin3.reports', {
 					url: '/Reports',
-					templateUrl: 'views/reports/reportsAdmin3.html',
+					templateUrl: 'views/reports/reports.html',
 					data: {pageTitle: 'Reports'},
-					controller: 'Admin1ReportsController'
+					controller: 'ReportsCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}
+							])
+								;
+						}
+					}
 				})
 				.state('admin3.reports.eod', {
 					url: '/EOD',
 					templateUrl: 'views/reports/reports.eod.html',
-					data: {pageTitle: 'EOD'},
+					data: {pageTitle: 'Reports'},
 					controller: 'ReportsEODCtrl',
 					resolve: {
 						loadPlugin: function ($ocLazyLoad) {
@@ -1653,29 +1846,33 @@
 										'js/plugins/flot/jquery.flot.resize.js',
 										'js/plugins/flot/jquery.flot.pie.js',
 										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js' ]
+										'js/plugins/flot/angular-flot.js']
 								}
 							]);
 						}
 					}
 				})
-				.state('admin3.reports.progression', {
-					url: '/Progression',
-					templateUrl: 'views/reports/reports.progression.html',
-					data: {pageTitle: 'Progression'},
-					controller: 'Admin1ReportsProgressionController'
-				})
-				.state('admin3.reports.atRisk', {
-					url: '/At_Risk',
-					templateUrl: 'views/reports/reports.atRisk.html',
-					data: {pageTitle: 'At Risk'},
-					controller: 'Admin1ReportsAtRiskController'
-				});
-				
 
+			;
 		}]);
 
 
+}(angular.module('Argus')));
+(function (app) {
+	app.controller('AECLiveCtrl', ['$scope', 'AECListService',
+		function ($scope, aec) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			$scope.getList = function (date) {
+				aec.getList(date, function (data) {
+					$scope.refTable = data;
+					$scope.count.aec = data.length;
+				});
+			};
+			$scope.getList($scope.currentDate);
+
+		}]);
 }(angular.module('Argus')));
 /* 
  * To change this license header, choose License Headers in Project Properties.
@@ -1687,23 +1884,20 @@
 /* global angular */
 
 (function (app) {
-	app.controller('ISSLiveCtrl', ['$scope', '$interval','notify','ISSService',
-		function ($scope, $interval, notify, isss) {
-			
-			var intervalPromise = $interval(function () {
-				getISSList();
-			}, 2000);
-			
-			$scope.$on('$destroy', function(){
-				$interval.cancel(intervalPromise);
-			});
-			
-			function getISSList(date){
-				isss.query({date:date}, function (data) {
-					$scope.iss = data;
+	app.controller('ISSLiveCtrl', ['$scope', '$interval', 'ISSService',
+		function ($scope, $interval, isss) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			$scope.getList = function (date) {
+				isss.getList(date, function (data) {
+					$scope.refTable = data;
+					$scope.count.iss = data.length;
 				});
 			};
-			
+			$scope.getList($scope.currentDate);
+
+
 		}]);
 }(angular.module('Argus')));
 /* 
@@ -1716,97 +1910,98 @@
 
 (function (app) {
 	app.controller('oRoomActivityLogCtrl',
-		['$scope', 'notify','$interval','FormatTimeService',
-			function ($scope, notify, $interval, time) {
-				$scope.currentList = 'oroom';
-				$scope.currentList = 'oroom';
-				$scope.refTable = [];
-				$scope.lunchTableA = [];
-				$scope.lunchTableB = [];
-				$scope.iss = [];
-				$scope.oss = [];
+		['$scope', '$interval','FormatTimeService','OroomService', 'LunchService','ISSService','OSSService','ReteachListService','AECListService',
+			function ($scope,  $interval, time, orooms, lunchs, isss, osss,reteach,aec) {
+
 				$scope.currentDate = formatDate(new Date());
-				
-				$interval(function(){
+				$scope.child = {};
+				$scope.count  = {};
+				$scope.$watch('form.date.$viewValue',function(n,o){
+					if(n){
+						$scope.currentDate = n;
+						console.log('new date ',n);
+						$scope.child.getList($scope.currentDate);
+					}
+
+				});
+
+					var intervalPromise = $interval(function () {
+						$scope.child.getList($scope.currentDate);
+					}, 5000);
+					$scope.$on('$destroy', function(){
+						$interval.cancel(intervalPromise);
+					});
+
+
+				// clock
+				var intervalPromise2 = $interval(function(){
 					$scope.currentTime = time.formatAMPM(new Date());
 				}, 1000);
-				
+				$scope.$on('$destroy', function(){
+					$interval.cancel(intervalPromise2);
+				});
+
+				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
+				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
+				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
+				reteach.get({count:true,roster:true},function(data){$scope.count.reteach = data.reteachCount;});
+				aec.get({count:true,roster:true},function(data){$scope.count.aec = data.aecCount;});
+
 				
 			}]);
 }(angular.module('Argus')));
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 /* global angular */
 
 (function (app) {
-	app.controller('LunchDetentionLiveCtrl', ['$scope', '$interval', 'notify', 'DevService', 'LunchService',
-		function ($scope, $interval, notify, dev, lunchs) {
+	app.controller('LunchDetentionLiveCtrl', ['$scope', '$interval',  'DevService', 'LunchService',
+		function ($scope, $interval, dev, lunchs) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
 
-			$scope.lunchTableA = [];
-			$scope.lunchTableB = [];
-
-			var intervalPromise = $interval(function () {
-				getLunchLists();
-			}, 2000);
-
-
-			$scope.$on('$destroy', function () {
-				$interval.cancel(intervalPromise);
-			});
-
-			function getLunchLists(date) {
-				lunchs.query({date: date}, function (data) {
+			$scope.getList = function(date) {
+				lunchs.getList(date).then(function (data) {
 					// separate the lists by the lunch type of the students
 					$scope.lunchTableA = [];
 					$scope.lunchTableB = [];
 					$scope.lunchTableC = [];
-					$scope.lunchTable = data;
-					angular.forEach(data, function (item) {
-						if (item.LunchType === 'A Lunch')
+					$scope.lunchTable = data.lunchStudents;
+					$scope.count.lunch = data.lunchStudentsCount;
+					angular.forEach(data.lunchStudents, function (item) {
+						if (item.LunchType && item.LunchType.search(/a/i) != -1)
 							$scope.lunchTableA.push(item);
-						else if (item.LunchType === 'B Lunch')
+						else if (item.LunchType && item.LunchType.search(/b/i) != -1)
 							$scope.lunchTableB.push(item);
 						else
-						$scope.lunchTableC.push(item);
+							$scope.lunchTableC.push(item);
 
 					});
 
 				});
-			}
-			;
-		}]);
-}(angular.module('Argus')));
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* global angular */
-
-(function (app) {
-	app.controller('OSSLiveCtrl', ['$scope', '$interval','notify', 'OSSService',
-		function ($scope, $interval, notify, osss) {
-			
-			var intervalPromise = $interval(function () {
-				getOSSList(); 
-			}, 2000);
-			
-			$scope.$on('$destroy', function(){
-				$interval.cancel(intervalPromise);
-			});
-			
-			function getOSSList(date){
-				osss.query({date:date}, function (data) {
-					$scope.oss = data;
-				});
 			};
-			
+			$scope.getList($scope.currentDate);
+
+
+		}]);
+}(angular.module('Argus')));
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* global angular */
+
+(function (app) {
+	app.controller('OSSLiveCtrl', ['$scope', '$interval', 'OSSService',
+		function ($scope, $interval, osss) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+			$scope.getList = function(date) {
+				$scope.oss = osss.getOSSList(date);
+			};
+			$scope.getList($scope.currentDate);
 		}]);
 }(angular.module('Argus')));
 /* 
@@ -1819,29 +2014,24 @@
 /* global angular */
 
 (function (app) {
-	app.controller('OroomLiveCtrl', ['$scope', '$interval', 'notify', 'OroomService', 'PeriodsService', 'FormatTimeService', '$timeout','$rootScope',
-		function ($scope, $interval, notify, orooms, periods, time, $timeout, $rootScope) {
-			var intervalPromise = $interval(interval, 2000);
+	app.controller('OroomLiveCtrl', ['$scope', '$interval',  'OroomService', 'FormatTimeService','PeriodsService',
+		function ($scope, $interval,  orooms, time, periods) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			var intervalPromise = $interval(interval, 5000);
 			
 			$scope.$on('$destroy',function(){
 				$interval.cancel(intervalPromise); 
 			});
 
 			function interval() {
-
 				var now = new Date();
-				$scope.currentTime = formatAMPM(now);
-				$scope.currentDate = formatDate(now);
 				$scope.currentPeriod = getPeriod(now);
-				//var newPeriod = getPeriod(now);
-				
-				getORoomLists($scope.currentPeriod);
-				
 			}
 
 			$scope.changePeriodTables = function (newPeriod, manual) {
 				$scope.currentPeriod = newPeriod;
-				
 			};
 
 
@@ -1850,8 +2040,6 @@
 				interval();
 			});
 
-			var formatAMPM = time.formatAMPM;
-			var formatDate = time.formatDate;
 			var formatTime24 = time.formatTime24;
 
 			function getPeriod(date) {
@@ -1871,20 +2059,33 @@
 			}
 
 
-			function getORoomLists(period) {
-				orooms.get({}, function (data) {
-					var ormList = [];
-					angular.forEach(data.OroomList, function(item,$index){
-						if(item.user.SchoolId === $rootScope.currentUser.SchoolId){
-							ormList.push(item);
-						}
+			$scope.getList = function(date) {
+				orooms.get({Date:date}, function (data) {
+					angular.forEach(data.reftable, function (item) {
+						item.ReferralIn = item.ReferralIn === 1 ;
 					});
 					$scope.refTable = data.reftable;
-					$scope.oroomlist = ormList;
+					$scope.oroomlist = data.OroomList;
 				});
-			}
-			getORoomLists();
+			};
+			$scope.getList($scope.currentDate);
 
+
+		}]);
+}(angular.module('Argus')));
+(function (app) {
+	app.controller('ReteachCtrl', ['$scope', 'ReteachListService',
+		function ($scope, reteach) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			$scope.getList = function (date) {
+				reteach.getList(date, function (data) {
+					$scope.refTable = data;
+					$scope.count.reteach = data.length;
+				});
+			};
+			$scope.getList($scope.currentDate);
 
 		}]);
 }(angular.module('Argus')));
@@ -1948,10 +2149,10 @@
 						var heading = 'Date,ActionBy,Activity,Comment \n';
 						text += heading;
 						angular.forEach($scope.activities, function (act) {
-							text += act.ActionDate.split(' ')[0] + ',';
-							text += act.user.FirstName + ' ' + act.user.LastName + ',';
-							text += act.activity.Name + ',';
-							text += act.Comment + ',';
+							text += '"' + act.ActionDate.split(' ')[0] + '",';
+							text += '"' + act.user.FirstName + ', ' + act.user.LastName + '",';
+							text += '"' + act.activity.Name + '",';
+							text += '"' + (act.Comment || '')  + '",';
 							text += "\n";
 						});
 
@@ -1962,7 +2163,7 @@
 
 						//console.log(text);
 						var element = document.createElement('a');
-						element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+						element.setAttribute('href', 'data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURI(text));
 						element.setAttribute('download', 'ActivityFor-' + student.user.FirstName + '_' + student.user.LastName + '.csv');
 						element.style.display = 'none';
 						document.body.appendChild(element);
@@ -2174,40 +2375,21 @@
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([
 								{
-									files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'angles',
-									files: ['js/plugins/chartJs/angles.js']
-								},
-								{
 									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
+								}, {
 									name: 'ui.footable',
 									files: ['js/plugins/footable/angular-footable.js']
 								}, {
-									insertBefore: '#loadBefore',
-									files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
-								},
-								{
-									name: 'ui.calendar',
-									files: ['js/plugins/fullcalendar/calendar.js']
-								},
-								{
+									name: 'ui.slimscroll',
+									files: ['js/plugins/slimscroll/angular.slimscroll.js']
+								}, {
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								},
-								{
-									name: 'ui.slimscroll',
-									files: ['js/plugins/slimscroll/angular.slimscroll.js']
 								}
-
 							]);
 						}
 					}
@@ -2236,8 +2418,21 @@
 					templateUrl: 'views/admin2/oroomActivityLogSupport.html',
 					data: {pageTitle: 'Oroom Activity Log'},
 					controller: 'oRoomActivityLogCtrl',
-					resolve: {
-					}
+					resolve: {}
+				})
+				.state('supportstaff.oroomActivitiLog.aec', {
+					url: "/AEC",
+					templateUrl: 'views/live/aec.html',
+					data: {pageTitle: 'OSS'},
+					controller: 'AECLiveCtrl',
+					resolve: {}
+				})
+				.state('supportstaff.oroomActivitiLog.reteach', {
+					url: "/Reteach",
+					templateUrl: 'views/live/reteach.html',
+					data: {pageTitle: 'OSS'},
+					controller: 'ReteachCtrl',
+					resolve: {}
 				})
 				.state('supportstaff.oroomActivitiLog.oroom', {
 					url: "/Oroom",
@@ -2372,580 +2567,427 @@
 		}]);
 
 }(angular.module('Argus')));
-
 /* global angular */
 
 (function (app) {
-	app.controller('ISSRosterController', ['$scope', 'notify', '$modal', 'ISSService',
-		function ($scope, notify, $modal, isss) {
-			$scope.getList = function () {
-				$scope.iss = isss.query({roster: true}, function (data) {
-					angular.forEach(data, function (item) {
-						if (item.counters.ORoomsToBeServed > 0) {
-							item.overlap = {class: 'bg-danger', msg: 'Has ORoom'};
-						}
+    app.controller('ISSRosterController', ['$scope', 'MyNotify', '$modal', 'ISSService','UtilService',
+        function ($scope, notify, $modal, isss, utils) {
+            $scope.currentDate = new Date();
+            $scope.selected = {};
+            $scope.$watch('form.date.$viewValue', function (newVal) {
+                if (newVal) {//when date has a valid date request the List from that date
+                    $scope.currentDate = newVal;
+                    $scope.getList();
+                }
+            });
 
-					});
+            $scope.getList = function () {
+                $scope.refTable = isss.getList($scope.currentDate, function(data){
+                    $scope.count.iss = data.length;
+                });
+            };
 
-					angular.forEach(data, function (item) {
-						angular.forEach(item.referred, function (ref) {
-							if (ref.ReferralTypeId === 12) {
-								item.overlap = {class: 'bg-warning', msg: 'Has AEC'};
-							}
-						});
+            $scope.onSelect = function ($index) {
+                $scope.selected.student = $scope.refTable[$index];
+            };
 
-					});
-
-					angular.forEach(data, function (item) {
-						if (item.counters.OSSPMP > 0) {
-							item.overlap = {class: 'bg-danger', msg: 'Has OSS'};
-						}
-
-					});
-				});
-			};
-			$scope.getList();
-
-			$scope.issAttendance = function (student, $index) {
+            $scope.issAttendance = function (student) {
 
 
-				var overlap = false;
-				var overlapPlace = '';
+                if(student.referred[0].RefferalStatus === 1 || student.referred[0].RefferalStatus === 16 ) {
+                    notify('Action Unavailable : Attendance  Already taken. ');
+                    return;
+                }
 
-				if (student.counters.OSSPMP > 0) {
-					overlapPlace = 'OSS';
-					overlap = true;
-				}
-				if (!!student.overlap && student.overlap.msg === 'Has AEC') {
-					// show present for AEC
-				}
+                var overlap = false;
+                var overlapPlace = '';
 
-
-				if (overlap) {
-					modalInstance = $modal.open({
-						templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, activity) {
-							$scope.student = student;
-							console.log(student);
-							$scope.activity = activity;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							},
-							activity: function () {
-								return overlapPlace;
-							}
-						}
-					});
-					return;
-				}
-
-				var modalInstance = $modal.open({
-					templateUrl: 'views/modals/attendanceISSModal.html',
-					//template:'<div> MODAL : true in Referral IN </div>',
-					size: 'lg',
-					controller: function ($scope, student, PeriodsService) {
-						$scope.periods = PeriodsService.query();
-						$scope.student = student;
-					},
-					resolve: {
-						student: function () {
-							return student;
-						}
-					}
-				});
-
-				modalInstance.result.then(function () {// on SUBMIT
-					// post the comment and other things to the database 
-					isss.update({id: student.referred[0].Id}, {
-						ActionType: student.radioModel,
-						Comment: student.comment,
-						StudentId: student.StudentId
-					}, function (data) {
-						notify(data.msg);
-						$scope.iss.splice($index, 1);
-					}, function (error) {
-						notify('error');
-					});
+                if (student.overlap.hasoss) {
+                    overlapPlace = 'OSS';
+                    overlap = true;
+                }
+                if (student.overlap.hasaec) {
+                    // show present for AEC
+                }
 
 
-					//$scope.selected.student = null;
-				}, function () {// on modal DISMISS
+                if (overlap) {
+                    modalInstance = $modal.open({
+                        templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student, activity) {
+                            $scope.student = student;
+                            console.log(student);
+                            $scope.activity = activity;
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            },
+                            activity: function () {
+                                return overlapPlace;
+                            }
+                        }
+                    });
+                    return;
+                }
 
-				});
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/modals/attendanceISSModal.html',
+                    //template:'<div> MODAL : true in Referral IN </div>',
+                    size: 'lg',
+                    controller: function ($scope, student) {
+                        $scope.student = student;
+
+                        $scope.$watch('form.date.$viewValue', function(n,o){
+                            console.log(n);
+                            student.moveDate = n;
+                        });
+                        $scope.selectedReferralToRemove = function(){
+                            var selectedCount = 0;
+                            angular.forEach(student.referred,function(item){
+                                if(item.remove)
+                                    selectedCount++;
+                            });
+                            console.log('removing ', selectedCount);
+                            student.removingAll = selectedCount == student.referred.length;
+                        }
 
 
+                    },
+                    resolve: {
+                        student: function () {
+                            return student;
+                        }
+                    }
+                });
 
-			};
+                modalInstance.result.then(function () {// on SUBMIT
+                    // post the comment and other things to the database
+                    isss.updateAttendance($scope.currentDate, student)
+                        .then(function (data) {
+                            notify(data.msg);
+                            $scope.selected.student = null;
+                        }, function (error) {
+                            notify('error, Before continuing please contact the system admin');
+                        });
+                });
 
-			$scope.printList = function () {
-				var heading = 'First Name, Last Name, Student ID, 1st Per., 2nd Per., Ref. Type, '
-					+ 'ISS Days, ORM Days, Overlap, Attendance,  \n';
-				var text = heading;
-				angular.forEach($scope.iss, function (item) {
-					text += item.user.FirstName + ', ' + item.user.LastName + ', ';
-					text += item.StudentId + ',' + item.classes[0].professor_class.room.Name + ',' + item.classes[1].professor_class.room.Name + ',';
-					text += item.referred[0].referral_type.Name + ', ';
-					text += item.counters.ISSDays + ', ';
-					text += item.counters.ORoomsToBeServed + ', ';
-					text += item.overlap.msg + ',';
-					text += item.referred[0].activity.Name;
 
-					text += '\n';
-				});
+            };
 
-				$scope.download(text, 'ISS');
-			};
+            $scope.printList = function () {
+                var heading = 'First Name, Last Name, Student ID, 1st Per., 2nd Per., Referral Type, '
+                    + 'ISS Days, ORM Days, Overlap, Attendance,  \n';
+                var text = heading;
+                angular.forEach($scope.refTable, function (item) {
+                    text += item.user.FirstName + ', ' + item.user.LastName + ', ';
+                    text += item.StudentId + ',' + item.classes[0].professor_class.room.Name + ',' + item.classes[1].professor_class.room.Name + ',';
+                    text += item.referred[0].referral_type.Name + ', ';
+                    text += item.counters.ISSDays + ', ';
+                    text += item.counters.ORoomsToBeServed + ', ';
+                    text += item.overlap.msg + ',';
+                    text += item.referred[0].activity.Name;
 
-		}]);
+                    text += '\n';
+                });
+
+                utils.downloadCSV(text, 'ISS-List_'+ $scope.currentDate);
+            };
+
+        }]);
 }(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
-	app.controller('LunchDetentionRosterCtrl', ['$scope', 'notify', '$modal', 'LunchService', '$rootScope',
-		function ($scope, notify, $modal, lunchs, $rootScope) {
-			lunchs.query({roster: true}, function (data) {
-				$scope.lunchTableA = [];
-				$scope.lunchTableB = [];
-				$scope.lunchTableC = [];
-				$scope.lunchTable = data;
-				$scope.ngOptions = {data: 'ngData'};
-				$scope.ngOptions2 = {
-					data: 'lunchTable',
-					showGroupPanel: true,
-					jqueryUIDraggable: true
-				};
-
-				angular.forEach(data, function (item, $index) {
-
-					if (item.LunchType === 'A Lunch')
-						$scope.lunchTableA.push(item);
-					else if (item.LunchType === 'B Lunch')
-						$scope.lunchTableB.push(item);
-					else
-						$scope.lunchTableC.push(item);
-
-					if (item.counters.ISSDays > 0) {
-						item.overlap = {class: 'bg-danger', msg: 'Has ISS'};
-//						var referred = [];
-//						angular.forEach(item.referred , function(ref){
-//							if((ref.ReferralTypeId === 5 || ref.ReferralTypeId === 6 || ref.ReferralTypeId === 7 || ref.ReferralTypeId === 17 ))
-//								referred.push(ref);
-//						});
-						//item.referred = referred;
-					}
-
-				});
-
-			}, function () {
-				notify('error');
-			});
-
-			$scope.lunchAttendance = function (student, $index) {
-				console.log('lunch attendance');
-				var modalInstance;
-
-				var overlap = false;
-				var overlapPlace = '';
+    app.controller('LunchDetentionRosterCtrl', ['$scope', 'MyNotify', '$modal', 'LunchService', '$rootScope',
+        function ($scope, notify, $modal, lunchs, $rootScope) {
+            $scope.selected = {};
+            $scope.currentDate = new Date();
 
 
-				if (student.counters.ISSDays > 0) {
-					overlapPlace = 'ISS';
-					overlap = true;
-				}
-//				if (student.counters.OSSPMP > 0) {
-//					overlapPlace = 'OSS';
-//					overlap = true;
-//				}
+            $scope.getList = function(date) {
+                date = date || $scope.currendDate;
+                lunchs.getList($scope.currentDate).then( function (data) {
+                    $scope.lunchTableA = [];
+                    $scope.lunchTableB = [];
+                    $scope.lunchTableC = [];
+                    $scope.lunchTable = data.lunchStudents;
+                    $scope.count.lunch = data.lunchStudentsCount;
+
+                    angular.forEach(data.lunchStudents, function (item, $index) {
+                        if (item.LunchType && item.LunchType.search(/A/i) != -1 )
+                            $scope.lunchTableA.push(item);
+                        else if (item.LunchType && item.LunchType.search(/B/i) != -1 )
+                            $scope.lunchTableB.push(item);
+                        else
+                            $scope.lunchTableC.push(item);
+
+                    });
+
+                }, function () {
+                    notify('error');
+                });
+            };
+
+            $scope.$watch('form.date.$viewValue', function (newVal) {
+                if (newVal) {
+                    //when date has a valid date request the List from that date
+                    $scope.currentDate = newVal;
+                    $scope.getList();
+                }
+            });
+
+            $scope.onSelect = function (item) {
+                $scope.selected.student = item;
+            };
+
+            $scope.lunchAttendance = function (student, $index) {
+                if (student.referred[0].RefferalStatus === 1) {
+                    notify('Action Unavailable : Attendance  Already taken. ');
+                    return;
+                }
+                var modalInstance;
+
+                var overlap = false;
+                var overlapPlace = '';
 
 
-				if (overlap) {
-					modalInstance = $modal.open({
-						templateUrl: 'views/modals/AttendanceUnavailableModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, activity) {
-							$scope.student = student;
-							console.log(student);
-							$scope.activity = activity;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							},
-							activity: function () {
-								return overlapPlace;
-							}
-						}
-					});
-					return;
-				}
+                if (student.overlap.hasoss) {
+                    overlapPlace = 'OSS';
+                    overlap = true;
+                } else if (student.overlap.hasiss && !student.overlap.isscleared) {
+                    overlapPlace = 'ISS';
+                    overlap = true;
+                }
 
 
-				modalInstance = $modal.open({
-					templateUrl: 'views/modals/attendanceLunchModal.html',
-					//template:'<div> MODAL : true in Referral IN </div>',
-					size: 'lg',
-					controller: function ($scope, student, PeriodsService) {
-						$scope.periods = PeriodsService.query();
-						$scope.student = student;
-					},
-					resolve: {
-						student: function () {
-							return student;
-						}
-					}
-				});
-
-				modalInstance.result.then(function () {// on SUBMIT
-					// post the comment and other things to the database 
-					lunchs.update({id: student.referred[0].Id, attendance: true}, {
-						ActionType: student.radioModel,
-						Comment: student.comment,
-						StudentId: student.Id
-					}, function (data) {
-						notify(data.msg);
-						if ($rootScope.currentUser.SchoolId === 2) {// dunbar
-							$scope.lunchTable.splice($index, 1);
-							return;
-						}
-
-						var lunch = student.LunchType;
-						if (lunch === 'A Lunch') {
-							$scope.lunchTableA.splice($index, 1);
-						} else if (lunch === 'B Lunch') {
-							$scope.lunchTableB.splice($index, 1);
-						} else {
-							$scope.lunchTableC.splice($index, 1);
-						}
-						if ($rootScope.currentUser.SchoolId !== 1) {
-							$scope.lunchTable.splice($index, 1);
-						}
-					}, function (error) {
-						notify('error');
-					});
+                if (overlap) {
+                    modalInstance = $modal.open({
+                        templateUrl: 'views/modals/AttendanceUnavailableModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student, activity) {
+                            $scope.student = student;
+                            console.log(student);
+                            $scope.activity = activity;
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            },
+                            activity: function () {
+                                return overlapPlace;
+                            }
+                        }
+                    });
+                    return;
+                }
 
 
+                modalInstance = $modal.open({
+                    templateUrl: 'views/modals/attendanceLunchModal.html',
+                    //template:'<div> MODAL : true in Referral IN </div>',
+                    size: 'lg',
+                    controller: function ($scope, student, PeriodsService) {
+                        $scope.periods = PeriodsService.query();
+                        $scope.student = student;
+                    },
+                    resolve: {
+                        student: function () {
+                            return student;
+                        }
+                    }
+                });
 
-				}, function () {// on modal DISMISS
+                modalInstance.result.then(function () {// on SUBMIT
+                    // post the comment and other things to the database
+                    lunchs.updateAttendance($scope.currentDate, student, function (data) {
+                            notify(data.msg);
+                            $scope.selected.student = null;
+                        }, function (data) {
+                            notify('error');
+                        }
+                    );
+                    return;
 
-				});
+
+                });
 
 
-			};
-			$scope.printListAll = function () {
-				var heading = 'First Name,' + 'Last Name,' + 'Student ID, ' +
-					'Grade, ' + 'Attendance' + ', ' + 'Progression, Overlap\n';
-				var text = heading;
-				angular.forEach($scope.lunchTable, function (item) {
-					text += item.user.FirstName + ', ' + item.user.LastName + ', ';
-					text += item.StudentId + ',' + item.Grade + ', ';
-					text += item.activity ? item.activity.Name : '' + ', ' + (item.referred[0] ? item.referred[0].referral_type.Name : '');
-					text += ',' + (item.overlap ? item.overlap.msg : '');
-					text += '\n';
-				});
-				notify('printing');
-				$scope.download(text);
-			};
+            };
+            $scope.printListAll = function () {
+                var heading = 'First Name,' + 'Last Name,' + 'Student ID, ' +
+                    'Grade, ' + 'Attendance' + ', ' + 'Progression, Overlap\n';
+                var text = heading;
+                angular.forEach($scope.lunchTable, function (item) {
+                    text += item.user.FirstName + ', ' + item.user.LastName + ', ';
+                    text += item.StudentId + ',' + item.Grade + ', ';
+                    text += item.activity ? item.activity.Name : '' + ', ' + (item.referred[0] ? item.referred[0].referral_type.Name : '');
+                    text += ',' + (item.overlap ? item.overlap.msg : '');
+                    text += '\n';
+                });
+                notify('printing');
+                $scope.download(text);
+            };
 
-			$scope.printEstacado = function () {
+            $scope.printEstacado = function () {
 
-			};
-		}]);
+            };
+        }]);
 }(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
-	app.controller('OSSRosterController',
-		['$scope', 'notify', '$modal', 'OSSService', 'FormatTimeService', 'ISSService', 'CountersService',
-			function ($scope, notify, $modal, osss, time, isss, counters) {
-				$scope.oss = osss.query({roster: true}, function (data) {
-					angular.forEach(data, function (item) {
-						item.Date = time.formatDate(new Date(item.Date));
-					});
-				}, function () {
-					notify('error');
-				});
-
-				$scope.ossAttendance = function (student, $index) {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/attendaceModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, teachers) {
-							$scope.student = student;
-							$scope.currentDate = new Date();
-							$scope.teachers = teachers.query();
-							$scope.$watch('form.date.$viewValue', function (newV, oldV) {
-								student.date = newV ? newV : oldV;
-								console.log(newV);
-							});
-						},
-						resolve: {
-							student: function () {
-								return student;
-							}
-						}
-					});
-
-					modalInstance.result.then(function (data) {
-						switch (student.radioModel) {
-							case '1':
-								counters.update({id: student.student_user.id},
-								{counters: student.student_user.student.counters,
-									Comment: student.comment
-								}, function () {
-									notify('success');
-									osss.update({id: student.Id},
-									{ OssPresent: true});
-
-								}, function (error) {
-									notify('error');
-								});
-								break;
-							case '2':
-								osss.update({id: student.Id},
-								{
-									Comment: student.comment
-								}, function (data) {
-									notify(data.msg);
-								}, function (error) {
-									notify('error');
-								});
-								break;
-							case '3':
-								isss.update({id: student.Id, followup: true}, {
-									Date: student.date,
-									Time: student.time,
-									ActionType: 46,
-									Comment: student.comment,
-									StudentId: student.StudentId,
-									TeacherId: student.teacher.id
-								}, function (data) {
-									notify(data.msg);
-									$scope.oss.splice($index, 1);
-								}, function (error) {
-									notify('error');
-								});
-								break;
-						}
-						$scope.oss.splice($index, 1);
-					});
-
-//				osss.update({id:student.Id, attendance:true}, {
-//					ActionType:student.activity.Id
-//				});
+    app.controller('OSSRosterController',
+        ['$scope', 'notify', '$modal', 'OSSService', 'FormatTimeService', 'ISSService', 'CountersService',
+            function ($scope, notify, $modal, osss, time, isss, counters) {
+                $scope.currentDate = new Date();
+                $scope.$watch('form.date.$viewValue', function (newV, oldV) {
+                    if (newV) {
+                        $scope.currentDate = newV;
+                        $scope.oss = osss.getOSSList($scope.currentDate, function(data){
+                            $scope.count.oss = data.length;
+                        });
+                    }
+                });
 
 
-				};
 
-			}]);
+
+            }]);
 }(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
-	app.controller('OroomRosterCtrl', ['$scope', 'notify', '$modal', 'OroomService', "AECListService",'UtilService',
-		function ($scope, notify, $modal, orooms, aec, utils) {
-			//$scope.currentDate = new Date();
+    app.controller('OroomRosterCtrl', ['$scope', 'MyNotify', '$modal', 'OroomService', "AECListService", 'UtilService',
+        function ($scope, notify, $modal, orooms, aec, utils) {
+            $scope.currentDate = new Date();
+            $scope.selected = {};
+            $scope.$watch('form.date.$viewValue', function (newVal) {
+                if (newVal) {//when date has a valid date request the List from that date
+                    console.log('new', newVal)
+                    $scope.currentDate = newVal;
+                    $scope.getList();
+                }
+            });
+
+            $scope.getList = function () {
+                var periodIds = [8];
+                orooms.getList($scope.currentDate,periodIds).then(function (data) {
+                    $scope.refTable = data.OroomList;
+                    $scope.count.oroom = data.OroomListCount;
+                });
+            };
+
+            $scope.onSelect = function ($index) {
+                $scope.selected.student = $scope.refTable[$index];
+            };
+
+            $scope.oRoomAttendance = function (student) {
+                if(student.referred[0].RefferalStatus === 1  ) {
+                    notify('Action Unavailable : Attendance  Already taken. ');
+                    return;
+                }
+                var modalInstance;
+                console.log('o-room attendance');
+
+                var overlap = false;
+                var overlapPlace = '';
+
+                if (student.overlap.hasiss && !student.overlap.isscleared ) {
+                    overlapPlace = 'ISS';
+                    overlap = true;
+                }
+                if (student.overlap.hasoss) {
+                    overlapPlace = 'OSS';
+                    overlap = true;
+                }
+                overlap = false;
+                if (overlap) {
+                    modalInstance = $modal.open({
+                        templateUrl: 'views/modals/AttendanceUnavailableModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student, activity) {
+                            $scope.student = student;
+                            console.log(student);
+                            $scope.activity = activity;
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            },
+                            activity: function () {
+                                return overlapPlace;
+                            }
+                        }
+                    });
+                    return;
+                }
+
+                //
+                modalInstance = $modal.open({
+                    templateUrl: 'views/modals/attendanceOroomModal.html',
+                    size: 'lg',
+                    controller: function ($scope, student) {
+                        $scope.student = student;
+                        $scope.$watch('form.date.$viewValue', function(n,o){
+                            console.log(n);
+                            student.moveDate = n;
+                        });
+                        $scope.selectedReferralToRemove = function(){
+                            var selectedCount = 0;
+                            angular.forEach(student.referred,function(item){
+                                if(item.remove)
+                                    selectedCount++;
+                            });
+                            console.log('removing ', selectedCount);
+                            student.removingAll = selectedCount == student.referred.length;
+                        }
+                    },
+                    resolve: {
+                        student: function () {
+                            return student;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {// on SUBMIT
+                    // post the comment and other things to the database
+                    orooms.updateAttendance($scope.currentDate, student).then(function (data) {
+                        notify(data.msg);
+                        $scope.selected.student = null;
+                    }, function (error) {
+                        notify('error, Before continuing please contact the system admin');
+                    });
 
 
-			$scope.getList = function () {
-				orooms.get({roster: true}, function (data) {
-					$scope.refTable = data.OroomList;
-					$scope.count.oroom = data.OroomList.length;
-//				angular.forEach(data.OroomList, function (item) {
-//					if (item.counters.ISSDays > 0) {
-//						item.overlap = {class: 'bg-danger', msg: 'Has ISS'};
-//						var referred = [];
-//						angular.forEach(item.referred , function(ref){
-//							if((ref.ReferralTypeId === 5 || ref.ReferralTypeId === 6 || ref.ReferralTypeId === 7 || ref.ReferralTypeId === 17 ))
-//								referred.push(ref);
-//						});
-//						item.referred = referred;
-//					}
-//				});
+                }, function () {// on modal DISMISS
 
-/*					var to_remove_indexes = [];
-					
-					angular.forEach(data.OroomList, function (item, $index) {
+                });
 
+            };
 
-						var referred = [];
-						var hasOroom = false;
-						angular.forEach(item.referred, function (ref, $index) {
-							if (ref.ReferralTypeId === 12) {
-								item.overlap = {class: 'bg-warning', msg: 'Has AEC'};
-							}
+            $scope.printList = function () {
+                var heading = 'First Name, Last Name, Student ID, Pending Days, Referral Type, 8th period, Attendance\n';
+                var text = heading;
+                angular.forEach($scope.refTable, function (item) {
+                    debugger;
+                    if((item.overlap.hasiss && !item.overlap.isscleared) || item.overlap.hasoss || item.referred[0].ActivityTypeId == 88)
+                        return;
+                    text += item.user.FirstName + ', ' + item.user.LastName + ', ';
+                    text += item.user.UserName + ', ' + item.counters.ORoomsToBeServed + ', ';
+                    text += item.referred[0].referral_type.Name + ', ';
+                    text += (item.classes[0] ? item.classes[0].professor_class.room.Name : 'N/A')+', ';
+                    text += item.referred[0].activity.Name;
+                    text += '\n';
+                });
 
-						});
-						var hasiss = false;
-						angular.forEach(item.referred, function (ref, $index) {
-							
-							if ((ref.ReferralTypeId === 5 || ref.ReferralTypeId === 6 || ref.ReferralTypeId === 7
-								|| ref.ReferralTypeId === 10 || ref.ReferralTypeId === 17 || ref.ReferralTypeId === 15 )) {
-									hasiss = true;
-									item.overlap = {class: 'bg-danger', msg: 'Has ISS'};
-							}
-							referred.push(ref);
-
-							if ((ref.ReferralTypeId === 1 || ref.ReferralTypeId === 2 || ref.ReferralTypeId === 3 || ref.ReferralTypeId === 16 || ref.ReferralTypeId === 10 || ref.ReferralTypeId === 19)) {
-								
-								hasOroom = true;
-							}
-
-						});
-						if(hasiss){
-							//console.log('Has ISS');
-							//console.log(item);
-						}
-			
-						if (!hasOroom) {
-							console.log('doesnt have oroom');
-							to_remove_indexes.push($index);
-						}
-						item.referred = referred;
-
-					});
-
-					angular.forEach(to_remove_indexes, function (index, $index) {
-						console.log(data.OroomList[index]);
-						data.OroomList.splice(index, 1);
-					});
-*/
-					utils.markOroomOverlaps(data.OroomList);
-					//console.log(data.OroomList);
-				});
-			};
-			$scope.getList();
-			$scope.oRoomAttendance = function (student, $index) {
-				var modalInstance;
-				console.log('o-room attendance');
-
-				var overlap = false;
-				var overlapPlace = '';
-
-				if (student.counters.ISSDays > 0) {
-					overlapPlace = 'ISS';
-					overlap = true;
-				}
-//					if (student.counters.OSSPMP > 0) {
-//						overlapPlace = 'OSS';
-//						overlap = true;
-//					}
-
-				if (overlap) {
-					modalInstance = $modal.open({
-						templateUrl: 'views/modals/AttendanceUnavailableModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, activity) {
-							$scope.student = student;
-							console.log(student);
-							$scope.activity = activity;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							},
-							activity: function () {
-								return overlapPlace;
-							}
-						}
-					});
-					return;
-				}
-
-				//
-				modalInstance = $modal.open({
-					templateUrl: 'views/modals/attendanceOroomModal.html',
-					//template:'<div> MODAL : true in Referral IN </div>',
-					size: 'lg',
-					controller: function ($scope, student, PeriodsService) {
-						$scope.periods = PeriodsService.query();
-//						student.hasAEC = false;
-//						$scope.showAssignments = false;
-//						if(student.overlap && student.overlap.msg === 'Has AEC'){
-//							console.log('this student has AEC');
-//							student.hasAEC = true;
-//						}
-//						$scope.referredAEC = 1;
-//						
-//						$scope.$watch('student.radioModel', function(n,o){
-//							if(n && n == 24 && student.hasAEC ){
-//								$scope.showAssignments = true;
-//							}else{
-//								$scope.showAssignments = false;
-//							}
-//						})
-						
-						$scope.student = student;
-					},
-					resolve: {
-						student: function () {
-							return student;
-						}
-					}
-				});
-
-				modalInstance.result.then(function () {// on SUBMIT
-					// post the comment and other things to the database 
-					
-					if(student.radioModel == 24 && student.hasAEC){
-						
-						var aecPresent = '49';
-						var comment = student.comment || '';
-						angular.forEach(student.referred, function(item){
-							if(item.ReferralTypeId !== 12)
-								return;
-							console.log(item);
-							if(item.assignment.selected){
-								comment += '(' + item.assignment.Name +' completed)';
-							}else{
-								comment += '(' + item.assignment.Name +' incomplete)';
-							}
-						});
-						student.comment = comment;
-						console.log(student.comment);
-						
-					}
-					
-					
-					orooms.update({id: student.referred[0].Id, attendance: true}, {
-						ActionType: student.radioModel,
-						Comment: student.comment,
-						StudentId: student.id
-					}, function (data) {
-						notify(data.msg);
-					}, function (error) {
-						notify('error, Before continuing please contact an admin');
-					});
-
-					$scope.refTable.splice($index, 1);
-					//$scope.selected.student = null;
-				}, function () {// on modal DISMISS
-
-				});
-
-			};
-
-			$scope.printList = function () {
-				var heading = 'First Name, Last Name, Student ID, Pending Days, Referral Type, 8th period, Attendance\n';
-				var text = heading;
-				angular.forEach($scope.refTable, function (item) {
-					text += item.user.FirstName + ', ' + item.user.LastName + ', ';
-					text += item.user.UserName + ',' + item.counters.ORoomsToBeServed + ', ';
-					text += item.referred[0].referral_type.Name + ', ';
-					text += item.classes[7] ? item.classes[7].professor_class.room.Name : 'N/A';
-
-					text += '\n';
-				});
-
-				$scope.download(text, 'O-Room');
-			};
-		}]);
+                utils.downloadCSV(text, 'O-Room-List'+$scope.currentDate);
+            };
+        }]);
 }(angular.module('Argus')));
 
 /* 
@@ -2991,10 +3033,10 @@
 					document.body.removeChild(element);
 				};
 				
-				lunchs.query({roster:true},function(data){ $scope.count.lunch = data.length;});
-				orooms.get({count:true}, function(data){ $scope.count.oroom = data.OroomList;});
-				isss.get({roster:true, count:true}, function(data){$scope.count.iss = data.count;});
-				osss.get({roster:true, count:true}, function(data){$scope.count.oss = data.count;});
+				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
+				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
+				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
 			}]);
 }(angular.module('Argus')));
 /* global angular */
@@ -3063,279 +3105,510 @@
 
 (function (app) {
 	app.controller('ReportsEODCtrl',
-		['$scope', 'notify', '$modal', '$http', 'FormatTimeService', '$rootScope',
-			function ($scope, notify, $modal, $http, time, $rootScope) {
+		['$scope', 'notify', '$modal', '$http', 'FormatTimeService', '$rootScope', 'OroomService',
+			'LunchService', 'ISSService', 'OSSService', 'ReteachListService', 'AECListService', 'ReportsService','PrintHtmlService',
+			function ($scope, notify, $modal, $http, time, $rootScope, orooms, lunchs, isss, osss, reteach, aec, reports,print) {
+				$scope.reportTypes = [
+					{name: 'EOD', value: 1},
+					{name: 'ORoom Conversion', value: 2}
+				];
+				$scope.selected = {reportType: $scope.reportTypes[0]};
+
+				$scope.eodTypes = [
+					{name: 'Single Day', value: 1},
+					{name: 'Multiple - Date Range', value: 2}
+				];
+
 				$scope.eodReports = [
 					{name: 'AEC', value: 1, url: 'report-eod-aec'},
 					{name: 'O-Room', value: 2, url: 'report-eod-oroom'},
-//					{name: 'Reteach', value: 3, url:'report-eod-reteach'},
+					{name: 'Reteach', value: 3, url: 'report-eod-reteach'},
 					{name: 'ISS', value: 4, url: 'report-eod-iss'},
-					{name: 'OSS PMP', value: 5, url: 'report-edo-oss'},
+					{name: 'OSS', value: 5, url: 'report-eod-oss'},
 					{name: 'Lunch', value: 6, url: 'report-eod-lunchd'}
 				];
-				$scope.eod = {};
-				$scope.eod.selected = $scope.eodReports[1];
-				$scope.eodCounters = {
-					expected: 0,
-					present: 0,
-					noShows: 0,
-					sentOuts: 0,
-					walkedOuts: 0,
-					schoolAbsent: 0,
-					leftSchool: 0,
-					other: 0,
-					reschedules:0,
-					clears:0,
-					absents:0
-				};
+				$scope.eod = {selected: $scope.eodReports[1], type: $scope.eodTypes[0]};
+
 				$scope.percentages = {
 					todays: 0,
 					averageThusFar: 0,
 					difference: 0
 				};
-				$scope.currentDate = new Date();
-				$scope.$watch('date.date.$viewValue', function (newValue, oldValue) {
+
+				$scope.date = new Date();
+
+				$scope.eodDateCounters = [];
+
+				var colorShades = ['#6FA45A', '#FFB757', '#CA423F', '#57325E', '#3C6C9D'];
+
+				function applyColorsToData(data) {
+					angular.forEach(data, function (item, $index) {
+						item.color = colorShades[$index];
+					});
+				}
+
+
+				function clearCounters() {
+					$scope.eodCounters = {
+						expected: 0,
+						assigned: 0,
+						present: 0,
+						noShows: 0,
+						sentOuts: 0,
+						walkedOuts: 0,
+						schoolAbsent: 0,
+						leftSchool: 0,
+						other: 0,
+						reschedules: 0,
+						clears: 0,
+						absents: 0,
+						overlaps: 0,
+						pendingFollowups:0
+					};
+				}
+
+				// counters constructor to create counter objects
+				function Counters() {
+					this.expected = 0;
+					this.assigned = 0;
+					this.present = 0;
+					this.noShows = 0;
+					this.sentOuts = 0;
+					this.walkedOuts = 0;
+					this.schoolAbsent = 0;
+					this.leftSchool = 0;
+					this.other = 0;
+					this.reschedules = 0;
+					this.clears = 0;
+					this.absents = 0;
+					this.overlaps = 0;
+					this.pendingFollowups = 0;
+				}
+
+				$scope.$watch('start.date.$viewValue', function (newValue, oldValue) {
 					if (newValue) {
-						date = time.formatDate(new Date(newValue));
+						$scope.currentDate = newValue;//time.formatDate(new Date(newValue));
 						$scope.reportChanged();
 					}
 				});
+
+				$scope.$watch('end.date.$viewValue', function (newValue, oldValue) {
+					if (newValue) {
+						$scope.endDate = newValue; //time.formatDate(new Date(newValue));
+						$scope.reportChanged();
+					}
+				});
+
 				$scope.reportChanged = function () {
-					$http.get('api/' + $scope.eod.selected.url + '?date=' + date).then(processResponse, function () {
+					var urlEncoded = $scope.eod.selected.url + '?Date=' + $scope.currentDate;
+					if ($scope.eod.type.value == 2)
+						urlEncoded += '&DateRange=true&DateEnd=' + $scope.endDate;
+					$http.get('api/' + urlEncoded).then(processResponse, function () {
 						notify('error');
 					});
 				};
 
+				$scope.getPdfReport = function () {
+					reports.EODAll(function (data) {
+						console.log(data);
+						var fileURL = URL.createObjectURL(data.response);
+						window.open(fileURL)
+					});
+				};
+
 				function processResponse(response) {
-					var list = response.data;
-					$scope.orooms = list;
-					//$scope.eodCounters.expected = list.length;
-					angular.forEach(list, function (item) {
-						if (item.student.SchoolId !== $rootScope.currentUser.SchoolId)
-							console.log(item);
+					if ($scope.eod.type.value == 2)
+						processResponseDateRange(response);
+					else
+						$scope.eodCounters = processResponseSingle(response);
+				}
+
+				function processResponseSingle(response) {
+					$scope.orooms = response.data;
+					var counters = new Counters();
+					counters.assigned = $scope.orooms.length;
+
+
+					switch ($scope.eod.selected.value) {
+						case 1: // aec
+							aec.markOverlapsReport($scope.orooms);
+							aec.markActions($scope.orooms);
+							var pendingFollowups = 0;
+							angular.forEach($scope.orooms, function (stu) {
+								if (stu.referred[0].RefferalStatus == 4) {
+									pendingFollowups++;
+									stu.referred[0].activity.Name = 'Pending Followup';
+
+								}
+								counters.pendingFollowups = pendingFollowups;
+							});
+
+							break;
+						case 2:
+							orooms.markOverlapsReport($scope.orooms);
+							orooms.markActions($scope.orooms);
+							angular.forEach($scope.orooms, function (stu) {
+								switch (stu.referred[0].ReferralTypeId) {
+									case 3: // orm + 1
+										$scope.oroomPieData[3].data++;
+										break;
+									case 1: // first time teacher
+										$scope.oroomPieData[4].data++;
+										break;
+									case 16: // aec->orm
+										$scope.oroomPieData[1].data++;
+										break;
+									case 2:// LD->orm
+										$scope.oroomPieData[0].data++;
+										break;
+									case 19:// reteach->orm
+										$scope.oroomPieData[2].data++;
+										break;
+									default:
+										console.log('not of ORM type');
+
+								};
+							});
+							applyColorsToData($scope.oroomPieData);
+							break;
+						case 3:
+							reteach.markOverlapsReport($scope.orooms);
+							reteach.markActions($scope.orooms);
+							var pendingFollowups = 0;
+							angular.forEach($scope.orooms, function (stu) {
+								if (stu.referred[0].RefferalStatus == 8) {
+									pendingFollowups++;
+									stu.referred[0].activity.Name = 'Pending Followup';
+
+								}
+								counters.pendingFollowups = pendingFollowups;
+							});
+							break;
+						case 4:
+							isss.markOverlapsReport($scope.orooms);
+							isss.markActions($scope.orooms);
+							break;
+						case 5:
+							osss.markOverlapsReport($scope.orooms);
+							osss.markActions($scope.orooms);
+							break;
+						case 6:
+							lunchs.markOverlapsReport($scope.orooms);
+							lunchs.markActions($scope.orooms);
+							break;
+					}
+
+					createConsequencesData($scope.orooms);
+
+					angular.forEach($scope.orooms, function (item) {
+						//if (item.student.SchoolId !== $rootScope.currentUser.SchoolId)
+						//	console.log(item);
 						switch ($scope.eod.selected.value) {
 							case 1:
-								checkAEC(item.ActionType);
+								checkAEC(item.referred[0].ActivityTypeId,counters);
 								break;
 							case 2:
-								checkOroom(item.ActionType);
+								checkOroom(item.referred[0].ActivityTypeId,counters);
+								if ((item.overlap.hasiss && !item.overlap.isscleared)|| item.overlap.hasoss)
+									counters.overlaps++;
+								break;
+							case 3:
+								checkReteach(item.referred[0].ActivityTypeId,counters);
 								break;
 							case 4:
-								checkISS(item.ActionType);
+								checkISS(item.referred[0].ActivityTypeId,counters);
 								break;
 							case 5:
-								checkOSS(item.ActionType);
+								checkOSS(item.referred[0].ActivityTypeId,counters);
 								break;
 							case 6:
-								checkLunchD(item.ActionType);
+								checkLunchD(item.referred[0].ActivityTypeId,counters);
 								break;
 						}
+					});
 
+					var cnt = counters;
+					$scope.flotPieData[0].data = cnt.present;
+					$scope.flotPieData[1].data = cnt.noShows + cnt.sentOuts + cnt.walkedOuts;
+					$scope.flotPieData[2].data = cnt.schoolAbsent + cnt.leftSchool + cnt.other
+						+ cnt.reschedules + cnt.clears + cnt.absents;
+					$scope.flotPieData[3].data = cnt.pendingFollowups;
 
+					counters.expected = cnt.assigned - (cnt.schoolAbsent + cnt.leftSchool + cnt.other + (cnt.pendingFollowups || 0) + cnt.clears + cnt.reschedules + cnt.overlaps);
+					console.log(counters);
+					return counters;
+
+				};
+
+				function processResponseDateRange(response) {
+					$scope.eodDateCounters = [];
+					var array = response.data;
+					angular.forEach(array , function (singleDateData) {
+						var date = singleDateData.Date;
+						var counters = processResponseSingle({data:singleDateData.students});
+						$scope.eodDateCounters.push(angular.extend({Date:date},counters));
+					});
+
+					totalCounters = new Counters();
+					angular.forEach($scope.eodDateCounters, function(singleCounter){
+
+						for(key in singleCounter){
+							totalCounters[key] += singleCounter[key];
+						}
 
 					});
-					var i = 0;
-//					angular.forEach($scope.eodCounters, function (item, key) {
-//						if (item !== list.length)
-//							$scope.flotPieData[i++].data = item;
-//					});
-					console.log($scope.eodCounters);
-				}
+					totalCounters.Date = 'Totals';
+					$scope.eodDateCounters.totals = totalCounters;
+					var cnt = totalCounters;
+					$scope.flotPieDataRange[0].data = cnt.present;
+					$scope.flotPieDataRange[1].data = cnt.noShows + cnt.sentOuts + cnt.walkedOuts;
+					$scope.flotPieDataRange[2].data = cnt.schoolAbsent + cnt.leftSchool + cnt.other
+						+ cnt.reschedules + cnt.clears + cnt.absents;
+					$scope.flotPieDataRange[3].data = cnt.pendingFollowups;
 
-				function checkOroom(actionTypeId) {
+
+				};
+
+				function checkAEC(actionTypeId, counters) {
 					switch (actionTypeId) {
-						case 1:
-						case 7:
-						case 44:
-						case 59:
-						case 73:
-						$scope.eodCounters.expected++;
-							break;
-						case 24:
-							break;
-						$scope.eodCounters.present++;
-							break;
-						case 25:
-							$scope.eodCounters.noShows++;
-							break;
-						case 28:
-							$scope.eodCounters.sentOuts++;
-							break;
-						case 29:
-							$scope.eodCounters.walkedOuts++;
-							break;
-						case 27:
-							$scope.eodCounters.schoolAbsent++;
-							break;
-						case 26:
-							$scope.eodCounters.leftSchool++;
-							break;
-						case 30:
-							$scope.eodCounters.other++;
-							break;
-					}
-				}
-				function checkAEC(actionTypeId) {
-					switch (actionTypeId) {
-						
-						case 48:
-						$scope.eodCounters.expected++;
-							break;
 						case 49:
-							$scope.eodCounters.present++;
+							counters.present++;
 							break;
 						case 52:
-							$scope.eodCounters.noShows++;
+							counters.noShows++;
 							break;
 						case 55:
-							$scope.eodCounters.sentOuts++;
+							counters.sentOuts++;
 							break;
 						case 56:
-							$scope.eodCounters.walkedOuts++;
+							counters.walkedOuts++;
 							break;
 						case 54:
-							$scope.eodCounters.schoolAbsent++;
+							counters.schoolAbsent++;
 							break;
 						case 53:
-							$scope.eodCounters.leftSchool++;
+							counters.leftSchool++;
 							break;
 						case 57:
-							$scope.eodCounters.other++;
+							counters.other++;
 							break;
 						case 50:
-							$scope.eodCounters.reschedules++;
+							counters.reschedules++;
 							break;
 						case 51:
-							$scope.eodCounters.clears++;
+							counters.clears++;
 							break;
 						case 58:
-							$scope.eodCounters.absents++;
+							counters.absents++;
 					}
 				}
-				function checkISS(actionTypeId) {
-					switch (actionTypeId) {
-						case 20: //ORMD->ISS
-						case 21: // Ref ISS
-						case 45: //  ORM->ISS
-							$scope.eodCounters.expected++;
-							break;
-						case 38:
-							$scope.eodCounters.present++;
-							break;
-						case 39:
-							$scope.eodCounters.noShows++;
-							break;
-						case 42:
-							$scope.eodCounters.sentOuts++;
-							break;
-						case 43:
-							$scope.eodCounters.walkedOuts++;
-							break;
-						case 41:
-							$scope.eodCounters.schoolAbsent++;
-							break;
-						case 40:
-							$scope.eodCounters.leftSchool++;
-							break;
-						case 47:
-							$scope.eodCounters.other++;
-							break;
-					}
-				}
-				function checkOSS(actionTypeId) {
+
+				function checkOroom(actionTypeId, counters) {
 					switch (actionTypeId) {
 						case 24:
-							$scope.eodCounters.present++;
+							counters.present++;
 							break;
 						case 25:
-							$scope.eodCounters.noShows++;
+							counters.noShows++;
 							break;
 						case 28:
-							$scope.eodCounters.sentOuts++;
+							counters.sentOuts++;
 							break;
 						case 29:
-							$scope.eodCounters.walkedOuts++;
+							counters.walkedOuts++;
 							break;
 						case 27:
-							$scope.eodCounters.schoolAbsent++;
+							counters.schoolAbsent++;
 							break;
 						case 26:
-							$scope.eodCounters.leftSchool++;
+							counters.leftSchool++;
 							break;
 						case 30:
-							$scope.eodCounters.other++;
+							counters.other++;
 							break;
 					}
 				}
-				function checkLunchD(actionTypeId) {
+
+				function checkReteach(actionTypeId, counters) {
 					switch (actionTypeId) {
-						case 31:
-							$scope.eodCounters.present++;
+						case 64:
+							counters.present++;
 							break;
-						case 32:
-							$scope.eodCounters.noShows++;
+						case 67:
+							counters.noShows++;
 							break;
-						case 35:
-							$scope.eodCounters.sentOuts++;
+						case 75:
+							counters.sentOuts++;
 							break;
-						case 36:
-							$scope.eodCounters.walkedOuts++;
+						case 70:
+							counters.walkedOuts++;
 							break;
-						case 34:
-							$scope.eodCounters.schoolAbsent++;
+						case 69:
+							counters.schoolAbsent++;
 							break;
-						case 33:
-							$scope.eodCounters.leftSchool++;
+						case 68:
+							counters.leftSchool++;
 							break;
-						case 37:
-							$scope.eodCounters.other++;
+						case 71:
+							counters.other++;
+							break;
+						case 65:
+							counters.reschedules++;
+							break;
+						case 66:
+							counters.clears++;
+							break;
+						case 72:
+							counters.absents++;
 							break;
 					}
+				}
+
+				function checkISS(actionTypeId, counters) {
+					switch (actionTypeId) {
+						case 38:
+							counters.present++;
+							break;
+						case 39:
+							counters.noShows++;
+							break;
+						case 42:
+							counters.sentOuts++;
+							break;
+						case 43:
+							counters.walkedOuts++;
+							break;
+						case 41:
+							counters.schoolAbsent++;
+							break;
+						case 40:
+							counters.leftSchool++;
+							break;
+						case 47:
+						case 91:
+							counters.other++;
+							break;
+					}
+				}
+
+				function checkOSS(actionTypeId, counters) {
+					switch (actionTypeId) {
+						case 25:
+							counters.noShows++;
+							break;
+						case 28:
+							counters.sentOuts++;
+							break;
+						case 29:
+							counters.walkedOuts++;
+							break;
+						case 27:
+							counters.schoolAbsent++;
+							break;
+						case 26:
+							counters.leftSchool++;
+							break;
+						case 30:
+							counters.other++;
+							break;
+					}
+				}
+
+				function checkLunchD(actionTypeId, counters) {
+					switch (actionTypeId) {
+						case 31:
+							counters.present++;
+							break;
+						case 32:
+							counters.noShows++;
+							break;
+						case 35:
+							counters.sentOuts++;
+							break;
+						case 36:
+							counters.walkedOuts++;
+							break;
+						case 34:
+							counters.schoolAbsent++;
+							break;
+						case 33:
+							counters.leftSchool++;
+							break;
+						case 37:
+							counters.other++;
+							break;
+					}
+				}
+
+				function createConsequencesData(list) {
+					// use a hash table to count how many different consequences exists
+					var consequenceHash = [];
+					angular.forEach(list, function (student) {
+						if (!student.referred[0].consequence) return;
+						var consequenceType = student.referred[0].consequence.referral_type.Name;
+
+						if (consequenceHash[consequenceType])
+							consequenceHash[consequenceType]++;
+						else
+							consequenceHash[consequenceType] = 1
+					});
+					// use hash to built data for the pie chart
+					var flotData = [];
+
+
+					var i = 0;
+					for (key in consequenceHash) {
+						var dataObj = {
+							label: key,
+							data: consequenceHash[key],
+							color: colorShades[i++]
+
+						};
+						flotData.push(dataObj);
+					}
+					$scope.flotPieDataConsequences = flotData;
 				}
 
 				$scope.flotPieData = [
-//				{
-//					label: "Expected",
-//					data: 5,
-//					color: "#d3d3d3"
-//				},
 					{
 						label: "Present",
-						data: 5,
-						color: "#bababa"
-					},
-					{
-						label: "No Show's",
-						data: 5,
-						color: "#79d2c0"
-					},
-					{
-						label: "Sent Out's",
-						data: 5,
-						color: "#1ab394"
-					},
-					{
-						label: "Walked Out's",
-						data: 5,
-						color: "#1ab394"
-					},
-					{
-						label: "School Absent",
-						data: 5,
-						color: "#1ab394"
-					},
-					{
-						label: "Left School",
-						data: 5,
-						color: "#1ab394"
-					},
-					{
-						label: "Other",
-						data: 5,
-						color: "#1ab394"
-					}
-
+						data: 0,
+						color: "#6FA45A"
+					}, {
+						label: "No Show, Sent-Out, Walked-Out",
+						data: 0,
+						color: "#CA423F"
+					}, {
+						label: "School Absent, Cleared,  Overlap, Other",
+						data: 0,
+						color: "#C2C3C5"
+					},{
+						label: 'Pending Followup',
+						data: 0,
+						color: '#FFB757'}
 				];
+
+				$scope.flotPieDataRange = [
+					{
+						label: "Present",
+						data: 0,
+						color: "#6FA45A"
+					}, {
+						label: "No Show, Sent-Out, Walked-Out",
+						data: 0,
+						color: "#CA423F"
+					}, {
+						label: "School Absent, Cleared,  Overlap, Other",
+						data: 0,
+						color: "#C2C3C5"
+					},{
+						label: 'Pending Followup',
+						data: 0,
+						color: '#FFB757'}
+				];
+
+				$scope.flotPieDataConsequences = [];
+
 				/**
 				 * Pie Chart Options
 				 */
@@ -3358,14 +3631,35 @@
 						defaultTheme: true
 					}
 				};
-				angular.forEach($scope.eod.issStudents, function (item) {
-					if (item.Attendance === 'Absent')
-						item.class = 'bg-gray';
-					else if (item.Attendance === 'Sent-Out')
-						item.class = 'bg-danger';
-					else
-						item.class = 'bg-green';
-				});
+
+				$scope.oroomPieData = [
+					{
+						label: "LD → ORM",
+						data: 0,
+						color: "#C3ECC8"
+					}, {
+						label: "AEC → ORM ",
+						data: 0,
+						color: "#999"
+					}, {
+						label: "Reteach → ORM ",
+						data: 0,
+						color: "#f2dede"
+					}, {
+						label: "ORM → ORM + 1",
+						data: 0,
+						color: "#C3ECC8"
+					}, {
+						label: "First Time - Teacher ",
+						data: 0,
+						color: "#999"
+					},
+				];
+
+				$scope.printDiv = function(){
+					print.printDiv("totals",'list');
+				};
+
 			}]);
 }(angular.module('Argus')));
 
@@ -3571,57 +3865,48 @@
 /* global angular */
 
 (function (app) {
-	app.controller('IssFollowupListCtrl', 
-	['$scope', 'notify','ISSService','$modal', function ($scope, notify, isss, $modal) {
-			$scope.iss = isss.query({followup:true});
-			
-			$scope.issFollowupAttendance = function (student,$index) {
-				var modalInstance = $modal.open({
-					templateUrl: 'views/modals/ISSFollowupModal.html',
-					//template:'<div> MODAL : true in Referral IN </div>',
-					size: 'lg',
-					controller: function ($scope, student, teachers) {
-						$scope.student = student;
-						$scope.currentDate = new Date();
-						$scope.teachers = teachers.query();
-						$scope.$watch('form.date.$viewValue', function(newV, oldV){
-							student.date = newV?newV:oldV;
-							console.log(newV);
-						});
-					},
-					resolve: {
-						student: function () {
-							return student;
-						}
-					}
-				});
+    app.controller('IssFollowupListCtrl',
+        ['$scope', 'notify', 'ISSService', 'ISSFollowupService', '$modal', function ($scope, notify, isss, issfs, $modal) {
+            $scope.iss = issfs.getList();
 
-				modalInstance.result.then(function () {// on SUBMIT
-					// post the comment and other things to the database 
-					isss.update({id:student.Id ,followup:true },{
-						Date: student.date,
-						Time: student.time,
-						ActionType: 46,
-						Comment: student.comment,
-						StudentId: student.StudentId,
-						TeacherId: student.teacher.id
-					}, function(data){
-						notify(data.msg);
-						$scope.iss.splice($index,1);
-					}, function(error){
-						notify('error');
-					});
+            $scope.issFollowupAttendance = function (student, $index) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/modals/ISSFollowupModal.html',
+                    size: 'lg',
+                    controller: function ($scope, student, teachers) {
+                        $scope.student = student;
+                        $scope.currentDate = new Date();
+                        $scope.teachers = teachers.query();
+                        $scope.$watch('suspension.startDate.$viewValue', function (newV, oldV) {
+                            student.dateOfSuspensionStart = newV ? newV : oldV;
+                        });
+                        $scope.$watch('suspension.endDate.$viewValue', function (newV, oldV) {
+                            student.dateOfSuspensionEnd = newV ? newV : oldV;
+                        });
+                        $scope.$watch('meeting.date.$viewValue', function (newV, oldV) {
+                            student.meetingDate = newV ? newV : oldV;
+                        });
+                    },
+                    resolve: {
+                        student: function () {
+                            return student;
+                        }
+                    }
+                });
 
-					 
-					//$scope.selected.student = null;
-				}, function () {// on modal DISMISS
+                modalInstance.result.then(function () {// on SUBMIT
+                    issfs.updateAttendance(student).then(function (data) {
+                        notify(data.msg);
+                        $scope.iss.splice($index, 1);
+                    }, function (data) {
+                        notify(data.msg || 'error');
+                    });
 
-				});
-				
-				
-				
-			};
-		}]);
+                });
+
+
+            };
+        }]);
 }(angular.module('Argus')));
 
 
@@ -3720,6 +4005,174 @@
 }(angular.module('Argus')));
 
 
+(function (app) {
+    app.controller('ParentMeetingCtrl', ['$scope', 'OSSService', '$modal', 'ISSFollowupService', 'notify',
+        function ($scope, osss, $modal, issfs, notify) {
+            $scope.refTable = osss.getParentMeetingList();
+
+
+            $scope.ossAttendance = function (referral, $index) {
+                if (!referral.Date || !referral.NewDate) {
+                    promptForParentMeetingInfo(referral, $index);
+                } else {
+
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/parentMeetingAttendaceModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, referral, teachers) {
+                            $scope.referral = referral;
+                            $scope.currentDate = new Date();
+                            $scope.teachers = teachers.query();
+                            $scope.$watch('form.date.$viewValue', function (newV, oldV) {
+                                referral.date = newV ? newV : oldV;
+                                console.log(newV);
+                            });
+                        },
+                        resolve: {
+                            referral: function () {
+                                return referral;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function (data) {// submit attendance modal
+                        osss.updateParentMeetingAttendance(referral).then(function(data){
+                            notify(data.msg);
+                            //$scope.refTable.splice($index,1);
+                        }, function(data){
+                            notify(data.msg);
+                        });
+                            return;
+                        switch (referral.ActivityTypeId) {
+
+
+                            case '1':
+                                osss.update
+                                counters.update({id: referral.student_user.id},
+                                    {
+                                        counters: referral.student_user.student.counters,
+                                        Comment: referral.comment
+                                    }, function () {
+                                        notify('success');
+                                        osss.update({id: referral.Id},
+                                            {OssPresent: true});
+
+                                    }, function (error) {
+                                        notify('error');
+                                    });
+                                break;
+                            case '2':
+                                osss.update({id: referral.Id},
+                                    {
+                                        Comment: referral.comment
+                                    }, function (data) {
+                                        notify(data.msg);
+                                    }, function (error) {
+                                        notify('error');
+                                    });
+                                break;
+                            case '3':
+                                isss.update({id: referral.Id, followup: true}, {
+                                    Date: referral.date,
+                                    Time: referral.time,
+                                    ActionType: 46,
+                                    Comment: referral.comment,
+                                    StudentId: referral.StudentId,
+                                    TeacherId: referral.teacher.id
+                                }, function (data) {
+                                    notify(data.msg);
+                                    $scope.oss.splice($index, 1);
+                                }, function (error) {
+                                    notify('error');
+                                });
+                                break;
+                        }
+                        $scope.oss.splice($index, 1);
+                    });
+                }
+
+            };
+
+            function promptForParentMeetingInfo(referral, $index) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/modals/ParentMeetingInfoModal.html',
+                    size: 'lg',
+                    controller: function ($scope, student, teachers) {
+                        $scope.student = student;
+                        $scope.currentDate = new Date();
+                        $scope.teachers = teachers.query();
+                        $scope.$watch('suspension.date.$viewValue', function (newV, oldV) {
+                            student.dateOfSuspension = newV ? newV : oldV;
+                            console.log('suspensionDate', newV);
+                        });
+                        $scope.$watch('meeting.date.$viewValue', function (newV, oldV) {
+                            student.meetingDate = newV ? newV : oldV;
+                            console.log('meetingDate', newV);
+                        });
+                    },
+                    resolve: {
+                        student: function () {
+                            return referral;
+                        }
+                    }
+                });
+                modalInstance.result.then(function (data) {// on modal submit
+                    //debugger;
+                    osss.updateParentMeetingInformation(referral).then(function (data) {
+                        notify(data.msg);
+                    }, function (data) {
+                        notify(data.msg || 'error');
+                    });
+                });
+            }
+
+        }])
+
+}(angular.module('Argus')));
+
+
+(function(app){
+    app.controller('ParentMeetingFollowupCtrl',['$scope','OSSFollowupService','notify','$modal', function($scope, ossfs, notify,$modal){
+        $scope.refTable = ossfs.getList();
+
+        $scope.setParentMeeting = function(referral,$index){
+            // some checks
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modals/ParentMeetingInfoModal.html',
+                //template:'<div> MODAL : true in Referral IN </div>',
+                size: 'lg',
+                controller: function ($scope, student, teachers) {
+                    $scope.student = student;
+                    $scope.currentDate = new Date();
+                    $scope.teachers = teachers.query();
+                    $scope.$watch('suspension.date.$viewValue', function (newV, oldV) {
+                        student.dateOfSuspension = newV ? newV : oldV;
+                    });
+                    $scope.$watch('meeting.date.$viewValue', function (newV, oldV) {
+                        student.meetingDate = newV ? newV : oldV;
+                    });
+                },
+                resolve: {
+                    student: function () {
+                        return referral;
+                    }
+                }
+            }); // end modal instance
+
+            modalInstance.result.then(function(data){ // on modal submit
+                ossfs.updateParentMeetingInformation(referral).then(function(data){
+                    notify(data.msg);
+                    $scope.refTable.splice($index,1);
+                }, function(data){
+                    notify('error');
+                })
+            });
+        };
+    }]);
+}(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
@@ -3840,7 +4293,11 @@
 							]);
 						}
 					}
-				});
+				})
+
+
+
+			;
 		}]);
 
 
@@ -4930,175 +5387,149 @@
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app
-		.controller("ManageReteachAbsenceCtrl",
-			["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'ReteachAbsenceListService','UtilService',
-				function ($scope, $modal, referrals, passes, useractions, notify, aec,utils) {
-					$scope.selected = {};
-					$scope.refTable = [];// table model
-					$scope.currentDate = new Date(); // date on the date picker
+    "use strict";
+    app
+        .controller("ManageReteachAbsenceCtrl",
+            ["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'ReteachAbsenceListService', 'UtilService',
+                function ($scope, $modal, referrals, passes, useractions, notify, aec, utils) {
+                    $scope.selected = {};
+                    $scope.refTable = [];// table model
+                    $scope.currentDate = new Date(); // date on the date picker
 
-					/**
-					 * Watch for changes in the datepicker then load the AECAbsence list
-					 */
-					$scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
+                    /**
+                     * Watch for changes in the datepicker then load the AECAbsence list
+                     */
+                    $scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
 
-						if (newVal) {//when date has a valid date request the List from that date
-							$scope.currentDate = newVal;
-							console.log("newVal = " + $scope.form.date.$viewValue);
+                        if (newVal) {//when date has a valid date request the List from that date
+                            $scope.currentDate = newVal;
+                            console.log("newVal = " + $scope.form.date.$viewValue);
 
-							$scope.refTable = aec.query({id: newVal, absence: true}, function (data) {
- 
-								if (!data.length) {
-									notify({message: "No students for current date",
-										classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
+                            $scope.refTable = aec.getList($scope.currentDate);
+                            return;
+                            $scope.refTable = aec.query({id: newVal, absence: true}, function (data) {
 
-								} else {
-									$scope.passesTable = data;
-									angular.forEach($scope.refTable, function (student) {
+                                if (!data.length) {
+                                    notify({
+                                        message: "No students for current date",
+                                        classes: 'alert-warning', templateUrl: 'views/common/notify.html'
+                                    });
 
-										student.status = [false, true];
+                                } else {
+                                    $scope.passesTable = data;
+                                    angular.forEach($scope.refTable, function (student) {
 
-									});
-								}
-							});
-						}
-					});
+                                        student.status = [false, true];
 
-					/**
-					 * Makes API call to get a pdf of the AECAbsence passes for the students
-					 * assigned AEC for the current date
-					 */
-					$scope.getPasses = function () {
-						notify({message: "Now Generating Passes",
-							classes: 'alert-successs', templateUrl: 'views/common/notify.html'});
-						$scope.getPasses = function () {
-							passes.pdf({date: $scope.currentDate, param: 'absence'}, function (data) {
-								var fileURL = URL.createObjectURL(data.response);
-								window.open(fileURL);
-							})
-						};
-					}
+                                    });
+                                }
+                            });
+                        }
+                    });
 
-					/**
-					 * Select the student that is clicked in the table so that the user doesn't 
-					 * have to type it 
-					 * @param {int} $index: reftable index of the clicked student 
-					 */
-					$scope.onSelect = function ($index) {
-						$scope.selected.student = $scope.refTable[$index];
-					};
+                    /**
+                     * Makes API call to get a pdf of the AECAbsence passes for the students
+                     * assigned AEC for the current date
+                     */
+                    $scope.getPasses = function () {
+                        notify({
+                            message: "Now Generating Passes",
+                            classes: 'alert-successs', templateUrl: 'views/common/notify.html'
+                        });
+                        $scope.getPasses = function () {
+                            passes.pdf({date: $scope.currentDate, param: 'absence'}, function (data) {
+                                var fileURL = URL.createObjectURL(data.response);
+                                window.open(fileURL);
+                            })
+                        };
+                    }
 
-					
+                    /**
+                     * Select the student that is clicked in the table so that the user doesn't
+                     * have to type it
+                     * @param {int} $index: reftable index of the clicked student
+                     */
+                    $scope.onSelect = function ($index) {
+                        $scope.selected.student = $scope.refTable[$index];
+                    };
 
-					
-					$scope.reteachListToCSV = function () {
-							//headings
-							var text = 'Teacher FirstName, Teacher LastName, Student FirstName,Student LastName,StudentId, Grade, Date\n';
-							angular.forEach($scope.refTable, function (item) { 
-								text += item.referred[0].teacher.FirstName +','+item.referred[0].teacher.LastName+','; 
-								text += item.FirstName + ',' + item.LastName + ',' + item.UserName +',';
-								text +=  item.student.Grade + ','+ item.referred[0].Date;
-								text += ' \n';
-							});
-							utils.downloadCSV(text, 'Reteach-Followup-List_'+ $scope.currentDate);
-					};
 
-					/******** MANAGE AEC Absence **********/
-					// for the next submit functions remove student from list self-reducing list.
-					// To avoid duplicate profile entries only 1 entry should be created in
-					// useractions table and all referrals must be changed in referrals 
-					// table (see backend implementation)
-					/**
-					 * PUT API call to change the referral status to referred (ReferralStatus 0)
-					 * as well as loggin it in the user actions for the profile 
-					 * @param {object} data: information returned by modal 
-					 * 	(noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
-					 */
-					var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
-						var student = $scope.selected.student;
-						var status = data.noShow ? 0 : data.walkOut ? 1 : data.sentOut ? 2 : data.schoolAbsent ? 3 : data.disciplinary ? 4 : data.clear ? 5 : -1;
+                    $scope.reteachListToCSV = function () {
+                        //headings
+                        var text = 'Teacher FirstName, Teacher LastName, Student FirstName,Student LastName,StudentId, Grade, Date\n';
+                        angular.forEach($scope.refTable, function (item) {
+                            text += item.referred[0].teacher.FirstName + ',' + item.referred[0].teacher.LastName + ',';
+                            text += item.FirstName + ',' + item.LastName + ',' + item.UserName + ',';
+                            text += item.student.Grade + ',' + item.referred[0].Date;
+                            text += ' \n';
+                        });
+                        utils.downloadCSV(text, 'Reteach-Followup-List_' + $scope.currentDate);
+                    };
 
-						// submit info of student '$scope.selected.student' to database
-						var dataToSent = {param: 'AbsentComment', comment: data.comment, status: status}
-						referrals.update({id: student.id}, dataToSent);
+                    /******** MANAGE AEC Absence **********/
+                    // for the next submit functions remove student from list self-reducing list.
+                    // To avoid duplicate profile entries only 1 entry should be created in
+                    // useractions table and all referrals must be changed in referrals
+                    // table (see backend implementation)
+                    /**
+                     * PUT API call to change the referral status to referred (ReferralStatus 0)
+                     * as well as loggin it in the user actions for the profile
+                     * @param {object} data: information returned by modal
+                     *    (noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
+                     */
+                    var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
+                        var student = $scope.selected.student;
+                        var status = data.noShow ? 0 : data.walkOut ? 1 : data.sentOut ? 2 : data.schoolAbsent ? 3 : data.disciplinary ? 4 : data.clear ? 5 : -1;
 
-						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-						$scope.refTable.splice(indexOfStudent, 1);
-						$scope.selected.student = null;
-					}
+                        // submit info of student '$scope.selected.student' to database
+                        var dataToSent = {param: 'AbsentComment', comment: data.comment, status: status}
+                        referrals.update({id: student.id}, dataToSent);
 
-					/********** MODALS   **********/
-					/** Comment Modal
-					 * Opens the Comment modal and passes in the student selected to be available
-					 * in the modal context, calls the SubmitComment function when modal
-					 * submit button is clicked, does nothing otherwise
-					 */
-					$scope.openComment = function (student) {
+                        var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
+                        $scope.refTable.splice(indexOfStudent, 1);
+                        $scope.selected.student = null;
+                    }
 
-						console.log(student)
-						var commentModal = $modal.open({
-							templateUrl: 'views/modals/ReteachCommentAbsenceModal.html',
-							size: 'md',
-							controller: function ($scope, student) {
-								$scope.title = "Reteach Followup Attendance";
-								$scope.student = student;
-							},
-							resolve: {
-								student: function () {
-									return student;
-								}
-							}
-						})// End commentModal
+                    /********** MODALS   **********/
+                    /** Comment Modal
+                     * Opens the Comment modal and passes in the student selected to be available
+                     * in the modal context, calls the SubmitComment function when modal
+                     * submit button is clicked, does nothing otherwise
+                     */
+                    $scope.openComment = function (student) {
 
-						commentModal.result.then(function (data) {
-							if (student.radioModel == 66 || student.radioModel == 67) {
-								var referralIds = student.referred.map(function (o) {
-									return o.Id;
-								});
-								
-								var payload = {
-									ActionType: student.radioModel,
-									Comment: student.comment,
-									Date: $scope.currentDate,
-									referrals: referralIds,
-									referred: student.referred
-								};
-								aec.update({id: student.id}, payload, function (data) {
-									notify(data.msg);
-								}, function (error) {
-									notify('error, Before continuing please contact a System Administrator');
-								});
-							} else {
-								var referred = student.referred.map(function(o){
-									return {Id: o.Id};
-								});
-								angular.forEach(student.referred, function (item) {
-									var urlEncoded = {id: item.Id};
-									var payload = {
-										param: 'attendance',
-										Folders: item.selected ? true : false,
-										ActionType: student.radioModel,
-										Comment: student.comment,
-										Date: $scope.currentDate,
-										Referrals: referred
-									};
-									aec.update(urlEncoded, payload, function (data) {
-										//notify(data.msg);
-									}, function (error) {
-										notify('error, Before continuing please contact an admin');
-									});
-								});
-							}
-						});
+                        console.log(student);
+                        var commentModal = $modal.open({
+                            templateUrl: 'views/modals/ReteachCommentAbsenceModal.html',
+                            size: 'md',
+                            controller: function ($scope, student) {
+                                $scope.title = "Reteach Followup Attendance";
+                                $scope.student = student;
+                            },
+                            resolve: {
+                                student: function () {
+                                    return student;
+                                }
+                            }
+                        })// End commentModal
 
-						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-						$scope.refTable.splice(indexOfStudent, 1);
-						$scope.selected.student = null;
-					};
+                        commentModal.result.then(function (data) {
+                            aec.updateAttendance($scope.currentDate, student).then(function(data){
+                                notify(data.msg);
+                                clearInputAndRemoveFromTable();
+                            },function(){
+                                notify('error, Before continuing please contact a System Administrator');
+                            });
+                        });
 
-				}])
+
+                    };
+                    function clearInputAndRemoveFromTable() {
+                        var indexOfSelected = $scope.refTable.indexOf($scope.selected.student);
+                        $scope.refTable.splice(indexOfSelected, 1);
+                        $scope.selected.student = null;
+                    }
+                }])
 }(angular.module('Argus')));
 /* global angular */
 
@@ -5106,12 +5537,23 @@
 	"use strict";
 	app
 		.controller("ManageReteachCtrl", ["$scope", "$filter", "$modal", "referrals", "PassesService",
-			"StudentsService", "notify", "ReteachListService",'UtilService',
-			function ($scope, $filter, $modal, referrals, passes, students, notify, aec,utils) {
+			"StudentsService", "notify", "ReteachListService",'UtilService','$rootScope',
+			function ($scope, $filter, $modal, referrals, passes, students, notify, aec,utils, $rootScope) {
 				$scope.selected = {};
 				$scope.refTable = [];// table model
 				$scope.currentDate = new Date();
 
+				function getListSuccessCallback(data){
+					if (!data.length) {
+						notify({message: "No students for current date",
+							classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
+					}
+				};
+
+				$scope.getList = function(date){
+					date = date || $scope.currentDate;
+					$scope.refTable = aec.getList(date, getListSuccessCallback);
+				};
 				/**
 				 * Watch for changes in the datepicker then load the AECList 
 				 * For the selected Date. Also adjusts data received
@@ -5122,51 +5564,7 @@
 					if (newVal) {//when date has a valid date request the List from that date
 						$scope.currentDate = newVal;
 						console.log("newVal = " + $scope.form.date.$viewValue);
-						$scope.refTable = aec.query({id: newVal}, function (data) {
-							angular.forEach(data, function (student) {
-								student.status = {classs: '', action: ''};
-								student.ActivityTypeId = 0;
-								angular.forEach(student.referred, function (ref) {
-									var counters = student.counters;
-
-									if (counters && counters.ORoomsToBeServed > 0) {
-										student.overlap = {place: 'Has Oroom', class: 'bg-danger'};
-									}
-									if (counters && counters.ISSDays > 0) {
-										student.overlap = {place: 'Has ISS', class: 'bg-danger'};
-									}
-									// check for present
-
-									student.ActivityTypeId = ref.ActivityTypeId;
-
-
-								});
-
-								if (student.ActivityTypeId === 64) {// present , check what assignments were completed
-									student.status.action = 'Present: ';
-									student.status.class = 'bg-green';
-									student.status.action += 'complete';
-
-								} else if (student.ActivityTypeId === 75) { // sent out
-									student.status.action = 'Sent Out: Oroom-today';
-									student.status.class = 'bg-danger';
-								} else if (student.ActivityTypeId === 70) { // walked out
-									console.log('walked out');
-									student.status.action = 'Walked Out: Oroom-tomorrow';
-									student.status.class = 'bg-danger';
-								} else if (student.ActivityTypeId === 65) { // rescheduled
-									student.status = {action: 'Rescheduled', class: 'bg-green'};
-								} else if (student.ActivityTypeId === 66) {
-									student.status = {action: 'Cleared', class: 'bg-green'};
-								}
-
-							});
-
-							if (!data.length) {
-								notify({message: "No students for current date",
-									classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
-							} 
-						});
+						$scope.getList($scope.currentDate)
 					}
 				});
 
@@ -5177,7 +5575,7 @@
 				 */
 				$scope.getPasses = function () {
 					notify({message: "Now Generating Passes",
-						classes: 'alert-successs', templateUrl: 'views/common/notify.html'});
+						classes: 'alert-success', templateUrl: 'views/common/notify.html'});
 					passes.pdf({date: $scope.currentDate, param: 'AECList'}, function (data) {
 						console.log(data);
 						var fileURL = URL.createObjectURL(data.response);
@@ -5236,9 +5634,9 @@
 				 * into user actions for the profile 
 				 * @param {object} data: information returned by modal (date,comment,student,excused)
 				 */
-				var submitReschedule = function (data) {
-					var student = data.student;
-					// get info from comment box and DatePicker       
+				var submitReschedule = function (student) {
+					var data;
+					// get info from comment box and DatePicker
 					// submit information of student '$scope.selected.student' to the database
 					student.status = {action: 'Rescheduled',
 						class: 'bg-green'};
@@ -5249,10 +5647,10 @@
 					var urlEncoded = {id: student.Id};
 					var payload = {
 						param: 'reschedule',
-						Comment: data.comment,
-						newDate: data.date,
+						Comment: student.comment,
+						newDate: student.rescheduleDate,
 						ReferralIds: referrals,
-						excused: data.excused
+						excused: student.excused
 					};
 
 					aec.update(urlEncoded, payload, function (data) {
@@ -5262,7 +5660,7 @@
 							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
 					});
 
-					removeSelectedStudentFromTableAndClear();
+					clearSelectStudentField();
 				};
 
 				/**
@@ -5271,10 +5669,8 @@
 				 * into user actions for the profile 
 				 * @param {object} data: information returned by modal (comment, student)
 				 */
-				var submitClear = function (data) {
-					var student = data.student;
-					student.status = {action: 'Cleared',
-						class: 'bg-green'};
+				var submitClear = function (student) {
+					student.status = {action: 'Cleared', class: 'bg-green'};
 
 					// submit information of student '$scope.selected.student' to the database
 
@@ -5284,7 +5680,7 @@
 					var urlEncoded = {id: student.Id};
 					var payload = {
 						param: 'clear',
-						Comment: data.comment,
+						Comment: student.comment,
 						ReferralIds: referralsIds,
 						Date: $scope.currentDate
 					};
@@ -5295,115 +5691,62 @@
 							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
 					});
 
-					removeSelectedStudentFromTableAndClear();
+					clearSelectStudentField();
 				};
 
-				/**
-				 * PUT API call to log parent notified information for current student
-				 * into user actions for the profile. 
-				 * In the case that parent requested a reschedule $scope.selected student 
-				 * is changed to the current student and submit reschedule is 
-				 * on that student, preprocess of data needed(line 193)
-				 * to provide necessary info for sumit Reschedule 
-				 * @param {object} data: information returned by modal (student,reschedule,newDate)
-				 */
-				var submitParentNotified = function (data) {
-					var rescheduleComment = "Parent Requested Reschedule";
-					console.log(data.student);
-
-
-					// Remove Student if reschedule
-					if (data.reschedule) {
-						// sent a post to the reschedule api point
-						angular.extend(data, {comment: rescheduleComment, excused: true, oldDate: $scope.currentDate, date: data.newDate});
-						$scope.selected.student = data.student;
-						submitReschedule(data);
-
-					} else {
-						// Make A post to update the student parent's information 
-						var student = data.student.student;
-
-						students.update({id: data.student.id}, {
-							ParentNotified: student.ParentNotified ? 1 : 0,
-							ParentNotifiedComment: student.ParentNotifiedComment,
-							ValidNumber: student.ValidNumber ? 1 : 0,
-							ParentSupportive: student.ParentSupportive ? 1 : 0,
-							GuardianPhone: student.GuardianPhone
-						}, function (response) {
-
-						}, function (response) {
-							notify({message: "Parent Notified Failed, Please Contact The Admin",
-								classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
+				function submitAttendance(data){
+					var student = data.student;
+					debugger;
+					aec.updateAttendance($scope.currentDate, student).then(function (data) {
+						clearSelectStudentField();
+						notify(data.msg);
+					}, function (err) {
+						notify({
+							message: "Present  Failed, Please Contact The System Admin Before Continuing",
+							classes: 'alert-danger', templateUrl: 'views/common/notify.html'
 						});
-
-
-					}
-
-
-				}
-
-
-
-				/**
-				 * PUT API call to log student notified information for student clicked
-				 * 
-				 * @param {object} ref: student selected
-				 * @param {int} $index: refTable index of student selected
-				 */
-				$scope.submitStudentNotified = function (ref, $index) {
-
-					var studentNotified = ref.student.Notified;
-					students.update({id: ref.id}, {Notified: !studentNotified ? 1 : 0}, function (response) {
-						console.log(response);
 					});
-					console.log($scope.refTable[$index]);
-				};
+				}
 
 				/**
 				 * PUT API call to change the all unprocessed referrals to absent(ReferralStatus 4)
 				 * as well as logging the absent into user actions for the profile 
 				 */
 				$scope.finishManageAEC = function () {
-					angular.forEach($scope.refTable, function (student) {
-						// if no overlap and not action taken by user then send to absent list
-						if ( !student.status.action && !student.overlap  ) {
-							
-							angular.forEach(student.referred, function (ref) {
-							
-								aec.update({'id': ref.Id},
-								{'param': 'absent', Date: $scope.currentDate},
-								function (response) {
-
-								}, function (response) {
-									notify({message: "Finish Failed, Please Contact The Admin",
-										classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-								});
-							});
-						}
+					// confirm before submit
+					var submit = confirm("IF YOU SUBMIT THIS LIST ALL THE CHANGES MADE WILL BE RECORDED AND YOU WILL BE UNABLE TO CHANGE THEM AGAIN");
+					if(!submit)
+						return;
+					debugger;
+					var prom = aec.submitList($scope.refTable, $scope.currentDate);
+					prom.then(function(data){
+						notify(data.msg);
+					}, function(err){
+						notify("Error Submitting,  Please Contact the System Admin before continuing ")
 					});
-					$scope.refTable = [];
+					return;
 				};
 
 				function isOverlap(student) {
 					var overlap = false;
 					var overlapPlace = '';
 
-					if (student.counters.ORoomsToBeServed > 0) {
+					if (student.overlap.hasorm ) {
 						overlapPlace = 'O-Room';
 						overlap = true;
 					}
-					if (student.counters.ISSDays > 0) {
+					if (student.hasiss ) {
 						overlapPlace = 'ISS';
 						overlap = true;
 					}
-					if (student.counters.OSSPMP > 0) {
+					if (student.overlap.hasoss) {
 						overlapPlace = 'OSS';
 						overlap = true;
 					}
 					//
 					overlap = false;
 					if (overlap) {
-						modalInstance = $modal.open({
+						var modalInstance = $modal.open({
 							templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
 							//template:'<div> MODAL : true in Referral IN </div>',
 							size: 'lg',
@@ -5434,17 +5777,26 @@
 				 */
 				$scope.AECAttendance = function (student, $index) {
 
+
+					if(student.referred[0].RefferalStatus === 2 ||  student.referred[0].RefferalStatus  == 8) {
+						notify('Action Unavailable : Attendance  Already taken and submitted.','warning');
+						return;
+					}
+
 					if (isOverlap(student)) {
 						return;
 					}
 
-					console.log(student);
+					console.log('Reteach attendance: student \n', student);
 					var modalInstance = $modal.open({
 						templateUrl: 'views/modals/attendanceReteachModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
 						size: 'lg',
 						controller: function ($scope, student) {
 							$scope.student = student;
+							$scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
+								student.rescheduleDate = newValue || student.rescheduleDate;
+
+							});
 						},
 						resolve: {
 							student: function () {
@@ -5452,72 +5804,13 @@
 							}
 						}
 					});
-					modalInstance.result.then(function (data) {// on SUBMIT
-						var student = data.student;
-						// check what buttons were present  and what assignments were completed
-						// to set the color and the attendance 
-
-						var status = {class: '', action: ''};
-						if (student.radioModel == 64 ) {// present , check what assignments were completed
-							//
-
-							status.action = 'Present: ';
-							status.class = 'bg-green';
-							status.action += 'complete';
-
-
-						} else if (student.radioModel == 75) {
-							console.log('sent out');
-							status.action = 'Sent Out: Oroom-today';
-							status.class = 'bg-danger';
-						} else if (student.radioModel == 70) {
-							console.log('walked out');
-							status.action = 'Walked Out: Oroom-tomorrow';
-							status.class = 'bg-danger';
-						}
-						student.status = status;
-
-
-
-						// post the comment and other things to the database 
-
-						console.log(student);
-						// sent when present
-						var referrals = student.referred.map(function (o) {
-							return {Id: o.Id, AssignmentCompleted: o.AssignmentCompleted}
-						});
-						// sent otherwhise
-						var referralIds = student.referred.map(function (o) {
-							return o.Id;
-						});
-						var urlEncoded = {id: student.Id};
-						var payload = {
-							param: 'attendance',
-							ActionType: student.radioModel,
-							Comment: student.comment,
-							Date: $scope.currentDate,
-							Referrals: student.radioModel == 64 ? referrals : referralIds
-						};
-
-						aec.update(urlEncoded, payload, function (data) {
-							notify(data.msg);
-						}, function (err) {
-							notify('error, Before continuing please contact an admin');
-						});
-
-
-
-						// Do Not Remove From List
-//						if ($index)
-//							$scope.refTable.splice($index, 1);
-//						else
-//						
-						// only clears the field
-						$scope.selected.student = null;
-					}, function () {// on modal DISMISS
-
+					modalInstance.result.then(function(data){
+						if(student.ActivityTypeId == 66)
+							return submitClear(student);
+						else if(student.ActivityTypeId ==65 )
+							return submitReschedule(student);
+						submitAttendance(data);
 					});
-
 				};
 
 
@@ -5537,8 +5830,8 @@
 							$scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
 								if (newValue) { //when date has a valid date request the List from that date
 									$scope.date = newValue;
-									console.log('date changed');
-								}
+								console.log('date changed');
+							}
 							});
 
 						},
@@ -5620,12 +5913,7 @@
 				 * sets it to null (clear field)
 				 * 
 				 */
-				var removeSelectedStudentFromTableAndClear = function () {
-//					for (var i = 0; i < $scope.refTable.length; i++)
-//						if ($scope.selected.student.id === $scope.refTable[i].id) {
-//							$scope.refTable.splice(i, 1);
-//							break;
-//						}
+				var clearSelectStudentField = function () {
 					$scope.selected.student = null;
 				};
 			}]);
@@ -5661,6 +5949,10 @@
 				id: 'Student Data',
 				link: "reteach.studentData",
 				icon: 'user fa-2x'
+			}, {
+				id: 'Reports',
+				link: 'reteach.reports.eod',
+				icon: 'area-chart fa-2x'
 			}
 		];
 	});
@@ -5676,9 +5968,25 @@
 					$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
 					$scope.currentDate = new Date(); // date on the datepicker
 					$scope.teacherStudents = []; // model for autocomplete  
-					$scope.refTable = []; // model for dynamic table 
-					$scope.edits = [];
-					$scope.eightPeriods = [];
+					$scope.refTable = []; // model for dynamic table
+
+					$scope.dropzoneConfig = {
+						maxFileSize:1,
+
+						options: {// passed into the Dropzone constructor
+							url: api+'reteachlist',
+							paramName:"file",
+							acceptedFiles: ".csv",
+							uploadMultiple: false,
+							headers: { 'Authorization':'Bearer '+ localStorage.getItem('satellizer_token') }
+
+						},
+						eventHandlers: {
+							success: function (file, response) {
+							},
+						},
+
+					}; // end dropzoneConfig
 
 
 					$scope.teachers = teachers.query();
@@ -5831,15 +6139,15 @@
 						//var selectedAssignments = $scope.selected.assignments;
 						var referralToAdd = $scope.selected.student;
 						var selectedTeacher = $scope.selected.teacher;
+
 						$http.get('api/classes/' + $scope.selected.student.Id).then(function (response) {
-							var last = response.data[7];
-							$scope.eightPeriods.push(last)
-							console.log($scope.eightPeriods);
-						})
+							referralToAdd.eightPeriod = response.data[7];
+							referralToAdd.ninethPeriod = response.data[8];
+						});
 
 						//addAssignmentsToStudent(selectedAssignments, referralToAdd);
 						referralToAdd.teacher = $scope.selected.teacher;
-						$scope.refTable.push(referralToAdd);
+						$scope.refTable.unshift(referralToAdd);
 						console.log($scope.refTable);
 						$scope.selected.student = null;
 					}
@@ -5925,7 +6233,7 @@
 				.state('reteach', {
 					abstract: true,
 					url: "/reteach",
-					templateUrl: "views/common/contentArgus.html",
+					templateUrl: "views/common/contentArgusReteachCoordinator.html",
 					controller: "NavigationReteachCtrl",
 					controllerAs: 'navigation',
 					resolve: {
@@ -5989,7 +6297,7 @@
 						}
 					}
 				})
-				.state('reteach.referral', {
+				.state('reteach.reteachReferral', {
 					url: "/ReteachReferral",
 					templateUrl: 'views/reteach/Referral.html',
 					data: {pageTitle: 'Referral'},
@@ -6006,7 +6314,7 @@
 					}
 
 				})
-				.state('reteach.reteachlist', {
+				.state('reteach.reteachList', {
 					url: "/ReteachList",
 					templateUrl: 'views/reteach/manageReteach.html',
 					data: {pageTitle: 'List'},
@@ -6027,7 +6335,7 @@
 					}
 
 				})
-				.state('reteach.pending', {
+				.state('reteach.reteachPending', {
 					url: "/ReteachFollowup",
 					templateUrl: 'views/reteach/manageReteachabsence.html',
 					data: {pageTitle: 'Pending'},
@@ -6058,10 +6366,60 @@
 							]);
 						}
 					}
-				});
+				})
 
-
-
+				.state('reteach.reports', {
+					url: '/Reports',
+					templateUrl: 'views/reports/reports.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ReportsCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}
+							])
+								;
+						}
+					}
+				})
+				.state('reteach.reports.eod', {
+					url: '/EOD',
+					templateUrl: 'views/reports/reports.eod.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ReportsEODCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									serie: true,
+									name: 'angular-flot',
+									files: [
+										'js/plugins/flot/jquery.flot.js',
+										'js/plugins/flot/jquery.flot.time.js',
+										'js/plugins/flot/jquery.flot.tooltip.min.js',
+										'js/plugins/flot/jquery.flot.spline.js',
+										'js/plugins/flot/jquery.flot.resize.js',
+										'js/plugins/flot/jquery.flot.pie.js',
+										'js/plugins/flot/curvedLines.js',
+										'js/plugins/flot/angular-flot.js']
+								}
+							]);
+						}
+					}
+				})
+			;
 
 		}]);
 
@@ -6324,7 +6682,7 @@
 						$scope.selected.rotation = null;
 						$scope.refTable = [];
 						console.log($rootScope.schoolId);
-						if ($rootScope.currentUser.schoolId === 2) {
+						if ($rootScope.currentUser.schoolId === 2 || $rootScope.currentUser.schoolId === 5) {
 							$scope.refTable = asp.query({Date: $scope.currentDate}, markOverlaps);
 						}
 					}
@@ -6340,8 +6698,8 @@
 					$scope.refTable = null;
 					asp.query({select: 1, rotation: rotation.Value, Date: $scope.currentDate},
 					function (data) {
-						// check for date and group all the PE into 1 PE 
-						
+						// check for date and group all the PE into 1 PE
+
 						$scope.programs = data;
 					}, function (err) {
 
@@ -6499,128 +6857,129 @@
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
-		function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide ) {
+    "use strict";
+    app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
+        function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
 //			var user = JSON.parse(localStorage.getItem('user'));
 //			var schoolId = user.SchoolId;
-			$stateProvider
-				.state('asp', {
-					abstract: true,
-					url: "/asp",
-					templateUrl: "views/common/contentArgus.html",
-					controller: "NavigationASPCtrl",
-					controllerAs: 'navigation',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'angles',
-									files: ['js/plugins/chartJs/angles.js']
-								},
-								{
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
-								},
-								{
-									name: 'ui.calendar',
-									files: ['js/plugins/fullcalendar/calendar.js']
-								},
-								{
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								},
-								{
-									name: 'ui.slimscroll',
-									files: ['js/plugins/slimscroll/angular.slimscroll.js']
-								}
+            $stateProvider
+                .state('asp', {
+                    abstract: true,
+                    url: "/asp",
+                    templateUrl: "views/common/contentArgus.html",
+                    controller: "NavigationASPCtrl",
+                    controllerAs: 'navigation',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/chartJs/Chart.min.js', 'js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'angles',
+                                    files: ['js/plugins/chartJs/angles.js']
+                                },
+                                {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    files: ['css/plugins/fullcalendar/fullcalendar.css', 'js/plugins/fullcalendar/fullcalendar.min.js', 'js/plugins/fullcalendar/gcal.js']
+                                },
+                                {
+                                    name: 'ui.calendar',
+                                    files: ['js/plugins/fullcalendar/calendar.js']
+                                },
+                                {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                },
+                                {
+                                    name: 'ui.slimscroll',
+                                    files: ['js/plugins/slimscroll/angular.slimscroll.js']
+                                }
 
-							]);
-						}
-					}
-				})
-				.state('asp.dashboard', {
-					url: "/dashboard",
-					templateUrl: 'views/aspcoordinator/dashboard.html',
-					data: {pageTitle: 'Dashboard'},
-					controller: "DashAdmin2Ctrl",
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
-								},
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('asp.manage', {
-					url: "/manage",
-					templateUrl: 'views/aspcoordinator/manage.html',
-					data: {pageTitle: 'Attendance'},
-					controller: 'ManageCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
+                            ]);
+                        }
+                    }
+                })
+                .state('asp.dashboard', {
+                    url: "/dashboard",
+                    templateUrl: 'views/aspcoordinator/dashboard.html',
+                    data: {pageTitle: 'Dashboard'},
+                    controller: "DashAdmin2Ctrl",
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+                                },
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('asp.manage', {
+                    url: "/manage",
+                    templateUrl: 'views/aspcoordinator/manage.html',
+                    data: {pageTitle: 'Attendance'},
+                    controller: 'ManageCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('asp.manageStudents', {
-					url: "/ManageStudents",
-					templateUrl: /*schoolId === 2? 'views/aspcoordinator/manageStudentsDunbar.html':*/'views/aspcoordinator/manageStudentsEstacado.html',
-					data: {pageTitle: 'ASP Students'},
-					controller: /*schoolId === 2? 'ManageASPStudentsDunbarCtrl':*/'ManageASPStudentsEstacadoCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-							]);
-						}
-					}
+                })
+                .state('asp.manageStudents', {
+                    url: "/ManageStudents",
+                    templateUrl: /*schoolId === 2? 'views/aspcoordinator/manageStudentsDunbar.html':*/'views/aspcoordinator/manageStudentsEstacado.html',
+                    data: {pageTitle: 'ASP Students'},
+                    controller: /*schoolId === 2? 'ManageASPStudentsDunbarCtrl':*/'ManageASPStudentsEstacadoCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([]);
+                        }
+                    }
 
-				});
-//				.state('asp.pending', {
-//					url: "/pending",
-//					templateUrl: 'views/sharedItems/manageAECabsence.html',
-//					data: {pageTitle: 'Pending'},
-//					controller: 'manageAECAbsenceController',
-//					resolve: {
-//						loadPlugin: function ($ocLazyLoad) {
-//							return $ocLazyLoad.load([
-//								{
-//									name: 'datePicker',
-//									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-//								}
-//							]);
-//						}
-//					}
-//				})
-				
+                })
+                /*				.state('asp.pending', {
+                 url: "/pending",
+                 templateUrl: 'views/sharedItems/manageAECabsence.html',
+                 data: {pageTitle: 'Pending'},
+                 controller: 'manageAECAbsenceController',
+                 resolve: {
+                 loadPlugin: function ($ocLazyLoad) {
+                 return $ocLazyLoad.load([
+                 {
+                 name: 'datePicker',
+                 files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                 }
+                 ]);
+                 }
+                 }
+                 })*/
 
-		}]);
+
+            ;
+
+        }]);
 
 
 }(angular.module('Argus')));
@@ -6630,8 +6989,8 @@
 	"use strict";
 	app
 		.controller("manageAECAbsenceController",
-			["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'AECAbsenceListService','UtilService',
-				function ($scope, $modal, referrals, passes, useractions, notify, aec,utils) {
+			["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'AECAbsenceListService','UtilService','$rootScope',
+				function ($scope, $modal, referrals, passes, useractions, notify, aec,utils, $rootScope) {
 					$scope.selected = {};
 					$scope.refTable = [];// table model
 					$scope.currentDate = new Date(); // date on the date picker
@@ -6645,8 +7004,9 @@
 							$scope.currentDate = newVal;
 							console.log("newVal = " + $scope.form.date.$viewValue);
 
+							$scope.refTable = aec.getList($scope.currentDate);
+							return;
 							referrals.query({id: newVal, absence: true}, function (data) {
-
 								if (!data.length) {
 									$scope.refTable = [];
 									notify({message: "No students for current date",
@@ -6708,9 +7068,7 @@
 									text += ref.assignment.Name
 									text += ' \n';
 								});
-								
 
-								
 							});
 							utils.downloadCSV(text, 'AEC-Followup-List_'+$scope.currentDate);
 						
@@ -6728,16 +7086,7 @@
 					 * 	(noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
 					 */
 					var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
-						var student = $scope.selected.student;
-						var status = data.noShow ? 0 : data.walkOut ? 1 : data.sentOut ? 2 : data.schoolAbsent ? 3 : data.disciplinary ? 4 : data.clear ? 5 : -1;
 
-						// submit info of student '$scope.selected.student' to database
-						var dataToSent = {param: 'AbsentComment', comment: data.comment, status: status};
-						referrals.update({id: student.id}, dataToSent);
-
-						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-						$scope.refTable.splice(indexOfStudent, 1);
-						$scope.selected.student = null;
 					};
 
 					/********** MODALS   **********/
@@ -6752,7 +7101,7 @@
 							templateUrl: 'views/modals/CommentAbsenceModal.html',
 							size: 'md',
 							controller: function ($scope, student) {
-								$scope.title = "Reteach Followup Attendance";
+								$scope.title = "AEC Followup ";
 								$scope.student = student;
 							},
 							resolve: {
@@ -6762,67 +7111,15 @@
 							}
 						});// End commentModal
 
-						commentModal.result.then(function (data) {
-							// present or clear
-							if (student.radioModel == 51 || student.radioModel == 52) { // one request
-								var referralIds = student.referred.map(function (o) {
-									return o.Id;
-								});
-								
-								var payload = {
-									ActionType: student.radioModel,
-									Comment: student.comment,
-									Date: $scope.currentDate,
-									referrals: referralIds,
-									referred: student.referred
-								};
-								aec.update({id: student.id}, payload, function (data) {
-									notify(data.msg);
-									clearInputAndRemoveFromTable();
-								}, function (error) {
-									notify('error, Before continuing please contact a System Administrator');
-								});
-							} else {
-								var referred = student.referred.map(function(o){
-									return {Id: o.Id, Folders:o.selected?true:false};
-								});
-								var urlEncoded  = {id:student.id};
-								var payload = {
-									param:'attendance',
-									Referrals : referred,
-									ActionType:student.radioModel,
-									Comment:student.comment,
-									Date: $scope.currentDate
-								};
-								aec.update(urlEncoded, payload, function(data){
-									notify(data.msg);
-									clearInputAndRemoveFromTable();
-								},function(){
-									notify('error');
-								});
-//								angular.forEach(student.referred, function (item) { // multiple requests
-//									var urlEncoded = {id: item.Id};
-//									var payload = {
-//										param: 'attendance',
-//										Folders: item.selected ? true : false,
-//										ActionType: student.radioModel,
-//										Comment: student.comment,
-//										Date: $scope.currentDate,
-//										Referrals: referred
-//									};
-//									aec.update(urlEncoded, payload, function (data) {
-//										//notify(data.msg);
-//										clearInputAndRemoveFromTable()
-//									}, function (error) {
-//										notify('error, Before continuing please contact an admin');
-//									});
-//								});
-							}
+						commentModal.result.then(function () {
+							aec.updateAttendance($scope.currentDate, student).then(function(data){
+								notify(data.msg);
+								clearInputAndRemoveFromTable();
+							},function(){
+								notify('error, Before continuing please contact a System Administrator');
+							});
 						});
-//
-//						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-//						$scope.refTable.splice(indexOfStudent, 1);
-//						$scope.selected.student = null;
+
 					};
 					
 					function clearInputAndRemoveFromTable(){
@@ -6836,841 +7133,586 @@
 /* global angular, URL */
 
 (function (app) {
-	"use strict";
-	app
-		.controller("manageAECController", ["$scope", "$filter", "$modal", "referrals", "PassesService",
-			"StudentsService", "notify", "AECListService",'UtilService',
-			function ($scope, $filter, $modal, referrals, passes, students, notify, aec,utils) {
-				$scope.selected = {student: null};
-				$scope.refTable = [];// table model
-				$scope.currentDate = new Date();
-
-				/**
-				 * Watch for changes in the datepicker then load the AECList 
-				 * For the selected Date. Also adjusts data received
-				 * to be easily shown in the view
-				 */
-				$scope.$watch('form.date.$viewValue', function (newVal) {
-
-					if (newVal) {//when date has a valid date request the List from that date
-						$scope.currentDate = newVal;
-						console.log("newVal = " + $scope.form.date.$viewValue);
-						$scope.refTable =aec.query({id: newVal}, function (data) {
-							var someFoldersMarked = false;
-							angular.forEach(data, function (student) {
-								var assignments = {completed: [], incomplete: []};
-								student.status = {classs: '', action: ''};
-								student.ActivityTypeId = 0;
-								angular.forEach(student.referred, function (ref) {
-									var counters = student.counters;
-
-									if (counters && counters.ORoomsToBeServed > 0) {
-										student.overlap = {place: 'Has Oroom', class: 'bg-danger'};
-									}
-									if (counters && counters.ISSDays > 0) {
-										student.overlap = {place: 'Has ISS', class: 'bg-danger'};
-									}
-									// check for present
-
-									student.ActivityTypeId = ref.ActivityTypeId;
-									ref.HasFolder = ref.HasFolder === 1 ? true : false;
-									if (ref.HasFlder) {
-										someFoldersMarked = true;
-									}
-									if (ref.ActivityTypeId === 49) {// present , check what assignments were completed
-										//
-										ref.AssignmentCompleted = ref.AssignmentCompleted === 1 ? true : false;
-										if (ref.AssignmentCompleted)
-											assignments.completed.push(ref);
-										else
-											assignments.incomplete.push(ref);
-
-										student.status.action = 'Present: ';
-									}
-
-								});
-
-								if (student.ActivityTypeId === 49) {// present , check what assignments were completed
-									if (assignments.incomplete.length === 0) {
-										student.status.class = 'bg-green';
-										student.status.action += 'complete';
-									} else {
-										student.status.class = 'bg-warning';
-										student.status.action += 'incomplete';
-									}
-								} else if (student.ActivityTypeId === 55) { // sent out
-									student.status.action = 'Sent Out: Oroom-today';
-									student.status.class = 'bg-danger';
-
-
-								} else if (student.ActivityTypeId === 56) { // walked out
-									console.log('walked out');
-									student.status.action = 'Walked Out: Oroom-tomorrow';
-									student.status.class = 'bg-danger';
-								} else if (student.ActivityTypeId === 50) { // rescheduled
-									student.status = {action: 'Rescheduled', class: 'bg-green'};
-								} else if (student.ActivityTypeId === 51) {
-									student.status = {action: 'Cleared', class: 'bg-green'};
-								}
-								if (someFoldersMarked) {
-									console.log('marked');
-									student.status.action = 'Folders Marked';
-								}
-
-							});
-
-
-
-							if (!data.length) {
-								notify({message: "No students for current date",
-									classes: 'alert-warning', templateUrl: 'views/common/notify.html'});
-							} else {
-								
-							}
-						});
-					}
-				});
-
-
-				$scope.onSelectedStude = function (student) {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/attendanceAECModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student, $timeout, $modalInstance) {
-							$scope.student = student;
-							$timeout(function () {
-								$modalInstance.dismiss('cancel');
-							}, 2000);
-						},
-						resolve: {
-							student: function () {
-								return student;
-							}
-						}
-					});
-					modalInstance.result.then(function () {
-					},
-						function () {
-							$scope.selected.student = null;
-						});
-
-				};
-
-				/**
-				 * Makes API call to get a pdf of the AEC passes for the students
-				 * assigned AEC for the current date
-				 */
-				$scope.getPasses = function () {
-					notify({message: "Now Generating Passes",
-						classes: 'alert-successs', templateUrl: 'views/common/notify.html'});
-					passes.pdf({date: $scope.currentDate, param: 'AECList'}, function (data) {
-						console.log(data);
-						var fileURL = URL.createObjectURL(data.response);
-						window.open(fileURL);
-					});
-
-				};
-
-				/**
-				 * Select the student that is clicked in the table so that the user doesn't 
-				 * have to type it 
-				 * @param {int} $index: reftable index of the clicked student 
-				 */
-				$scope.onSelect = function ($index) {
-					$scope.selected.student = $scope.refTable[$index];
-				};
-
-				/**
-				 * Converts the current AEC list into a csv text format so it can
-				 * be passed to the download method 
-				 */
-				$scope.AECListToCSV = function () {
-					var text = 'TeacherFirst,TeacherLast,FirstName,LastName,StudentId, Grade, Assignment,Overlap, Attendance\n';
-					angular.forEach($scope.refTable, function (item) {
-						angular.forEach(item.referred, function (referred) {
-							text += referred.teacher.FirstName + ',' + referred.teacher.LastName + ","
-								+ item.user.FirstName + ',' + item.user.LastName + ',' + item.StudentId + ','
-								+ item.Grade + ',' + referred.assignment.Name + ','
-								+ (item.overlap ? item.overlap.place : 'N/A')+',' +
-								+  item.status.action
-								+ ' \n';
-						});
-					});
-					utils.downloadCSV(text, 'AEC-List_' + $scope.currentDate );
-				};
-
-
-				/******** MANAGE AEC **********/
-				// To avoid duplicate profile entries only 1 entry should be created in
-				// useractions table and all referrals must be changed in referrals 
-				// table (see backend implementation)
-
-
-				/**
-				 * PUT API call to change the referral status to reschedule (ReferralStatus 2), 
-				 * rescheduling all the referrals as well as loggin the reschedule 
-				 * into user actions for the profile 
-				 * @param {object} data: information returned by modal (date,comment,student,excused)
-				 */
-				var submitReschedule = function (data) {
-					var student = data.student;
-					// get info from comment box and DatePicker       
-					// submit information of student '$scope.selected.student' to the database
-					student.status = {action: 'Rescheduled',
-						class: 'bg-green'};
-
-					var referrals = student.referred.map(function (o) {
-						return o.Id;
-					});
-					var urlEncoded = {id: student.Id};
-					var payload = {
-						param: 'reschedule',
-						Comment: data.comment,
-						newDate: data.date,
-						Date: $scope.currentDate,
-						ReferralIds: referrals,
-						excused: data.excused
-					};
-
-					aec.update(urlEncoded, payload, function (data) {
-						notify(data.msg);
-					}, function (err) {
-						notify({message: "Reschedule Failed, Please Contact The Admin",
-							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-					});
-
-					removeSelectedStudentFromTableAndClear();
-				};
-
-				/**
-				 * PUT API call to change the referral status to clear(ReferralStatus 3), 
-				 * rescheduling all the referrals as well as loggin the reschedule 
-				 * into user actions for the profile 
-				 * @param {object} data: information returned by modal (comment, student)
-				 */
-				var submitClear = function (data) {
-					var student = data.student;
-					student.status = {action: 'Cleared',
-						class: 'bg-green'};
-
-					// submit information of student '$scope.selected.student' to the database
-
-					var referralsIds = student.referred.map(function (o) {
-						return o.Id;
-					});
-					var urlEncoded = {id: student.Id};
-					var payload = {
-						param: 'clear',
-						Comment: data.comment,
-						ReferralIds: referralsIds
-					};
-					aec.update(urlEncoded, payload, function (data) {
-						notify(data.msg);
-					}, function (data) {
-						notify({message: "Clear Failed, Please Contact The System Admin",
-							classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-					});
-
-					removeSelectedStudentFromTableAndClear();
-				};
-
-				/**
-				 * PUT API call to log parent notified information for current student
-				 * into user actions for the profile. 
-				 * In the case that parent requested a reschedule $scope.selected student 
-				 * is changed to the current student and submit reschedule is 
-				 * on that student, preprocess of data needed(line 193)
-				 * to provide necessary info for sumit Reschedule 
-				 * @param {object} data: information returned by modal (student,reschedule,newDate)
-				 */
-				var submitParentNotified = function (data) {
-					var rescheduleComment = "Parent Requested Reschedule";
-					console.log(data.student);
-
-					// Remove Student if reschedule
-					if (data.reschedule) {
-						// sent a post to the reschedule api point
-						angular.extend(data, {comment: rescheduleComment, excused: true, oldDate: $scope.currentDate, date: data.newDate});
-						$scope.selected.student = data.student;
-						submitReschedule(data);
-
-					} else {
-						// Make A post to update the student parent's information 
-						var student = data.student.student;
-
-						students.update({id: data.student.id}, {
-							ParentNotified: student.ParentNotified ? 1 : 0,
-							ParentNotifiedComment: student.ParentNotifiedComment,
-							ValidNumber: student.ValidNumber ? 1 : 0,
-							ParentSupportive: student.ParentSupportive ? 1 : 0,
-							GuardianPhone: student.GuardianPhone
-						}, function (response) {
-
-						}, function (response) {
-							notify({message: "Parent Notified Failed, Please Contact The Admin",
-								classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-						});
-
-					}
-
-				};
-
-
-
-				/**
-				 * PUT API call to log student notified information for student clicked
-				 * 
-				 * @param {object} ref: student selected
-				 * @param {int} $index: refTable index of student selected
-				 */
-				$scope.submitStudentNotified = function (ref, $index) {
-
-					var studentNotified = ref.student.Notified;
-					students.update({id: ref.id}, {Notified: !studentNotified ? 1 : 0}, function (response) {
-						console.log(response);
-					});
-					console.log($scope.refTable[$index]);
-				};
-
-				/**
-				 * PUT API call to change the all unprocessed referrals to absent(ReferralStatus 4)
-				 * as well as logging the absent into user actions for the profile 
-				 */
-				$scope.finishManageAEC = function () {
-					angular.forEach($scope.refTable, function (student) {
-						if (student.ActivityTypeId === 0 && !student.overlap) {
-
-
-							angular.forEach(student.referred, function (ref) {
-								referrals.update({'id': ref.Id},
-								{'param': 'absent', Date: $scope.currentDate},
-								function (response) {
-
-								}, function (response) {
-									notify({message: "Finish Failed, Please Contact The Admin",
-										classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-								});
-							});
-						}
-					});
-					$scope.refTable = [];
-				};
-
-				function isOverlap(student) {
-					var overlap = false;
-					var overlapPlace = '';
-
-					if (student.counters.ORoomsToBeServed > 0) {
-						overlapPlace = 'O-Room';
-						overlap = true;
-					}
-					if (student.counters.ISSDays > 0) {
-						overlapPlace = 'ISS';
-						overlap = true;
-					}
-					if (student.counters.OSSPMP > 0) {
-						overlapPlace = 'OSS';
-						overlap = true;
-					}
-
-					if (overlap) {
-
-						if (overlapPlace === 'OSS') {
-							var modalInstance = $modal.open({
-								templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
-								//template:'<div> MODAL : true in Referral IN </div>',
-								size: 'lg',
-								controller: function ($scope, student, activity) {
-									$scope.student = student;
-									console.log(student);
-									$scope.activity = activity;
-								},
-								resolve: {
-									student: function () {
-										return student;
-									},
-									activity: function () {
-										return overlapPlace;
-									}
-								}
-							});
-							return true;
-						} else {
-							var modalInstance = $modal.open({
-								templateUrl: 'views/modals/attendanceAECFoldersModal.html',
-								//template:'<div> MODAL : true in Referral IN </div>',
-								size: 'lg',
-								controller: function ($scope, student, activity) {
-									$scope.student = student;
-									console.log(student);
-									$scope.activity = activity;
-								},
-								resolve: {
-									student: function () {
-										return student;
-									},
-									activity: function () {
-										return overlapPlace;
-									}
-								}
-							});
-
-							modalInstance.result.then(function () {
-								var referrals = student.referred.map(function (o) {
-									return {Id: o.Id, HasFolder: o.HasFolder || false};
-								});
-								var payload = {
-									param: 'attendance',
-									param2: 'hasFolders',
-									ActionType: student.radioModel,
-									Comment: student.comment,
-									Date: $scope.currentDate,
-									Referrals: referrals
-								};
-								var urlEncoded = {id: student.Id};
-								aec.update(urlEncoded, payload, function (data) {
-									notify(data.msg);
-									var status = {class: 'bg-warning', action: 'foldersMarked'};
-									student.status = status;
-								}, function (err) {
-									notify('error, Before continuing please contact an admin');
-								});
-
-							});
-							return true;
-						}
-
-						return false;
-					}
-				}
-				/********************************************** MODALS   **************************/
-
-				/** Attendance Modal
-				 * opens the attendance modal with 3 buttons (present, sent out, walked out 
-				 * 
-				 */
-				$scope.AECAttendance = function (student, $index) {
-
-					if (isOverlap(student)) {
-						return;
-					}
-
-					console.log(student);
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/attendanceAECModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student) {
-							$scope.student = student;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							}
-						}
-					});
-					modalInstance.result.then(function (data) {// on SUBMIT
-						var student = data.student;
-						// check what buttons were present  and what assignments were completed
-						// to set the color and the attendance 
-						var assignments = {completed: [], incomplete: []};
-						var status = {class: '', action: ''};
-						if (student.radioModel == 49) {// present , check what assignments were completed
-							//
-							angular.forEach(student.referred, function (ref) {
-								if (ref.AssignmentCompleted)
-									assignments.completed.push(ref);
-								else
-									assignments.incomplete.push(ref);
-							});
-							status.action = 'Present: ';
-							var aecComplete = false;
-
-							if (assignments.incomplete.length === 0) {
-								status.class = 'bg-green';
-								status.action += 'complete';
-								aecComplete = true;
-
-							} else {
-								status.class = 'bg-warning';
-								status.action += 'incomplete';
-							}
-
-						} else if (student.radioModel == 55) {
-							console.log('sent out');
-							status.action = 'Sent Out: Oroom-today';
-							status.class = 'bg-danger';
-						} else if (student.radioModel == 56) {
-							console.log('walked out');
-							status.action = 'Walked Out: Oroom-tomorrow';
-							status.class = 'bg-danger';
-						}
-						student.assignments = assignments;
-						student.status = status;
-
-
-
-						// post the comment and other things to the database 
-
-						console.log(student);
-						// sent when present
-						var referrals = student.referred.map(function (o) {
-							return {Id: o.Id, AssignmentCompleted: o.AssignmentCompleted};
-						});
-						// sent otherwhise
-						var referralIds = student.referred.map(function (o) {
-							return o.Id;
-						});
-						var urlEncoded = {id: student.Id};
-						var payload = {
-							param: 'attendance',
-							ActionType: student.radioModel,
-							Comment: student.comment,
-							Date: $scope.currentDate,
-							Referrals: student.radioModel == 49 ? referrals : referralIds,
-							aecComplete: aecComplete
-						};
-
-						aec.update(urlEncoded, payload, function (data) {
-							notify(data.msg);
-						}, function (err) {
-							notify('error, Before continuing please contact an admin');
-						});
-
-
-
-						// Do Not Remove From List
-//						if ($index)
-//							$scope.refTable.splice($index, 1);
-//						else
-//						
-						// only clears the field
-						$scope.selected.student = null;
-					}, function () {// on modal DISMISS
-
-					});
-
-				};
-
-
-				/** Reschedule Modal
-				 * Opens the Reschedule modal and passes in the student selected to be available
-				 * in the modal context, calls submitReschedule function when modal 
-				 * submit button is clicked,does nothing otherwise
-				 */
-				$scope.openReschedule = function () {
-					var resModal = $modal.open({
-						templateUrl: 'views/modals/RescheduleModal.html',
-						size: 'md',
-						controller: function ($scope, student) {
-							$scope.student = student;
-							$scope.date = new Date();
-
-							$scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
-								if (newValue) { //when date has a valid date request the List from that date
-									$scope.date = newValue;
-									console.log('date changed');
-								}
-							});
-
-						},
-						resolve: {
-							student: function () {
-								return $scope.selected.student;
-							}
-						}
-					});// end modalInstance
-
-					resModal.result.then(submitReschedule);
-				};
-
-				/** Clear Modal
-				 * Opens the Clear modal and passes in the student selected to be available
-				 * in the modal context, calls submitClear function when modal 
-				 * submit button is clicked,does nothing otherwise
-				 */
-				$scope.openClear = function (studentInfo) {
-
-					var clrModal = $modal.open({
-						templateUrl: 'views/modals/ClearModal.html',
-						size: 'md',
-						controller: function ($scope, student) {
-							$scope.student = student;
-							$scope.title = 'clear';
-						},
-						resolve: {
-							student: function () {
-								return $scope.selected.student;
-							}
-						}
-					});// End clrModal
-
-					clrModal.result.then(submitClear);
-				};
-
-				/** Parent Notified Modal
-				 * Opens the Parent Notified modal and passes in the student selected to be 
-				 * available in the modal context, as well as the current date. 
-				 * calls submitParentNotified function when modal submit 
-				 * button is clicked,does nothing otherwise
-				 * @param {object} stu: student selected for parent notified
-				 */
-				$scope.parentNotifiedModal = function (stu) {
-					var parentModal = $modal.open({
-						templateUrl: "views/modals/ParentModal.html",
-						size: 'md',
-						controller: function ($scope, $modalInstance, student, date) {
-							$scope.student = student;
-							$scope.date = date;
-
-							$scope.$watch('form.date.$viewValue', function (newValue) {
-								if (newValue) { //when date has a valid date request the List from that date
-									$scope.date = newValue;
-								}
-							});
-						},
-						resolve: {
-							student: function () {
-								return stu;
-							},
-							date: function () {
-								return $scope.currentDate;
-							}
-						}
-					});// end modal
-
-					parentModal.result.then(submitParentNotified,
-						function () {
-							// change parent notified button it back to what it was
-							stu.student.ParentNotified = !stu.student.ParentNotified;
-						});
-
-				};
-
-				/**
-				 * Removes $scope.selected student from the refTable and then
-				 * sets it to null (clear field)
-				 * 
-				 */
-				var removeSelectedStudentFromTableAndClear = function () {
-//					for (var i = 0; i < $scope.refTable.length; i++)
-//						if ($scope.selected.student.id === $scope.refTable[i].id) {
-//							$scope.refTable.splice(i, 1);
-//							break;
-//						}
-					$scope.selected.student = null;
-				};
-			}]);
+    "use strict";
+    app
+        .controller("manageAECController", ["$scope", "$filter", "$modal", "referrals", "PassesService",
+            "StudentsService", "notify", "AECListService", 'UtilService',
+            function ($scope, $filter, $modal, referrals, passes, students, notify, aec, utils) {
+                $scope.selected = {student: null};
+                $scope.refTable = [];// table model
+                $scope.currentDate = new Date();
+
+
+                function getListSuccessCallback(data) {
+                    if (!data.length) {
+                        notify({
+                            message: "No students for current date",
+                            classes: 'alert-warning', templateUrl: 'views/common/notify.html'
+                        });
+                    }
+                };
+
+                $scope.getList = function(date){
+                    date = date || $scope.currentDate;
+                    $scope.refTable = aec.getList(date, getListSuccessCallback);
+                };
+                /**
+                 * Watch for changes in the datepicker then load the AECList
+                 * For the selected Date. Also adjusts data received
+                 * to be easily shown in the view
+                 */
+                $scope.$watch('form.date.$viewValue', function (newVal) {
+                    if (newVal) {//when date has a valid date request the List from that date
+                        $scope.currentDate = newVal;
+                        console.log("newVal = " + $scope.form.date.$viewValue);
+                        $scope.getList($scope.currentDate);
+                    }
+                });
+
+                /**
+                 * Makes API call to get a pdf of the AEC passes for the students
+                 * assigned AEC for the current date
+                 */
+                $scope.getPasses = function () {
+                    notify({
+                        message: "Now Generating Passes",
+                        classes: 'alert-successs', templateUrl: 'views/common/notify.html'
+                    });
+                    passes.pdf({date: $scope.currentDate, param: 'AECList'}, function (data) {
+                        console.log(data);
+                        var fileURL = URL.createObjectURL(data.response);
+                        window.open(fileURL);
+                    });
+
+                };
+
+                /**
+                 * Select the student that is clicked in the table so that the user doesn't
+                 * have to type it
+                 * @param {int} $index: reftable index of the clicked student
+                 */
+                $scope.onSelect = function ($index) {
+                    $scope.selected.student = $scope.refTable[$index];
+                };
+
+                /**
+                 * Converts the current AEC list into a csv text format so it can
+                 * be passed to the download method
+                 */
+                $scope.AECListToCSV = function () {
+                    var text = 'TeacherFirst,TeacherLast,FirstName,LastName,StudentId, Grade, Assignment,Overlap, Attendance\n';
+                    angular.forEach($scope.refTable, function (item) {
+                        angular.forEach(item.referred, function (referred) {
+                            text += referred.teacher.FirstName + ',' + referred.teacher.LastName + ","
+                                + item.user.FirstName + ',' + item.user.LastName + ',' + item.StudentId + ','
+                                + item.Grade + ',' + referred.assignment.Name + ','
+                                + (item.overlap.msg ? item.overlap.msg : 'N/A') + ','
+                                + item.referred[0].activity.Name + ','
+                                + ' \n';
+                        });
+                    });
+                    utils.downloadCSV(text, 'AEC-List_' + $scope.currentDate);
+                };
+
+
+                /************************************** MANAGE AEC ***********************************/
+                // To avoid duplicate profile entries only 1 entry should be created in
+                // useractions table and all referrals must be changed in referrals
+                // table (see backend implementation)
+
+
+                /**
+                 * PUT API call to change the referral status to reschedule (ReferralStatus 2),
+                 * rescheduling all the referrals as well as login the reschedule
+                 * into user actions for the profile
+                 * @param {object} data: information returned by modal (date,comment,student,excused)
+                 */
+                function submitReschedule(data) {
+                    aec.updateReschedule($scope.currentDate, data).then(function (data) {
+                        clearSelectStudentField();
+                        notify(data.msg);
+                    }, function (err) {
+                        notify({
+                            message: "Reschedule Failed, Please Contact The Admin Before Continuing",
+                            classes: 'alert-danger', templateUrl: 'views/common/notify.html'
+                        });
+                    });
+
+                };
+
+                /**
+                 * PUT API call to change the referral status to clear(ReferralStatus 3),
+                 * rescheduling all the referrals as well as loggin the reschedule
+                 * into user actions for the profile
+                 * @param {object} data: information returned by modal (comment, student)
+                 */
+                function submitClear(data) {
+                    var student = data.student;
+                    debugger;
+                    aec.updateClear($scope.currentDate, student, data.comment).then(function (data) {
+                        clearSelectStudentField();
+                        notify(data.msg);
+                    }, function (data) {
+                        notify({
+                            message: "Clear Failed, Please Contact The System Admin Before Continuing",
+                            classes: 'alert-danger', templateUrl: 'views/common/notify.html'
+                        });
+                    });
+
+
+                };
+
+                /**
+                 * PUT API to change the referral attendance to whatever the user choses.
+                 * The referral is marked with an status of 2 (attendance taken)
+                 *
+                 */
+                function submitAttendance(data) {// on SUBMIT
+                    var student = data.student;
+                    aec.updateAttendance($scope.currentDate, student).then(function (data) {
+                        clearSelectStudentField();
+                        notify(data.msg);
+                    }, function (err) {
+                        notify({
+                            message: "Present  Failed, Please Contact The System Admin Before Continuing",
+                            classes: 'alert-danger', templateUrl: 'views/common/notify.html'
+                        });
+                    });
+
+                };
+
+                /**
+                 * PUT API call to change the all unprocessed referrals to absent(ReferralStatus 4)
+                 * as well as logging the absent into user actions for the profile
+                 */
+                $scope.finishManageAEC = function () {
+                    // confirm before submit
+                    var submit = confirm("IF YOU SUBMIT THIS LIST ALL THE CHANGES MADE WILL BE RECORDED AND YOU WILL BE UNABLE TO CHANGE THEM AGAIN");
+                    if (!submit)
+                        return;
+                    var prom = aec.submitList($scope.refTable, $scope.currentDate);
+                    prom.then(function (data) {
+                        notify(data.msg, 'success');
+                    }, function (err) {
+                        notify("error submitting,  Please Contact the System Admin before continuing ", 'danger')
+                    });
+
+                };
+
+                /********************************************** MODALS   **************************/
+
+                /** Attendance Modal
+                 * opens the attendance modal with 3 buttons (present, sent out, walked out
+                 */
+                $scope.AECAttendance = function (student, $index) {
+                    //if (isOverlap(student)) {
+                    //    return;
+                    //}
+                    // can only change if not changed before
+                    if (student.referred[0].RefferalStatus === 2 || student.referred[0].RefferalStatus === 4) {
+                        notify('Action Unavailable : Attendance  Already taken and submitted.','warning');
+                        return;
+                    }
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/attendanceAECModal.html',
+                        size: 'lg',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                            $scope.rescheduleDate = new Date();
+
+                            $scope.$watch('rescheduleForm.date.$viewValue', function (n, o) {
+                                student.rescheduleDate = n || student.rescheduleDate;
+                                console.log('new_reschedule_date',n);
+                            });
+                            $scope.$watch('clearForm.date.$viewValue', function (n, o) {
+                                student.moveDate = n || student.moveDate;
+                                console.log('new_clear_move_date',n);
+                            });
+                            $scope.selectedReferralToRemove = function () {
+                                var selectedCount = 0;
+                                angular.forEach(student.referred, function (item) {
+                                    if (item.remove)
+                                        selectedCount++;
+                                });
+                                console.log('removing ', selectedCount);
+                                student.removingAll = selectedCount == student.referred.length;
+                            }
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            }
+                        }
+                    });
+                    modalInstance.result.then(submitAttendance);
+
+                };
+
+
+                /** Reschedule Modal
+                 * Opens the Reschedule modal and passes in the student selected to be available
+                 * in the modal context, calls submitReschedule function when modal
+                 * submit button is clicked,does nothing otherwise
+                 */
+                $scope.openReschedule = function () {
+
+                    console.log('AEC Reschedule: student\n', $scope.selected.student);
+
+                    var resModal = $modal.open({
+                        templateUrl: 'views/modals/RescheduleModal.html',
+                        size: 'md',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                            $scope.date = new Date();
+
+                            $scope.$watch('form.date.$viewValue', function (newValue, oldValue) {
+                                if (newValue) { //when date has a valid date request the List from that date
+                                    $scope.date = newValue;
+                                    console.log('date changed');
+                                }
+                            });
+
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.selected.student;
+                            }
+                        }
+                    });// end modalInstance
+
+                    resModal.result.then(submitReschedule);
+                };
+
+                /** Clear Modal
+                 * Opens the Clear modal and passes in the student selected to be available
+                 * in the modal context, calls submitClear function when modal
+                 * submit button is clicked,does nothing otherwise
+                 */
+                $scope.openClear = function () {
+
+                    console.log('AEC Clear: student\n', $scope.selected.student);
+
+                    var clrModal = $modal.open({
+                        templateUrl: 'views/modals/ClearModal.html',
+                        size: 'md',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                            $scope.title = 'clear';
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.selected.student;
+                            }
+                        }
+                    });// End clrModal
+
+                    clrModal.result.then(submitClear);
+                };
+
+
+                /**
+                 * clear select student field
+                 */
+                function clearSelectStudentField() {
+                    $scope.selected.student = null;
+                };
+
+                function isOverlap(student) {
+                    var overlap = false;
+                    var overlapPlace = '';
+                    if (!student.overlap)
+                        return false;
+                    if (student.overlap.hasorm && ! student.overlap.ormcleared) {
+                        overlapPlace = 'O-Room';
+                        overlap = true;
+                    }
+                    if (student.overlap.hasiss && ! student.overlap.isscleared) {
+                        overlapPlace = 'ISS';
+                        overlap = true;
+                    }
+                    if (student.overlap.hasoss) {
+                        overlapPlace = 'OSS';
+                        overlap = true;
+                    }
+
+                    if (overlap) {
+
+                        if (overlapPlace === 'OSS') {
+                            var modalInstance = $modal.open({
+                                templateUrl: 'views/modals/AttendanceUnavailableModal2.html',
+                                //template:'<div> MODAL : true in Referral IN </div>',
+                                size: 'lg',
+                                controller: function ($scope, student, activity) {
+                                    $scope.student = student;
+                                    $scope.activity = activity;
+
+                                },
+                                resolve: {
+                                    student: function () {
+                                        return student;
+                                    },
+                                    activity: function () {
+                                        return overlapPlace;
+                                    }
+                                }
+                            });
+                            return true;
+                        } else {
+                            var modalInstance = $modal.open({
+                                templateUrl: 'views/modals/attendanceAECFoldersModal.html',
+                                //template:'<div> MODAL : true in Referral IN </div>',
+                                size: 'lg',
+                                controller: function ($scope, student, activity) {
+                                    $scope.student = student;
+                                    console.log(student);
+                                    $scope.activity = activity;
+
+                                },
+                                resolve: {
+                                    student: function () {
+                                        return student;
+                                    },
+                                    activity: function () {
+                                        return overlapPlace;
+                                    }
+                                }
+                            });
+
+                            modalInstance.result.then(function () {
+                                aec.updateOverlapAttendance($scope.currentDate, student).then(
+                                    function (data) {
+                                        notify(data.msg);
+                                        //var status = {class: 'bg-warning', action: 'foldersMarked'};
+                                        //student.status = status;
+                                    }, function (err) {
+                                        notify('error, Before continuing please contact an admin');
+                                    });
+                            });
+                            return true;
+                        }
+
+                        return false;
+                    }
+                }
+            }]);
 
 }(angular.module('Argus')));						
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app.controller("admin1referalController",
-		["$scope", "assignmentsListService", "teachers", "AECListService", "StudentsService", '$modal', 'notify', '$http', '$localStorage',
-			function ($scope, assignmentsService, teachers, aec, students, $modal, notify, $http, $localStorage) {
-				$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
-				$scope.currentDate = new Date(); // date on the datepicker
-				$scope.teacherStudents = []; // model for autocomplete  
+    "use strict";
+    app.controller("admin1referalController",
+        ["$scope", "assignmentsListService", "teachers", "AECListService", "StudentsService", '$modal', 'notify', '$http', '$localStorage',
+            function ($scope, assignmentsService, teachers, aec, students, $modal, notify, $http, $localStorage) {
+                $scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
+                $scope.currentDate = new Date(); // date on the datepicker
+                $scope.teacherStudents = []; // model for autocomplete
 
-				$scope.$storage = $localStorage;
+                $scope.$storage = $localStorage;
 
-				// set ref table
-				$scope.$storage.refTable = $scope.$storage.refTable || [];
+                // set ref table
+                $scope.$storage.refTable = $scope.$storage.refTable || [];
 
-				$scope.refTable = $scope.$storage.refTable; // model for dynamic table 
-				$scope.edits = [];
-				$scope.$storage.eightPeriods = $scope.$storage.eightPeriods || [];
-				$scope.eightPeriods = $scope.$storage.eightPeriods;
+                $scope.refTable = $scope.$storage.refTable; // model for dynamic table
+                $scope.edits = [];
+                $scope.$storage.eightPeriods = $scope.$storage.eightPeriods || [];
+                $scope.eightPeriods = $scope.$storage.eightPeriods;
 
-				$scope.$storage.ninethPeriods = $scope.$storage.ninethPeriods || [];
-				$scope.ninethPeriods = $scope.$storage.ninethPeriods;
+                $scope.$storage.ninethPeriods = $scope.$storage.ninethPeriods || [];
+                $scope.ninethPeriods = $scope.$storage.ninethPeriods;
 
-				$scope.teachers = teachers.query();
+                $scope.teachers = teachers.query();
 
-				/**
-				 * Watch for changes in the datepicker to add students to that date's
-				 * AEC List
-				 */
-				$scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
-					if (newVal) {//when date has a valid date request the List from that date	
-						$scope.currentDate = newVal;
-					}
-				});
+                /**
+                 * Watch for changes in the datepicker to add students to that date's
+                 * AEC List
+                 */
+                $scope.$watch('form.date.$viewValue', function (newVal, oldVal) {
+                    if (newVal) {//when date has a valid date request the List from that date
+                        $scope.currentDate = newVal;
+                    }
+                });
 
-				/* REFER A STUDENT LOGIC */
+                /* REFER A STUDENT LOGIC */
 
+                /**
+                 * Called when a student is selected or deselected
+                 * no action for now
+                 */
+                $scope.onSelectedStudent = function () {
+                    return;
+                    // add to the list
+                    var alreadyInList = false;
+                    for (var i = 0; i < $scope.refTable.length; i++) {
+                        if ($scope.refTable[i].id === $scope.selected.student.user.id) {
+                            alreadyInList = true;
+                        }
+                    }
+                    if (!alreadyInList)
+                        $scope.refTable.push($scope.selected.student.user);
+                    else
+                        alert('student is already in the list');
+                    // clear the field
+                    //$scope.selected.student = null;
+                };
 
-				/**
-				 * Called when a student is selected or deselected 
-				 * no action for now 
-				 */
-				$scope.onSelectedStudent = function () {
-					return;
-					// add to the list
-					var alreadyInList = false;
-					for (var i = 0; i < $scope.refTable.length; i++) {
-						if ($scope.refTable[i].id === $scope.selected.student.user.id) {
-							alreadyInList = true;
-						}
-					}
-					if (!alreadyInList)
-						$scope.refTable.push($scope.selected.student.user);
-					else
-						alert('student is already in the list');
-					// clear the field
-					//$scope.selected.student = null;
-				};
+                /**
+                 * Called when teacher is selected or deselected. Retrieves the selected
+                 * teacher's students if a teacher is selected.  If deselected
+                 * set teacherStudents to null
+                 */
+                $scope.onSelectedTeacher = function () {
+                    if (!$scope.selected.teacher) {// if teacher deselected
+                        $scope.teacherStudents = null;
+                        return;
+                    }
+                    $scope.selected.assignments = null;
+                    $scope.teacherStudents = null;
+                    var teacherId = $scope.selected.teacher.id;
+                    students.query({teacherId: teacherId}, function (results) {
+                        $scope.teacherStudents = results;
+                    }, function (error) {
+                        console.log(error);
+                    });
 
-				/**
-				 * Called when teacher is selected or deselected. Retrieves the selected
-				 * teacher's students if a teacher is selected.  If deselected
-				 * set teacherStudents to null
-				 */
-				$scope.onSelectedTeacher = function () {
-					if (!$scope.selected.teacher) {// if teacher deselected 
-						$scope.teacherStudents = null;
-						return;
-					}
-					$scope.teacherStudents = null;
-					var teacherId = $scope.selected.teacher.id;
-					students.query({teacherId: teacherId}, function (results) {
-						console.log("Teacher students");
-						console.log(results);
-
-						$scope.teacherStudents = results;
-					}, function (error) {
-						console.log(error);
-					});
-
-				};
+                };
 
 
-				/** New Assignment Modal
-				 * Opens the New Assignment modal and passes in the teacher selected to be available
-				 * in the modal context, on submit makes a post call to assignments
-				 * to add the current assignment to the teacher 
-				 */
-				$scope.openCreateNewAssignment = function () {
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/addNewAssignmentModal.html',
-						size: 'md',
-						controller: function ($scope, teacher) {
-							$scope.teacher = teacher;
-						},
-						resolve: {// variables that get injected into the controller (taken from current $scope)
-							teacher: function () {
-								return $scope.selected.teacher;
-							}
-						}
-					}); // End modalInstace
+                /** New Assignment Modal
+                 * Opens the New Assignment modal and passes in the teacher selected to be available
+                 * in the modal context, on submit makes a post call to assignments
+                 * to add the current assignment to the teacher
+                 */
+                $scope.openCreateNewAssignment = function () {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/addNewAssignmentModal.html',
+                        size: 'md',
+                        controller: function ($scope, teacher) {
+                            $scope.teacher = teacher;
+                        },
+                        resolve: {// variables that get injected into the controller (taken from current $scope)
+                            teacher: function () {
+                                return $scope.selected.teacher;
+                            }
+                        }
+                    }); // End modalInstace
 
-					modalInstance.result.then(function (data) {
-						assignmentsService.save({teacher: $scope.selected.teacher, assignment: data}, function (response) {
-							var teacher = $scope.selected.teacher;
-							response.assignment.Id = response.assignment.Id + "";
-							$scope.selected.teacher.assignments.push(response.assignment);
-							
-							var assign = $scope.selected.assignments ;
-							assign = assign? assign : [];
-							assign.push(response.assignment);
-						}, function (response) {
-						});
-					});
-				};
+                    modalInstance.result.then(function (data) {
+                        assignmentsService.save({
+                            teacher: $scope.selected.teacher,
+                            assignment: data
+                        }, function (response) {
+                            var teacher = $scope.selected.teacher;
+                            response.assignment.Id = response.assignment.Id + "";
+                            $scope.selected.teacher.assignments.push(response.assignment);
 
-				/**
-				 * Adds selected.student with selected.assignments to the refTable
-				 * then clears selected.student
-				 */
-				$scope.addToList = function () {
-					var selectedAssignments = $scope.selected.assignments;
-					var referralToAdd = $scope.selected.student;
-					var selectedTeacher = $scope.selected.teacher;
-					console.log($scope.selected.student);
-					$http.get('api/classes/' + $scope.selected.student.id).then(function (response) {
-						var last = response.data[7];
-						var lastlast = response.data[8];
-						$scope.eightPeriods.push(last);
-						$scope.ninethPeriods.push(lastlast);
-						console.log($scope.eightPeriods);
-						console.log($scope.ninethPeriods);
-					});
+                            var assign = $scope.selected.assignments;
+                            assign = assign ? assign : [];
+                            assign.push(response.assignment);
+                        }, function (response) {
+                        });
+                    });
+                };
 
-					addAssignmentsToStudent(selectedAssignments, referralToAdd);
-					referralToAdd.teacher = $scope.selected.teacher;
-					$scope.refTable.push(referralToAdd);
-					console.log($scope.refTable);
-					$scope.selected.student = null;
-				};
+                /**
+                 * Adds selected.student with selected.assignments to the refTable
+                 * then clears selected.student
+                 */
+                $scope.addToList = function () {
+                    var selectedAssignments = $scope.selected.assignments;
+                    var referralToAdd = $scope.selected.student;
+                    var selectedTeacher = $scope.selected.teacher;
+                    if(!$scope.selected.assignments){
+                        notify({
+                            message: "Hold your horses, to add a student you need to select an assignment first.",
+                            classes: 'alert-danger', templateUrl: 'views/common/notify.html'
+                        });
 
-				/**
-				 * Adds assignments to the student object 
-				 * @param  {[objects]} assignments	: list of assignment objects to be added
-				 * @param 	{object} 	student		: 
-				 */
-				function addAssignmentsToStudent(assignments, student) {
+                    }
+                    console.log($scope.selected.student);
+                    $http.get('api/classes/' + $scope.selected.student.id).then(function (response) {
+                        referralToAdd.eightPeriod = response.data[7];
+                        referralToAdd.ninethPeriod = response.data[8];
+                    });
 
-					if (!student.referred) {// current student doesnt have any assignments, add all the selected assignments	
-						//  copy assignments into referred
-						student.referred = assignments.slice();
-						return;
-					}
+                    addAssignmentsToStudent(selectedAssignments, referralToAdd);
+                    referralToAdd.teacher = $scope.selected.teacher;
+                    $scope.refTable.unshift(referralToAdd);
+                    console.log($scope.refTable);
+                    $scope.selected.student = null;
+                };
 
-					for (var i = 0; i < assignments.length; i++) {
-						var j = false;
-						for (j = 0; j < student.referred.length; j++) {
-							if (student.referred[j].Id === assignments[i].Id)
-								break;
-						}
+                /**
+                 * Adds assignments to the student object
+                 * @param  {[objects]} assignments    : list of assignment objects to be added
+                 * @param    {object}    student        :
+                 */
+                function addAssignmentsToStudent(assignments, student) {
 
-						if (j === student.referred.length)// assignment is not already in the student
-							student.referred.unshift(assignments[i]);
-					}
+                    if (!student.referred) {// current student doesnt have any assignments, add all the selected assignments
+                        //  copy assignments into referred
+                        student.referred = assignments.slice();
+                        return;
+                    }
 
+                    for (var i = 0; i < assignments.length; i++) {
+                        var j = false;
+                        for (j = 0; j < student.referred.length; j++) {// check if assignment is already in the student's list
+                            if (student.referred[j].Id === assignments[i].Id)
+                                break;
+                        }
 
-					delete student.selected; // delete the selected property;
-
-				}
-
-				/**
-				 * POST API call to referrals. adds all the students in the refTable to the 
-				 * current date's AEC list.
-				 * Despite the number of assignmets only 1 entry should be loged in 
-				 * into user activities with information containig the assignments
-				 */
-				$scope.submitReferedStudents = function () {
-					// format the data so it an be easily insterted in the database
-					var studentsReferred = [];
-					angular.forEach($scope.refTable, function (student) {
-						angular.forEach(student.referred, function (assignment) {
+                        if (j === student.referred.length)// assignment is not already in the student
+                            student.referred.unshift(assignments[i]);
+                    }
 
 
-							var referral = {
-								StudentId: student.id,
-								TeacherId: assignment.TeacherId,
-								AssignmentId: assignment.Id,
-								Date: $scope.currentDate
-							};
-							studentsReferred.push(referral);
-						});
-					});
-					if (studentsReferred.length)
-						aec.save({data: studentsReferred, date: $scope.currentDate},
-						function (response) {
-							notify({message: "AEC List Was Submitted Successfully",
-								classes: 'alert-success', templateUrl: 'views/common/notify.html'});
-						}, function (response) {
-							notify({message: "Submit Failed, Please Contact The Admin",
-								classes: 'alert-danger', templateUrl: 'views/common/notify.html'});
-						});
-					$scope.$storage.refTable = [];
-					$scope.refTable  = $scope.$storage.refTable;
-				};
+                    delete student.selected; // delete the selected property;
 
-			}]);
+                }
+
+                /**
+                 * POST API call to referrals. adds all the students in the refTable to the
+                 * current date's AEC list.
+                 * Despite the number of assignmets only 1 entry should be loged in
+                 * into user activities with information containig the assignments
+                 */
+                $scope.submitReferedStudents = function () {
+
+                    // format the data so it an be easily insterted in the database
+                    var studentsReferred = [];
+                    angular.forEach($scope.refTable, function (student) {
+                        angular.forEach(student.referred, function (assignment) {
+
+
+                            var referral = {
+                                StudentId: student.id,
+                                TeacherId: assignment.TeacherId,
+                                AssignmentId: assignment.Id,
+                                Date: $scope.currentDate
+                            };
+                            studentsReferred.push(referral);
+                        });
+                    });
+                    if (studentsReferred.length)
+                        aec.save({data: studentsReferred, date: $scope.currentDate},
+                            function (response) {
+                                notify({
+                                    message: "AEC List Was Submitted Successfully",
+                                    classes: 'alert-success', templateUrl: 'views/common/notify.html'
+                                });
+                            }, function (response) {
+                                notify({
+                                    message: "Submit Failed, Please Contact The Admin",
+                                    classes: 'alert-danger', templateUrl: 'views/common/notify.html'
+                                });
+                            });
+                    $scope.$storage.refTable = [];
+                    $scope.refTable = $scope.$storage.refTable;
+                };
+
+            }]);
 
 }(angular.module('Argus')));
 /* 
@@ -7683,364 +7725,402 @@
 /* global angular */
 
 (function (app) {
-	app.controller('oRoomActivityLogAdminCtrl',
-		['$scope', 'notify', 'StudentsService', 'teachers', '$modal', 'PeriodsService', '$interval', 'OroomService', 'ActivitiesService', 'referrals', 'ISSService','$rootScope','DevService','CountersService',
-			function ($scope, notify, students, teachers, $modal, periods, $interval, orooms, activities, referrals, isss,$rootScope, dev, counters) {
-				function footable_redraw(){
-					$('.footable').trigger('footable_redraw');
-				}
-				
-				$rootScope.$on('studentsUpdated', function(stu){
-					$scope.schoolStudents = students.students;
-				});
-				var intervalPromise = $interval(interval, 2000);
-				$scope.$on('$destroy', function () {
-					$interval.cancel(intervalPromise); 
-				});
-				
-				$scope.mouseOnTable = false;
-				function interval() {
-					var now = new Date();
-					$scope.currentTime = formatAMPM(now);
-					$scope.currentDate = formatDate(now);
-					$scope.currentPeriod = getPeriod(now);
-					if (!$scope.mouseOnTable) {
-						orooms.get({}, function (data) {
-							angular.forEach(data.reftable, function (item) {
-								item.ReferralIn = item.ReferralIn === 1 ? true : false;
-								
-							});
-							angular.forEach(data.OroomList, function(item){
-								if(item.counters.ISSDays > 0){
-									item.class =  'bg-danger';
-								}
-							});
-							$scope.refTable2 = data.OroomList;
-							$scope.refTable1 = data.reftable;
-							footable_redraw();
-						});
-					}
+    app.controller('oRoomActivityLogAdminCtrl',
+        ['$scope', 'notify', 'StudentsService', 'teachers', '$modal', 'PeriodsService', '$interval', 'OroomService', 'ActivitiesService', 'ReferralsService', 'ISSService', '$rootScope', 'DevService', 'CountersService','$filter',
+            function ($scope, notify, students, teachers, $modal, periods, $interval, orooms, activities, referrals, isss, $rootScope, dev, counters, $filter) {
+                function footable_redraw() {
+                    $('.footable').trigger('footable_redraw');
+                }
 
-					//console.log($scope.currentPeriod)
-					// check time and change period accordingly 
+                $rootScope.$on('studentsUpdated', function (stu) {
+                    $scope.schoolStudents = students.students;
+                });
+                var intervalPromise = $interval(interval, 2000);
+                $scope.$on('$destroy', function () {
+                    $interval.cancel(intervalPromise);
+                });
+
+                $scope.mouseOnTable = false;
+                function interval() {
+                    var now = new Date();
+                    $scope.currentTime = formatAMPM(now);
+                    $scope.currentDate = formatDate(now);
+                    $scope.currentPeriod = getPeriod(now);
+                    if (!$scope.mouseOnTable) {
+                        orooms.get({}, function (data) {
+                            angular.forEach(data.reftable, function (item) {
+                                item.ReferralIn = item.ReferralIn === 1 ? true : false;
+
+                            });
+                            angular.forEach(data.OroomList, function (item) {
+                                if (item.counters.ISSDays > 0) {
+                                    item.class = 'bg-danger';
+                                }
+                            });
+                            $scope.refTable2 = data.OroomList;
+                            $scope.refTable1 = data.reftable;
+                            footable_redraw();
+                        });
+                    }
+
+                    //console.log($scope.currentPeriod)
+                    // check time and change period accordingly
 //				if ($scope.currentPeriod) {// period changed programatically
 //					getORoomLists($scope.currentPeriod);
 //				}
 
-				}
-				;
-				
-				$scope.refresh = getORoomLists;
-				$scope.selected = {student: null};
-				$scope.refTable1 = [];
-				$scope.refTable2 = [];
-				$scope.activities = [
-					{Name: "In O-Room", Id: 1},
-					{Name: "Assign ISS", Id: 2},
-					{Name: "Walked-Out", Id: 3},
-					{Name: "No Show", Id: 4},
-					{Name: "Other", Id: 5}
-				];
+                }
+                ;
+
+                $scope.refresh = getORoomLists;
+                $scope.selected = {student: null};
+                $scope.refTable1 = [];
+                $scope.refTable2 = [];
+                $scope.activities = [
+                    {Name: "In O-Room", Id: 1},
+                    {Name: "Assign ISS", Id: 2},
+                    {Name: "Walked-Out", Id: 3},
+                    {Name: "No Show", Id: 4},
+                    {Name: "Other", Id: 5}
+                ];
 
 
-				$scope.periods = periods.query(function (data) {
-					$scope.currentPeriod = data[6];
+                $scope.periods = periods.query(function (data) {
+                    $scope.currentPeriod = data[6];
 
-					interval();
-				});
+                    interval();
+                });
 
-				$scope.schoolStudents = students.students;
-				$scope.teachers = teachers.query();
-
-
-
-				$scope.changePeriodTables = function (newPeriod) {
-					$scope.currentPeriod = newPeriod;
-
-				};
+                $scope.schoolStudents = students.students;
+                $scope.teachers = teachers.query();
 
 
+                $scope.changePeriodTables = function (newPeriod) {
+                    $scope.currentPeriod = newPeriod;
+
+                };
 
 
-				$scope.onSelectedStudent = function () {
-					// default activity to In O-Room
-					$scope.selected.student.activity = $scope.activities[0];
+                $scope.onSelectedStudent = function () {
+                    // default activity to In O-Room
+                    $scope.selected.student.activity = $scope.activities[0];
 
-					// preprocess the data to send
-					var date = formatDate(new Date);
-					var dataToSend = {
-						"StudentId": $scope.selected.student.user.id,
-						"PeriodId": $scope.currentPeriod ? $scope.currentPeriod.Id : 14,
-						"ActivityId": $scope.selected.student.activity.Id,
-						"Date": date
-					};
+                    // preprocess the data to send
+                    var date = formatDate(new Date);
+                    var dataToSend = {
+                        "StudentId": $scope.selected.student.user.id,
+                        "PeriodId": $scope.currentPeriod ? $scope.currentPeriod.Id : 14,
+                        "ActivityId": $scope.selected.student.activity.Id,
+                        "Date": date
+                    };
 
-					//post data to oroomactivity 
-					orooms.save({reftable: true}, dataToSend, function (data) {
-						console.log('data saved');
-						console.log(data);
+                    //post data to oroomactivity
+                    orooms.save({reftable: true}, dataToSend, function (data) {
+                        console.log('data saved');
+                        console.log(data);
 
-						// add too the left table
-						$scope.refTable1.unshift(data);
-					}, function (error) {
-						notify('Error');
-					});
+                        // add too the left table
+                        $scope.refTable1.unshift(data);
+                    }, function (error) {
+                        notify('Error');
+                    });
 
-					// clear field
-					$scope.selected.student = null;
+                    // clear field
+                    $scope.selected.student = null;
 
-				};
+                };
 
-				$scope.onTeacherChanged = function (item) {
-					updateTable1Record(item);
-				};
+                $scope.onTeacherChanged = function (item) {
+                    updateTable1Record(item);
+                };
 
-				$scope.onActivitySelected = function (student, oldActivity) {
-					//console.log(student.activity);
-					//console.log(angular.fromJson(oldActivity));
-					if (student.activity.Id !== 2) {
-						updateTable1Record(student);
-						return;
-					}
-					// go here if Assign ISS is not selected
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/ISSReferralModal.html',
-						//template: '<div> MODAL: assignISS selected</div>',
-						size: 'lg',
-						controller: function ($scope, student, currentUser) {
-							$scope.student = student;
-							$scope.currentUser = currentUser;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							},
-							currentUser: function () {
-								return JSON.parse(localStorage.getItem('user'));
-							}
-						}
-					});
+                $scope.onActivitySelected = function (student, oldActivity) {
+                    //console.log(student.activity);
+                    //console.log(angular.fromJson(oldActivity));
+                    if (student.activity.Id !== 2) {
+                        updateTable1Record(student);
+                        return;
+                    }
+                    // go here if Assign ISS is not selected
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/ISSReferralModal.html',
+                        //template: '<div> MODAL: assignISS selected</div>',
+                        size: 'lg',
+                        controller: function ($scope, student, currentUser) {
+                            $scope.student = student;
+                            $scope.currentUser = currentUser;
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            },
+                            currentUser: function () {
+                                return JSON.parse(localStorage.getItem('user'));
+                            }
+                        }
+                    });
 
-					modalInstance.result.then(function () {//on SUBMIT
-						// post the ISS referral to the database 
-						isss.save({
-							StudentId: student.student.id,
-							ReferralTypeId: 5,
-							ActionType: 20,
-							Comment: student.comment
-						},function(data){
-							notify('success');
-						}, dev.openError);
+                    modalInstance.result.then(function () {//on SUBMIT
+                        // post the ISS referral to the database
+                        isss.save({
+                            StudentId: student.student.id,
+                            ReferralTypeId: 5,
+                            ActionType: 20,
+                            Comment: student.comment
+                        }, function (data) {
+                            notify('success');
+                        }, dev.openError);
 
-						updateTable1Record(student);
+                        updateTable1Record(student);
 
-						// change row to non removable
-						student.nonRemovable = true;
+                        // change row to non removable
+                        student.nonRemovable = true;
 
-						student.staticActivity = true;
+                        student.staticActivity = true;
 
-					}, function () {// modal dismissed
-						// change the activity back to what it was
-						student.activity = angular.fromJson(oldActivity);
-						//updateTable1Record(student);
-						
-					});
-				};
+                    }, function () {// modal dismissed
+                        // change the activity back to what it was
+                        student.activity = angular.fromJson(oldActivity);
+                        //updateTable1Record(student);
 
-				$scope.onReferralInTrue = function (student) {
-					if (student.ReferralIn === false) {
-						updateTable1Record(student);
-						return;
-					}
-					if (!student.teacher || student.teacher.id == 0) {
-						notify({message: 'Please Select A Teacher First'});
-						student.ReferralIn = false;
-						return;
-					}
-					// check referral type 
-					students.get({id: student.student.id}, function (data) {
-						var oroomsToBeSeved = data.counters.ORoomsToBeServed;
+                    });
+                };
+
+                $scope.onReferralInTrue = function (student) {
+                    if (student.ReferralIn === false) {
+                        updateTable1Record(student);
+                        return;
+                    }
+                    if (!student.teacher || student.teacher.id == 0) {
+                        notify({message: 'Please Select A Teacher First'});
+                        student.ReferralIn = false;
+                        return;
+                    }
+                    // check referral type
+                    students.get({id: student.student.id}, function (data) {
+                        var oroomsToBeSeved = data.counters.ORoomsToBeServed;
 //					if(oroomsToBeSeved === 0)
-						student.referralType = "First Time - Teacher";
+                        student.referralType = "First Time - Teacher";
 //					else{
 //						student.referralType = ""
 //					}
 
-						angular.forEach(data.activitiesAffected, function (item) {
-							if (item.Date === $scope.currentDate)
-								student.referralType = "O-Room Referral → ISS";
-						});
-					});
+                        angular.forEach(data.activitiesAffected, function (item) {
+                            if (item.Date === $scope.currentDate)
+                                student.referralType = "O-Room Referral → ISS";
+                        });
+                    });
 
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/oRoomReferralModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student) {
-							$scope.student = student;
-						},
-						resolve: {
-							student: function () {
-								return student;
-							}
-						}
-					});
-
-
-
-					modalInstance.result.then(function () {// on SUBMIT
-						// post the comment and other things to the database 
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/oRoomReferralModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                        },
+                        resolve: {
+                            student: function () {
+                                return student;
+                            }
+                        }
+                    });
 
 
-						// put reftable
-						updateTable1Record(student);
-						var dataToSend = {
-							Date: $scope.currentDate,
-							PeriodId: $scope.currentPeriod? $scope.currentPeriod.Id:0 ,
-							StudentId: student.StudentId,
-							TeacherId: student.teacher.id,
-							ReferralType: student.referralType,
-							Comment: student.comment
-						};
-						orooms.save({ormlist: true}, dataToSend, function (data) {
-							notify('success');
-							$scope.refTable2.unshift(data);
-						}, function (error) {
-							notify('error');
-						});
-
-						//change switch  to static 
-						student.staticRef = true;
-						// change teacher to static
-						student.staticTeacher = true;
-						// change row to non removable
-						student.nonRemovable = true;
-
-					}, function () {// on modal DISMISS
-						student.ReferralIn = false;
-					});
-
-				};
-
-				$scope.onDeleteTable1 = function ($index) {
-					// perform a DELETE request
-					var obj = $scope.refTable1[$index];
-					orooms.delete({id: obj.Id, reftable: true}, function (data) {
-						notify('success');
-						$scope.refTable1.splice($index, 1);
-					}, function (error) {
-						notify('error');
-					});
-				};
-
-				$scope.onDeleteTable2 = function ($index) {
-					var item = $scope.refTable2[$index];
-					//checks before opening the modal 
-
-					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/oRoomCoordinatorUpdateModal.html',
-						//template:'<div> MODAL : true in Referral IN </div>',
-						size: 'lg',
-						controller: function ($scope, student) {
-							$scope.student = student;
-						},
-						resolve: {
-							student: function () {
-								return $scope.refTable2[$index];
-							}
-						}
-					});
-
-					modalInstance.result.then(function () {// on SUBMIT
-						// post the comment and other things to the database 
-						var payload = {
-							counters: item.counters,
-							Comment: item.comment
-						};
-						counters.update({id:item.Id}, payload,function(data){
-							
-						}, dev.openError);
-
-						//add student to the list on the right
-						$scope.refTable2.splice($index, 1);
-
-					}, function () {// on modal DISMISS
-					});
-				};
+                    modalInstance.result.then(function () {// on SUBMIT
+                        // post the comment and other things to the database
 
 
-				function formatAMPM(date) {
-					var hours = date.getHours();
-					var minutes = date.getMinutes();
-					var seconds = date.getSeconds();
-					var ampm = hours >= 12 ? 'pm' : 'am';
-					hours = hours % 12;
-					hours = hours ? hours : 12; // the hour '0' should be '12'
-					hours = hours < 10 ? '0' + hours : hours;
-					minutes = minutes < 10 ? '0' + minutes : minutes;
-					seconds = seconds < 10 ? '0' + seconds : seconds;
-					var strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
-					return strTime;
-				}
+                        // put reftable
 
-				function formatTime24(date) {
-					var hours = date.getHours();
-					var minutes = date.getMinutes();
-					var seconds = '00';
-					hours = hours < 10 ? '0' + hours : hours;
-					minutes = minutes < 10 ? '0' + minutes : minutes;
-					var strTime = hours + ":" + minutes + ":" + seconds;
-					return strTime;
-				}
+                        var oRoomReferralTypeId = 1;
+                        var oRoomActivityTypeId = 1;
+                        var payLoad = {
+                            Date: $scope.currentDate,
+                            PeriodId: $scope.currentPeriod ? $scope.currentPeriod.Id : 0,
+                            StudentId: student.StudentId,
+                            TeacherId: student.teacher.id,
+                            ReferralTypeId: oRoomReferralTypeId,
+                            ActivityTypeId: oRoomActivityTypeId,
+                            Comment: (student.comment || '') + '[From O-Room During Day(System)]'
+                        };
+                        orooms.save({ormlist: true}, payLoad, function (data) {
+                            notify('success');
+                            updateTable1Record(student);
+                            $scope.refTable2.unshift(data);
+                        }, function (error) {
+                            notify('error');
+                            student.ReferralIn = false;
+                        });
 
-				function formatDate(date) {
-					var month = date.getMonth() + 1;
-					var day = date.getDate();
-					var year = date.getFullYear();
-					var strDate = month + '/' + day + "/" + year;
-					return strDate;
-				}
+                        //change switch  to static
+                        student.staticRef = true;
+                        // change teacher to static
+                        student.staticTeacher = true;
+                        // change row to non removable
+                        student.nonRemovable = true;
 
-				function getPeriod(date) {
-					var currentPeriod = null;
-					var datestr = formatTime24(date);
-					//console.log(datestr);
-					angular.forEach($scope.periods, function (item) {
-						if (datestr > item.StartTime) {
-							//console.log('datestr < ' + item.StartTime);
-							if (datestr < item.EndTime) {
-								//console.log('datestr < ' + item.EndTime);
-								currentPeriod = item;
-							}
-						}
+                    }, function () {// on modal DISMISS
+                        student.ReferralIn = false;
+                    });
+
+                };
+
+                $scope.onDeleteTable1 = function ($index) {
+                    // perform a DELETE request
+                    var obj = $scope.refTable1[$index];
+                    orooms.delete({id: obj.Id, reftable: true}, function (data) {
+                        notify('success');
+                        $scope.refTable1.splice($index, 1);
+                    }, function (error) {
+                        notify('error');
+                    });
+                };
+
+                $scope.onDeleteTable2 = function ($index) {
+                    var item = $scope.refTable2[$index];
+                    //checks before opening the modal
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/oRoomCoordinatorUpdateModal.html',
+                        //template:'<div> MODAL : true in Referral IN </div>',
+                        size: 'lg',
+                        controller: function ($scope, student) {
+                            $scope.student = student;
+                        },
+                        resolve: {
+                            student: function () {
+                                return $scope.refTable2[$index];
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {// on SUBMIT
+                        // post the comment and other things to the database
+                        var payload = {
+                            counters: item.counters,
+                            Comment: item.comment
+                        };
+                        counters.update({id: item.Id}, payload, function (data) {
+
+                        }, dev.openError);
+
+                        //add student to the list on the right
+                        $scope.refTable2.splice($index, 1);
+
+                    }, function () {// on modal DISMISS
+                    });
+                };
 
 
-					});
-					return currentPeriod;
-				}
+                $scope.onClear = function (student) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'views/modals/ClearReferralsModal.html',
+                        size: 'lg',
+                        controller: function ($scope, PeriodsService, student) {
+                            $scope.student = student;
+                            $scope.onReferralRemove = function ($index) {
 
-				function updateTable1Record(item) {
-					console.log(item);
-					var dataToSent = {
-						SentOutById: item.teacher ? item.teacher.id : 0,
-						ActivityId: item.activity ? item.activity.Id : 0,
-						ReferralIn: item.ReferralIn ? 1 : 0
-					};
-					orooms.update({id: item.Id, reftable: true}, dataToSent);
-				}
+                            }
+                        },
+                        resolve: {
+                            student: function () {
+                                referrals.query({StudentId: student.Id}, function (data) {
+                                    student.referred = $filter('filter')(data, function (o) {
+                                        return o.ReferralTypeId === 1 || o.ReferralTypeId === 2
+                                            || o.ReferralTypeId === 3 || o.ReferralTypeId === 16
+                                            || o.ReferralTypeId === 19;
+                                    });
+                                    return student;
+                                });
+                                return student;
 
-				function getORoomLists(period) {
-					orooms.get({}, function (data) {
-						angular.forEach(data.reftable, function (item) {
-							item.ReferralIn = item.ReferralIn === 1 ? true : false;
-						});
+                            }
+                        }
+                    });
+                    modalInstance.result.then(function () {// on SUBMIT
+                        debugger;
+                        referrals.deleteReferralsFromStudent($scope.currentDate, student).then(function (data) {
+                            notify(data.msg, 'success');
+                        }, dev.openError);
 
-						$scope.refTable1 = data.reftable;
-						$scope.refTable2 = data.OroomList;
-					});
-				}
-				getORoomLists();
-			}]);
+                        $scope.selected.student = null;
+                    });
+                };
+
+
+                function formatAMPM(date) {
+                    var hours = date.getHours();
+                    var minutes = date.getMinutes();
+                    var seconds = date.getSeconds();
+                    var ampm = hours >= 12 ? 'pm' : 'am';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // the hour '0' should be '12'
+                    hours = hours < 10 ? '0' + hours : hours;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    seconds = seconds < 10 ? '0' + seconds : seconds;
+                    var strTime = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+                    return strTime;
+                }
+
+                function formatTime24(date) {
+                    var hours = date.getHours();
+                    var minutes = date.getMinutes();
+                    var seconds = '00';
+                    hours = hours < 10 ? '0' + hours : hours;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
+                    var strTime = hours + ":" + minutes + ":" + seconds;
+                    return strTime;
+                }
+
+                function formatDate(date) {
+                    var month = date.getMonth() + 1;
+                    var day = date.getDate();
+                    var year = date.getFullYear();
+                    var strDate = month + '/' + day + "/" + year;
+                    return strDate;
+                }
+
+                function getPeriod(date) {
+                    var currentPeriod = null;
+                    var datestr = formatTime24(date);
+                    //console.log(datestr);
+                    angular.forEach($scope.periods, function (item) {
+                        if (datestr > item.StartTime) {
+                            //console.log('datestr < ' + item.StartTime);
+                            if (datestr < item.EndTime) {
+                                //console.log('datestr < ' + item.EndTime);
+                                currentPeriod = item;
+                            }
+                        }
+
+
+                    });
+                    return currentPeriod;
+                }
+
+                function updateTable1Record(item) {
+                    console.log(item);
+                    var dataToSent = {
+                        SentOutById: item.teacher ? item.teacher.id : 0,
+                        ActivityId: item.activity ? item.activity.Id : 0,
+                        ReferralIn: item.ReferralIn ? 1 : 0
+                    };
+                    orooms.update({id: item.Id, reftable: true}, dataToSent);
+                }
+
+                function getORoomLists(period) {
+                    orooms.get({}, function (data) {
+                        angular.forEach(data.reftable, function (item) {
+                            item.ReferralIn = item.ReferralIn === 1 ? true : false;
+                        });
+
+                        $scope.refTable1 = data.reftable;
+                        $scope.refTable2 = data.OroomList;
+                    });
+                }
+
+                getORoomLists();
+            }]);
 }(angular.module('Argus')));
 /* global angular */
 
@@ -8083,4 +8163,3 @@
 		
 	}]);	
 }(angular.module('Argus')));
-//# sourceMappingURL=admin1Main.js.map

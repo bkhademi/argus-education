@@ -1,0 +1,68 @@
+﻿<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul data-side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element" data-dropdown>
+                    <img alt='{{currentUser.school.Name}}School' class='' src='{{currentUser.logo}}' height="86"
+                         width="86">
+                    <a class="dropdown-toggle" data-dropdown-toggle href="">
+                        <span class="clear">
+                            <div class="block m-t-xs">
+                                <strong class="font-bold">{{currentUser.FirstName +', ' +
+                                    currentUser.LastName}}</strong>
+                            </div>
+							<div>
+                                {{currentUser.role}}
+                            </div>
+                            <span class="text-muted text-xs block">option<b class="caret"></b></span>
+
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a data-ng-click='main.logout()'> Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    AR
+                </div>
+            </li>
+
+
+            <li ui-sref-active="active">
+                <a data-ui-sref="reteach.dashboard">
+                    <i class="fa fa-dashboard fa-2x"></i>
+                    <span class="nav-label">Dashboard</span>
+                </a>
+            </li>
+
+            <li data-ng-class="{active: $state.includes('reteach')}">
+                <a href="#"> <i class="	fa fa-graduation-cap  fa-2x"> </i>
+                    <span class="nav-label">Reteach</span>
+                    <span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('reteach')}">
+                    <li ui-sref-active="active"><a ui-sref="reteach.reteachReferral">Referral</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reteach.reteachList">Roster</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reteach.reteachPending">Followup</a></li>
+                </ul>
+            </li>
+
+            <li ui-sref-active="active">
+                <a data-ui-sref="reteach.reports.eod">
+                    <i class="fa fa-area-chart  fa-2x"></i>
+                    <span class="nav-label">Reports</span>
+                </a>
+            </li>
+
+
+            <!--<li data-ng-repeat="item in navigation.tabs" ui-sref-active="active">-->
+            <!--<a data-ui-sref="{{item.link}}">-->
+            <!--<i class="fa fa-{{item.icon}} "></i>-->
+            <!--<span class="nav-label">{{item.id}}</span>-->
+            <!--</a>-->
+            <!--</li>-->
+
+
+        </ul>
+    </div>
+</nav>

@@ -12,7 +12,8 @@
 					<li style="width:60%;" >
 						<form>
 
-							<select chosen 
+							<select chosen
+									width="'100%'"
 									class=" chosen-select form-control"
 									allow-single-deselect="true"
 									data-ng-if='schoolStudents'
@@ -42,30 +43,17 @@
 		</div>
 
 		<div class="row" > 
-			<div class="col-sm-12 col-lg-6"> 
+			<div class="col-sm-12 col-lg-7">
 				<div class="text-center">
 					<div class="row">
 
 						<h3 class="col-sm-6 col-sm-offset-3 form-inline" > Current Period:
 							{{ currentPeriod.Number}}
-							<!--							<select chosen
-																width="'40%'"	 
-																class="chosen-select form-control form"
-																data-placeholder="Select Period"
-																data-ng-disabled="true"
-																data-ng-if="periods"
-																data-ng-model="currentPeriod"
-																data-ng-change="changePeriodTables(currentPeriod)"
-																allow-single-deselect="true"
-																data-ng-options="p as (p.Number + ' ' + p.PeriodType) for p in periods track by p.Id">
-															<option value=''></option>
-							
-														</select>-->
 						</h3>
 					</div>
 					<!--{{currentPeriod.Number + currentPeriod.PeriodType}}-->
 				</div>
-				<table id="refTable1" class="footable table table-bordered table-responsive toggle-arrow-tiny"
+				<table id="refTable1" class="table footable table-bordered table-responsive toggle-arrow-tiny"
 					   data-page-size="1000"
 					   data-ng-mouseover="mouseOnTable = true"  data-ng-mouseleave="mouseOnTable = false"
 					   >
@@ -178,7 +166,7 @@
 					</tfoot>
 				</table>
 			</div>
-			<div class="col-sm-12 col-lg-6">
+			<div class="col-sm-12 col-lg-5">
 				<div class="text-center">
 					<h3 >Today's {{currentDate}} |  O-Room List <i class="badge badge-info"> {{refTable2.length}} </i></h3>
 				</div>
@@ -206,15 +194,15 @@
 							<td>{{item.counters.ORoomsToBeServed}}</td>
 							<!--<td>{{item.classes[7].professor_class.room.Name}}</td>-->
 							<td style="border:0;margin:0; padding:0; position: fixed; right:17px;" data-ng-show="item.mouseover2" >
-								<i class="btn btn-primary fa fa-times delete-btn" data-ng-click='onDeleteTable2($index)'
+								<i class="btn btn-primary fa fa-times delete-btn" data-ng-click='onClear(item)'
 								   ></i>
 							</td>
 						</tr>
 					</tbody>
-					<tfoot>
+					<tfoot class="hide-if-no-paging">
 						<tr>
-							<td colspan="3">
-								<ul class="pagination pull-right"></ul>
+						 	<td colspan="3">
+								<ul class="pagination  pull-right"></ul>
 							</td>
 						</tr>
 					</tfoot>

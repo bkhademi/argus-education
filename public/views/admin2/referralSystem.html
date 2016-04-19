@@ -1,104 +1,88 @@
 <section class="wrapper wrapper-content animated fadeInRight">
     <div class="panel panel-default">
-        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, lets create references!</h2>
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>,
+            lets create references!</h2>
 
         <div class="panel-body">
-            <div class="table-filters ">
-                <div class="text-center">
 
-                    <br />
-                    <div class="row"> 
 
-                        <div class="col-sm-8 col-sm-offset-2 " >
-                                <select chosen 
-                                        class=" chosen-select form-control"
-										allow-single-deselect="true"
-										data-ng-if='schoolStudents'
-                                        data-placeholder="Select or enter a student"
-                                        data-ng-model="selected.student"
-                                        data-ng-options="s as 
-										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
-										for s in schoolStudents track by s.Id "
-										>
-									<option value=''></option>
-								</select>
-                                <select  
-									multiple chosen
-									class="chosen-select form-control"
-									data-ng-if="!schoolStudents"
-									data-placeholder="Loading Students">
-								</select>
-                        </div >
-                    </div>
-					<br />
-					<ul class="list-group list-inline "> 
-                        <li style="width:20%;">
-                            <button style="width:100%;" type="button" class="btn  btn-primary" data-ng-click="assignLunch()" 
-									data-ng-disabled="!selected.student">Lunch Detention</button>
-                        </li>
+            <div class="row">
+                <div class="col-sm-12">
+                    <form name="form" class="text-center ">
+                        <label>Select Date for Referrals</label>
+                                <span class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+                                    <input type="datetime" class="form-control" date-time ng-model="currentDate"
+                                           name="date"
+                                           view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+                                    <span class="input-group-addon btn"><i class="fa fa-calendar"></i></span>
 
-                        <li style="width:20%;">
-                            <button style="width:100%;" type="button" class="btn  btn-primary" data-ng-click="assignORoom()"
-									data-ng-disabled="!selected.student">O-Room</button>
-                        </li>
-						<li style="width:20%;">
-							<button style="width:100%;" type="button" class="btn  btn-primary" data-ng-click="assignISS()" 
-									data-ng-disabled="!selected.student">ISS</button>
-                        </li>
-						<li style="width:20;">
-							<button style="width:100%;" type="button" class="btn  btn-primary" data-ng-click="changeAndComment()" 
-									data-ng-disabled="!selected.student">Change & Comment</button>
-                        </li>
-
-                    </ul>
+                                </span>
+                    </form>
                 </div>
             </div>
+            <br/>
+            <div class="row text-center">
 
-<!--            <br />
+                <div class="col-sm-8 col-sm-offset-2 ">
+                    <select chosen
+                            width="'100%'"
+                            class=" chosen-select form-control"
+                            allow-single-deselect="true"
+                            data-ng-if='schoolStudents'
+                            data-placeholder="Select or enter a student"
+                            data-ng-model="selected.student"
+                            data-ng-options="s as
+										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+										for s in schoolStudents track by s.Id "
+                    >
+                        <option value=''></option>
+                    </select>
+                    <select
+                            multiple chosen
+                            class="chosen-select form-control"
+                            data-ng-if="!schoolStudents"
+                            data-placeholder="Loading Students">
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="text-center">
+                <ul class="list-group list-inline ">
+                    <li style="width:15%;">
+                        <button style="width:100%;" type="button" class="btn  btn-primary"
+                                data-ng-click="assignLunch()"
+                                data-ng-disabled="!selected.student">Lunch Detention
+                        </button>
+                    </li>
 
-            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
-                <thead>
-                    <tr>
-						<th>Remove</th>
-                        <th data-toggle="true">First Name</th>
-                        <th>Last Name</th>
-                        <th>ID</th>
-                        <th>Grade</th>
-                        <th class="col-sm-6">Assignment</th>
-						<th data-ng-if='showChecks'></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr data-ng-repeat="stu in refTable track  by stu.id">
-						<td> <button data-ng-click='refTable.splice($index, 1)'class="btn btn-primary fa fa-times"></button></td>
-                        <td>{{stu.FirstName}}</td>
-                        <td>{{stu.LastName}}</td>
-                        <td>{{stu.student.StudentId}}</td>
-                        <td>{{stu.student.Grade}}</td>
-                        <td>
-							<select multiple chosen
-									class="chosen-select form-control"
-									data-ng-if="assignments"
-									data-placeholder="Select a homework"
-									data-ng-model="stu.referred"
-									data-ng-options="a as (a.Name) for a in assignments track by a.Name">
-								<option value=''></option>
+                    <li style="width:15%;">
+                        <button style="width:100%;" type="button" class="btn  btn-primary"
+                                data-ng-click="assignORoom()"
+                                data-ng-disabled="!selected.student">O-Room
+                        </button>
+                    </li>
+                    <li style="width:15%;">
+                        <button style="width:100%;" type="button" class="btn  btn-primary"
+                                data-ng-click="assignISS()"
+                                data-ng-disabled="!selected.student">ISS
+                        </button>
+                    </li>
+                    <li style="width:15%;" data-ng-show="showFeature()">
+                        <button style="width:100%;" type="button" class="btn  btn-primary"
+                                data-ng-click="changeAndComment()"
+                                data-ng-disabled="!selected.student">Change & Comment
+                        </button>
+                    </li>
+                    <li style="width:15%;" >
+                        <button style="width:100%;" type="button" class="btn  btn-primary"
+                                data-ng-click="clear()"
+                                data-ng-disabled="!selected.student"> Clear
+                        </button>
+                    </li>
 
-							</select>
+                </ul>
+            </div>
 
-                        </td>
-						<td data-ng-if='showChecks'> <input type='checkbox' data-ng-model='stu.selected'></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="7">
-                            <ul class="pagination pull-right"></ul>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
--->
 
         </div>
     </div>

@@ -2672,7 +2672,7 @@
 
 				$scope.ossAttendance = function (student, $index) {
 					var modalInstance = $modal.open({
-						templateUrl: 'views/modals/attendaceModal.html',
+						templateUrl: 'views/modals/parentMeetingAttendaceModal.html',
 						//template:'<div> MODAL : true in Referral IN </div>',
 						size: 'lg',
 						controller: ["$scope", "student", "teachers", function ($scope, student, teachers) {

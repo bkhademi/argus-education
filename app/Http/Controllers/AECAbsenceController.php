@@ -9,186 +9,205 @@ use DB;
 use App\Referrals;
 use App\Useractions;
 use App\Counters;
+use App\User;
 use Carbon\Carbon;
 
-class AECAbsenceController extends Controller {
+class AECAbsenceController extends Controller
+{
+    protected $attendances = array('NoShow' => 52, 'LeftSchool' => 53, 'SchoolAbsent' => 54, 'Other' => 57, 'Clear' => 51);
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index() {
-		//
-	}
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        $date = $this->getDate($request);
+        $schoolId = $this->user->SchoolId;
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create() {
-		//
-	}
+        $refs =  User
+            ::with('student', 'classes.professor_class.room')
+            ->with(['referred' => function ($q) use ($date) {
+                $q
+                    ->where('RefferalStatus', 4)
+                    ->where('ReferralTypeId', 12)
+                    // ->where('Date', $date)
+                    ->with('assignment', 'teacher', 'activity');
+            }])
+            ->where('SchoolId', $schoolId)
+            ->whereHas('referred', function ($q) use ($date) {
+                $q
+                    ->where('RefferalStatus', 4)
+                    ->where('ReferralTypeId', 12)// ->where('Date', $date)
+                ;
+            })
+            ->orderBy('LastName', 'ASC')
+            ->get();
+        if($request->count)
+            $refs = ['aecAbsentCount'=>$refs->count()];
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store() {
-		//
-	}
+        return $refs;
+    }
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id) {
-		//
-	}
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        //
+    }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id) {
-		//
-	}
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function store()
+    {
+        //
+    }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id, Request $request) {
-		$today = Carbon::today();
-		$tomorrow = Carbon::tomorrow();
-		// present or clear
-		if ($request->ActionType == 51 || $request->ActionType == 52) {
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
-			$referral = Referrals::whereIn('Id', $request->referrals);
-			$referralone = Referrals::find($request->referred[0]['Id']);
-			$action = UserActions::create([
-					'ActionDate' => $today,
-					'ActionByUserId' => $this->userId,
-					'ActionType' => $request->ActionType,
-					'ActionToUSerId' => $referralone->StudentId,
-					'ParentNotified' => $request->data['ParentNotified'],
-					'StudentNotified' => $request->data['StudentNotified'],
-			]);
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function edit($id)
+    {
+        //
+    }
 
-			if ($request->ActionType == 51) {
-				$msg = 'Student Cleared From AEC';
-				$referral->update(['RefferalStatus' => 1]);
-				$action->update(['Comment' => $request->Comment
-					. '[Student Cleared (System)]']);
-			} else {
-				$msg = 'No Show. AEC->ORM.';
-				$referrals = $request->referred;
-				$incomplete = false;
-				$assignments = '';
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function update($id, Request $request)
+    {
+        //DB::beginTransaction();
+        $today = Carbon::today();
+        $tomorrow = Carbon::today()->addWeekDay();
+        $studentId = $id;
+        $lastPendingFollowupAction = Useractions::where('ActionToUserId', $studentId)
+            ->where('ActionType', 58)
+            ->orderBy('created_at', 'DESC')
+            ->first();
 
-				for ($i = 0; $i < count($referrals); $i++) {
-					$obj = $referrals[$i];
+        if ($request->ActionType == $this->attendances['NoShow'] || $request->ActionType == $this->attendances['Clear']) {
 
-					if (!isset($obj['selected'])) {// doesnt have folder
-						$msg .= ' (Doesnt has folder for ' . $obj['assignment']['Name'] . ', no AEC)  ';
-						$incomplete = true;
+            if ($request->ActionType == $this->attendances['Clear']) { // CLEAR
+                $msg = 'Student Cleared From AEC';
+                $referrals = Referrals::whereIn('Id', $request->referrals);
+                $referrals->update(['RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType]);
+                $lastPendingFollowupAction->Comment .= "\n Followup Comment: \n " . $request->Comment
+                    . '[Student Cleared (System)]';
+                $lastPendingFollowupAction->ActionType = $request->ActionType;
+                $lastPendingFollowupAction->save();
 
-						//Referrals::find($obj['Id'])->update(['Date'=>$tomorrow]);
-						// doesnt have folder.. not continue AEC and mark with status 6
-						Referrals::find($obj['Id'])->update(['RefferalStatus' => 6]);
-					} else {
-						// has folder. Reschedule AEC 
-						$msg .= ' (Has Folder for ' . $obj['assignment']['Name'] . ', AEC Rescheduled)  ';
-						Referrals::find($obj['Id'])->update(['RefferalStatus' => 0, 'Date' => Carbon::today()]);
-					}
-					$assignments .= $obj['assignment']['Name'] . ', ';
-				}
-				// regardless if has folders or not,, it goes to oroom
-				$orm = Referrals::create([
-						'UserId' => $this->userId,
-						'StudentId' => $referralone->StudentId,
-						'ReferralTypeId' => 16,
-						'Date' => $today
-				]);
-				$counters = Counters::find($referralone->StudentId)->increment('ORoomsToBeServed');
+            } else { // NO Show (52)
+                $msg = 'No Show. AEC->ORM.';
+                $referrals = $request->referred;
+                // GOES TO OROOM
+                $consequence = Referrals::create([
+                    'UserId' => $this->userId,
+                    'StudentId' => $id,
+                    'ReferralTypeId' => 16,
+                    'Date' => $today
+                ]);
+                foreach ($referrals as $ref) {
+                    $referral = Referrals::find($ref['Id']);
 
-				//$msg ='Student Was A No Show, Rescheduling For Next Day';
-				//$referral->update(['RefferalStatus' => 0, 'Date'=>Carbon::today()->addWeekDay()]);
-				$action->update(['Comment' => $request->Comment
-					. '[' . $msg . ' (System)]']);
-			}
+                    if ($ref['HasFolder']) {
+                        // has folder. Reschedule AEC (resubmit)
+                        $msg .= ' (Has Folder for ' . $ref['assignment']['Name'] . ', AEC Rescheduled)  ';
+                        // leave a copy to mark this date
+                        $new_ref = $referral->replicate();
+                        $new_ref->Date = Carbon::today();
+                        $new_ref->RefferalStatus = 0;
+                        $new_ref->ActivityTypeId = 0;
+                        $new_ref->save();
+                        $new_ref->created_at = $referral->created_at;
 
-			$referral = Referrals::whereIn('Id', $request->referrals)->get();
-			return compact('msg', 'referral', 'action', 'orm', 'counters');
-		}//ditched
-		else {
-			$msg = '';
-			$referralIds = $request->Referrals;
-			
-			foreach($referralIds as $ref) {
-				$referral = Referrals::with('assignment')->findOrFail($ref['Id']);
-				$msg .= "(".$referral->assignment->Name;
-				if($ref['Folders']){
-					$msg .= ". Has Folder, reassigning for today's AEC ";
-					$referral->update(['Date'=>$today, 'RefferalStatus'=> 0]);
-				}else{
-					$msg .= ". Doesn't has Foder, clearing student ";
-					$referral->update(['RefferalStatus'=> 1]);//clear student because no folders
-				}
-				$msg .= ")System \n";
-			}
-			
-			$action = UserActions::create([
-					'ActionDate' => $today,
-					'ActionByUserId' => $this->userId,
-					'ActionType' => $request->ActionType,
-					'ActionToUserId' => $referral->StudentId,
-					'Comment'=>$request->Comment .'['.$msg.']'
-			]);
-			
-			
-//			$referral = Referrals::with('assignment')->findOrFail($id);
-//			$status = $request->Folders ? 0 : 1;
-//			$referral->update(['RefferalStatus' => $status]);
-//			$action = UserActions::create([
-//					'ActionDate' => $today,
-//					'ActionByUserId' => $this->userId,
-//					'ActionType' => $request->ActionType,
-//					'ActionToUserId' => $referral->StudentId,
-//					'Completed' => $request->Completed
-//			]);
-//
-//			if ($request->Folders) {
-//				$msg = 'Folders Were Present, Rescheduled AEC For Next Day (today)';
-//				$referral->update(['Date' => $today]);
-//				$action->update(['Comment' => $request->Comment
-//					. ' [Have Folders, Rescheduling for Next Available Day(System)]']);
-//			} else {
-//				$msg = 'Folders Were Not Present, Clearing Student';
-//				$action->update(['Comment' => $request->Comment
-//					. ' [Doesnt Have Folders, Clearing(System)]']);
-//			}
-			
-			return compact('msg', 'referral', 'action');
-		}
-	}
+                    } else {
+                        $msg .= ' (Doesn\'t have folder for ' . $ref['assignment']['Name'] . ', no AEC)  ';
+                        $incomplete = true;
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id) {
-		//
-	}
+                    }
+                    // update the contents on the referral to be shown in the roster
+                    $referral->update(['HasFolder' => $ref['HasFolder'], 'RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType, 'ConsequenceId'=>$consequence->Id]);
+                }
+
+
+                $counters = Counters::find($id);
+                $counters->increment('ORoomsToBeServed');
+
+                $lastPendingFollowupAction->update(['Comment' => $lastPendingFollowupAction->Comment . "\n Followup Comment: \n "
+                    . $request->Comment .' [' . $msg . ' (System)]', 'ActionType' => $request->ActionType]);
+            }
+
+            $referrals = Referrals::whereIn('Id', $request->referrals)->get();
+            return compact('msg', 'referrals', 'lastPendingFollowupAction', 'consequence', 'counters');
+        }//ditched
+        else if ($request->ActionType == $this->attendances['LeftSchool'] || $request->ActionType == $this->attendances['SchoolAbsent'] || $request->ActionType == $this->attendances['Other']) {// left school(53) , school absent(54), other(57)
+
+            $msg = '';
+            $referrals = $request->referred;
+
+            foreach ($referrals as $ref) {
+                $referral = Referrals::with('assignment')->findOrFail($ref['Id']);
+                if ($ref['HasFolder']) {// leave a copy/trace behind
+                    $msg .= ' (Has Folder for ' . $referral->assignment->Name . ', AEC Rescheduled)  ';
+                    // leave a copy to mark this date
+                    $new_ref = $referral->replicate();
+                    $new_ref->RefferalStatus = 0;
+                    $new_ref->Date = Carbon::today();
+                    $new_ref->save();
+                    $new_ref->created_at = $referral->created_at;
+                    $new_ref->save();
+
+                } else {
+                    $msg .= ' (Doesnt has folder for ' . $referral->assignment->Name . ', no AEC)  ';
+
+                }
+                $referral->update(['HasFolder' => $ref['HasFolder'], 'RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType]);
+
+            }
+
+            $lastPendingFollowupAction->update(['Comment' => $lastPendingFollowupAction->Comment . "\n Followup Comment: \n "
+                . $request->Comment .' [' . $msg . ' (System)]', 'ActionType' => $request->ActionType]);
+
+
+            return compact('msg', 'referral', 'lastPendingFollowupAction', 'action');
+        }else{ // no Action Type,, therefore, had overlap.
+
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 
 }

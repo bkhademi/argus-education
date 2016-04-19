@@ -22,7 +22,8 @@
                         <!-- AutoComplete Input Field -->
                         <li style="width:55%">
                             <form>
-                                <select chosen 
+                                <select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										id="refSearch"
 										allow-single-deselect="true"
@@ -85,7 +86,7 @@
                         <i class="fa fa-download"></i> Download List
                     </button>
                 </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
+				<table class="table footable table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
 					<thead>
 						<tr>
 							<!-- <th>Teacher</th> -->
@@ -96,7 +97,9 @@
 							<th class="col-sm-4">Assignment</th>
 							<th> Teacher</th>
 							<th> Overlap </th>
+<!--
 							<th> Overlap Action </th>
+-->
 							<th>Date</th>
 						</tr>
 					</thead>
@@ -104,7 +107,7 @@
 						<tr data-ng-repeat="stu in refTable track  by stu.id" 
 							data-ng-click="onSelect($index)"
 							data-ng-dblclick="openComment(stu, $index)"
-
+							class="{{stu.overlap.class}} {{stu.status.class}}"
 							>
 							<!-- <td> {{stu.FirstName + ', ' + stu.LastName}}</td> -->
 							<td>{{stu.FirstName}}</td>
@@ -129,13 +132,18 @@
 
 							</td>
 							<td>{{stu.referred[0].teacher.FirstName + ', ' + stu.referred[0].teacher.LastName}}</td>
+							<td>{{stu.overlap.msg}}</td>
+<!--
 							<td>{{stu.referred[0].overlap_activity.Name}}</td>
+-->
+<!--
 							<td>{{stu.referred[0].overlap_action.Name}}</td>
+-->
 							<!--							<td>
 															<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
 															<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
 														</td>-->
-							<td>{{stu.referred[0].Date.split(' ')[0]}}</td>
+							<td>{{stu.referred[0].Date.split(' ')[0] | date:'longDate'}}</td>
 						</tr>
 					</tbody>
 					<tfoot>

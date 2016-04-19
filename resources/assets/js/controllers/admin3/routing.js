@@ -9,7 +9,7 @@
 				.state('admin3', {
 					abstract: true,
 					url: "/admin3",
-					templateUrl: "views/common/contentArgus.html",
+					templateUrl: "views/common/contentArgusOroomCoordinator.html",
 					controller: "NavigationAdmin3Ctrl",
 					controllerAs: 'navigation',
 					resolve: {
@@ -91,7 +91,20 @@
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([
 								{
+									files: ['js/plugins/jasny/jasny-bootstrap.min.js']
+								}, {
 									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
 								}
 							]);
 						}
@@ -108,7 +121,32 @@
 							return $ocLazyLoad.load([
 								{
 									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+								},
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'ngGrid',
+									files: ['js/plugins/nggrid/ng-grid-2.0.3.min.js']
+								},
+								{
+									insertBefore: '#loadBefore',
+									files: ['js/plugins/nggrid/ng-grid.css']
 								}
+
 							]);
 						}
 					}
@@ -141,18 +179,37 @@
 					controller: 'OSSLiveCtrl',
 					resolve: {}
 				})
-				
-				
+
 				.state('admin3.reports', {
 					url: '/Reports',
-					templateUrl: 'views/reports/reportsAdmin3.html',
+					templateUrl: 'views/reports/reports.html',
 					data: {pageTitle: 'Reports'},
-					controller: 'Admin1ReportsController'
+					controller: 'ReportsCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}
+							])
+								;
+						}
+					}
 				})
 				.state('admin3.reports.eod', {
 					url: '/EOD',
 					templateUrl: 'views/reports/reports.eod.html',
-					data: {pageTitle: 'EOD'},
+					data: {pageTitle: 'Reports'},
 					controller: 'ReportsEODCtrl',
 					resolve: {
 						loadPlugin: function ($ocLazyLoad) {
@@ -168,26 +225,14 @@
 										'js/plugins/flot/jquery.flot.resize.js',
 										'js/plugins/flot/jquery.flot.pie.js',
 										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js' ]
+										'js/plugins/flot/angular-flot.js']
 								}
 							]);
 						}
 					}
 				})
-				.state('admin3.reports.progression', {
-					url: '/Progression',
-					templateUrl: 'views/reports/reports.progression.html',
-					data: {pageTitle: 'Progression'},
-					controller: 'Admin1ReportsProgressionController'
-				})
-				.state('admin3.reports.atRisk', {
-					url: '/At_Risk',
-					templateUrl: 'views/reports/reports.atRisk.html',
-					data: {pageTitle: 'At Risk'},
-					controller: 'Admin1ReportsAtRiskController'
-				});
-				
 
+			;
 		}]);
 
 

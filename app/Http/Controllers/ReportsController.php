@@ -8,145 +8,179 @@ use App\Http\Controllers\Controller;
 use App\Referrals;
 use App\Useractions;
 use Carbon\Carbon;
+use App\Students;
+use PDF;
 
-class ReportsController extends Controller {
+class ReportsController extends Controller
+{
+	private $loadForReport = ['activity', 'consequence.referralType', 'referralType'];
 
-	public function EODoroom(Request $request) {
-		//
-		$date = new Carbon($request->date);
+	public function EODoroom(Request $request)
+	{
+		$date = $this->getDate($request);
 		$schoolId = $this->user->SchoolId;
-//		$oroom = Referrals::with('user', 'studentUser.student.counters', 'teacher')
-//			->where('Date', $date)
-//			->wherehas('user', function($q)use($schoolId) { // from the school the user requested
-//				$q->where('SchoolId', $schoolId);
-//			})
-//			->whereIn('ReferralTypeId', [1, 2, 3,16,19])
-//			->get();
-		return Useractions
-				::with('student', 'user', 'activity')
-				->where('ActionDate', $date)
-				->whereIn('ActionType',[1,7,44,59,73,24,25,26,27,28,29,30])
-				->whereHas('student', function($q)use($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-//		return $oroom;
+		$includeRefTypes = array_merge(Referrals::$oroomReferralTypes, Referrals::$issReferralTypes, Referrals::$ossReferralType, Referrals::$aecReferralType, Referrals::$reteachReferralType);
+		$excludeRefTypes = array_merge(Referrals::$lunchReferralType);
+		$wantRefTypes = Referrals::$oroomReferralTypes;
+		$wantRange = $request->has('DateRange');
+		$endDate = $wantRange? new Carbon($request->DateEnd):null;
+
+		return $this->getReportReferrals($date,$wantRefTypes ,null, $excludeRefTypes, $schoolId,true,$wantRange,$endDate );
+
 	}
 
-	public function EODlunchD(Request $request) {
-		$date = new Carbon($request->date);
+	public function EODlunchD(Request $request)
+	{
+		$date = $this->getDate($request);
 		$schoolId = $this->user->SchoolId;
-		$oroom = Referrals::with('user', 'studentUser.student.counters', 'teacher')
-			->where('Date', $date)
-			->wherehas('user', function($q)use($schoolId) { // from the school the user requested
-				$q->where('SchoolId', $schoolId);
-			})
-			->whereIn('ReferralTypeId', [9])
+		$includeRefTypes = array_merge(Referrals::$lunchReferralType, Referrals::$issReferralTypes, Referrals::$ossReferralType);
+		$excludeRefTypes = array_merge(Referrals::$oroomReferralTypes, Referrals::$aecReferralType, Referrals::$reteachReferralType);
+		$wantRefTypes = Referrals::$lunchReferralType;
+		$wantRange = $request->has('DateRange');
+		$endDate = $wantRange? new Carbon($request->DateEnd):null;
+
+		return $this->getReportReferrals($date,$wantRefTypes ,null, $excludeRefTypes, $schoolId,true,$wantRange,$endDate );
+	}
+
+	public function EODiss(Request $request)
+	{
+		$date = $this->getDate($request);
+		$schoolId = $this->user->SchoolId;
+		$includeRefTypes = array_merge(Referrals::$issReferralTypes, Referrals::$reteachReferralType, Referrals::$aecReferralType);
+		$excludeRefTypes = Referrals::$lunchReferralType;
+		$wantRefTypes = Referrals::$issReferralTypes;
+		$wantRange = $request->has('DateRange');
+		$endDate = $wantRange? new Carbon($request->DateEnd):null;
+
+		return $this->getReportReferrals($date,$wantRefTypes ,null, $excludeRefTypes, $schoolId,true,$wantRange,$endDate );
+	}
+
+	public function EODAEC(Request $request)
+	{
+		$date = $this->getDate($request);
+		$schoolId = $this->user->SchoolId;
+		$excludeRefTypes = array_merge(Referrals::$lunchReferralType);
+		$wantRefTypes = Referrals::$aecReferralType;
+		$wantRange = $request->has('DateRange');
+		$endDate = $wantRange? new Carbon($request->DateEnd):null;
+
+
+		return $this->getReportReferrals($date,$wantRefTypes ,null, $excludeRefTypes, $schoolId,true,$wantRange,$endDate );
+	}
+
+	public function EODReteach(Request $request)
+	{
+		$date = $this->getDate($request);
+		$schoolId = $this->user->SchoolId;
+		$excludeRefTypes = Referrals::$lunchReferralType;
+		$wantRefTypes = Referrals::$reteachReferralType;
+		$wantRange = $request->has('DateRange');
+		$endDate = $wantRange? new Carbon($request->DateEnd):null;
+
+		return $this->getReportReferrals($date,$wantRefTypes ,null, $excludeRefTypes, $schoolId,true,$wantRange,$endDate );
+	}
+
+	public function EODasp(Request $request)
+	{
+		$date = $this->getDate($request);
+		$schoolId = $this->user->SchoolId;
+	}
+
+	public function EODoss(Request $request)
+	{
+		$date = $this->getDate($request);
+		$schoolId = $this->user->SchoolId;
+		$oss = Referrals
+			::with('studentUser', 'referralType', 'activity', 'consequence.referralType')
+			->ofSchoolId($schoolId)
+			->whereIn('ReferralTypeId', Referrals::$ossReferralType)
+			->where('newDate', $date)
+			->sortByUserProperty('LastName', 'ASC')
 			->get();
-		return Useractions
-				::with('student', 'user', 'activity')
-				->where('ActionDate', $date)
-				->whereIn('ActionType',[10,31,32,33,34,35,36,37])
-				->whereHas('student', function($q)use($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-		return $oroom;
+		return $oss;
 	}
 
-	public function EODiss(Request $request) {
-		$date = new Carbon($request->date);
-		$schoolId = $this->user->SchoolId;
-		
-		
-//		$oroom = Referrals::with('user', 'studentUser.student.counters', 'teacher')
-//			->where('Date', $date)
-//			->wherehas('user', function($q)use($schoolId) { // from the school the user requested
-//				$q->where('SchoolId', $schoolId);
-//			})
-//			->whereIn('ReferralTypeId', [4, 5, 6, 7, 8,10,17])
-//			->get();
-//		return $oroom;
-		
-		return Useractions
-				::with('student', 'user', 'activity')
-				->where('ActionDate', $date)
-				->whereIn('ActionType',[2,20,45,38,39,40,41,42,43,47])
-				->whereHas('student', function($q)use($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-	}
-
-	public function EODoss(Request $request) {
-		$date = new Carbon($request->date);
-		$schoolId = $this->user->SchoolId;
-		$oroom = Referrals::with('user', 'studentUser.student.counters', 'teacher')
-			->where('Date', $date)
-			->wherehas('user', function($q)use($schoolId) { // from the school the user requested
-				$q->where('SchoolId', $schoolId);
+	public function oroomActivity(Request $request)
+	{
+		$schoolId = 2;
+		$ormacts = Oroomactivity
+			::with('student','teacher','period','activity')
+			->whereHas('student',function($q)use($schoolId){
+				$q->where('SchoolId',$schoolId);
 			})
-			->whereIn('ReferralTypeId', [11])
+			->orderBy('Date','ASC')
+			->get()
+		;
+		if($request->has('excel')) {
+			Excel::create('Filename', function ($excel) use ($ormacts) {
+				$excel->sheet('OroomDuringDay', function ($sheet) use ($ormacts) {
+					$sheet->row(1, ['Date', 'Sent Out By', 'Student Name', 'StudentID', 'ReferralIn']);
+					foreach ($ormacts as $ref) {
+						$row = [];
+						$row[] = $ref->Date;
+						$row[] = $ref->teacher->FirstName . ', ' . $ref->teacher->LastName;
+						$row[] = $ref->student->FirstName . ', ' . $ref->student->LastName;
+						$row[] = $ref->student->UserName;
+						$row[] = $ref->ReferralIn;
+						$sheet->appendRow($row);
+					}
+				});
+			})->download('xlsx');
+		}else
+			return $ormacts;
+	}
+
+
+	public function getReferralsFromDateForReport($date,$ofTypes, $includeRefTypes, $excludeRefTypes, $schoolId,$sort)
+	{
+		return Students
+			::with('user')
+			->withReferralsFromDateWithAndWithout($date, $includeRefTypes, $excludeRefTypes, $this->loadForReport,$sort)
+			->ofSchoolId($schoolId)
+			->ofTypesAndDate($ofTypes, $date)
+			->sortByUserProperty('LastName', 'ASC')
 			->get();
-		return $oroom;
 	}
 
-	public function EODAEC(Request $request) {
-		$date = new Carbon($request->date);
-		$schoolId = $this->user->SchoolId;
-//		$oroom = Referrals::with('user', 'studentUser.student.counters', 'teacher')
-//			->where('Date', $date)
-//			->wherehas('user', function($q)use($schoolId) { // from the school the user requested
-//				$q->where('SchoolId', $schoolId);
-//			})
-//			->whereIn('ReferralTypeId', [12])
-//			->get();
-//		return $oroom;
-		return Useractions
-				::with('student', 'user', 'activity')
-				->where('ActionDate', $date)
-				->whereIn('ActionType',[48,49,50,60,51,52,53,54,55,56,57,58])
-				->whereHas('student', function($q)use($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-	}
-	public function EODReteach(Request $request) {
-		$date = new Carbon($request->date);
-		$schoolId = $this->user->SchoolId;
+	public function getReportReferrals($date, $ofTypes, $includeTypes, $excludeRefTypes,$schoolId,$sort, $range, $endDate){
 
-		return Useractions
-				::with('student', 'user', 'activity')
-				->where('ActionDate', $date)
-				->whereIn('ActionType',[63,64,65,66,67,68,69,70,71,72,74,75])
-				->whereHas('student', function($q)use($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-	}
-	
+		if(!$range){
+			return $this->getReferralsFromDateForReport($date,$ofTypes, $includeTypes, $excludeRefTypes, $schoolId,$sort);
 
-	public function oroomActivity(Request $request) {
-		$date = new Carbon($request->date);
-		$schoolId = $this->user->SchoolId;
+		}else{
 
-		$activities = \App\Oroomactivity
-			::with('student', 'teacher', 'period', 'activity')
-			->where('Date', $date)
-			->wherehas('student', function($q)use($schoolId) { // from the school the user requested
-				$q->where('SchoolId', $schoolId);
-			})
-			->get();
+			$list = [];
+			$endDate->addWeekDay();
+			do {
 
-		return $activities;
+				$list[] = ['Date'=>$date->toDateString(),
+					'students'=>$this->getReferralsFromDateForReport($date,$ofTypes, null, $excludeRefTypes, $schoolId,true)];
+
+				$date->addWeekDay();
+			}while($date->ne($endDate));
+
+		}
+
+		return $list;
 	}
 
-	public function update(Request $request, $id) {
-		//
-	}
+	public function printHtml(Request $request){
+		$css = 'css/print.css';
+		$pdf = PDF::loadHTML(
+			'<html><!DOCTYPE html><html><head><link href="'.$css.'" rel="stylesheet"> </head><body>'
+			.'<div class="header">'
+			.$request->head
+			.'</div>'
+			.'<div class="footer">'
+			.$request->footer
+			.'</div>'
+			.'<div class="content">'
+			.$request->totals
+			.$request->list
+			.'</div>'
+			. '</body></html>')
+			->setPaper('letter');
 
-	public function destroy($id) {
-		//
+		return $pdf->stream('report.pdf');
 	}
-
 }

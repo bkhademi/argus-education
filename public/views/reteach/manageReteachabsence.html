@@ -1,6 +1,7 @@
-﻿<section class="wrapper wrapper-content animated fadeInRight" >
+﻿<section class="wrapper wrapper-content animated fadeInRight">
     <div class="panel panel-default">
-        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>, lets manage Reteach Absences!</h2>
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName + ' ' + currentUser.LastName}}</span>,
+            lets manage Reteach Absences!</h2>
 
 
         <div class="panel-body">
@@ -11,7 +12,8 @@
                     <div class="form-group" id="data_1">
                         <label class="font-noraml">Select Reteach Absence List Date</label>
                         <div class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
-                            <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+                            <input type="datetime" class="form-control" date-time ng-model="currentDate" name="date"
+                                   view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         </div>
                     </div>
@@ -22,33 +24,37 @@
                         <!-- AutoComplete Input Field -->
                         <li style="width:55%">
                             <form>
-                                <select chosen 
+                                <select chosen
+                                        width="'100%'"
                                         class=" chosen-select form-control"
-										allow-single-deselect="true"
-										data-ng-if="refTable.$resolved"
+                                        allow-single-deselect="true"
+                                        data-ng-if="refTable.$resolved"
                                         data-placeholder="Select or enter a student"
                                         data-ng-model="selected.student"
                                         data-ng-options="s as 
 										(s.FirstName +' '+s.LastName+' '+s.student.StudentId+' '+s.student.Grade+' ')
 										for s in refTable  track by s.id"
-										>
-									<option value=''></option>
-								</select>
-								<select chosen 
+                                >
+                                    <option value=''></option>
+                                </select>
+                                <select chosen
+                                        width="'100%'"
                                         class=" chosen-select form-control"
-										allow-single-deselect="true"
-										data-ng-if="!refTable.$resolved"
+                                        allow-single-deselect="true"
+                                        data-ng-if="!refTable.$resolved"
                                         data-placeholder="Loading Folloup List"
 
-										>
-									<option value=''></option>
-								</select>
+                                >
+                                    <option value=''></option>
+                                </select>
 
                             </form>
                         </li>
                         <!-- Comment Button -->
                         <li>
-                            <button type="button" class="btn btn-primary" data-ng-click="openComment(selected.student)" data-ng-disabled="!selected.student">Attendance</button>
+                            <button type="button" class="btn btn-primary" data-ng-click="openComment(selected.student)"
+                                    data-ng-disabled="!selected.student">Attendance
+                            </button>
                         </li>
                         <!-- Re-Schedule Button 
                         <li>
@@ -60,79 +66,70 @@
                 </div>
             </div>
 
-            <br />
+            <br/>
 
             <!-- Table Start -->
-            <div class="col-sm-12" style="float:none;margin:0 auto; " >
-                <div  class="form-group">
-                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="getPasses()" data-ng-disabled="reftable.length">
+            <div class="col-sm-12" style="float:none;margin:0 auto; ">
+                <div class="form-group">
+                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="getPasses()"
+                            data-ng-disabled="reftable.length">
                         <i class="fa fa-ticket"></i> Print Passes
                     </button>
                 </div>
-				<div  class="form-group">
-                    <button class="btn btn-primary pull-right " style="margin-right:8px" data-ng-click="reteachListToCSV()">
-                        <i class="fa fa-download"></i> Download List <i class="badge badge-black">{{refTable.length}}</i>
+                <div class="form-group">
+                    <button class="btn btn-primary pull-right " style="margin-right:8px"
+                            data-ng-click="reteachListToCSV()">
+                        <i class="fa fa-download"></i> Download List <i
+                            class="badge badge-black">{{refTable.length}}</i>
                     </button>
                 </div>
-				<table class="footable table table-hover table-bordered toggle-arrow-tiny" data-page-size="1000">
-					<thead>
-						<tr>
-							<!-- <th>Teacher</th> -->
-							<th data-toggle="true">First Name</th>
-							<th>Last Name</th>
-							<th>ID</th>
-							<th>Grade</th>
-							<th class="col-sm-6">Assignment</th>
-							<th> teacher</th>
-							<th>Date</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr data-ng-repeat="stu in refTable track  by stu.id" data-ng-click="onSelect($index)">
-							<!-- <td> {{stu.FirstName + ', ' + stu.LastName}}</td> -->
-							<td>{{stu.FirstName}}</td>
-							<td>{{stu.LastName}}</td>
-							<td>{{stu.student.StudentId}}</td>
-							<td>{{stu.student.Grade}}</td>
-							<td>
-								{{stu.referred[0].assignment.Name}}
-								<span data-ng-show="stu.referred.length > 1" style="font-weight:700">
-									<strong>...<strong>
-											</span>
+                <table class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
+                    <thead>
+                    <tr>
+                        <!-- <th>Teacher</th> -->
+                        <th data-toggle="true">First Name</th>
+                        <th>Last Name</th>
+                        <th>ID</th>
+                        <th>Grade</th>
+                        <th> Teacher</th>
+                        <th> Overlap </th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr data-ng-repeat="stu in refTable track  by stu.id"
+                        data-ng-click="onSelect($index)"
+                        data-ng-dblclick="openComment(stu, $index)"
+                        class="{{stu.overlap.class}} {{stu.status.class}}"
+                    >
+                        <!-- <td> {{stu.FirstName + ', ' + stu.LastName}}</td> -->
+                        <td>{{stu.FirstName}}</td>
+                        <td>{{stu.LastName}}</td>
+                        <td>{{stu.student.StudentId}}</td>
+                        <td>{{stu.student.Grade}}</td>
 
-											<!--								<select multiple chosen
-																					class="chosen-select form-control"
-																					data-ng-disabled
-																					data-placeholder="Select a homework"
-																					data-ng-model="stu.referred"
-																					data-ng-options="a as (a.Name) for a in assignments track by a.Name">
-																				<option value=''></option>
-											
-																			</select>-->
-
-											</td>
-											<td>{{stu.referred[0].teacher.FirstName + ', ' + stu.referred[0].teacher.LastName}}</td>
-											<!--							<td>
-																			<label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
-																			<label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
-																		</td>-->
-											<td>{{stu.referred[0].Date.split(' ')[0]}}</td>
-											</tr>
-											</tbody>
-											<tfoot>
-												<tr>
-													<td colspan="7">
-														<ul class="pagination pull-right"></ul>
-													</td>
-												</tr>
-											</tfoot>
-											</table>
+                        <td>{{stu.referred[0].teacher.FirstName + ', ' + stu.referred[0].teacher.LastName}}</td>
+                        <td>{{stu.overlap.msg}}</td>
+                        <!--							<td>
+                                                        <label tooltip-popup-delay='300' tooltip='Were the parents notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[0]" btn-checkbox="" data-ng-click="parentNotifiedModal(stu)"> <i class="fa fa-home"></i></label>
+                                                        <label tooltip-popup-delay='300' tooltip='Was the student notified' class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="stu.status[1]" btn-checkbox=""><i class="fa fa-user"></i></label>
+                                                    </td>-->
+                        <td>{{stu.referred[0].Date.split(' ')[0]}}</td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <ul class="pagination pull-right"></ul>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
 
 
+            </div>
+        </div>
 
-											</div>
-											</div>
+    </div>
 
-											</div>
-
-											</section>
+</section>

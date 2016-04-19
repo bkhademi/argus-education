@@ -1,0 +1,383 @@
+[22:13:40] Using gulpfile ~/argus_education_1.0/gulpfile.js
+[22:13:40] Starting 'watch'...
+[22:13:40] Finished 'watch' after 54 ms
+[22:13:40] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[22:13:40] Finished 'scripts' after 665 ms
+[22:13:40] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:13:40] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:14:35] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[22:14:35] Finished 'scripts' after 29 ms
+[22:14:35] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:14:35] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:14:51] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[22:14:51] Finished 'scripts' after 29 ms
+[22:14:51] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:14:51] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:15:01] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[22:15:01] Finished 'scripts' after 31 ms
+[22:15:01] gulp-notify: [Laravel Elixir] Scripts Merged!
+[22:15:01] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:48:46] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[15:48:46] Finished 'scripts' after 36 ms
+[15:48:46] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:48:46] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:52:08] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[15:52:08] Finished 'scripts' after 25 ms
+[15:52:08] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:52:08] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:53:30] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[15:53:30] Finished 'scripts' after 27 ms
+[15:53:30] gulp-notify: [Laravel Elixir] Scripts Merged!
+[15:53:30] gulp-notify: [Laravel Elixir] Scripts Merged!
+[19:59:47] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[19:59:47] Finished 'scripts' after 24 ms
+[19:59:47] gulp-notify: [Laravel Elixir] Scripts Merged!
+[19:59:47] gulp-notify: [Laravel Elixir] Scripts Merged!
+[06:34:08] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[06:34:08] Finished 'scripts' after 41 ms
+[06:34:08] gulp-notify: [Laravel Elixir] Scripts Merged!
+[06:34:09] gulp-notify: [Laravel Elixir] Scripts Merged!
+[06:34:14] Starting 'scripts'...
+
+Fetching Scripts Source Files...
+   - resources/assets/js/controllers/admin1//**/*
+   - resources/assets/js/controllers/admin2//**/*
+   - resources/assets/js/controllers/admin3//**/*
+   - resources/assets/js/controllers/live/**/*
+   - resources/assets/js/controllers/student//**/*
+   - resources/assets/js/controllers/supportstaff//**/*
+   - resources/assets/js/controllers/teacher//**/*
+   - resources/assets/js/controllers/attendanceRosters//**/*
+   - resources/assets/js/controllers/reports/**/*
+   - resources/assets/js/controllers/iss/**/*
+   - resources/assets/js/controllers/dataStaff/**/*
+   - resources/assets/js/controllers/sysadmin/**/*
+   - resources/assets/js/controllers/reteach/**/*
+   - resources/assets/js/controllers/aspcoordinator/**/*
+   - resources/assets/js/controllers/manageAEC/**/*
+   - resources/assets/js/controllers/manageORM/**/*
+   - resources/assets/js/controllers/commons/**/*
+
+
+Saving To...
+   - public/js/admin1Main.js
+
+
+Fetching Scripts Source Files...
+   - public/js/app.js
+   - public/js/argusdirectives.js
+   - public/js/argusservices.js
+
+
+Saving To...
+   - public/js/argusCore.min.js
+
+[06:34:14] Finished 'scripts' after 20 ms
+[06:34:14] gulp-notify: [Laravel Elixir] Scripts Merged!
+[06:34:14] gulp-notify: [Laravel Elixir] Scripts Merged!

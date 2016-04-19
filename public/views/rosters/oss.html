@@ -1,12 +1,18 @@
 <div class="row">
 	<div class="col-sm-12"> 
-		<div class="text-center">
-			<h3> OSS</h3>
+		<form name="form" class="text-center">
+			<label>Select OSS List Date</label>
+				<span class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+					<input type="datetime" class="form-control" date-time ng-model="currentDate" name="date"
+						   view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+					<span class="input-group-addon btn"><i class="fa fa-calendar"></i></span>
+
+				</span>
 			<button class='btn btn-primary pull-right fa fa-file-excel-o' data-ng-click='printList()'>
 				Download List
 			</button>
-		</div>
-		<table id="OSS" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="1000">
+		</form>
+		<table id="OSS" class="table footable table-bordered toggle-arrow-tiny" data-page-size="1000">
 			<thead>
 				<tr>
 					<th data-toggle="true">First Name</th>
@@ -17,38 +23,19 @@
 					<th>O-Room Days</th>
 					<th>Parent Meeting Date</th>
 					<th>Staff</th>
-					<th>ISS Attendance</th>
 
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat="item in oss track  by $index"
-					data-ng-dblclick='ossAttendance(item,$index)'
-					>
+				<tr data-ng-repeat="item in oss track  by $index" data-ng-dblclick='ossAttendance(item,$index)'>
 					<td>{{item.student_user.FirstName}}</td>
 					<td>{{item.student_user.LastName}}</td>
 					<td>{{item.student_user.UserName}}</td>
-					<!--<td>{{item.student_user.student.counters.Cycles}}</td>-->
 					<td>{{item.student_user.student.counters.ISSDays}}</td>
 					<td>{{item.student_user.student.counters.ORoomsToBeServed}}</td>
-					<td>{{item.Date }}  {{item.Time}}</td>
-					<td>{{item.user.FirstName }} , {{item.user.LastName}}</td>
-					<td>
-						{{item.activity.Name}}
-<!--						<div>
-							<select chosen
-									width="'100%'"	 
-									class="chosen-select form-control"
-									data-placeholder="Select Attendance"
-									data-ng-model="item.activity" 
-									allow-single-deselect="true"
-									data-ng-change="issAttendance(item, $index)"
-									data-ng-options="a as (a.name) for a in activities track by a.value">
-								<option value=''></option>
+					<td>{{ item.NewDate.split(' ')[0] | date:'longDate'}} - {{item.Time}}</td>
+					<td>{{item.teacher.FirstName +  ',' + item.teacher.LastName}}</td>
 
-							</select>
-						</div>-->
-					</td>
 				</tr>
 			</tbody>
 			<tfoot>

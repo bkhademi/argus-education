@@ -3,7 +3,7 @@
 		<div class="text-center">
 			<h3> ISS</h3>
 		</div>
-		<table id="ISS" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="1000">
+		<table id="ISS" class="table footable table-bordered toggle-arrow-tiny" data-page-size="1000">
 			<thead>
 				<tr>
 					<th data-toggle="true">First Name</th>
@@ -18,11 +18,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr data-ng-repeat="item in iss track  by $index" 
-					
-					class="{{(item.activity.Id === 42 || item.activity.Id === 43)?'bg-danger':''}}"
-					
-					>
+				<tr data-ng-repeat="item in refTable track  by $index"
+					class="{{item.overlap.class}} {{item.status.class}}"
+				>
 					<td>{{item.user.FirstName}}</td>
 					<td>{{item.user.LastName}}</td>
 					<td>{{item.StudentId}}</td>

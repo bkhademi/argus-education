@@ -4,8 +4,8 @@
 	"use strict";
 	app
 		.controller("manageAECAbsenceController",
-			["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'AECAbsenceListService','UtilService',
-				function ($scope, $modal, referrals, passes, useractions, notify, aec,utils) {
+			["$scope", "$modal", "referrals", "PassesService", "UserActionsService", 'notify', 'AECAbsenceListService','UtilService','$rootScope',
+				function ($scope, $modal, referrals, passes, useractions, notify, aec,utils, $rootScope) {
 					$scope.selected = {};
 					$scope.refTable = [];// table model
 					$scope.currentDate = new Date(); // date on the date picker
@@ -19,8 +19,9 @@
 							$scope.currentDate = newVal;
 							console.log("newVal = " + $scope.form.date.$viewValue);
 
+							$scope.refTable = aec.getList($scope.currentDate);
+							return;
 							referrals.query({id: newVal, absence: true}, function (data) {
-
 								if (!data.length) {
 									$scope.refTable = [];
 									notify({message: "No students for current date",
@@ -82,9 +83,7 @@
 									text += ref.assignment.Name
 									text += ' \n';
 								});
-								
 
-								
 							});
 							utils.downloadCSV(text, 'AEC-Followup-List_'+$scope.currentDate);
 						
@@ -102,16 +101,7 @@
 					 * 	(noShow,walkOut, SentOut, schoolAbsent, disciplinary, clear,comment )
 					 */
 					var submitComment = function (data) {// data:{comment, noShow, walkOut, sentOut}
-						var student = $scope.selected.student;
-						var status = data.noShow ? 0 : data.walkOut ? 1 : data.sentOut ? 2 : data.schoolAbsent ? 3 : data.disciplinary ? 4 : data.clear ? 5 : -1;
 
-						// submit info of student '$scope.selected.student' to database
-						var dataToSent = {param: 'AbsentComment', comment: data.comment, status: status};
-						referrals.update({id: student.id}, dataToSent);
-
-						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-						$scope.refTable.splice(indexOfStudent, 1);
-						$scope.selected.student = null;
 					};
 
 					/********** MODALS   **********/
@@ -126,7 +116,7 @@
 							templateUrl: 'views/modals/CommentAbsenceModal.html',
 							size: 'md',
 							controller: function ($scope, student) {
-								$scope.title = "Reteach Followup Attendance";
+								$scope.title = "AEC Followup ";
 								$scope.student = student;
 							},
 							resolve: {
@@ -136,67 +126,15 @@
 							}
 						});// End commentModal
 
-						commentModal.result.then(function (data) {
-							// present or clear
-							if (student.radioModel == 51 || student.radioModel == 52) { // one request
-								var referralIds = student.referred.map(function (o) {
-									return o.Id;
-								});
-								
-								var payload = {
-									ActionType: student.radioModel,
-									Comment: student.comment,
-									Date: $scope.currentDate,
-									referrals: referralIds,
-									referred: student.referred
-								};
-								aec.update({id: student.id}, payload, function (data) {
-									notify(data.msg);
-									clearInputAndRemoveFromTable();
-								}, function (error) {
-									notify('error, Before continuing please contact a System Administrator');
-								});
-							} else {
-								var referred = student.referred.map(function(o){
-									return {Id: o.Id, Folders:o.selected?true:false};
-								});
-								var urlEncoded  = {id:student.id};
-								var payload = {
-									param:'attendance',
-									Referrals : referred,
-									ActionType:student.radioModel,
-									Comment:student.comment,
-									Date: $scope.currentDate
-								};
-								aec.update(urlEncoded, payload, function(data){
-									notify(data.msg);
-									clearInputAndRemoveFromTable();
-								},function(){
-									notify('error');
-								});
-//								angular.forEach(student.referred, function (item) { // multiple requests
-//									var urlEncoded = {id: item.Id};
-//									var payload = {
-//										param: 'attendance',
-//										Folders: item.selected ? true : false,
-//										ActionType: student.radioModel,
-//										Comment: student.comment,
-//										Date: $scope.currentDate,
-//										Referrals: referred
-//									};
-//									aec.update(urlEncoded, payload, function (data) {
-//										//notify(data.msg);
-//										clearInputAndRemoveFromTable()
-//									}, function (error) {
-//										notify('error, Before continuing please contact an admin');
-//									});
-//								});
-							}
+						commentModal.result.then(function () {
+							aec.updateAttendance($scope.currentDate, student).then(function(data){
+								notify(data.msg);
+								clearInputAndRemoveFromTable();
+							},function(){
+								notify('error, Before continuing please contact a System Administrator');
+							});
 						});
-//
-//						var indexOfStudent = $scope.refTable.indexOf($scope.selected.student);
-//						$scope.refTable.splice(indexOfStudent, 1);
-//						$scope.selected.student = null;
+
 					};
 					
 					function clearInputAndRemoveFromTable(){

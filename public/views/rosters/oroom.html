@@ -1,54 +1,111 @@
-<div class="row" > 
+<div class="wrapper wrapper-content animated fadeInDown">
 
-	<div class="col-sm-12">
-		<div class="">
-			<h3 class='text-center'>Today's {{currentDate}} 
-				|  O-Room List
-				<button class='btn btn-primary pull-right fa fa-refresh' data-ng-click='getList()'>
-					Refresh List
-				</button>
-				<button class='btn btn-primary pull-right fa fa-file-excel-o' data-ng-click='printList()'>
-					Download List
-				</button>
-			</h3>
-		</div>
-		<table id="refTable" class="footable table  table-bordered toggle-arrow-tiny" data-page-size="1000">
-			<thead>
-				<tr>
-					<th data-toggle="true">First Name</th>
-					<th>Last Name</th>
-					<th>ID</th>
-					<th>Grade</th>
-					<th>Pending Days</th>
-					<!--<th> referred</th>-->
-					<th>Referral Type </th>
-					<th>8th Period</th>
-					<th>Overlap</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr data-ng-repeat="item in refTable track  by $index" 
-					data-ng-dblclick="oRoomAttendance(item, $index)"
-					class="{{item.overlap.class}} "
-					>
-					<td>{{item.user.FirstName}}</td>
-					<td>{{item.user.LastName}}</td>
-					<td>{{item.user.UserName}}</td>
-					<td>{{item.Grade}}</td>
-					<td>{{item.counters.ORoomsToBeServed}}</td>
-					<!--<td>{{item.referred.length}}</td>-->
-					<td> {{item.referred[0].referral_type.Name}}
-					<td>{{item.classes[7].professor_class.room.Name}}</td>
-					<td>{{item.overlap.msg}}</td>
-				</tr>
-			</tbody>
-			<tfoot>
-				<tr>
-					<td colspan="9">
-						<ul class="pagination pull-right"></ul>
-					</td>
-				</tr>
-			</tfoot>
-		</table>
-	</div>
+    <!-- inputs -->
+    <div class="row">
+
+        <div class="col-sm-12">
+            <form name="form" class="text-center form-group">
+                <label>Select ORoom List Date</label>
+				<span class="input-group date col-md-4 col-sm-12" style="margin:0 auto">
+					<input type="datetime" class="form-control" date-time ng-model="currentDate" name="date"
+                           view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+					<span class="input-group-addon btn"><i class="fa fa-calendar"></i></span>
+
+				</span>
+            </form>
+            <div class="col-sm-6 col-sm-offset-2">
+                <select chosen
+                        width="'100%'"
+                        class=" chosen-select form-control "
+                        allow-single-deselect="true"
+                        data-ng-show="refTable"
+                        data-placeholder="Select or enter a student"
+                        focus-me="!!!selected.student"
+                        data-ng-model="selected.student"
+                        data-ng-change="onSelectedStudent(selected.student)"
+                        data-ng-options="s as
+										(s.user.FirstName +' '+s.user.LastName+' '+s.StudentId+' '+s.Grade )
+										for s in refTable  track by s.Id"
+                >
+                    <option value=''></option>
+                </select>
+                <span data-ng-if="!refTable">
+                    <div class="sk-spinner sk-spinner-wave">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
+                </span>
+            </div>
+            <div class=" col-sm-3">
+                <button type="button" class="btn  btn-primary "
+                        data-ng-click="oRoomAttendance(selected.student)" data-ng-disabled="!selected.student">
+                    Attendance
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <br/>
+    <!-- table elements -->
+    <div class="row">
+        <div class="col-sm-12">
+            <button class='btn btn-primary pull-right fa fa-refresh' data-ng-click='getList()'>
+                Refresh List
+            </button>
+            <button class='btn btn-primary pull-right fa fa-file-excel-o' data-ng-click='printList()'>
+                Download List
+            </button>
+            <table id="refTable" class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
+                <thead>
+                <tr>
+                    <th data-toggle="true">First Name</th>
+                    <th>Last Name</th>
+                    <th>ID</th>
+                    <th>Grade</th>
+                    <th>Pending Days</th>
+                    <th data-ng-show="showToUser()"> referred</th>
+                    <th>Referral Type</th>
+                    <th>8th Period</th>
+                    <th>Overlap</th>
+                    <th>Attendance</th>
+                    <th>Progression</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="item in refTable track  by $index"
+                    data-ng-dblclick="oRoomAttendance(item, $index)"
+                    data-ng-click="onSelect($index)"
+                    class="{{item.overlap.class}} {{item.status.class}}"
+                >
+                    <td>{{item.user.FirstName}}</td>
+                    <td>{{item.user.LastName}}</td>
+                    <td>{{item.user.UserName}}</td>
+                    <td>{{item.Grade}}</td>
+                    <td>{{item.counters.ORoomsToBeServed}}</td>
+                    <td data-ng-show="showToUser()">{{item.referred.length}}</td>
+                    <td> {{item.referred[0].referral_type.Name}}
+                    <td>{{item.classes[0].professor_class.room.Name}}</td>
+                    <td>{{item.overlap.msg}}</td>
+                    <td>{{item.referred[0].activity.Name}}</td>
+                    <td>{{item.referred[0].consequence.referral_type.Name}}</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="10">
+                        <ul class="pagination pull-right"></ul>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
 </div>

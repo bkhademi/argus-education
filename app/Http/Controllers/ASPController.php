@@ -12,6 +12,7 @@ use App\Days;
 use App\Activities;
 use Carbon\Carbon;
 use App\Aspattendance;
+use App\Aspchanges;
 
 class ASPController extends Controller {
 	
@@ -24,59 +25,117 @@ class ASPController extends Controller {
 	public function index(Request $request) {
 		//
 		$schoolId = $this->user->SchoolId;
-		if ($schoolId === 2) {
+		if ($schoolId === 2 || $schoolId === 5) {
 			//get dunbar students  from rotationdays
 
 			return Studentgroups::with('student.user.referred', 'group')
-					->with(['student.user.referred'=>function($q)use ($request){
-						$q->where('Date', new Carbon($request->Date));
-					}])
-					->with(['student.aspAttendance' => function($q)use($request) {
-							$q->where('Date', new Carbon($request->Date));
-						}])
-					->whereHas('student.user', function($q)use($schoolId) {
-						$q->where('SchoolId', $schoolId);
-					})
-					->get()
-			;
+				->with(['student.user.referred'=>function($q)use ($request){
+					$q->where('Date', new Carbon($request->Date));
+				}])
+				->with(['student.aspAttendance' => function($q)use($request) {
+					$q->where('Date', new Carbon($request->Date));
+				}])
+				->whereHas('student.user', function($q)use($schoolId) {
+					$q->where('SchoolId', $schoolId);
+				})
+				->get()
+				;
 		}else{
 
-		switch ($request->select) {
-			case 1:
-				$date = new Carbon($request->Date);
-				$dayOfWeek = $date->dayOfWeek;
-				$activitiesIds = Rotationdays
+			switch ($request->select) {
+				case 1:// get the activities for the current rotation
+
+
+					$date = new Carbon($request->Date);
+					if($date->gte(new Carbon("Jan 11 2016"))  // only PE
+						&& $date->lte(new Carbon("Jan 15 2016")) )
+					{
+						return Activities::where('Name','PE')->get();
+					}
+
+
+
+					$dayOfWeek = $date->dayOfWeek;
+					$activitiesIds = Rotationdays
 						::where('DayId', $date->dayOfWeek)
 						->where('RotationNumber', $request->rotation)
 						->distinct()->select('ActivityId')->get()
-				;
-				$activities = Activities::whereIn('Id', $activitiesIds)->get();
-				return $activities;
-				break;
-			case 2:
-				$date = new Carbon($request->Date);
-				$dayOfWeek = $date->dayOfWeek;
-				$groups = Rotationdays::
-						where('DayId', $date->dayOfWeek)
+					;
+					$activities = Activities::whereIn('Id', $activitiesIds)->get();
+
+					if($date->gte(new Carbon("Jan 15 2016"))
+						&& $date->lte(new Carbon("Jan 27 2016")))
+					{
+						$activities = $activities->reject(function($item){
+							return $item->Id === 79  ;
+						});
+						$activities = $activities->values();
+					}
+
+					return $activities;
+					break;
+				case 2: // get students for selected group
+					$date = new Carbon($request->Date);
+
+					$dayOfWeek = $date->dayOfWeek;
+					$groups = Rotationdays::
+					where('DayId', $date->dayOfWeek)
 						->where('RotationNumber', $request->rotation)
 						->where('ActivityId', $request->program)
-						->distinct()->select('GroupId')->get()
-				;
-				$rotation = $request->rotation;
+						->distinct()->select('GroupId')
+						->get()
+					;
+					$rotation = $request->rotation;
 
-				$studentGroups = Studentgroups::with('student.user', 'group')
+					if($date->gte(new Carbon("Jan 11 2016")) // only PE
+						&& $date->lte(new Carbon("Jan 15 2016"))
+					){
+						$groups = Groups::select('Id')->get();
+					}
+
+					else if($request->program == 84 && ($date->gt(new Carbon("Jan 15 2016"))
+							&& $date->lte(new Carbon("Jan 27 2016")) ) )
+					{
+						$groupsForCooking = Rotationdays::
+						where('DayId', $date->dayOfWeek)
+							->where('RotationNumber',$request->rotation)
+							->whereIn('ActivityId',[79] )
+							->distinct()->select('GroupId')
+							->get();
+
+						foreach($groupsForCooking as $grp){
+							$groups->push($grp);
+						}
+
+					}else{
+
+						$groups= $this->getGroupsChanges($date,$request->rotation,$request->program,$groups);
+
+					}
+
+					$studentGroups = Studentgroups::with( 'student.user','group')
 						->with(['student.aspAttendance' => function($q)use($rotation, $date) {
-								$q->where('Date', $date)
+							$q->where('Date', $date)
 								->where('RotationNumber', $rotation);
-							}])
-						->whereIn('GroupId', $groups)->get();
-				return $studentGroups;
-				break;
-			default;
-				return response(['msg' => 'Bad Parameters'], 500);
+						}])
+						->whereHas('student.user',function($q){
+							$q->where('SchoolId',3);
+						})
+						->whereIn('GroupId', $groups)
+						->join('aspnetusers', 'studentgroups.StudentId', '=', 'aspnetusers.id')
+						->orderBy('GroupId',"ASC")
+						->orderBy('FirstName', 'ASC')
+						->select('studentgroups.*')
+						->get();
+
+
+					return $studentGroups;
+					break;
+				default;
+					return response(['msg' => 'Bad Parameters'], 500);
+			}
 		}
-		}
-		
+
 		return Rotationdays::all();
 	}
 
@@ -146,4 +205,42 @@ class ASPController extends Controller {
 		//
 	}
 
+	private function getGroupsChanges($date, $rotation, $activity, $groups){
+		$changes = Aspchanges::
+		where('DayId', $date->dayOfWeek)
+			->where('Date', '<=', $date)
+			->where('RotationNumber',$rotation)
+			->where('Range',true)
+			->orderBy('Date','ASC')
+			->get();
+
+
+		foreach($changes as $change){
+
+
+			$contains = $groups->contains(function($key,$value)use($change){
+
+				return $value['GroupId'] == $change->GroupId;
+			});
+
+			//print(gettype($change->ToActivityId) . '=');
+			//print_r($contains?'true':'false' . '/');
+			//print(gettype($activity) . '=');
+			//print_r(($change->ToActivityId === $activity)?'true':'false' . '--');
+
+			if($contains && !($change->ToActivityId == $activity)){
+				//dd('removed');
+				$groups = $groups->reject(function($item)use($change){
+					return $item['GroupId'] == $change->GroupId;
+				});
+			}else if( ($change->ToActivityId == $activity) &&  !$contains ){
+				//dd('added');
+				$groups->push(['GroupId'=>$change->GroupId]);
+			}else{
+				//dd('both are equal');
+			}
+
+		}
+		return $groups;
+	}
 }

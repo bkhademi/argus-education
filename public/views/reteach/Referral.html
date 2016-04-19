@@ -23,7 +23,8 @@
 						 <li style="width:20%;" >
                             <form>
                                   
-                                <select chosen 
+                                <select chosen
+                                        width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="teachers.$resolved"
@@ -47,7 +48,8 @@
                         <li style="width:20%;" >
                             <form>
                                   
-                                <select chosen 
+                                <select chosen
+                                        width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if='schoolStudents.$resolved'
@@ -71,6 +73,7 @@
 						<li style="width:20%;" >
 							<form>
 								<select chosen
+                                        width="'100%'"
 									class="chosen-select form-control"
 									data-placeholder="Select 9th Period"
 									split_word_search='true'
@@ -130,10 +133,31 @@
 					 </ul>
                 </div>
             </div>
+            <div class="row" data-ng-show="showFeature()">
+                <div class="col-sm-offset-2 col-lg-8">
+                    <!-- <form action="/pdf/SaveUploadedFile" method="post" enctype="multipart/form-data"  class="dropzone"id="dropZone">-->
+
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Upload CSV File Here</h5>
+
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            <form data-ng-submit="submitSingleFile()" novalidate class="dropzone" id="dropZone" dropzone="dropzoneConfig">
+                                <div class="fallback">
+                                    <input file-model="myFile[0]" name="file" type="file" multiple />
+                                    <input type="submit" value="Upload" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <br />
             
-            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="1000">
+            <table class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
                 <thead>
                     <tr>
 						<th>Remove</th>
@@ -155,7 +179,7 @@
                         <td>{{stu.user.LastName}}</td>
                         <td>{{stu.StudentId}}</td>
                         <td >{{stu.Grade}}</td>
-						<td> {{ eightPeriods[$index].professor_class.classs.Name + ' - ' +eightPeriods[$index].professor_class.room.Name}}</td>
+						<td> {{ stu.eightPeriod.professor_class.classs.Name + ' - ' + stu.eightPeriod.professor_class.room.Name}}</td>
 <!--                        <td >
                              <select multiple chosen
 								width="'100%'"	 

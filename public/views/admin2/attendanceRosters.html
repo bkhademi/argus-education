@@ -6,7 +6,7 @@
 			<div class="row">
 
 				<div class="col-lg-3 col-sm-6">
-					<div class="btn btn-primary block widget " data-ng-click="changeList('oroom')"
+					<div class="btn btn-primary block widget "
 						 data-ui-sref-active='active' data-ui-sref="admin1.attendanceRosters.oroom"
 						 >
 
@@ -23,7 +23,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-sm-6" >
-					<div class="btn btn-info block widget" data-ng-click="changeList('lunch')"
+					<div class="btn btn-info block widget"
 						 data-ui-sref-active='active' data-ui-sref="admin1.attendanceRosters.lunchDetention"
 						 >
 
@@ -40,7 +40,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-sm-6">
-					<div class="btn btn-primary block widget" data-ng-click="changeList('iss')"
+					<div class="btn btn-primary block widget"
 						 data-ui-sref-active='active' data-ui-sref="admin1.attendanceRosters.iss"
 						 >
 
@@ -57,7 +57,7 @@
 					</div>
 				</div>
 				<div class="col-lg-3 col-sm-6">
-					<div class="btn btn-info block widget" data-ng-click="changeList('oss')"
+					<div class="btn btn-info block widget"
 						 data-ui-sref-active='active' data-ui-sref="admin1.attendanceRosters.oss"
 						 >
 
@@ -75,233 +75,7 @@
 				</div>
 
 			</div>
-			
-<!--			
-			<div class="row" data-ng-show="currentList == 'oroom'"> 
-				
-				<div class="col-sm-12">
-					<div class="text-center">
-						<h3>Today's {{currentDate}} |  O-Room List</h3>
-					</div>
-					<table id="refTable" class="footable table table-bordered toggle-arrow-tiny table-hover" data-page-size="8">
-						<thead>
-							<tr>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Pending Days</th>
-								<th>8th Period</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in refTable track  by $index" data-ng-dblclick="oRoomAttendance(item)">
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>{{item.counters.pendingOroomDays}}</td>
-								<td>{{item.eighthPeriod}}</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="5">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
 
-			<div class="row" data-ng-show="currentList == 'lunch'">
-				<div class="col-sm-6"> 
-					<div class="text-center">
-						<h3> Lunch A</h3>
-					</div>
-					<table id="lunchA" class="footable table  table-bordered toggle-arrow-tiny table-hover" data-page-size="8" >
-						<thead>
-							<tr>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Attendance</th>
-								<th >Progressions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in lunchTableA track  by $index" data-ng-dblclick="lunchAttendance(item)">
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>{{ item.attendance}}</td>
-								<td>{{  item.progression}}</td>
-								
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="5">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-				<div class="col-sm-6">
-					<div class="text-center">
-						<h3> Lunch A</h3>
-					</div>
-					<table id="lunchB" class="footable table  table-bordered toggle-arrow-tiny table-hover" data-page-size="8" >
-						<thead>
-							<tr>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Attendance</th>
-								<th >Progressions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in lunchTableB track  by $index" data-page-size="8" data-ng-dblclick="lunchAttendance(item)">
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>
-									<div>
-										{{ item.attendance}}
-									</div>
-
-
-								</td>
-								<td>
-									{{  item.progression}}
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="5">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-			
-			<div class="row" data-ng-show="currentList == 'iss'">
-				<div class="col-sm-12"> 
-					<div class="text-center">
-						<h3> ISS</h3>
-					</div>
-					<table id="ISS" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
-						<thead>
-							<tr>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th>Attendance</th>
-								<th>Progressions</th>
-								<th>ISS Days</th>
-								<th >O-Room Days</th>
-								<th> Attendance</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in iss track  by $index">
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>{{ item.attendance }}</td>
-								<td>{{  item.progression}}</td>
-								<td>{{item.issDays}}</td>
-								<td>{{item.oroomDays}}</td>
-								<td>
-									<div>
-										<select chosen
-											width="'100%'"	 
-											class="chosen-select form-control"
-											data-placeholder="Select Attendance"
-											data-ng-model="item.activity" 
-											allow-single-deselect="true"
-											data-ng-change="onActivitySelected(item, '{{item.activity}}')"
-											data-ng-options="a as (a.name) for a in activities track by a.value">
-										<option value=''></option>
-
-									</select>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="7">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-			
-			<div class="row" data-ng-show="currentList == 'oss'">
-				<div class="col-sm-12"> 
-					<div class="text-center">
-						<h3> OSS</h3>
-					</div>
-					<table id="OSS" class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="8">
-						<thead>
-							<tr>
-								<th data-toggle="true">First Name</th>
-								<th>Last Name</th>
-								<th>ID</th>
-								<th >Cycles</th>
-								<th>ISS Days</th>
-								<th>O-Room Days</th>
-								<th>Parent Meeting Date</th>
-								<th>Staff</th>
-								<th> Attendance</th>
-								
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-ng-repeat="item in oss track  by $index">
-								<td>{{item.user.FirstName}}</td>
-								<td>{{item.user.LastName}}</td>
-								<td>{{item.StudentId}}</td>
-								<td>{{item.cycles}}</td>
-								<td>{{item.issDays}}</td>
-								<td>{{item.oroomDays}}</td>
-								<td>{{item.PMDate}}</td>
-								<td>{{item.staff}}</td>
-								<td>
-									<div>
-										<select chosen
-											width="'100%'"	 
-											class="chosen-select form-control"
-											data-placeholder="Select Attendance"
-											data-ng-model="item.activity" 
-											allow-single-deselect="true"
-											data-ng-change="onActivitySelected(item, '{{item.activity}}')"
-											data-ng-options="a as (a.name) for a in activities track by a.value">
-										<option value=''></option>
-
-									</select>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="7">
-									<ul class="pagination pull-right"></ul>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>-->
-			
 			<div data-ui-view></div>
 		
 		</div>

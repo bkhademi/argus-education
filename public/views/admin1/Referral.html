@@ -26,7 +26,8 @@
 						<li style="width:25%;" >
                             <form>
 
-                                <select chosen 
+                                <select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if="teachers.$resolved"
@@ -51,7 +52,8 @@
                         <li style="width:25%;" >
                             <form>
 
-                                <select chosen 
+                                <select chosen
+										width="'100%'"
                                         class=" chosen-select form-control"
 										allow-single-deselect="true"
 										data-ng-if='selected.teacher && teacherStudents.$resolved'
@@ -136,7 +138,7 @@
 
             <br />
 
-            <table class="footable table table-stripped table-bordered toggle-arrow-tiny" data-page-size="1000">
+            <table class="table footable table-bordered toggle-arrow-tiny" data-page-size="1000">
                 <thead>
                     <tr>
 						<th>Remove</th>
@@ -164,7 +166,7 @@
                         <td >{{stu.student.Grade}}</td>
 						<td data-ng-if='currentUser.SchoolId === 1'> 
 
-							{{ eightPeriods[$index].professor_class.classs.Name + ' - ' + eightPeriods[$index].professor_class.room.Name}}
+							{{ stu.eightPeriod.professor_class.classs.Name + ' - ' + stu.eightPeriod.professor_class.room.Name}}
 						</td>
 						<td data-ng-if='currentUser.SchoolId === 2'> 
 

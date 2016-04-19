@@ -9,28 +9,30 @@
     <h4 class="modal-title">AEC Attendance - Name: {{student.user.FirstName + " " + student.user.LastName}} - ID:{{student.StudentId}}</h4>
 </div>
 <div class="modal-body ">
-	<div class="row"> 
+	<div class="row">
 		<div class="col-sm-4 col-sm-offset-2">
-			<label> Guardian Name : </label> {{student.GuardianName}}				
+			<label> Guardian Name : </label> {{student.GuardianName}}
 		</div>
 		<div class="col-sm-4">
-			<label> Guardian Phone : </label> {{student.GuardianPhone}}				
+			<label> Guardian Phone : </label> {{student.GuardianPhone}}
 		</div>
 	</div>
 	<br />
 	<div class="row text-center">
 		<div class="btn-group">
-			<label class="btn btn-success" ng-model="student.radioModel" btn-radio="'49'" style="margin:5px"> Present</label>
-			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'52'" style="margin:5px"> No Show</label>-->
-			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'53'"  style="margin:5px"> Left School</label>-->
-			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'54'" style="margin:5px" > School Absent</label>-->
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'55'" style="margin:5px"> Sent Out</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'56'" style="margin:5px"> Walked Out</label>
+			<label class="btn btn-success" ng-model="student.ActivityTypeId" btn-radio="49" style="margin:5px"> Present</label>
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="52" style="margin:5px"> No Show</label>-->
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="53"  style="margin:5px"> Left School</label>-->
+			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="54" style="margin:5px" > School Absent</label>-->
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="55" style="margin:5px"> Sent Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="56" style="margin:5px"> Walked Out</label>
 			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'57'" style="margin:5px"> Other</label>-->
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="51" style="margin:5px"> Clear</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="50" style="margin:5px"> Reschedule</label>
 		</div>
-	</div> 
-	
-	<div class='row text-left' data-ng-show="student.radioModel === '49'">
+	</div>
+    <br>
+	<div class='row text-left' data-ng-show="student.ActivityTypeId === 49">
 		<h3 class='text-center'> Assignments </h3>
 		<table class="table table-bordered">
 			<thead>
@@ -47,6 +49,71 @@
 			</tbody>
 		</table>
 	</div>
+	<div class='row text-left' data-ng-show="student.ActivityTypeId === 50">
+        <form name="rescheduleForm" role="form" class="form">
+            <div class="form-group col-lg-offset-2 col-sm-12 col-md-6" >
+                <label >Select a Date to Re-Schedule </label>
+                <div class="input-group date" style="margin:0 auto">
+
+                    <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+            <div class="form-group col-sm-12 col-md-3" >
+                <label>Excused</label>
+                <div class="switch">
+                    <div class="onoffswitch" >
+                        <input type="checkbox" class="onoffswitch-checkbox" id="stuNotified" data-ng-model="student.excused">
+                        <label class="onoffswitch-label" for="stuNotified">
+                            <span class="onoffswitch-inner yesno"></span>
+                            <span class="onoffswitch-switch yesno"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+	</div>
+	<div class='row text-left' data-ng-show="student.ActivityTypeId === 51">
+        <h3 class='text-center'> Referrals Active </h3>
+        <div class="text-center col-sm-12" data-ng-show="student.referred.length > 1 && !student.removingAll">
+            <form name="clearForm" role="form" class="form">
+                <div class="form-group col-sm-6 col-sm-offset-3">
+                    <label>Select a Date to Re-Schedule Pending Referrals</label>
+                    <div class="input-group date" style="margin:0 auto">
+                        <input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date"
+                               min-view="date" auto-close="true" format="MMM DD YYYY">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th>Remove?</th>
+                <th>Date</th>
+                <th>Assignment</th>
+                <th>Teacher</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="item in student.referred" data-ng-class="item.remove?'bg-primary':''">
+                <td data-ng-click='selectedReferralToRemove($index)'>
+                    <div><label> <input icheck type="checkbox" data-ng-model="item.remove">
+                    </label></div>
+                </td>
+                <td>{{item.Date.split(' ')[0]}}</td>
+                <td>{{item.assignment.Name}}</td>
+                <td>{{item.teacher.FirstName}} , {{item.teacher.LastName}}</td>
+
+            </tr>
+            </tbody>
+        </table>
+
+	</div>
+
+
 	<br />
 <!--	<div class="row">
 		<div class="col-sm-4 col-sm-offset-4">
@@ -65,7 +132,7 @@
 
 </div>
 <div class="modal-footer">
-    <button class="btn  btn-info" 
+    <button class="btn  btn-info"
 			data-ng-click="$close({student:student})">Submit</button>
     <button class="btn " data-ng-click="$dismiss()">Cancel</button>
 </div>

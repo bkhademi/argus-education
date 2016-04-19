@@ -41,7 +41,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-		return $request->session()->all();
+		return $request->all();
          //
 		$user = $request->userInfo;
 		$user['id'] = str_random(128);

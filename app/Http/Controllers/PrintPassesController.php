@@ -53,6 +53,7 @@ class PrintPassesController extends Controller {
 		//	->where('Date', Carbon::today())
 		//	->where('RefferalStatus',0)
 		//	->get();
+		$date = new Carbon($request->date);
 		$schoolId = $this->user->SchoolId;
 		$template = '';
 		if ($schoolId === 1) {
@@ -65,37 +66,37 @@ class PrintPassesController extends Controller {
 
 		if ($request->param === "AECList") {
 			$referrals = User::
-				with(['referred' => function($query) {
-						$query
-						->where('Date', Carbon::today())
-						->where('ReferralTypeId', 1)
-						->where('RefferalStatus', 0)
-						;
-					}], 'student')
-				->whereHas('referred', function($query) {
-					$query
-					->where('Date', Carbon::today())
-					->where('ReferralTypeId', 1)
+			with(['referred' => function($query)use($date) {
+				$query
+					->where('Date', $date)
+					->where('ReferralTypeId', 12)
 					->where('RefferalStatus', 0)
+				;
+			}], 'student')
+				->whereHas('referred', function($query)use($date) {
+					$query
+						->where('Date', $date)
+						->where('ReferralTypeId', 12)
+						->where('RefferalStatus', 0)
 					;
 				})
 				->where('SchoolId', $schoolId)
 				->get();
 		} else if ($request->param === 'ReteachLabels') {
 			$referrals = User::
-				with(['referred' => function($query) {
-						$query
-						->where('Date', Carbon::today())
-						->where('ReferralTypeId', 18)
-						->where('RefferalStatus', 0)
-						;
-					}])
-				->with('student', 'student.classes.professor_class.room')
-				->whereHas('referred', function($query) {
-					$query
-					->where('Date', Carbon::today())
+			with(['referred' => function($query)use($date) {
+				$query
+					->where('Date', $date)
 					->where('ReferralTypeId', 18)
 					->where('RefferalStatus', 0)
+				;
+			}])
+				->with('student', 'student.classes.professor_class.room')
+				->whereHas('referred', function($query)use($date)  {
+					$query
+						->where('Date', $date)
+						->where('ReferralTypeId', 18)
+						->where('RefferalStatus', 0)
 					;
 				})
 				->where('SchoolId', $schoolId)
@@ -129,9 +130,9 @@ class PrintPassesController extends Controller {
 //					$pdf = new Pdf('LabelTemplatePageV3.pdf');
 //				$name = $obj->FirstName . ',  ' . $obj->LastName;
 //				$id = $obj->UserName;
-//				
+//
 //				$goto = $obj->student['classes'][count($obj->student['classes'])-1]['professor_class']['room']['Name'];
-//				
+//
 //				$deliverTo = isset($obj->student['classes'][8])? $obj->student['classes'][8]['professor_class']['room']['Name']: 'N/A';
 //				$fields['name'.$k ] = $name;
 //				//$fields['id'.($k + 1)] = $id;
@@ -148,7 +149,7 @@ class PrintPassesController extends Controller {
 //					$fields = [];
 //				}
 //			}
-//			if ($j == 1) { //  didnt fill a whole page 
+//			if ($j == 1) { //  didnt fill a whole page
 //				$pdf->fillForm($fields)->flatten()
 //					->saveAs($j . ".pdf");
 //				$command .= $j . '.pdf ';
@@ -168,13 +169,13 @@ class PrintPassesController extends Controller {
 			return $files;
 		} else {
 			$referrals = User::with(['referred' => function($query) {
-						$query->where('Date', Carbon::today());
-					}], 'student')->whereHas('referred', function($query) {
-					$query->where('RefferalStatus', 4);
-				})->get();
+				$query->where('Date', Carbon::today());
+			}], 'student')->whereHas('referred', function($query) {
+				$query->where('RefferalStatus', 4);
+			})->get();
 		}
 
-		// $command =  "pdfjam "; 
+		// $command =  "pdfjam ";
 		$command = "pdftk ";
 		$files = "rm ";
 
@@ -183,10 +184,10 @@ class PrintPassesController extends Controller {
 			$obj = $referrals[$i]->toArray();
 			$pdf = new Pdf($template);
 			$schedule = Classstudents::with('professor_class.period', 'professor_class.room')
-					->where('StudentId', $obj['id'])
-					->whereHas('professor_class.classs', function($q) {
-						$q->where('Term', 'S2');
-					})->get();
+				->where('StudentId', $obj['id'])
+				->whereHas('professor_class.classs', function($q) {
+					$q->where('Term', 'S2');
+				})->get();
 			$schedule1 = '';
 			$schedule2 = '';
 			$k = 0;
@@ -205,9 +206,9 @@ class PrintPassesController extends Controller {
 			}
 
 			$pdf->fillForm(array('Student Name' => $obj['FirstName'] . ', ' . $obj['LastName']
-					, 'AECReferrals' => count($obj['referred']), 'Now' => Carbon::now()->toFormattedDateString(),
-					'RefDate' => Carbon::now()->toFormattedDateString(),
-					'Schedule1' => $schedule1, 'Schedule2' => $schedule2))
+			, 'AECReferrals' => count($obj['referred']), 'Now' => Carbon::now()->toFormattedDateString(),
+				'RefDate' => Carbon::now()->toFormattedDateString(),
+				'Schedule1' => $schedule1, 'Schedule2' => $schedule2))
 				->flatten()
 				->saveAs($i . ".pdf");
 

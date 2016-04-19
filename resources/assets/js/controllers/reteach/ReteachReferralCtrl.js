@@ -7,9 +7,25 @@
 					$scope.selected = {}; // model for the possible selections (selected.student,   or seleted.assignments)
 					$scope.currentDate = new Date(); // date on the datepicker
 					$scope.teacherStudents = []; // model for autocomplete  
-					$scope.refTable = []; // model for dynamic table 
-					$scope.edits = [];
-					$scope.eightPeriods = [];
+					$scope.refTable = []; // model for dynamic table
+
+					$scope.dropzoneConfig = {
+						maxFileSize:1,
+
+						options: {// passed into the Dropzone constructor
+							url: api+'reteachlist',
+							paramName:"file",
+							acceptedFiles: ".csv",
+							uploadMultiple: false,
+							headers: { 'Authorization':'Bearer '+ localStorage.getItem('satellizer_token') }
+
+						},
+						eventHandlers: {
+							success: function (file, response) {
+							},
+						},
+
+					}; // end dropzoneConfig
 
 
 					$scope.teachers = teachers.query();
@@ -162,15 +178,15 @@
 						//var selectedAssignments = $scope.selected.assignments;
 						var referralToAdd = $scope.selected.student;
 						var selectedTeacher = $scope.selected.teacher;
+
 						$http.get('api/classes/' + $scope.selected.student.Id).then(function (response) {
-							var last = response.data[7];
-							$scope.eightPeriods.push(last)
-							console.log($scope.eightPeriods);
-						})
+							referralToAdd.eightPeriod = response.data[7];
+							referralToAdd.ninethPeriod = response.data[8];
+						});
 
 						//addAssignmentsToStudent(selectedAssignments, referralToAdd);
 						referralToAdd.teacher = $scope.selected.teacher;
-						$scope.refTable.push(referralToAdd);
+						$scope.refTable.unshift(referralToAdd);
 						console.log($scope.refTable);
 						$scope.selected.student = null;
 					}

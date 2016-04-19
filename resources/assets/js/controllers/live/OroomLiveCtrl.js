@@ -8,29 +8,24 @@
 /* global angular */
 
 (function (app) {
-	app.controller('OroomLiveCtrl', ['$scope', '$interval', 'notify', 'OroomService', 'PeriodsService', 'FormatTimeService', '$timeout','$rootScope',
-		function ($scope, $interval, notify, orooms, periods, time, $timeout, $rootScope) {
-			var intervalPromise = $interval(interval, 2000);
+	app.controller('OroomLiveCtrl', ['$scope', '$interval',  'OroomService', 'FormatTimeService','PeriodsService',
+		function ($scope, $interval,  orooms, time, periods) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			var intervalPromise = $interval(interval, 5000);
 			
 			$scope.$on('$destroy',function(){
 				$interval.cancel(intervalPromise); 
 			});
 
 			function interval() {
-
 				var now = new Date();
-				$scope.currentTime = formatAMPM(now);
-				$scope.currentDate = formatDate(now);
 				$scope.currentPeriod = getPeriod(now);
-				//var newPeriod = getPeriod(now);
-				
-				getORoomLists($scope.currentPeriod);
-				
 			}
 
 			$scope.changePeriodTables = function (newPeriod, manual) {
 				$scope.currentPeriod = newPeriod;
-				
 			};
 
 
@@ -39,8 +34,6 @@
 				interval();
 			});
 
-			var formatAMPM = time.formatAMPM;
-			var formatDate = time.formatDate;
 			var formatTime24 = time.formatTime24;
 
 			function getPeriod(date) {
@@ -60,19 +53,16 @@
 			}
 
 
-			function getORoomLists(period) {
-				orooms.get({}, function (data) {
-					var ormList = [];
-					angular.forEach(data.OroomList, function(item,$index){
-						if(item.user.SchoolId === $rootScope.currentUser.SchoolId){
-							ormList.push(item);
-						}
+			$scope.getList = function(date) {
+				orooms.get({Date:date}, function (data) {
+					angular.forEach(data.reftable, function (item) {
+						item.ReferralIn = item.ReferralIn === 1 ;
 					});
 					$scope.refTable = data.reftable;
-					$scope.oroomlist = ormList;
+					$scope.oroomlist = data.OroomList;
 				});
-			}
-			getORoomLists();
+			};
+			$scope.getList($scope.currentDate);
 
 
 		}]);

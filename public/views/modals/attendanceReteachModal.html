@@ -20,39 +20,44 @@
 	<br />
 	<div class="row text-center">
 		<div class="btn-group">
-			<label class="btn btn-success" ng-model="student.radioModel" btn-radio="'64'" style="margin:5px"> Present</label>
+			<label class="btn btn-success" ng-model="student.ActivityTypeId" btn-radio="64" style="margin:5px"> Present</label>
 			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'52'" style="margin:5px"> No Show</label>-->
 			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'53'"  style="margin:5px"> Left School</label>-->
 			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'54'" style="margin:5px" > School Absent</label>-->
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'75'" style="margin:5px"> Sent Out</label>
-			<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'70'" style="margin:5px"> Walked Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="75" style="margin:5px"> Sent Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="70" style="margin:5px"> Walked Out</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="66" style="margin:5px"> Clear</label>
+			<label class="btn btn-success " ng-model="student.ActivityTypeId" btn-radio="65" style="margin:5px"> Reschedule</label>
 			<!--<label class="btn btn-success " ng-model="student.radioModel" btn-radio="'57'" style="margin:5px"> Other</label>-->
 		</div>
 	</div> 
-<!--	
-	<div class='row text-left' data-ng-show="student.radioModel === '49'">
-		<h3 class='text-center'> Assignments </h3>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-				<th>Completed</th>
-				<th>Name</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr  data-ng-repeat="ref in student.referred">
-					<td><input type="checkbox" data-ng-model="ref.AssignmentCompleted"></td>
-					<td> <label>{{ref.assignment.Name}}</label> </td>
-				</tr>
-			</tbody>
-		</table>
-	</div>-->
+
 	<br />
-<!--	<div class="row">
-		<div class="col-sm-4 col-sm-offset-4">
-			<label> Referred By : </label> {{ student.user.FirstName + ' ' + student.user.LastName}}
-		</div>
-	</div>-->
+	<div class='row text-left' data-ng-show="student.ActivityTypeId === 65">
+		<form name="form" role="form" class="form">
+			<div class="form-group col-lg-offset-2 col-sm-12 col-md-6" >
+				<label >Select a Date to Re-Schedule </label>
+				<div class="input-group date" style="margin:0 auto">
+
+					<input type="datetime" class="form-control" date-time ng-model="date" name="date" view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+					<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+				</div>
+			</div>
+			<div class="form-group col-sm-12 col-md-3" >
+				<label>Excused</label>
+				<div class="switch">
+					<div class="onoffswitch" >
+						<input type="checkbox" class="onoffswitch-checkbox" id="stuNotified" data-ng-model="student.excused">
+						<label class="onoffswitch-label" for="stuNotified">
+							<span class="onoffswitch-inner yesno"></span>
+							<span class="onoffswitch-switch yesno"></span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
 
 	<br />
 	<div class="form-group">

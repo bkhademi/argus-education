@@ -1,6 +1,6 @@
 var elixir = require('laravel-elixir');
 var gulp = require('gulp');
-//elixir.config.sourcemaps = false;
+elixir.config.sourcemaps = false;
 /*
  |--------------------------------------------------------------------------
  | Elixir Asset Management
@@ -13,7 +13,7 @@ var gulp = require('gulp');
  */
 
 elixir(function (mix) {
-	mix.sass('app.scss');
+	mix.less('../LESS/style.less');
 	mix
 		.scripts([
 			'controllers/admin1/',

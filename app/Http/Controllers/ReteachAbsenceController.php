@@ -12,15 +12,40 @@ use App\Counters;
 use Carbon\Carbon;
 use App\User;
 
-class ReteachAbsenceController extends Controller {
+class ReteachAbsenceController extends Controller
+{
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
-	public function index() {
+	public function index(Request $request)
+	{
 		//
+		//
+		$userId = $this->userId;
+		$schoolId = $this->user->SchoolId;
+		$date = $this->getDate($request);
+		$reteachAbsense = User::with(['referred' => function ($query) use ($userId, $date) {
+			$query->with('assignment', 'user.assignments', 'teacher')
+				->where('RefferalStatus', 8)//->where('Date', $date)
+			;
+		}])
+			->where('SchoolId', $schoolId)
+			->with('student')
+			->whereHas('referred', function ($query) use ($userId, $date) {
+				$query
+					->where('RefferalStatus', 8)//->where('Date',$date)
+				;
+			})
+			->orderBy('LastName', 'ASC')
+			->get();
+
+		if($request->count)
+			$reteachAbsense = [ 'reteachAbsentCount'=>$reteachAbsense->count() ];
+
+		return $reteachAbsense;
 	}
 
 	/**
@@ -28,7 +53,8 @@ class ReteachAbsenceController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function create() {
+	public function create()
+	{
 		//
 	}
 
@@ -37,141 +63,121 @@ class ReteachAbsenceController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store() {
+	public function store()
+	{
 		//
 	}
 
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return Response
 	 */
-	public function show($id, Request $request) {
+	public function show($id, Request $request)
+	{
 		//
 		$userId = $this->userId;
 		$schoolId = $this->user->SchoolId;
 		$date = new Carbon($id);
-		return User::with(['referred' => function($query)use($userId, $date) {
-						$query->with('assignment', 'user.assignments', 'teacher')
-						->where('RefferalStatus', 8)
-						->where('Date', $date)
-						;
-					}])
-				->where('SchoolId', $schoolId)
-				->with('student')
-				->whereHas('referred', function($query)use($userId, $date) {
-					$query
+		return User::with(['referred' => function ($query) use ($userId, $date) {
+			$query->with('assignment', 'user.assignments', 'teacher')
+				->where('RefferalStatus', 8)
+				->where('Date', $date);
+		}])
+			->where('SchoolId', $schoolId)
+			->with('student')
+			->whereHas('referred', function ($query) use ($userId, $date) {
+				$query
 					->where('RefferalStatus', 8)
-					->where('Date',$date)
-					;
-				})->get();
+					->where('Date', $date);
+			})->get();
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return Response
 	 */
-	public function edit($id) {
+	public function edit($id)
+	{
 		//
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return Response
 	 */
-	public function update($id, Request $request) {
+	public function update($id, Request $request)
+	{
+		//DB::beginTransaction();
 		$today = Carbon::today();
 		$tomorrow = Carbon::tomorrow();
+		$studentId = $id;
+		$lastPendingFollowupAction = Useractions::where('ActionToUserId', $studentId)
+			->where('ActionType', 72)
+			->orderBy('created_at', 'DESC')
+			->first();
+		// CLEAR OR NO-SHOW
 		if ($request->ActionType == 66 || $request->ActionType == 67) {
+			$referrals = Referrals::whereIn('Id', $request->referrals);
+			$referrals->update(['RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType]);
 
-			$referral = Referrals::whereIn('Id', $request->referrals);
-			$referralone = Referrals::find($request->referred[0]['Id']);
-			$action = UserActions::create([
-					'ActionDate' => $today,
-					'ActionByUserId' => $this->userId,
-					'ActionType' => $request->ActionType,
-					'ActionToUSerId' => $referralone->StudentId,
-					'ParentNotified' => $request->data['ParentNotified'],
-					'StudentNotified' => $request->data['StudentNotified'],
-			]);
 
-			if ($request->ActionType == 66) {
+			if ($request->ActionType == 66) {// CLEAR
 				$msg = 'Student Cleared From Reteach';
-				$referral->update(['RefferalStatus' => 1]);
-				$action->update(['Comment' => $request->Comment
-					. '[Student Cleared (System)]']);
-			} else {
+
+				$lastPendingFollowupAction->Comment .= "\n Followup Comment: \n " . $request->Comment
+					. '[Student Cleared (System)]';
+				$lastPendingFollowupAction->ActionType = $request->ActionType;
+				$lastPendingFollowupAction->save();
+
+			} else { //NO SHOW
 				$msg = 'No Show. Reteach->ORM.';
-				$referrals = $request->referred;
-				$incomplete = false;
-				$assignments = '';
 
-				for ($i = 0; $i < count($referrals); $i++) {
-					$obj = $referrals[$i];
-
-					if (!isset($obj['selected'])) {// doesnt have folder
-						$msg .= ' (Doesnt has folder for ' . $obj['assignment']['Name'] . ', no Reteach)  ';
-						$incomplete = true;
-
-						//Referrals::find($obj['Id'])->update(['Date'=>$tomorrow]);
-						// doesnt have folder.. not continue AEC and mark with status 6
-						Referrals::find($obj['Id'])->update(['RefferalStatus' => 6]);
-					} else {
-						// has folder. Reschedule AEC 
-						$msg .= ' (Has Folder for ' . $obj['assignment']['Name'] . ', AEC Rescheduled)  ';
-						Referrals::find($obj['Id'])->update(['RefferalStatus' => 0, 'Date' => Carbon::today()]);
-					}
-					$assignments .= $obj['assignment']['Name'] . ', ';
-				}
-				// regardless if has folders or not,, it goes to oroom
-				$orm = Referrals::create([
-						'UserId' => $this->userId,
-						'StudentId' => $referralone->StudentId,
-						'ReferralTypeId' => 19,
-						'Date' => $today
+				$consequence = Referrals::create([
+					'UserId' => $this->userId,
+					'StudentId' => $studentId,
+					'ReferralTypeId' => 19, // reteach -> ORM
+					'Date' => $today
 				]);
-				$counters = Counters::find($referralone->StudentId)->increment('ORoomsToBeServed');
+				$counters = Counters::find($studentId);
+				$counters->increment('ORoomsToBeServed');
 
-				//$msg ='Student Was A No Show, Rescheduling For Next Day';
-				//$referral->update(['RefferalStatus' => 0, 'Date'=>Carbon::today()->addWeekDay()]);
-				$action->update(['Comment' => $request->Comment
-					. '[' . $msg . ' (System)]']);
+				$lastPendingFollowupAction->update(['Comment' => $lastPendingFollowupAction->Comment . "\n Followup Comment: \n "
+					. $request->Comment . ' [' . $msg . ' (System)]', 'ActionType' => $request->ActionType]);
+				$referrals->update(['RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType, 'ConsequenceId'=>$consequence->Id]);
 			}
 
-			$referral = Referrals::whereIn('Id', $request->referrals)->get();
-			return compact('msg', 'referral', 'action', 'orm', 'counters');
+			$referrals = Referrals::with('activity')->whereIn('Id', $request->referrals)->get();
+			return compact('msg', 'referrals', 'lastPendingFollowupAction', 'consequence', 'counters');
 		}//ditched
 		else {
-			$referral = Referrals::with('assignment')->findOrFail($id);
-			$status = 1;
-			$referral->update(['RefferalStatus' => $status]);
-			$action = UserActions::create([
-					'ActionDate' => $today,
-					'ActionByUserId' => $this->userId,
-					'ActionType' => $request->ActionType,
-					'ActionToUSerId' => $referral->StudentId,
-					'ParentNotified' => $request->data['ParentNotified'],
-					'StudentNotified' => $request->data['StudentNotified'],
-					'Completed' => $request->Completed
-			]);
+
+			$msg = '';
+			$referrals = Referrals::whereIn('Id', $request->referrals);
+			$referrals->update(['RefferalStatus' => 2, 'ActivityTypeId' => $request->ActionType]);
 
 
-			return compact('msg', 'referral', 'action');
+			$lastPendingFollowupAction->update(['Comment' => $lastPendingFollowupAction->Comment . "\n Followup Comment: \n "
+				. $request->Comment . ' [' . $msg . ' (System)]', 'ActionType' => $request->ActionType]);
+
+			$referrals = Referrals::with('activity')->whereIn('Id', $request->referrals)->get();
+			return compact('msg', 'referrals', 'action');
 		}
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return Response
 	 */
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		//
 	}
 

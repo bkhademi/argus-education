@@ -8,22 +8,19 @@
 /* global angular */
 
 (function (app) {
-	app.controller('ISSLiveCtrl', ['$scope', '$interval','notify','ISSService',
-		function ($scope, $interval, notify, isss) {
-			
-			var intervalPromise = $interval(function () {
-				getISSList();
-			}, 2000);
-			
-			$scope.$on('$destroy', function(){
-				$interval.cancel(intervalPromise);
-			});
-			
-			function getISSList(date){
-				isss.query({date:date}, function (data) {
-					$scope.iss = data;
+	app.controller('ISSLiveCtrl', ['$scope', '$interval', 'ISSService',
+		function ($scope, $interval, isss) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+
+			$scope.getList = function (date) {
+				isss.getList(date, function (data) {
+					$scope.refTable = data;
+					$scope.count.iss = data.length;
 				});
 			};
-			
+			$scope.getList($scope.currentDate);
+
+
 		}]);
 }(angular.module('Argus')));
