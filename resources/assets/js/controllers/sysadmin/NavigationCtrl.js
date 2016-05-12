@@ -22,6 +22,10 @@
 				id: 'Users',
 				link: "sysadmin.users",
 				icon: 'eye fa-2x'
+			}, {
+				id: 'ASP Attendances',
+				link: "sysadmin.aspAttendances",
+				icon: 'list fa-2x'
 			},{
 				id: 'AEC Referral System',
 				link: "sysadmin.referral",

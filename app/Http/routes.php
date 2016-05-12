@@ -103,7 +103,9 @@ Route::group(['prefix'=>'api', 'middleware'=>['jwt.auth']], function(){
 
 	Route::resource('printAssignments', 'PrintAssignmentsController');
 	Route::resource('printPasses', 'PrintPassesController');
-        
+
+	Route::post('schedule',"ClassesController@store");
+
 /*    Route::get('authenticate', 'AuthenticateController');
 
 	Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');*/

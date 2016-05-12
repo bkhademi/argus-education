@@ -106,7 +106,7 @@ class Referrals extends Model
 
 	public function scopeofSchoolId($q, $schoolId)
 	{
-		return $q->whereHas('user', function ($q) use ($schoolId) {
+		return $q->whereHas('studentUser', function ($q) use ($schoolId) {
 			$q->where('SchoolId', $schoolId);
 		});
 	}

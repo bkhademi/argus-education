@@ -36,7 +36,7 @@
 						text += heading;
 						angular.forEach($scope.activities, function (act) {
 							text += '"' + act.ActionDate.split(' ')[0] + '",';
-							text += '"' + act.user.FirstName + ', ' + act.user.LastName + '",';
+							text += '"' + (act.user && act.user.FirstName )+ ', ' + (act.user && act.user.LastName )+ '",';
 							text += '"' + act.activity.Name + '",';
 							text += '"' + (act.Comment || '')  + '",';
 							text += "\n";
@@ -99,7 +99,7 @@
 							{date: formatDate(new Date),
 								activity: "comment",
 								Comment: $scope.comment,
-								taff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName};
+								staff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName};
 						$scope.activities.push(entry);
 						$scope.comment = '';
 					};

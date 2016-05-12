@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Helpers\ScheduleHelper;
 
 use App\Classes;
 use App\Classstudents;
+use Illuminate\Support\Facades\Input;
+
+
 class ClassesController extends Controller
 {
     /**
@@ -41,7 +44,14 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $schoolId = $this->user->SchoolId;
+        $file = Input::file('file');
+
+        if($file){
+            ScheduleHelper::store($file,$schoolId);
+        }
+
+
     }
 
     /**

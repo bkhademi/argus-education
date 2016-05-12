@@ -278,7 +278,10 @@
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}
+								},{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								},
 							]);
 						}
 					}
@@ -588,6 +591,40 @@
 					templateUrl: 'views/reports/reports.atRisk.html',
 					data: {pageTitle: 'Reports'},
 					controller: 'ReportsAtRiskCtrl'
+				})
+
+				//update schedules
+				.state('admin1.schedule', {
+					url: '/schedule',
+					templateUrl: 'views/admin1/schedule.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ScheduleController',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
+								}
+							]);
+						}
+					}
 				})
 
 			;

@@ -62,6 +62,10 @@
 					id: 'Reports',
 					link: 'admin1.reports.eod',
 					icon: 'area-chart fa-2x'
+				},{
+					id: 'Schedule',
+					link: 'admin1.schedule',
+					icon: 'area-chart fa-2x'
 				}
 			];
 

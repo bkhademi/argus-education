@@ -13,6 +13,7 @@ use App\Activities;
 use Carbon\Carbon;
 use App\Aspattendance;
 use App\Aspchanges;
+use App\Helpers\ASPHelpers;
 
 class ASPController extends Controller {
 	
@@ -145,7 +146,7 @@ class ASPController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create() {
-		//
+
 	}
 
 	/**
@@ -155,7 +156,11 @@ class ASPController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request) {
-		//
+		$schoolId = $request->all?[2,3,5]:[$request->SchoolId];
+		$date  = new Carbon($request->WeekStart);
+		$results = ASPHelpers::createASPAttendancesForAWeek($schoolId,$date);
+
+		return compact('results');
 	}
 
 	/**

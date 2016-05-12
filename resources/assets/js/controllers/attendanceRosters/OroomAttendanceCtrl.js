@@ -99,8 +99,6 @@
                     orooms.updateAttendance($scope.currentDate, student).then(function (data) {
                         notify(data.msg);
                         $scope.selected.student = null;
-                    }, function (error) {
-                        notify('error, Before continuing please contact the system admin');
                     });
 
 

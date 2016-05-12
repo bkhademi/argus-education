@@ -28,6 +28,9 @@ use App\Counters;
 use Excel;
 use App\Referralconsequences;
 use App\Referralactions;
+use App\Assignments;
+use App\Helpers\LunchDetentionHelper;
+use App\Helpers\ReteachHelper;
 
 use File;
 
@@ -64,23 +67,61 @@ class MorningJobs extends Command
 	 */
 	public function handle()
 	{
+		//$this->updateDunbarReteachSchedules(2,'reteach_dunbar_19_apr_2016.xlsx');
+		//$this->updateDunbarReteachSchedules(2,'reteachdunbar5-2-2016.json');
 
 
-		//$this->fixRosters();
-		//$this->updateDunbarReteachSchedules('reteachdunbar4-19-2016.json');
-		//$this->createDunbarReteachAttendance('reteachdunbar4-19-2016.json');
+		//$this->createDunbarReteachAttendance('reteachdunbar5-2-2016.json');
 
 
-		//$this->createASPAttendancesForAWeek([2, 3, 5], new Carbon('Apr 25 2016')); // for the 3 schools, ervin(3) , dunbar(2), alderson(5)
-
-		//$this->fixRosters();
 		//$this->clearAdrianSchool();
+
 		//$this->moveFromFollowupReteach();
-		//$this->miscellaneous(2);
-		//$this->miscellaneous2();
+
+		//$this->checkMissingStudentsFromOroomRosters(1);
+
 		//$this->moveLunchDetention('Apr 04 2016', 'Apr 05 2016');
-		//dd(Referralactions::all()->toArray());
+
 		//$this->moveAndMarkOSSOverlaps();
+
+		//$this->deleteScheduleInfo(1);
+
+		//$this->updateSchoolSchedule(2,'StudentScheduleListing_estacado_4-27.xlsx');
+
+		//$this->restoreReferralsFromActivityLog();
+
+		//ReteachHelper::markReteachAttendanceDunbar();
+
+
+		$schoolId = 2;
+		$date = new Carbon('May 03 2016');
+		LunchDetentionHelper::markAllPresentForDate($schoolId,$date);
+
+	}
+
+	private function deleteScheduleInfo($schoolId)
+	{
+		$this->deleteAllClassStudentsFromSchool($schoolId);
+		//$this->deleteAllProfessorClassesFromSchool($schoolId);
+	}
+
+	private function deleteAllProfessorClassesFromSchool($schoolId)
+	{
+		$professorclasses = Professorclasses::whereHas('user', function ($q) use ($schoolId) {
+			$q->where('SchoolId', $schoolId);
+		});
+		$professorclasses->delete();
+		print_r("professorclassses = " . $professorclasses->get()->count() . "\n");
+	}
+
+	private function deleteAllClassStudentsFromSchool($schoolId)
+	{
+		$classstudents = Classstudents::whereHas('user', function ($q) use ($schoolId) {
+			$q->where('SchoolId', $schoolId);
+		});
+
+		$classstudents->delete();
+		print_r("classstudents = " . $classstudents->get()->count() . "\n");
 	}
 
 	private function moveFromFollowupReteach()
@@ -97,54 +138,6 @@ class MorningJobs extends Command
 
 	}
 
-	private function createASPAttendancesForAWeek($schoolIds, $date)
-	{
-		foreach ($schoolIds as $schoolId) {
-			$days = 0;
-			$aspStudents = Studentgroups
-				::whereHas('student.user', function ($q) use ($schoolId) {
-					$q->where('SchoolId', $schoolId);
-				})
-				->get();
-			$schoolName = Schools::find($schoolId)->Name;
-
-			if ($schoolId == 3) // ervin 2 rotations
-				$rotations = [1, 2];
-			else  // other schools 1 rotation
-				$rotations = [0];
-
-			do {
-				$this->createAttendanceForADate($date, $aspStudents, $rotations, $schoolName);
-				$date->addWeekDay();
-				$days++;
-			} while ($days < 5);
-		}
-	}
-
-	private function createAttendanceForADate($date, $students, $rotations, $schoolName)
-	{
-		$created = 0;
-		$fetched = 0;
-		foreach ($rotations as $rotation) {
-			foreach ($students as $student) {
-				$att = Aspattendance::firstOrCreate([
-					'Date' => $date,
-					'StudentId' => $student->StudentId,
-					'Attendance' => 1,
-					'RotationNumber' => $rotation
-				]);
-				if ($att->wasRecentlyCreated)
-					$created++;
-				else
-					$fetched++;
-
-			}
-		}
-		echo "           $schoolName     $date         \n";
-		echo "created =  $created \n";
-		echo "fetched = $fetched \n";
-		echo "\n";
-	}
 
 //because ISS
 	private function fixRosters()
@@ -207,101 +200,6 @@ class MorningJobs extends Command
 		dd($orm); */
 	}
 
-	private function updateDunbarReteachSchedules($fileName)
-	{
-		$listJson = File::get(storage_path() . '/2016_spring_json/' . $fileName);
-		$list = json_decode($listJson);
-
-		for ($i = 1; $i < count($list); $i++) {
-			$obj = $list[$i];
-			$schoolId = 2;
-			$nine_per_id = 9;
-
-			$student = Students::where('StudentId', $obj->FIELD2)->first();
-			if (!$student) {
-				print_r($obj);
-				continue;
-			}
-
-			$roomId = Rooms::where('Name', $obj->FIELD3)->firstOrFail()->Id;
-
-			$professorClassId = Professorclasses::where('RoomId', $roomId)->first()->Id;
-
-			//get the student's 10 period
-			$class = Classstudents::
-			where('StudentId', $student->Id)
-				->whereHas('professor_class', function ($q) {
-					$q->where('PeriodId', 41);
-				})
-				->first();
-
-
-			// if doesnt have a reteach period add it
-			if (!$class) {
-				$class = DB::table('classstudents')->insertGetId([
-					'StudentId' => $student->Id,
-					'ProfessorClassId' => $professorClassId
-				]);
-
-			} else {// if it has ,update it
-
-				$class->ProfessorClassId = $professorClassId;
-				$class->save();
-			}
-
-		}
-	}
-
-	private function createDunbarReteachAttendance($fileName)
-	{
-		$listJson = File::get(storage_path() . '/2016_spring_json/' . $fileName);
-		$list = json_decode($listJson);
-		$date = Carbon::today();
-		for ($j = 0; $j < 4; $j++) {
-			for ($i = 1; $i < count($list); $i++) {
-				$obj = $list[$i];
-				$schoolId = 2;
-				$nine_per_id = 9;
-
-				$student = Students::where('StudentId', $obj->FIELD2)->first();
-				if (!$student) {
-					print_r($obj);
-					continue;
-				}
-
-//				$action = Useractions::firstOrCreate([
-//					'ActionDate' => $date,
-//					'ActionByUserId' => 'zzTUEkRuPOdHL8sI0CqJl1FbSQNd3QQn9edmboOVjskLxA8Rfo4oiD41go2USKv12mKmGlD1o0jtIFV6ZGPl56bAP5aAOoKixPVLTJtWUa1nTQLlfg8nkO8wUQHGYjNU',
-//					'ActionToUserId' => $student->Id,
-//					'ActionType' => 63,
-//					'Comment' => 'Student Referred for Reteach  '
-//				]);
-
-				$referral = Referrals::firstOrCreate([
-					'UserId' => 'zzTUEkRuPOdHL8sI0CqJl1FbSQNd3QQn9edmboOVjskLxA8Rfo4oiD41go2USKv12mKmGlD1o0jtIFV6ZGPl56bAP5aAOoKixPVLTJtWUa1nTQLlfg8nkO8wUQHGYjNU',
-					'StudentId' => $student->Id,
-					'TeacherId' => 0,
-					'RefferalStatus' => 0,
-					'ReferralTypeId' => 18,
-					'Date' => $date,
-				]);
-			}
-			$date->addWeekDay();
-		}
-	}
-
-	private function createDunbarReteachAttendance2($fileName)
-	{
-		Excel::load(storage_path() . '/2016_spring_csv/' . $fileName, function ($sheet) {
-			$sheet->each(function ($row) {
-
-				$student = Students::whereStudentid($row->studentid)->first();
-				dd($student->toArray());
-				print_r(intval($row->studentid) . "\n");
-
-			});
-		});
-	}
 
 	private function clearAdrianSchool()
 	{
@@ -311,7 +209,10 @@ class MorningJobs extends Command
 
 		foreach ($students as $stu) {
 			// reset counters
-			$stu->counters->update(['ORoomsToBeServed' => 0, 'ORMReferrals' => 0, 'LunchDetentionsToBeServed' => 0, 'LDReferrals' => 0, 'ISSDays' => 0, 'ISSReferrals' => 0, 'OSSReferral' => 0, 'OSSPMP' => 0]);
+			$stu->counters->update(['ORoomsToBeServed' => 0, 'ORMReferrals' => 0,
+				'LunchDetentionsToBeServed' => 0, 'LDReferrals' => 0, 'ISSDays' => 0,
+				'ISSReferrals' => 0, 'OSSReferral' => 0, 'OSSPMP' => 0, 'debt' => 0
+			]);
 			//remove referrals
 			if ($stu->referred)
 				foreach ($stu->referred as $ref)
@@ -328,93 +229,161 @@ class MorningJobs extends Command
 
 	}
 
-	private function commitAECAttendanceToProfiles($schoolId)
+	private function deleteReferralsFromDateToDate($types, $schoolId, $fromDate, $toDate)
 	{
-
-	}
-
-	private function miscellaneous($schoolId)
-	{
-		$students = Students
-			::with('user')
-			->whereHas('counters', function ($q) {
-				$q->where('ORoomsToBeServed', '>', 0);
-			})
-			->whereDoesntHave('referred', function ($q) {
-				$q->whereIn('ReferralTypeId', [1, 2, 3, 16, 19])
-					->where('Date', Carbon::today());
-			})
-			->ofSchoolId($schoolId)
-			->get();
-		$students->transform(function ($item) {
-			return ['Name' => $item->user->Name, 'StudentId' => $item->StudentId];
-		});
-		dd($students->toJson());
-	}
-
-	private function moveLunchDetention($fromDate, $toDate)
-	{
-		$fromDate = new Carbon($fromDate);
-		$toDate = new Carbon($toDate);
-		Referrals
-			::ofSchoolId(2)
-			->ofTypes(Referrals::$lunchReferralType)
-			->ofStatus(Referrals::$attendanceNotTakenStatus)
-			->where('Date', $fromDate)
-			->update(['Date' => $toDate]);
-
-
-	}
-
-	private function moveAndMarkOSSOverlaps()
-	{
-
-	}
-
-	private function miscellaneous2()
-	{
-		$aspStudents = Studentgroups
-			::whereHas('student.user', function ($q) {
-				$q->where('SchoolId', 3);
-			})
-			->get();
-		$date = new Carbon('Apr 11 2016');
-		$created = 0;
-		$fetched = 0;
-		foreach ($aspStudents as $student) {
-			$att = Aspattendance::firstOrCreate([
-				'Date' => $date,
-				'StudentId' => $student->StudentId,
-				'Attendance' => 1,
-				'RotationNumber' => 2
-			]);
-			if ($att->wasRecentlyCreated) {
-				$created++;
-			} else {
-				$fetched++;
-
-			}
-		}
-	}
-
-	private function deleteReferralsFromDateToDate($types, $schoolId, $fromDate, $toDate){
 		$reteach = Referrals
 			::ofSchoolId($schoolId)
 			->ofTypes([$types])
-			->whereBetween('Date',[$fromDate, $toDate]);
+			->whereBetween('Date', [$fromDate, $toDate]);
 		$reteach->delete();
 		$reteach->get();
 		dd($reteach->count());
 	}
 
-	private function moveReteachFromFollowupToRoster(){
-		$reteach = Referrals::ofSchoolId(1)->ofTypes(Referrals::$reteachReferralType)->where('Date',Carbon::yesterday());
-		$reteach->update(['RefferalStatus'=>0]);
-		$reteachStudentIds = $reteach->get()->unique('StudentId')->pluck('StudentId');
+	private function updateSchoolSchedule($schoolId, $fileName)
+	{
+		$file = storage_path() . '/2016_spring_excel/' . $fileName;
+		\App\Helpers\ScheduleHelper::store($file, $schoolId);
+	}
 
-		//dd($reteachStudentIds->toArray());
+	private function copyOldDatabaseAECToNewDatabase()
+	{
+		//DB::beginTransaction();
+		$oldRefs = Referrals
+			::on('oldargus')
+			->ofSchoolId(2)
+			->where('ReferralTypeId', 12)
+			->get();
 
-		$userActions = Useractions::where('ActionDate', Carbon::yesterday())->where('ActionType', 72)->whereIn('ActionToUserId',$reteachStudentIds);
-		dd($userActions->get()->toArray());
+		$refs2 = Referrals
+			::where('ReferralTypeId', 12)
+			->ofSchoolId(2);
+
+
+		$i = 0;
+		foreach ($oldRefs as $ref) {
+			$refId = $ref->Id;
+			$referral = Referrals::find($refId);
+			if ($referral)
+				print_r('referralFound');
+
+			//print_r($ref->toArray());
+			$elem = collect($ref->toArray());
+			$elem = $elem->except(['Overlap', 'OverlapId', 'OverlapActionId'])->toArray();
+			$newDBReferral = Referrals::create($elem);
+
+			//print_r('New Instance '."\n");
+			//print_r($ref->toArray());
+
+			//dd('inserted');
+			//print_r($ref->Date."     |    ".$ref->ReferralTypeId."\n");
+			$i++;
+		}
+
+		print_r($oldRefs->count() . "\n");
+		print_r($refs2->get()->count() . "\n");
+	}
+
+	private function addAssignmentToDatabase()
+	{
+		$assignments = Assignments
+			::on('oldargus')
+			->whereHas('teacher', function ($q) {
+				$q->where('SchoolId', 2);
+			})
+			->get();
+
+		foreach ($assignments as $assignment) {
+			print_r($assignment->toArray());
+			print_r("\n");
+			$teacherId = $assignment->TeacherId;
+			$professorClassId = Professorclasses::where('UserId', $teacherId)->first()->Id;
+
+			$assign = Assignments::create(['Id' => $assignment->Id, 'Name' => $assignment->Name,
+				'ProfessorClassId' => $professorClassId, 'TeacherId' => $teacherId]);
+		}
+
+	}
+
+	private function restoreReferralsFromActivityLog()
+	{
+		//DB::beginTransaction();
+		$date = new Carbon('Mar 31 2016');
+		$endDate = new Carbon('Apr 26 2016');
+		$userId = 'zzTUEkRuPOdHL8sI0CqJl1FbSQNd3QQn9edmboOVjskLxA8Rfo4oiD41go2USKv12mKmGlD1o0jtIFV6ZGPl56bAP5aAOoKixPVLTJtWUa1nTQLlfg8nkO8wUQHGYjTT';
+
+		while ($date->ne($endDate)) {
+			//$this->restoreReferralsFromDateFromActivityLog($date, $userId);
+			$this->restoreAttendanceFromDateFromActivityLog($date);
+			print "\tDate" . $date->toDateString() . "\n";
+			$date->addWeekDay();
+
+		}
+
+	}
+
+	private function restoreReferralsFromDateFromActivityLog($date, $userId)
+	{
+		$actions = Useractions
+			::where('ActionDate', $date)
+			->where('ActionType', 48)
+			->ofSchoolId(2);
+		$actions = $actions->get()->load('student');
+		foreach ($actions as $item) {
+			$assignment = $this->getAssignmentFromActionOrCreate($item);
+
+			$referralContent = [
+				'UserId' => $userId,
+				'TeacherId' => $item->ActionByUserId,
+				'StudentId' => $item->ActionToUserId,
+				'AssignmentId' => $assignment->Id,
+				'RefferalStatus' => 0,
+				'ReferralTypeId' => 12,
+				'Date' => $date,
+			];
+			Referrals::firstOrCreate($referralContent);
+		}
+	}
+
+	private function restoreAttendanceFromDateFromActivityLog($date)
+	{
+		$list = Students
+			::with(['referred' => function ($q) use ($date) {
+				$q->where('Date', $date)
+					->where('ReferralTypeId', 12);
+			}])
+			->ofSchoolId(2)
+			->ofTypesAndDate([12],$date)
+			->get();
+		foreach($list as $student){
+			$action = Useractions::where('ActionToUserId',$student->Id)
+				->whereBetween('ActionDate',[$date,Carbon::today()])
+				->whereIn('ActionType',[49,50,51,52,53,54,55,56,57,58])
+				->orderBy('created_at','ASC')
+				->first();
+			$student->referred[0]->update(['ActivityTypeId'=>$action->ActionType,'RefferalStatus'=>2]);
+
+		}
+
+		;
+	}
+
+	private function getAssignmentFromActionOrCreate($action)
+	{
+		$comment = $action->Comment;
+		$assignment = stripos($comment, 'assignment') + 11;
+		$comma = strrpos($comment, ',');
+		$assignmentLength = $comma - $assignment;
+		$assignmentName = substr($comment, $assignment, $assignmentLength);
+
+		$professorClassId = Professorclasses::where('UserId', $action->ActionByUserId)->first()->Id;
+
+		$assignment = Assignments::firstOrCreate(['Name' => $assignmentName, 'ProfessorClassId' => $professorClassId, 'TeacherId' => $action->ActionByUserId]);
+		if ($assignment->wasRecentlyCreated)
+			print_r('Created ' . $assignmentName . "\n");
+
+		return $assignment;
+
+
 	}
 }

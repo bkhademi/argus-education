@@ -1,0 +1,117 @@
+<section class="wrapper wrapper-content animated fadeInRight">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <form name='attendance' class="group-form text-center">
+                        <label>Select Start of Week</label>
+                        <div class="input-group date ">
+                            <input type="datetime" class="form-control" date-time ng-model="currentDate"
+                                   name="date"
+                                   view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+                            <span class="input-group-addon btn"><i class="fa fa-calendar"></i></span>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-sm-12 ">
+                    <div class="group-form text-center">
+                        <label>Click On The School To Create Attendance For</label>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <button class=" btn btn-primary" data-ng-click="createASPDunbar()">
+                        <i class="fa fa-plus"></i>
+                        Dunbar
+                    </button>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <button class=" btn btn-primary " data-ng-click="createASPAlderson()">
+                        <i class="fa fa-plus"></i>
+                        Alderson
+                    </button>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <button class=" btn btn-primary " data-ng-click="createASPErvin()">
+                        <i class="fa fa-plus"></i>
+                        Ervin
+                    </button>
+                </div>
+                <div class="col-sm-3 col-xs-6">
+                    <button class=" btn btn-primary " data-ng-click="createASPAll()">
+                        <i class="fa fa-plus"></i>
+                        ALL
+                    </button>
+                </div>
+            </div>
+
+            <br/>
+            <div class="row" data-ng-if="loading">
+                <div class="col-sm-12">
+                    <span data-ng-if="!refTable.$resolved">
+									<div class="sk-spinner sk-spinner-wave">
+                                        <div class="sk-rect1"></div>
+                                        <div class="sk-rect2"></div>
+                                        <div class="sk-rect3"></div>
+                                        <div class="sk-rect4"></div>
+                                        <div class="sk-rect5"></div>
+                                    </div>
+								</span>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class=" btn btn-primary pull-right"
+                            tooltip="Clear Table"
+                            data-ng-click="clearTable()">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                    <table class="table table-bordered table-responsive">
+                        <thead>
+                        <tr>
+
+                            <th>School</th>
+                            <th>Date</th>
+                            <th>Created</th>
+                            <th>Fetched</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="item in creationResults.results track by $index">
+                            <td> {{item.school}}</td>
+                            <td>{{item.date}}</td>
+                            <td>{{item.created}}</td>
+                            <td>{{item.fetched}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+
+    #refTable1 tr td {
+        vertical-align: middle;
+    }
+
+    h1 {
+        font-size: 20pt;
+    }
+
+    .delete-btn {
+        opacity: 0.4
+    }
+
+    .delete-btn:hover {
+        opacity: 1.0;
+    }
+
+
+</style>

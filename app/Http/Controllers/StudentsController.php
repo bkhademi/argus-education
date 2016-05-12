@@ -125,7 +125,9 @@ class StudentsController extends Controller {
 		$student = Students
 			::with(['user.activitiesAffected' => function($q) {
 					$q->with('user', 'activity')
-					->orderBy('ActionDate','DESC');
+					->orderBy('ActionDate','DESC')
+
+					;
 					
 				}])
 			->with('counters')

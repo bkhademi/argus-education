@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Helpers\ORoomHelper;
+use Carbon\Carbon;
 
 class ReferralsAdminController extends Controller {
 
@@ -13,8 +15,14 @@ class ReferralsAdminController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index(Request $request) {
 		//
+		if($request->CheckOroomMissing){
+			$schoolId = $request->SchoolId;
+			$date = new Carbon($request->Date);
+			$results = ORoomHelper::checkMissingStudentsFromOroomRosters($schoolId,$date);
+			return $results;
+		}
 	}
 
 	/**

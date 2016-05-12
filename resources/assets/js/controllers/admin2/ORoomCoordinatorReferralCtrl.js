@@ -81,6 +81,7 @@
 
                         orooms.save({ormlist: true}, payload, function () {
                             notify('success','success');
+                            orooms.count++;
                         }, dev.openError);
 
                         $scope.selected.student = null;

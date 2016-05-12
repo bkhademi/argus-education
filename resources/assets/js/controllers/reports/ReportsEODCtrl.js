@@ -3,8 +3,8 @@
 (function (app) {
 	app.controller('ReportsEODCtrl',
 		['$scope', 'notify', '$modal', '$http', 'FormatTimeService', '$rootScope', 'OroomService',
-			'LunchService', 'ISSService', 'OSSService', 'ReteachListService', 'AECListService', 'ReportsService','PrintHtmlService',
-			function ($scope, notify, $modal, $http, time, $rootScope, orooms, lunchs, isss, osss, reteach, aec, reports,print) {
+			'LunchService', 'ISSService', 'OSSService', 'ReteachListService', 'AECListService', 'ReportsService', 'PrintHtmlService',
+			function ($scope, notify, $modal, $http, time, $rootScope, orooms, lunchs, isss, osss, reteach, aec, reports, print) {
 				$scope.reportTypes = [
 					{name: 'EOD', value: 1},
 					{name: 'ORoom Conversion', value: 2}
@@ -60,7 +60,7 @@
 						clears: 0,
 						absents: 0,
 						overlaps: 0,
-						pendingFollowups:0
+						pendingFollowups: 0
 					};
 				}
 
@@ -164,7 +164,8 @@
 									default:
 										console.log('not of ORM type');
 
-								};
+								}
+								;
 							});
 							applyColorsToData($scope.oroomPieData);
 							break;
@@ -202,24 +203,24 @@
 						//	console.log(item);
 						switch ($scope.eod.selected.value) {
 							case 1:
-								checkAEC(item.referred[0].ActivityTypeId,counters);
+								checkAEC(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 2:
-								checkOroom(item.referred[0].ActivityTypeId,counters);
-								if ((item.overlap.hasiss && !item.overlap.isscleared)|| item.overlap.hasoss)
+								checkOroom(item.referred[0].ActivityTypeId, counters);
+								if ((item.overlap.hasiss && !item.overlap.isscleared) || item.overlap.hasoss)
 									counters.overlaps++;
 								break;
 							case 3:
-								checkReteach(item.referred[0].ActivityTypeId,counters);
+								checkReteach(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 4:
-								checkISS(item.referred[0].ActivityTypeId,counters);
+								checkISS(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 5:
-								checkOSS(item.referred[0].ActivityTypeId,counters);
+								checkOSS(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 6:
-								checkLunchD(item.referred[0].ActivityTypeId,counters);
+								checkLunchD(item.referred[0].ActivityTypeId, counters);
 								break;
 						}
 					});
@@ -240,16 +241,16 @@
 				function processResponseDateRange(response) {
 					$scope.eodDateCounters = [];
 					var array = response.data;
-					angular.forEach(array , function (singleDateData) {
+					angular.forEach(array, function (singleDateData) {
 						var date = singleDateData.Date;
-						var counters = processResponseSingle({data:singleDateData.students});
-						$scope.eodDateCounters.push(angular.extend({Date:date},counters));
+						var counters = processResponseSingle({data: singleDateData.students});
+						$scope.eodDateCounters.push(angular.extend({Date: date}, counters));
 					});
 
 					totalCounters = new Counters();
-					angular.forEach($scope.eodDateCounters, function(singleCounter){
+					angular.forEach($scope.eodDateCounters, function (singleCounter) {
 
-						for(key in singleCounter){
+						for (key in singleCounter) {
 							totalCounters[key] += singleCounter[key];
 						}
 
@@ -261,8 +262,18 @@
 					$scope.flotPieDataRange[1].data = cnt.noShows + cnt.sentOuts + cnt.walkedOuts;
 					$scope.flotPieDataRange[2].data = cnt.schoolAbsent + cnt.leftSchool + cnt.other
 						+ cnt.reschedules + cnt.clears + cnt.absents;
-					$scope.flotPieDataRange[3].data = cnt.pendingFollowups;
+					if ($scope.eod.selected.value == 1 || $scope.eod.selected.value == 3) {
 
+						if(!$scope.flotPieDataRange)
+						$scope.flotPieDataRangepush({
+							label: 'Pending Followup',
+							data: cnt.pendingFollowups,
+							color: '#FFB757'
+						});
+						else
+							$scope.flotPieDataRange[3].data = cnt.pendingFollowups;
+					}else
+						$scope.flotPieDataRange.splice(3,1);
 
 				};
 
@@ -479,10 +490,11 @@
 						label: "School Absent, Cleared,  Overlap, Other",
 						data: 0,
 						color: "#C2C3C5"
-					},{
+					}, {
 						label: 'Pending Followup',
 						data: 0,
-						color: '#FFB757'}
+						color: '#FFB757'
+					}
 				];
 
 				$scope.flotPieDataRange = [
@@ -498,10 +510,11 @@
 						label: "School Absent, Cleared,  Overlap, Other",
 						data: 0,
 						color: "#C2C3C5"
-					},{
+					}, {
 						label: 'Pending Followup',
 						data: 0,
-						color: '#FFB757'}
+						color: '#FFB757'
+					}
 				];
 
 				$scope.flotPieDataConsequences = [];
@@ -553,8 +566,8 @@
 					},
 				];
 
-				$scope.printDiv = function(){
-					print.printDiv("totals",'list');
+				$scope.printDiv = function () {
+					print.printDiv("totals", 'list');
 				};
 
 			}]);

@@ -316,9 +316,10 @@ class ISSController extends Controller
 
         $today = $this->getDate($request);
 
-        if ($today->eq(Carbon::today())) {
+        /*if ($today->eq(Carbon::today())) {
             $tomorrow = Carbon::today()->addWeekDay();
-        } else if ($today->lt(Carbon::today())) { // can only be yesterday
+        } else */
+        if ($today->lt(Carbon::today())) { // can only be yesterday
             $tomorrow = Carbon::today();
         } else {
             $tomorrow = $today->copy()->addWeekDay();
@@ -506,7 +507,7 @@ class ISSController extends Controller
         $ormReferral = Referrals
             ::where('Date', $fromDate)
             ->where('RefferalStatus', 0)// pending
-            ->whereIn('ReferralTypeId', [1, 2, 3, 16, 19])
+            ->whereIn('ReferralTypeId', Referrals::$oroomReferralTypes)
             ->where('StudentId', $studentId)
             ->join('referraltypes', 'referraltypes.id', '=', 'ReferralTypeId')
             ->orderBy('Priority', 'ASC')
@@ -516,7 +517,7 @@ class ISSController extends Controller
         if ($ormReferral) {
             $ormReferralCopy = $ormReferral->replicate();
             $ormReferralCopy->save();
-            $ormReferralCopy->update(['created_at' => $ormReferral->created_at, 'Date' => $toDate, 'RefferalStatus' => 0]);
+            $ormReferralCopy->update(['created_at' => $ormReferral->created_at, /*'Date' => $toDate,*/ 'RefferalStatus' => 0]);
             $ormReferral->update(['RefferalStatus' => 1, 'ActivityTypeId' => $activityTypeId]);
         }
         return $ormReferral;

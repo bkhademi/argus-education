@@ -81,7 +81,11 @@ class User extends Model implements AuthenticatableContract,
     public function classes(){
         return $this->belongsToMany('App\Classes', 'professorclasses', 'UserId', 'ClassId' );
     }
-    
+
+	public function professorClasses(){
+		return $this->hasMany('App\Professorclasses','UserId');
+	}
+
     // get all assignments from a teacher 
     public function assignments(){
         return $this->hasMany('App\Assignments', 'TeacherId');

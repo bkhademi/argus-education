@@ -97,5 +97,15 @@
 						notify('error');
 					});
 				};
+
+
+				$scope.checkMissingORMStudents = function(){
+					if(!$scope.selected.school){
+						notify('Select a school first');
+						return;
+					}
+					var schoolId = $scope.selected.school.Id;
+					$scope.missingORMStudents = referrals.query({CheckOroomMissing:true,SchoolId:schoolId, Date:$scope.missing.date.$viewValue})
+				}
 			}]);
 }(angular.module('Argus')));

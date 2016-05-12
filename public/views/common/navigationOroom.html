@@ -37,13 +37,38 @@
 
             <li>
                 <a href="#"> <i class="fa fa-users  fa-2x"> </i>
-                    <span class="nav-label">ORoom & Lunch  D.</span>
-                    <span class="fa arrow"></span>
+                    <span class="fa arrow pull-right"></span>
+                    <span class="nav-label">
+                        ORoom<span class="badge badge-black pull-right">{{navigation.oroom.count}}</span>
+                    </span>
+
                 </a>
                 <ul class="nav nav-second-level" ng-class="{in: $state.includes('oroom')}" >
                     <li ui-sref-active="active"><a ui-sref="admin3.CoordinatorReferralSystem">Referral</a></li>
                     <li ui-sref-active="active"><a ui-sref="admin3.oroomActivityLogAdmin">Activity Log</a></li>
-                    <li ui-sref-active="active"><a ui-sref="admin3.attendanceRosters.oroom">Roster</a></li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="admin3.attendanceRosters.oroom">
+                            Roster <span class="badge badge-black pull-right">{{navigation.oroom.count}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#"><i class="fa fa-cutlery fa-2x"></i>
+                    <span class="fa arrow pull-right"></span>
+                    <span class="nav-label">
+                        Lunch D. <span class="badge badge-black pull-right">{{navigation.lunch.count }}</span>
+                    </span>
+
+                </a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.include('lunch')}">
+                    <li ui-sref-active="active"><a ui-sref="admin3.CoordinatorReferralSystem">Referral</a></li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="admin3.attendanceRosters.lunchDetention">
+                            Roster <span class="badge badge-black pull-right">{{navigation.lunch.count}}</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
 

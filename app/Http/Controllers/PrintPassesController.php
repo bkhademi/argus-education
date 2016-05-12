@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 // use Request;
 // use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,14 +18,16 @@ use App\Professorclasses;
 use App\User;
 use App\Assignments;
 
-class PrintPassesController extends Controller {
+class PrintPassesController extends Controller
+{
 
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index() {
+	public function index()
+	{
 		//
 		$userId = Request::header('UserID');
 	}
@@ -34,17 +37,19 @@ class PrintPassesController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create() {
+	public function create()
+	{
 		//
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 
 		// $dataIn = $request->input('data');
 		$schoolId = $this->user->SchoolId;
@@ -66,38 +71,35 @@ class PrintPassesController extends Controller {
 
 		if ($request->param === "AECList") {
 			$referrals = User::
-			with(['referred' => function($query)use($date) {
+			with(['referred' => function ($query) use ($date) {
 				$query
 					->where('Date', $date)
 					->where('ReferralTypeId', 12)
-					->where('RefferalStatus', 0)
-				;
+					->where('RefferalStatus', 0);
 			}], 'student')
-				->whereHas('referred', function($query)use($date) {
+				->whereHas('referred', function ($query) use ($date) {
 					$query
 						->where('Date', $date)
 						->where('ReferralTypeId', 12)
-						->where('RefferalStatus', 0)
-					;
+						->where('RefferalStatus', 0);
 				})
 				->where('SchoolId', $schoolId)
 				->get();
-		} else if ($request->param === 'ReteachLabels') {
-			$referrals = User::
-			with(['referred' => function($query)use($date) {
-				$query
-					->where('Date', $date)
-					->where('ReferralTypeId', 18)
-					->where('RefferalStatus', 0)
-				;
-			}])
-				->with('student', 'student.classes.professor_class.room')
-				->whereHas('referred', function($query)use($date)  {
+		}
+		else if ($request->param === 'ReteachLabels') {
+			$referrals = User
+				:: with(['referred' => function ($query) use ($date) {
 					$query
 						->where('Date', $date)
 						->where('ReferralTypeId', 18)
-						->where('RefferalStatus', 0)
-					;
+						->where('RefferalStatus', 0);
+				}])
+				->with('student', 'student.classes.professor_class.room')
+				->whereHas('referred', function ($query) use ($date) {
+					$query
+						->where('Date', $date)
+						->where('ReferralTypeId', 18)
+						->where('RefferalStatus', 0);
 				})
 				->where('SchoolId', $schoolId)
 				//->orderBy('student.Grade', 'ASC')
@@ -162,15 +164,15 @@ class PrintPassesController extends Controller {
 			$labels = new Pdf('labels.pdf');
 			$labels->send();
 
-			$files.="labels.pdf ";
+			$files .= "labels.pdf ";
 			exec($files);
 
 
 			return $files;
 		} else {
-			$referrals = User::with(['referred' => function($query) {
+			$referrals = User::with(['referred' => function ($query) {
 				$query->where('Date', Carbon::today());
-			}], 'student')->whereHas('referred', function($query) {
+			}], 'student')->whereHas('referred', function ($query) {
 				$query->where('RefferalStatus', 4);
 			})->get();
 		}
@@ -185,7 +187,7 @@ class PrintPassesController extends Controller {
 			$pdf = new Pdf($template);
 			$schedule = Classstudents::with('professor_class.period', 'professor_class.room')
 				->where('StudentId', $obj['id'])
-				->whereHas('professor_class.classs', function($q) {
+				->whereHas('professor_class.classs', function ($q) {
 					$q->where('Term', 'S2');
 				})->get();
 			$schedule1 = '';
@@ -225,7 +227,7 @@ class PrintPassesController extends Controller {
 		$passes = new Pdf('passes.pdf');
 		$passes->send();
 
-		$files.="passes.pdf ";
+		$files .= "passes.pdf ";
 		exec($files);
 
 		$filledFile = new Pdf('PassV3Filled.pdf');
@@ -237,41 +239,45 @@ class PrintPassesController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
+	public function show($id)
+	{
 		//
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function edit($id) {
+	public function edit($id)
+	{
 		//
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function update(Request $request, $id) {
+	public function update(Request $request, $id)
+	{
 		//
 	}
 
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy($id) {
+	public function destroy($id)
+	{
 		//
 	}
 

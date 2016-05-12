@@ -28,7 +28,7 @@ class estacadoSeeder extends Seeder
 		$term = 'S2'; // current term
 		$defaultDepartment = Departments::find(1); // default department
 		
-		$scheduleJson = File::get(storage_path().'/2016_spring_json/EHS.json');
+		$scheduleJson = File::get(storage_path().'/2016_spring_json/EHS_4_19.json');
 		$schedule = json_decode($scheduleJson);
 		
 		// get the 2 roles 

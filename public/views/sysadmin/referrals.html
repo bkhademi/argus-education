@@ -268,6 +268,52 @@
 					</table>
 				</div>
 			</div>
+			<hr />
+			<div class="row">
+				<div class="col-sm-3 col-sm-offset-3">
+					<form name='missing' class="group-form text-center">
+						<label>Select Start of Week</label>
+						<div class="input-group date ">
+							<input type="datetime" class="form-control" date-time ng-model="currentDate"
+								   name="date"
+								   view="date" min-view="date" auto-close="true" format="MMM DD YYYY">
+							<span class="input-group-addon btn"><i class="fa fa-calendar"></i></span>
+						</div>
+					</form>
+				</div>
+				<div class="col-sm-3  text-center">
+					<button class="btn btn-primary" data-ng-click="checkMissingORMStudents()">
+						<i class="fa fa-check"></i>
+						Check Missing ORoom Students
+					</button>
+				</div>
+				<div class="col-sm-3"></div>
+				<div class="col-sm-12">
+					<table class="table table-bordered footable " data-page-size="1000">
+						<thead>
+						<tr>
+						<th>First</th>
+						<th>Last</th>
+						<th>ID</th>
+						<th>YesterdayORM</th>
+						<th>YesterdayISS</th>
+						<th>TodayISS</th>
+						</tr>
+						</thead>
+						<tbody>
+							<tr data-ng-repeat="item in missingORMStudents">
+								<td>{{item.user.FirstName}}</td>
+								<td>{{item.user.LastName}}</td>
+								<td>{{item.StudentId}}</td>
+								<td>{{item.yesterdayORM.ActivityTypeId}}</td>
+								<td>{{item.yesterdayISS.ActivityTypeId}}</td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+			</div>
 		</div>
 	</div>
 </section>

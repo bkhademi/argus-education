@@ -22,7 +22,7 @@ class Students extends Model
 	//  get all the classsttudents for this user (many to many throurgh
 	public function professorClasses()
 	{
-		return $this->hasManyThrough('App\ClassStudents', 'App\ProfessorClasses', 'Id', 'ProfessorClassId');
+		return $this->hasManyThrough('App\ProfessorClasses','App\ClassStudents', 'StudentId', 'Id');
 	}
 
 	public function user()

@@ -40,7 +40,7 @@
                     <div><label> <input icheck type="checkbox" ng-model="item.remove">
                     </label></div>
                 </td>
-                <td>{{item.Date.split(' ')[0] | date:'longDate'}}</td>
+                <td>{{item.created_at.split(' ')[0] | date:'longDate'}}</td>
                 <td>{{item.referral_type.Name}}</td>
                 <td>{{item.teacher.FirstName || item.user.FirstName}} , {{item.teacher.LastName || item.user.LastName}}</td>
 

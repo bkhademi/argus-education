@@ -71,6 +71,7 @@
                     <th>Referral Type</th>
                     <th>ISS Days</th>
                     <th>O-Room Days</th>
+                    <th data-ng-show="showToUser()"> referred</th>
                     <th> Overlap</th>
                     <th> Attendance</th>
                     <th> Progression</th>
@@ -92,6 +93,7 @@
                     <td>{{item.referred[0].referral_type.Name}}</td>
                     <td>{{item.counters.ISSDays}}</td>
                     <td>{{item.counters.ORoomsToBeServed}}</td>
+                    <td data-ng-show="showToUser()">{{item.referred.length}}</td>
                     <td>{{item.overlap.msg}}</td>
                     <td>{{item.referred[0].activity.Name}}</td>
                     <td>{{item.referred[0].consequence.referral_type.Name}}</td>

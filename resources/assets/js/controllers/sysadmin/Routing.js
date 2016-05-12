@@ -48,7 +48,7 @@
 								{
 									name: 'ui.slimscroll',
 									files: ['js/plugins/slimscroll/angular.slimscroll.js']
-								}
+								},
 
 							]);
 						}
@@ -113,6 +113,23 @@
 					templateUrl: 'views/sysadmin/users.html',
 					data: {pageTitle: 'Referral'},
 					controller: 'UsersCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}
+							]);
+						}
+					}
+
+				})
+				.state('sysadmin.aspAttendances', {
+					url: "/ASP-Attendances",
+					templateUrl: 'views/sysadmin/aspAttendance.html',
+					data: {pageTitle: 'ASP ATT'},
+					controller: 'ASPAttendancesCtrl',
 					resolve: {
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([

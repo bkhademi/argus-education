@@ -11,9 +11,15 @@
     app.controller('oRoomActivityLogAdminCtrl',
         ['$scope', 'notify', 'StudentsService', 'teachers', '$modal', 'PeriodsService', '$interval', 'OroomService', 'ActivitiesService', 'ReferralsService', 'ISSService', '$rootScope', 'DevService', 'CountersService','$filter',
             function ($scope, notify, students, teachers, $modal, periods, $interval, orooms, activities, referrals, isss, $rootScope, dev, counters, $filter) {
+                $scope.currentDate = new Date();
                 function footable_redraw() {
                     $('.footable').trigger('footable_redraw');
                 }
+
+                $scope.$watch('form.date.$viewValue',function(n){
+                    $scope.currentDate =  n? n:$scope.currentDate;
+                    interval();
+                });
 
                 $rootScope.$on('studentsUpdated', function (stu) {
                     $scope.schoolStudents = students.students;
@@ -25,12 +31,12 @@
 
                 $scope.mouseOnTable = false;
                 function interval() {
-                    var now = new Date();
-                    $scope.currentTime = formatAMPM(now);
+                    var now = new Date($scope.currentDate);
+                    $scope.currentTime = formatAMPM(new Date());
                     $scope.currentDate = formatDate(now);
-                    $scope.currentPeriod = getPeriod(now);
+                    $scope.currentPeriod = getPeriod(new Date());
                     if (!$scope.mouseOnTable) {
-                        orooms.get({}, function (data) {
+                        orooms.get({Date:$scope.currentDate}, function (data) {
                             angular.forEach(data.reftable, function (item) {
                                 item.ReferralIn = item.ReferralIn === 1 ? true : false;
 
@@ -75,6 +81,7 @@
                 });
 
                 $scope.schoolStudents = students.students;
+
                 $scope.teachers = teachers.query();
 
 
@@ -94,7 +101,7 @@
                         "StudentId": $scope.selected.student.user.id,
                         "PeriodId": $scope.currentPeriod ? $scope.currentPeriod.Id : 14,
                         "ActivityId": $scope.selected.student.activity.Id,
-                        "Date": date
+                        "Date": $scope.currentDate
                     };
 
                     //post data to oroomactivity
@@ -386,7 +393,8 @@
                     var dataToSent = {
                         SentOutById: item.teacher ? item.teacher.id : 0,
                         ActivityId: item.activity ? item.activity.Id : 0,
-                        ReferralIn: item.ReferralIn ? 1 : 0
+                        ReferralIn: item.ReferralIn ? 1 : 0,
+                        ReferredInAt:item.ReferralIn ? true:null
                     };
                     orooms.update({id: item.Id, reftable: true}, dataToSent);
                 }

@@ -40,9 +40,11 @@
 					element.click();
 					document.body.removeChild(element);
 				};
-				
-				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
-				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+
+				$scope.oroom = orooms;
+				$scope.lunch = lunchs;
+				lunchs.getCount();
+				orooms.getCount();
 				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
 				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
 			}]);

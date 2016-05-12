@@ -110,6 +110,11 @@ class ORoomController extends Controller
             $OroomList = $refsWithNoOverlaps->count();
             $reftable = $reftable->count();
         }
+        if($request->has('roster'))
+            foreach($refsWithNoOverlaps as $student){
+                if($student->toArray()['referred'][0]['RefferalStatus'] ==1)
+                    $OroomListCount--;
+            }
 
         return compact('OroomList', 'reftable', 'OroomListCount', 'reftableListCount');
     }
@@ -148,6 +153,7 @@ class ORoomController extends Controller
         // and the activity type
 
         if ($request->has('reftable')) {  // ADD STUDENT TO OROOM ACTIVITY TABLE
+
 
 
             $record = Oroomactivity::create([
@@ -258,13 +264,20 @@ class ORoomController extends Controller
         $now = Carbon::now();
 
         if ($request->has('reftable')) {/// OROOM ACTIVITY
-            $updated = Oroomactivity::findOrFail($id)->update($request->except('reftable'));
+            $referredInTime = $request->has('ReferredInAt')?Carbon::now():null;
+            $content = array_merge($request->except('reftable','ReferredInAt'),['ReferredInAt'=>$referredInTime]);
+            $updated = Oroomactivity::findOrFail($id)->update($content);
+            return Oroomactivity::findOrFail($id);
         } else if ($request->has('ormlist')) {
             //work some logic with the counters
         } else if ($request->has('attendance')) {
 
-            $activity = Activities::find($request->ActionType);
             $referral = Referrals::find($id);
+            if($referral->RefferalStatus == 1){
+                $referral->load('activity','consequence');
+                return response(['msg'=>'Attendance was already taken, may be by another user','referral'=>$referral],409);
+            }
+
             $counters = Counters::find($referral->StudentId);
 
             $useraction = Useractions::create([
@@ -505,10 +518,10 @@ class ORoomController extends Controller
     {
         //
 
-        return $this->notImplemented();
 
-        if ($request->has('reftamble')) {
-            Oroomactivity::destroy($id);
+
+        if ($request->has('reftable')) {
+            return Oroomactivity::destroy($id);
         } else if ($request->has('ormlist')) {
             //work some logic with the counters
             $counts = json_decode($request->counters);

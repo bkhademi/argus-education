@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Oroomactivity extends Model
 {
      //
-	public $timestamps = false;
 	protected $guarded = [];
 	public $primaryKey = 'Id';
 	public $table = 'oroomactivity';

@@ -234,6 +234,10 @@
 					id: 'Reports',
 					link: 'admin1.reports.eod',
 					icon: 'area-chart fa-2x'
+				},{
+					id: 'Schedule',
+					link: 'admin1.schedule',
+					icon: 'area-chart fa-2x'
 				}
 			];
 
@@ -253,6 +257,36 @@
 		}]);
 }(angular.module('Argus')));
 
+(function (app) {
+	"use strict";
+	app.
+		controller("ScheduleController",
+			["$scope", '$modal', 'notify', '$http',
+				function ($scope, assignmentsService, teachers, referrals, students, $modal, notify, $http, reteach, ProfessorClassesService) {
+					$scope.currentDate = new Date(); // date on the datepicker
+
+					$scope.dropzoneConfig = {
+						maxFileSize:1,
+
+						options: {// passed into the Dropzone constructor
+							url: api+'schedule',
+							paramName:"file",
+							acceptedFiles: ".xlsx",
+							uploadMultiple: false,
+							headers: { 'Authorization':'Bearer '+ localStorage.getItem('satellizer_token') }
+
+						},
+						eventHandlers: {
+							success: function (file, response) {
+							},
+						},
+
+					}; // end dropzoneConfig
+
+
+				}])
+
+}(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
@@ -533,7 +567,10 @@
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}
+								},{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								},
 							]);
 						}
 					}
@@ -845,6 +882,40 @@
 					controller: 'ReportsAtRiskCtrl'
 				})
 
+				//update schedules
+				.state('admin1.schedule', {
+					url: '/schedule',
+					templateUrl: 'views/admin1/schedule.html',
+					data: {pageTitle: 'Reports'},
+					controller: 'ScheduleController',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+								}, {
+									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+								},
+								{
+									name: 'ui.footable',
+									files: ['js/plugins/footable/angular-footable.js']
+								}, {
+									insertBefore: '#loadBefore',
+									name: 'localytics.directives',
+									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								},
+								{
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+								}, {
+									files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
+								}
+							]);
+						}
+					}
+				})
+
 			;
 
 
@@ -1132,6 +1203,7 @@
 
                         orooms.save({ormlist: true}, payload, function () {
                             notify('success','success');
+                            orooms.count++;
                         }, dev.openError);
 
                         $scope.selected.student = null;
@@ -1583,39 +1655,44 @@
 /* global angular */
 
 (function (app) {
-    "use strict";
+	"use strict";
 //	O-Room Coordinator
-    app.controller('NavigationAdmin3Ctrl', function () {
-        var path = "../Client/Views/dashItems/";
-        var vm = this;
-        /**
-         * Navigation bar places with their links and icons
-         */
-        vm.tabs = [
-            {
-                id: 'Dashboard',
-                link: "admin3.dashboard",
-                icon: 'dashboard fa-2x'
-            }, {
-                id: 'Activity Log',
-                link: 'admin3.oroomActivityLogAdmin',
-                icon: 'tasks fa-2x'
-            }, {
-                id: 'Create Referral',
-                link: "admin3.CoordinatorReferralSystem",
-                icon: 'pencil-square-o fa-2x'
-            }, {
-                id: 'Attendance Rosters',
-                link: "admin3.attendanceRosters.oroom",
-                icon: 'list-alt fa-2x'
-            }, {
-                id: 'Reports',
-                link: 'admin3.reports.eod',
-                icon: 'area-chart fa-2x'
-            }
+	app.controller('NavigationAdmin3Ctrl', ['LunchService', 'OroomService','$scope',
+		function (lunchs, orooms,$scope) {
+			var path = "../Client/Views/dashItems/";
+			var vm = this;
+			/**
+			 * Navigation bar places with their links and icons
+			 */
+			vm.tabs = [
+				{
+					id: 'Dashboard',
+					link: "admin3.dashboard",
+					icon: 'dashboard fa-2x'
+				}, {
+					id: 'Activity Log',
+					link: 'admin3.oroomActivityLogAdmin',
+					icon: 'tasks fa-2x'
+				}, {
+					id: 'Create Referral',
+					link: "admin3.CoordinatorReferralSystem",
+					icon: 'pencil-square-o fa-2x'
+				}, {
+					id: 'Attendance Rosters',
+					link: "admin3.attendanceRosters.oroom",
+					icon: 'list-alt fa-2x'
+				}, {
+					id: 'Reports',
+					link: 'admin3.reports.eod',
+					icon: 'area-chart fa-2x'
+				}
 
-        ];
-    });
+			];
+			vm.oroom = orooms;
+			vm.lunch = lunchs;
+			orooms.getCount();
+			lunchs.getCount();
+		}]);
 }(angular.module('Argus')));
 
 
@@ -2150,7 +2227,7 @@
 						text += heading;
 						angular.forEach($scope.activities, function (act) {
 							text += '"' + act.ActionDate.split(' ')[0] + '",';
-							text += '"' + act.user.FirstName + ', ' + act.user.LastName + '",';
+							text += '"' + (act.user && act.user.FirstName )+ ', ' + (act.user && act.user.LastName )+ '",';
 							text += '"' + act.activity.Name + '",';
 							text += '"' + (act.Comment || '')  + '",';
 							text += "\n";
@@ -2213,7 +2290,7 @@
 							{date: formatDate(new Date),
 								activity: "comment",
 								Comment: $scope.comment,
-								taff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName};
+								staff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName};
 						$scope.activities.push(entry);
 						$scope.comment = '';
 					};
@@ -2389,6 +2466,9 @@
 									insertBefore: '#loadBefore',
 									name: 'localytics.directives',
 									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+								}, {
+									name: 'cgNotify',
+									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
 								}
 							]);
 						}
@@ -2817,6 +2897,21 @@
 
 
             };
+
+            $scope.markAllPresent = function(){
+                angular.forEach($scope.lunchTable,function(stu){
+                    stu.ActivityTypeId = 31;
+                    stu.comment = '';
+                    if(stu.overlap.hasiss)
+                        return;
+                    lunchs.updateAttendance($scope.currentDate,stu,function(data){
+                        debugger;
+                    },function(data){
+                        debugger;
+                    });
+                });
+            };
+
             $scope.printListAll = function () {
                 var heading = 'First Name,' + 'Last Name,' + 'Student ID, ' +
                     'Grade, ' + 'Attendance' + ', ' + 'Progression, Overlap\n';
@@ -2959,8 +3054,6 @@
                     orooms.updateAttendance($scope.currentDate, student).then(function (data) {
                         notify(data.msg);
                         $scope.selected.student = null;
-                    }, function (error) {
-                        notify('error, Before continuing please contact the system admin');
                     });
 
 
@@ -3032,9 +3125,11 @@
 					element.click();
 					document.body.removeChild(element);
 				};
-				
-				lunchs.get({count:true, roster:true},function(data){ $scope.count.lunch = data.lunchStudentsCount;});
-				orooms.get({count:true, roster:true}, function(data){ $scope.count.oroom = data.OroomList;});
+
+				$scope.oroom = orooms;
+				$scope.lunch = lunchs;
+				lunchs.getCount();
+				orooms.getCount();
 				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
 				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
 			}]);
@@ -3106,8 +3201,8 @@
 (function (app) {
 	app.controller('ReportsEODCtrl',
 		['$scope', 'notify', '$modal', '$http', 'FormatTimeService', '$rootScope', 'OroomService',
-			'LunchService', 'ISSService', 'OSSService', 'ReteachListService', 'AECListService', 'ReportsService','PrintHtmlService',
-			function ($scope, notify, $modal, $http, time, $rootScope, orooms, lunchs, isss, osss, reteach, aec, reports,print) {
+			'LunchService', 'ISSService', 'OSSService', 'ReteachListService', 'AECListService', 'ReportsService', 'PrintHtmlService',
+			function ($scope, notify, $modal, $http, time, $rootScope, orooms, lunchs, isss, osss, reteach, aec, reports, print) {
 				$scope.reportTypes = [
 					{name: 'EOD', value: 1},
 					{name: 'ORoom Conversion', value: 2}
@@ -3163,7 +3258,7 @@
 						clears: 0,
 						absents: 0,
 						overlaps: 0,
-						pendingFollowups:0
+						pendingFollowups: 0
 					};
 				}
 
@@ -3267,7 +3362,8 @@
 									default:
 										console.log('not of ORM type');
 
-								};
+								}
+								;
 							});
 							applyColorsToData($scope.oroomPieData);
 							break;
@@ -3305,24 +3401,24 @@
 						//	console.log(item);
 						switch ($scope.eod.selected.value) {
 							case 1:
-								checkAEC(item.referred[0].ActivityTypeId,counters);
+								checkAEC(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 2:
-								checkOroom(item.referred[0].ActivityTypeId,counters);
-								if ((item.overlap.hasiss && !item.overlap.isscleared)|| item.overlap.hasoss)
+								checkOroom(item.referred[0].ActivityTypeId, counters);
+								if ((item.overlap.hasiss && !item.overlap.isscleared) || item.overlap.hasoss)
 									counters.overlaps++;
 								break;
 							case 3:
-								checkReteach(item.referred[0].ActivityTypeId,counters);
+								checkReteach(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 4:
-								checkISS(item.referred[0].ActivityTypeId,counters);
+								checkISS(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 5:
-								checkOSS(item.referred[0].ActivityTypeId,counters);
+								checkOSS(item.referred[0].ActivityTypeId, counters);
 								break;
 							case 6:
-								checkLunchD(item.referred[0].ActivityTypeId,counters);
+								checkLunchD(item.referred[0].ActivityTypeId, counters);
 								break;
 						}
 					});
@@ -3343,16 +3439,16 @@
 				function processResponseDateRange(response) {
 					$scope.eodDateCounters = [];
 					var array = response.data;
-					angular.forEach(array , function (singleDateData) {
+					angular.forEach(array, function (singleDateData) {
 						var date = singleDateData.Date;
-						var counters = processResponseSingle({data:singleDateData.students});
-						$scope.eodDateCounters.push(angular.extend({Date:date},counters));
+						var counters = processResponseSingle({data: singleDateData.students});
+						$scope.eodDateCounters.push(angular.extend({Date: date}, counters));
 					});
 
 					totalCounters = new Counters();
-					angular.forEach($scope.eodDateCounters, function(singleCounter){
+					angular.forEach($scope.eodDateCounters, function (singleCounter) {
 
-						for(key in singleCounter){
+						for (key in singleCounter) {
 							totalCounters[key] += singleCounter[key];
 						}
 
@@ -3364,8 +3460,18 @@
 					$scope.flotPieDataRange[1].data = cnt.noShows + cnt.sentOuts + cnt.walkedOuts;
 					$scope.flotPieDataRange[2].data = cnt.schoolAbsent + cnt.leftSchool + cnt.other
 						+ cnt.reschedules + cnt.clears + cnt.absents;
-					$scope.flotPieDataRange[3].data = cnt.pendingFollowups;
+					if ($scope.eod.selected.value == 1 || $scope.eod.selected.value == 3) {
 
+						if(!$scope.flotPieDataRange)
+						$scope.flotPieDataRangepush({
+							label: 'Pending Followup',
+							data: cnt.pendingFollowups,
+							color: '#FFB757'
+						});
+						else
+							$scope.flotPieDataRange[3].data = cnt.pendingFollowups;
+					}else
+						$scope.flotPieDataRange.splice(3,1);
 
 				};
 
@@ -3582,10 +3688,11 @@
 						label: "School Absent, Cleared,  Overlap, Other",
 						data: 0,
 						color: "#C2C3C5"
-					},{
+					}, {
 						label: 'Pending Followup',
 						data: 0,
-						color: '#FFB757'}
+						color: '#FFB757'
+					}
 				];
 
 				$scope.flotPieDataRange = [
@@ -3601,10 +3708,11 @@
 						label: "School Absent, Cleared,  Overlap, Other",
 						data: 0,
 						color: "#C2C3C5"
-					},{
+					}, {
 						label: 'Pending Followup',
 						data: 0,
-						color: '#FFB757'}
+						color: '#FFB757'
+					}
 				];
 
 				$scope.flotPieDataConsequences = [];
@@ -3656,8 +3764,8 @@
 					},
 				];
 
-				$scope.printDiv = function(){
-					print.printDiv("totals",'list');
+				$scope.printDiv = function () {
+					print.printDiv("totals", 'list');
 				};
 
 			}]);
@@ -4527,6 +4635,45 @@
 		}]);
 
 }(angular.module('Argus')));
+(function(app){
+	app.controller('ASPAttendancesCtrl',['$scope','ASPService',function($scope,asp){
+		$scope.currentDate = new Date();
+		$scope.creationResults = [];
+
+		$scope.createASPAlderson = function(){
+			createASP(5);
+		};
+		$scope.createASPDunbar = function(){
+			createASP(2)
+		};
+		$scope.createASPErvin = function(){
+			createASP(3)
+		};
+
+		$scope.createASPAll = function(){
+			createASP(0,true);
+		};
+
+		$scope.clearTable = function(){
+			$scope.creationResults = [];
+		};
+
+		var createASP = function(schoolId,all){
+			var date = $scope.attendance.date.$viewValue;
+			console.log('date',date);
+			console.log('schoolId',schoolId);
+			$scope.loading=true;
+			$scope.creationResults =  asp.save({SchoolId:schoolId, WeekStart:date,all:all},function(){
+				$scope.loading = false;
+			});
+		};
+
+
+
+
+	}])
+}(angular.module('Argus')));
+
 (function (app) {
 	app.controller('ActivitiesCtrl', ['$scope', function ($scope) {
 			
@@ -4557,6 +4704,10 @@
 				id: 'Users',
 				link: "sysadmin.users",
 				icon: 'eye fa-2x'
+			}, {
+				id: 'ASP Attendances',
+				link: "sysadmin.aspAttendances",
+				icon: 'list fa-2x'
 			},{
 				id: 'AEC Referral System',
 				link: "sysadmin.referral",
@@ -4722,6 +4873,16 @@
 						notify('error');
 					});
 				};
+
+
+				$scope.checkMissingORMStudents = function(){
+					if(!$scope.selected.school){
+						notify('Select a school first');
+						return;
+					}
+					var schoolId = $scope.selected.school.Id;
+					$scope.missingORMStudents = referrals.query({CheckOroomMissing:true,SchoolId:schoolId, Date:$scope.missing.date.$viewValue})
+				}
 			}]);
 }(angular.module('Argus')));
 
@@ -4775,7 +4936,7 @@
 								{
 									name: 'ui.slimscroll',
 									files: ['js/plugins/slimscroll/angular.slimscroll.js']
-								}
+								},
 
 							]);
 						}
@@ -4840,6 +5001,23 @@
 					templateUrl: 'views/sysadmin/users.html',
 					data: {pageTitle: 'Referral'},
 					controller: 'UsersCtrl',
+					resolve: {
+						loadPlugin: function ($ocLazyLoad) {
+							return $ocLazyLoad.load([
+								{
+									name: 'datePicker',
+									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+								}
+							]);
+						}
+					}
+
+				})
+				.state('sysadmin.aspAttendances', {
+					url: "/ASP-Attendances",
+					templateUrl: 'views/sysadmin/aspAttendance.html',
+					data: {pageTitle: 'ASP ATT'},
+					controller: 'ASPAttendancesCtrl',
 					resolve: {
 						loadPlugin: function ($ocLazyLoad) {
 							return $ocLazyLoad.load([
@@ -5591,7 +5769,7 @@
 						var fileURL = URL.createObjectURL(data.response);
 						window.open(fileURL);
 					});
-				}
+				};
 				/**
 				 * Select the student that is clicked in the table so that the user doesn't 
 				 * have to type it 
@@ -7728,9 +7906,15 @@
     app.controller('oRoomActivityLogAdminCtrl',
         ['$scope', 'notify', 'StudentsService', 'teachers', '$modal', 'PeriodsService', '$interval', 'OroomService', 'ActivitiesService', 'ReferralsService', 'ISSService', '$rootScope', 'DevService', 'CountersService','$filter',
             function ($scope, notify, students, teachers, $modal, periods, $interval, orooms, activities, referrals, isss, $rootScope, dev, counters, $filter) {
+                $scope.currentDate = new Date();
                 function footable_redraw() {
                     $('.footable').trigger('footable_redraw');
                 }
+
+                $scope.$watch('form.date.$viewValue',function(n){
+                    $scope.currentDate =  n? n:$scope.currentDate;
+                    interval();
+                });
 
                 $rootScope.$on('studentsUpdated', function (stu) {
                     $scope.schoolStudents = students.students;
@@ -7742,12 +7926,12 @@
 
                 $scope.mouseOnTable = false;
                 function interval() {
-                    var now = new Date();
-                    $scope.currentTime = formatAMPM(now);
+                    var now = new Date($scope.currentDate);
+                    $scope.currentTime = formatAMPM(new Date());
                     $scope.currentDate = formatDate(now);
-                    $scope.currentPeriod = getPeriod(now);
+                    $scope.currentPeriod = getPeriod(new Date());
                     if (!$scope.mouseOnTable) {
-                        orooms.get({}, function (data) {
+                        orooms.get({Date:$scope.currentDate}, function (data) {
                             angular.forEach(data.reftable, function (item) {
                                 item.ReferralIn = item.ReferralIn === 1 ? true : false;
 
@@ -7792,6 +7976,7 @@
                 });
 
                 $scope.schoolStudents = students.students;
+
                 $scope.teachers = teachers.query();
 
 
@@ -7811,7 +7996,7 @@
                         "StudentId": $scope.selected.student.user.id,
                         "PeriodId": $scope.currentPeriod ? $scope.currentPeriod.Id : 14,
                         "ActivityId": $scope.selected.student.activity.Id,
-                        "Date": date
+                        "Date": $scope.currentDate
                     };
 
                     //post data to oroomactivity
@@ -8103,7 +8288,8 @@
                     var dataToSent = {
                         SentOutById: item.teacher ? item.teacher.id : 0,
                         ActivityId: item.activity ? item.activity.Id : 0,
-                        ReferralIn: item.ReferralIn ? 1 : 0
+                        ReferralIn: item.ReferralIn ? 1 : 0,
+                        ReferredInAt:item.ReferralIn ? true:null
                     };
                     orooms.update({id: item.Id, reftable: true}, dataToSent);
                 }

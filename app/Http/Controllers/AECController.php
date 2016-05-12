@@ -40,7 +40,7 @@ class AECController extends Controller
 				$q
 					->where('Date', $date)
 					->whereNotIn('ReferralTypeId', [9])// dont load LD
-					->where('RefferalStatus', '!=', 99)
+					//->where('RefferalStatus', '!=', 99)
 					->with('assignment', 'teacher', 'activity', 'consequence.referralType');
 			}])
 			->whereHas('user', function ($q) use ($schoolId) { // from the school the user requested
@@ -49,7 +49,7 @@ class AECController extends Controller
 			->whereHas('referred', function ($q) use ($date) {
 				$q
 					//->where('RefferalStatus', 0)
-					->where('RefferalStatus', '!=', 99)
+					//->where('RefferalStatus', '!=', 99)
 					->where('ReferralTypeId', 12)
 					->where('Date', $date);
 			})
@@ -460,7 +460,8 @@ class AECController extends Controller
 					'ActionType' => 59,
 					'Comment' => $comment . ' [student ditched AEC (' . $activity->Name . '), Assigned O-Room on ' . $date . '(System)]',
 				]);
-
+				if($date->lt((new Carbon())->subWeekDays(3)) )
+					break ;
 				$consequence = Referrals::create([
 					'UserId' => $this->userId,
 					'StudentId' => $student->Id,
@@ -474,6 +475,7 @@ class AECController extends Controller
 				$counters = Counters::find($student->Id)->increment('ORoomsToBeServed');
 				break;
 			case 50:// reschedule
+				
 				foreach ($student->referred as $ref) {
 					$new_ref = $ref->replicate();
 					$new_ref->Date = new Carbon($ref->NewDate);

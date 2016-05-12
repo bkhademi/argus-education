@@ -259,6 +259,8 @@
 //					}, function (error) {
 //						console.log(error);
 //					});
+					if(!students.students)
+						students.refresh()
 					vm.schoolStudents = students.students;
 					vm.openCreateNewStudent = function () {
 						var student = {UserInfo: {}, StuInfo: {}, ProfessorClasses: []};
@@ -318,7 +320,6 @@
 								//template:'<div> MODAL : true in Referral IN </div>',
 								size: 'lg',
 								controller: function ($scope, student, PeriodsService) {
-									$scope.periods = PeriodsService.query();
 									$scope.student = student;
 								},
 								resolve: {

@@ -59,6 +59,10 @@ class LunchDetentionController extends Controller
 
         $refsWithNoOverlaps = Referrals::getReferralsWithNoOverlaps($lunchStudents,Referrals::$issReferralTypes);
         $lunchStudentsCount = $refsWithNoOverlaps->count();
+        foreach($lunchStudents as $student){
+            if($student->toArray()['referred'][0]['RefferalStatus'] ==1)
+                $lunchStudentsCount--;
+        }
 
 
         return $request->count?compact('lunchStudentsCount'):compact('lunchStudents','lunchStudentsCount');
@@ -150,7 +154,7 @@ class LunchDetentionController extends Controller
      */
     public function update(Request $request, $id)
     {
-       // DB::beginTransaction();
+        //DB::beginTransaction();
         //
         $today = $this->getDate($request);
         $tomorrow = $today->copy()->addWeekDay();

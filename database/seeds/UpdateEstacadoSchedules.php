@@ -25,7 +25,7 @@ class UpdateEstacadoSchedules extends Seeder {
 		$term = 'S2'; // current term
 		$defaultDepartment = Departments::find(1); // default department
 
-		$scheduleJson = File::get(storage_path() . '/2016_spring_json/3-24EstacadoSchedule.json');
+		$scheduleJson = File::get(storage_path() . '/2016_spring_json/4-19EstacadoSchedule.json');
 		$schedule = json_decode($scheduleJson);
 
 		// get the 2 roles 
@@ -114,7 +114,7 @@ class UpdateEstacadoSchedules extends Seeder {
 					echo('no teacherid');
 					return;
 				}
-				// this is wrong.. it should be first or create **** 
+
 				$professorClass = Professorclasses::firstOrCreate(['UserId' => $teacher->id, 'ClassId' => $classDb->Id,
 						'PeriodId' => $period->Id, 'RoomId' => $room->Id]);
 

@@ -1,0 +1,83 @@
+<section class="wrapper wrapper-content animated fadeInRight" >
+    <div class="panel panel-default">
+        <h2 style="text-align:center"> Hello <span class="bg-primary">{{currentUser.FirstName +' ' + currentUser.LastName}}</span> Update the Student Schedule Listing </h2>
+
+        <div class="panel-body">
+
+            <div class="row" >
+                <div class="col-sm-offset-2 col-lg-8">
+                    <!-- <form action="/pdf/SaveUploadedFile" method="post" enctype="multipart/form-data"  class="dropzone"id="dropZone">-->
+
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>drag and drop your Excel SSL</h5>
+
+                            <div ibox-tools></div>
+                        </div>
+                        <div class="ibox-content">
+                            <form data-ng-submit="submitSingleFile()" novalidate class="dropzone" id="dropZone" dropzone="dropzoneConfig">
+                                <div class="fallback">
+                                    <input file-model="myFile[0]" name="file" type="file" multiple />
+                                    <input type="submit" value="Upload" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            
+            <table data-ng-if="false" class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
+                <thead>
+                    <tr>
+						<th>Remove</th>
+						<th>Teacher</th>
+                        <th data-toggle="true">First Name</th>
+                        <th>Last Name</th>
+                        <th>ID</th>
+                        <th>Grade</th>
+						<th>Student 8th Period</th>
+                        <!--<th class="col-sm-6">Assignment</th>-->
+						<th data-ng-if='showChecks'></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-ng-repeat="stu in refTable track  by $index">
+						<td> <button data-ng-click='refTable.splice($index,1);eightPeriods.splice($index,1)'class="btn btn-primary fa fa-times"></button></td>
+						<td>{{stu.teacher.FirstName + ", " +stu.teacher.LastName}}</td>
+                        <td>{{stu.user.FirstName}}</td>
+                        <td>{{stu.user.LastName}}</td>
+                        <td>{{stu.StudentId}}</td>
+                        <td >{{stu.Grade}}</td>
+						<td> {{ stu.eightPeriod.professor_class.classs.Name + ' - ' + stu.eightPeriod.professor_class.room.Name}}</td>
+<!--                        <td >
+                             <select multiple chosen
+								width="'100%'"	 
+								class="chosen-select form-control"
+								data-ng-if="refTable"
+								data-placeholder="Select a homework"
+								data-ng-model="stu.referred"
+								data-ng-options="a as (a.Name) for a in stu.teacher.assignments track by a.Id">
+								 <option value=''></option>
+								 
+							 </select>
+
+                        </td>-->
+						<td data-ng-if='showChecks'> <input type='checkbox' data-ng-model='stu.selected'></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9">
+                            <ul class="pagination pull-right"></ul>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+
+
+        </div>
+    </div>
+</section>

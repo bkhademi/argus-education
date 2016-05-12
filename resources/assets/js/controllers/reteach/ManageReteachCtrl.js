@@ -58,7 +58,7 @@
 						var fileURL = URL.createObjectURL(data.response);
 						window.open(fileURL);
 					});
-				}
+				};
 				/**
 				 * Select the student that is clicked in the table so that the user doesn't 
 				 * have to type it 

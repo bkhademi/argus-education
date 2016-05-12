@@ -1,0 +1,1152 @@
+[
+  {
+    "FIELD1":"StudentName",
+    "FIELD2":"StudentId",
+    "FIELD3":"Teacher"
+  },
+  {
+    "FIELD1":"Ka'Vadrion,Allen",
+    "FIELD2":"100141231",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Zachary Landon,Andrews",
+    "FIELD2":"100115683",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Abigail Soledad,Barrientos",
+    "FIELD2":"100130598",
+    "FIELD3":"129"
+  },
+  {
+    "FIELD1":"Dashawn Ray,Boyd",
+    "FIELD2":"100126598",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Tristen Roshawn,Brandon",
+    "FIELD2":"100144584",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Luis Ruben,Chavez",
+    "FIELD2":"100149010",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Zy'Kerra Shy'Ray,Childress",
+    "FIELD2":"100126171",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Noelia Marie,De la Cerda",
+    "FIELD2":"100114417",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Ray'Zanique Capri,Devero",
+    "FIELD2":"100124008",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Bry'Tazia Aashauntis,Dial",
+    "FIELD2":"100130824",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Sir Jashawn Nazario,Finney",
+    "FIELD2":"100153886",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Markwan Amarion,Giddens",
+    "FIELD2":"100113779",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Muruta,Gloria",
+    "FIELD2":"100160053",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Jonathon,Gonzalez",
+    "FIELD2":"100101165",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"DeLauren Omar,Gordon",
+    "FIELD2":"100130579",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Jonathan Thomas,Hall",
+    "FIELD2":"100150459",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Reggie Ja'Rawn,Hodge",
+    "FIELD2":"100125259",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Ireshia Jaisonet,Horton-Carlock",
+    "FIELD2":"100131407",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Ke'Vondricq Dewaine,Hunter",
+    "FIELD2":"100116133",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Cyrai Denik,Jay",
+    "FIELD2":"100130832",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Zachary D'Angelo,Johnson",
+    "FIELD2":"100113623",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Zane Dionte,Johnson",
+    "FIELD2":"100113621",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Destiny Antwanay,Jones",
+    "FIELD2":"100110227",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Ariyanna Maylene,Lopez",
+    "FIELD2":"100097781",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Raquel Guadalupe,Martinez",
+    "FIELD2":"100131363",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"A'Shantis Lachez,McKinney",
+    "FIELD2":"100131030",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Jossiah Javarie Joseph,Mitchell",
+    "FIELD2":"100132257",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Dominic Alexander,Morales",
+    "FIELD2":"100141282",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Aysja MoNay,Nelson",
+    "FIELD2":"100126992",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Natalie,Oursbourn",
+    "FIELD2":"100131048",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Jasmine Renee,Pigrum",
+    "FIELD2":"100131053",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Teresa Jazmyn,Rangel",
+    "FIELD2":"100124119",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Greysi,Rivera Sanchez",
+    "FIELD2":"100154953",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Izabella Marie,Rivera",
+    "FIELD2":"100132250",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Kevon,Robinson-Evans",
+    "FIELD2":"100108433",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Jacob,Rodriquez",
+    "FIELD2":"100131141",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Tameka Audrea,Rosemond",
+    "FIELD2":"100130235",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Juan Carlos Alexander,Salazar",
+    "FIELD2":"100091971",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Jamez,Sanchez",
+    "FIELD2":"100125050",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Evanie Nikole,Sanchez",
+    "FIELD2":"100097058",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Shyla Olisa,Sauceda",
+    "FIELD2":"100115993",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"DAKOTA Rae,Sierra",
+    "FIELD2":"100130633",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Kaitlyn Caricia,Stancell",
+    "FIELD2":"100096496",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Aniah Lashae,Taylor",
+    "FIELD2":"100130441",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Ja'Zyri Ty'Kiece D'Kole,Taylor",
+    "FIELD2":"100124487",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Eric Rondell,Thomas",
+    "FIELD2":"100124018",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Dontae Tre'Shaun,Thomas",
+    "FIELD2":"100130915",
+    "FIELD3":"123"
+  },
+  {
+    "FIELD1":"Dakarai Daraill,Thompson",
+    "FIELD2":"100130495",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Gregory Abel,Torres",
+    "FIELD2":"100092881",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Kayden Lynn,Trevino",
+    "FIELD2":"100131050",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Christopher James,Turney",
+    "FIELD2":"100140639",
+    "FIELD3":"124"
+  },
+  {
+    "FIELD1":"Isaiah Victor,Vaughn",
+    "FIELD2":"100146078",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Tyrenee Jelyse,Walton",
+    "FIELD2":"100115537",
+    "FIELD3":"130"
+  },
+  {
+    "FIELD1":"Ja'Kobe Deshone,Williams",
+    "FIELD2":"100127589",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Jaquan Pierre,Williams",
+    "FIELD2":"100130828",
+    "FIELD3":"127"
+  },
+  {
+    "FIELD1":"Camrin Malik,Wood",
+    "FIELD2":"100137308",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Arianna Icis,Zapata",
+    "FIELD2":"100128963",
+    "FIELD3":"122"
+  },
+  {
+    "FIELD1":"Mercedes Angel,Alcorte",
+    "FIELD2":"100090582",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Claytron J'Sean,Anzley",
+    "FIELD2":"100125230",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Allison Janaye,Baiza",
+    "FIELD2":"100115765",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Jonathan Israel,Banda",
+    "FIELD2":"100115243",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Demodric Dejuan,Briley",
+    "FIELD2":"100125811",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Symphony Euekyah,Brown",
+    "FIELD2":"100113789",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Brandon Jeremy,Bryand",
+    "FIELD2":"100122494",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Nathalie Deva,Burnett",
+    "FIELD2":"100125352",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Dezaray Ann,Cantu",
+    "FIELD2":"100114073",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Toni Aalanah,Carr",
+    "FIELD2":"100114607",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Ryan Luke,Castro",
+    "FIELD2":"100128163",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Detreaviean,Chiles",
+    "FIELD2":"100122904",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Ty'Trice Ladasha,Conor",
+    "FIELD2":"100125955",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Marisa Denise,Davis",
+    "FIELD2":"100106461",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Briasia,Dial",
+    "FIELD2":"100122776",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Robert Matthew,Diaz",
+    "FIELD2":"100114827",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Jay'Lon Lee,Dobbins",
+    "FIELD2":"100116723",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"La'Devin Tyrell,Dunn",
+    "FIELD2":"100124953",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Devinn Quashawn,Eddington",
+    "FIELD2":"100106469",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Carlos Miguel,Enriquez",
+    "FIELD2":"100159374",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Jada Keirra,Evans",
+    "FIELD2":"100103544",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Darius,Flemons",
+    "FIELD2":"100122600",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Abriana Elena,Flores",
+    "FIELD2":"100159782",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Jesus Enrigue,Flores",
+    "FIELD2":"100095808",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Skki,Freeman",
+    "FIELD2":"100124530",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Gabriel Gregory,Frutis",
+    "FIELD2":"100116855",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Seairra Desiree,Gamboa Salazar",
+    "FIELD2":"100114489",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Elizabeth Marie,Garcia",
+    "FIELD2":"100149191",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Arquesia Anshata'E,Garner",
+    "FIELD2":"100119486",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Zakaria Jeaneaja-Kenshae,Grant",
+    "FIELD2":"100114691",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Anthony Deshawn,Hawkins",
+    "FIELD2":"100115639",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Arquise Tavion Cornelious,Hawkins",
+    "FIELD2":"100115131",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Jenifer Ann,Hernandez",
+    "FIELD2":"100100525",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Alexis Nichole,Herrera",
+    "FIELD2":"100115623",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Marisol Briana,Jimenez",
+    "FIELD2":"100126310",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Jacquelynn Makavia,Johns",
+    "FIELD2":"100103683",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Keyvon Dashawn,Johnson",
+    "FIELD2":"100115709",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Nakia Nicole,Johnson",
+    "FIELD2":"100116755",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Da'Vion Kyree-Ahmad,Lawrence",
+    "FIELD2":"100103799",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Shakira Sommore,Mayes",
+    "FIELD2":"100125411",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Angel Domingo,Melgoza",
+    "FIELD2":"100123274",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Desirea Neveah,Mercado",
+    "FIELD2":"100114931",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Xavier Isiah,Montiel-Flores",
+    "FIELD2":"100131451",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Christopher Nicholas,Moreno",
+    "FIELD2":"100118859",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Lailah Angelyse,Moreno",
+    "FIELD2":"100125895",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Daviand Donnel,Morris",
+    "FIELD2":"100152362",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Noel Elishia,Natal",
+    "FIELD2":"100106499",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Hailey Paris,Newman",
+    "FIELD2":"100103438",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Jeremyah Ashaun,O'Neal",
+    "FIELD2":"100160144",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Sha'Kyra Unique,Owens",
+    "FIELD2":"100115939",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Leticia Dinah,Palos",
+    "FIELD2":"100119048",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Carlos Alejandro,Pando",
+    "FIELD2":"100137932",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Harley Anette,Picon",
+    "FIELD2":"100126059",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Leah Raquel,Picon",
+    "FIELD2":"100126259",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Esperanza,Plasencio",
+    "FIELD2":"100117997",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Jacquetta Marie,Porter",
+    "FIELD2":"100085468",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Emerald Kristin,Puente",
+    "FIELD2":"100117029",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Thalia Isabel,Quevedo",
+    "FIELD2":"100099136",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Angel Enrique,Ramirez",
+    "FIELD2":"100159604",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Chauncey keegan,Ramirez",
+    "FIELD2":"100159598",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Sasha-Alexis Nikole,Ramirez",
+    "FIELD2":"100142347",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Alexis Nicole,Rodriguez",
+    "FIELD2":"100104497",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Henry Edward,Ross",
+    "FIELD2":"100125891",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Jaylynn Heavenly,Ruiz",
+    "FIELD2":"100103509",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Josiah Saul,Ruiz",
+    "FIELD2":"100125975",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Juan Noe,Sarinana",
+    "FIELD2":"100104337",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Precious Manuelita,Sierra",
+    "FIELD2":"100125701",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Isaiah Joe,Sims",
+    "FIELD2":"100123114",
+    "FIELD3":"204"
+  },
+  {
+    "FIELD1":"Jalen,Smith",
+    "FIELD2":"100118375",
+    "FIELD3":"203"
+  },
+  {
+    "FIELD1":"Rj,Steele",
+    "FIELD2":"100107365",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"TJ Stephon,Steele",
+    "FIELD2":"100107359",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Dejanea Renetta,Taylor",
+    "FIELD2":"100154351",
+    "FIELD3":"115"
+  },
+  {
+    "FIELD1":"Reginald Deshan,Taylor",
+    "FIELD2":"100125801",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Savannah Danae,Vasquez",
+    "FIELD2":"100132372",
+    "FIELD3":"121"
+  },
+  {
+    "FIELD1":"Adam Kyne,Villarreal",
+    "FIELD2":"100140184",
+    "FIELD3":"118"
+  },
+  {
+    "FIELD1":"Lakandra Renee,Watson",
+    "FIELD2":"100103668",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"De'Shon La'Charles,William",
+    "FIELD2":"100115489",
+    "FIELD3":"201B"
+  },
+  {
+    "FIELD1":"Deaundre Lamar,Wilson",
+    "FIELD2":"100115105",
+    "FIELD3":"120"
+  },
+  {
+    "FIELD1":"Sha'Dia J'Kaibreon,Atkins",
+    "FIELD2":"100098701",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Jevaushaune Kiara,Bascus",
+    "FIELD2":"100103374",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Torriyon Dyshawn,Bates",
+    "FIELD2":"100115671",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Jose Rafael,Belgara",
+    "FIELD2":"100103807",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Jimmy Joe,Benitez",
+    "FIELD2":"100098712",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Za'Korrian Tre'Baughan,Bluitt",
+    "FIELD2":"100117927",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"A'Laysha Lachelle,Bradley",
+    "FIELD2":"100098702",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Brianna Rae,Brand",
+    "FIELD2":"100117791",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Isaiah Maliak,Brown",
+    "FIELD2":"100085729",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ariel Bricole Marie,Cade",
+    "FIELD2":"100104431",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Heriberto,Camacho",
+    "FIELD2":"100132923",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Reina Jai,Campos",
+    "FIELD2":"100103350",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Eushandria Shada,Chase-Bowman",
+    "FIELD2":"100106383",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Mahkai Ka'Von,Childress",
+    "FIELD2":"100115143",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"David Antwan,Conor",
+    "FIELD2":"100099457",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Vaniya Villenciay,Davis",
+    "FIELD2":"100107381",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Jermiah Darun,Dobbins",
+    "FIELD2":"100125970",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Trimeka,Eddington",
+    "FIELD2":"100106937",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Sebastian,Esparza",
+    "FIELD2":"100103689",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Rashaad Tyvore,Essix",
+    "FIELD2":"100082853",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Samuel Torres,Fierro",
+    "FIELD2":"100085715",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Zakhorian Dequalon,Fletcher",
+    "FIELD2":"100117299",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Devin Kayshawn,Francis",
+    "FIELD2":"100116643",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Kelvondre Ke'shaun,Glaspie",
+    "FIELD2":"100146378",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Johnny,Gomez",
+    "FIELD2":"100148798",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Isis Tamara,Gordon",
+    "FIELD2":"100119206",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"O'Breshiana Ta'Braya,Green",
+    "FIELD2":"100115123",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Alexandria,Gutierrez",
+    "FIELD2":"100106205",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ernest,Guzman",
+    "FIELD2":"100117839",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Zykeria Damiya,Harris",
+    "FIELD2":"100104287",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Aaniyah Da'Zareal,Hawkins",
+    "FIELD2":"100104769",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Aaliyah Lyann,Hernandez-Mungia",
+    "FIELD2":"100103532",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Cynthia Crystal,Herrera",
+    "FIELD2":"100086411",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Joshua Cristan,Herrera",
+    "FIELD2":"100145383",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Zack Anthony,Herrera",
+    "FIELD2":"100103712",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Jacob Ethan,Hyer",
+    "FIELD2":"100115171",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Michael Guadalupe,Irlas",
+    "FIELD2":"100131360",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Tyson Ladon,Isaac",
+    "FIELD2":"100107579",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Trayci Kiyanna,Jackson",
+    "FIELD2":"100098676",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Jasmine Mikayla,Jenkins",
+    "FIELD2":"100121076",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Christopher Jaheim,Jolly",
+    "FIELD2":"100117783",
+    "FIELD3":"112"
+  },
+  {
+    "FIELD1":"Ermeshia La' Deen,Jones",
+    "FIELD2":"100138250",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Stephanie Marie,Lara",
+    "FIELD2":"100117587",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Desiree Alyzah,Ledezma",
+    "FIELD2":"100098223",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Ry'Brianna Earlshae,Lee",
+    "FIELD2":"100098235",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Jakiyre Lynn,Linzsey",
+    "FIELD2":"100099027",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Rondale Deshawn,Love",
+    "FIELD2":"100099875",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ciannah Angel,Marmolejo",
+    "FIELD2":"100103494",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Arioni Danee,Martin",
+    "FIELD2":"100125738",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Paul,Martinez",
+    "FIELD2":"100116821",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Brianna Nevaeh,Martinez",
+    "FIELD2":"100103619",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Destiny,Martinez",
+    "FIELD2":"100106341",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Kayla Marie,Martinez",
+    "FIELD2":"100108697",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Ty'Keisha Keyanna,McDade",
+    "FIELD2":"100117951",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Kendraisia Tyese,McDonald",
+    "FIELD2":"100117707",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"J'Lon,McGruder",
+    "FIELD2":"100108019",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Thomas Kane,McLin",
+    "FIELD2":"100103811",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Juliann Randi,Melgoza",
+    "FIELD2":"100114069",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Shydai,Mims",
+    "FIELD2":"100117523",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Sammie Madison,Minjarez",
+    "FIELD2":"100117091",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ke'Zadrick Laquan,Murray",
+    "FIELD2":"100117975",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Daniel Darrell,Newton",
+    "FIELD2":"100104227",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Keyishia Teenee,Owens",
+    "FIELD2":"100103673",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Quiarra,Patterson",
+    "FIELD2":"100117519",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Dashae Darice,Pollard",
+    "FIELD2":"100103784",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Trinity Rene,Ponce",
+    "FIELD2":"100117679",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Madison Paige,Powers",
+    "FIELD2":"100099008",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Nataley La'Shae,Prieto",
+    "FIELD2":"100127374",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Rickey,Puente",
+    "FIELD2":"100098659",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Andrew Junior,Ramirez",
+    "FIELD2":"100106419",
+    "FIELD3":"109"
+  },
+  {
+    "FIELD1":"Kaylee Ann,Rangel",
+    "FIELD2":"100103749",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Areill D,Ross",
+    "FIELD2":"100100929",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"De'Quairious Tyrell,Ruth",
+    "FIELD2":"100109263",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Elijah Inocente,Sanchez",
+    "FIELD2":"100099215",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Jezus Tito,Sanchez",
+    "FIELD2":"100085748",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Nathan Izaiah,Sanchez",
+    "FIELD2":"100130198",
+    "FIELD3":"207"
+  },
+  {
+    "FIELD1":"Christian Damar,Shoup-Wesson",
+    "FIELD2":"100081818",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Anthony Sabas Miguel,Silvas,",
+    "FIELD2":"100098758",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"C'Kyra Monae,Sims",
+    "FIELD2":"100098817",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Mikayla Rae,Stone",
+    "FIELD2":"100103753",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Gabriel Cristos,Tafoya",
+    "FIELD2":"100131883",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Ja'Quandrek Jae'Korey,Taylor",
+    "FIELD2":"100103385",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Starr Paige,Torres",
+    "FIELD2":"100105769",
+    "FIELD3":"125A"
+  },
+  {
+    "FIELD1":"Antonia Ylianna,Valdez",
+    "FIELD2":"100101299",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Korrina Rene,Valdez",
+    "FIELD2":"100082958",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Elizabeth Lee,Villarreal",
+    "FIELD2":"100140172",
+    "FIELD3":"107"
+  },
+  {
+    "FIELD1":"Tadrian Tashawn,Ward",
+    "FIELD2":"100093275",
+    "FIELD3":"110"
+  },
+  {
+    "FIELD1":"Michael Deshone,Whitfield",
+    "FIELD2":"100103547",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Aaliyah Kerri,Williams",
+    "FIELD2":"100117743",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Chyna Deunka,Williams",
+    "FIELD2":"100107615",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Mya Larayn,Williams",
+    "FIELD2":"100144442",
+    "FIELD3":"111"
+  },
+  {
+    "FIELD1":"Stephionee Alphaeus,Williams",
+    "FIELD2":"100122144",
+    "FIELD3":"209"
+  },
+  {
+    "FIELD1":"Ja'Corien Lamar,Wilson",
+    "FIELD2":"100117869",
+    "FIELD3":"202"
+  },
+  {
+    "FIELD1":"Vaughntray Jordan,Wright",
+    "FIELD2":"100077457",
+    "FIELD3":"125A"
+  }
+]

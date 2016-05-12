@@ -20,4 +20,10 @@ class Useractions extends Model
 	public function activity(){
 		return $this->hasOne('App\Activities',  'Id' ,'ActionType');
 	}
+
+	public function scopeofSchoolId($q,$schoolId){
+		$q->whereHas('student',function($q)use($schoolId){
+			$q->where('SchoolId',$schoolId);
+		});
+	}
 }

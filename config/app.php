@@ -146,6 +146,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 		Maatwebsite\Excel\ExcelServiceProvider::class,
+		'App\Providers\HelperServiceProvider',
     ],
 
     /*

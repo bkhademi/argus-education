@@ -117,6 +117,21 @@
 
 
             };
+
+            $scope.markAllPresent = function(){
+                angular.forEach($scope.lunchTable,function(stu){
+                    stu.ActivityTypeId = 31;
+                    stu.comment = '';
+                    if(stu.overlap.hasiss)
+                        return;
+                    lunchs.updateAttendance($scope.currentDate,stu,function(data){
+                        debugger;
+                    },function(data){
+                        debugger;
+                    });
+                });
+            };
+
             $scope.printListAll = function () {
                 var heading = 'First Name,' + 'Last Name,' + 'Student ID, ' +
                     'Grade, ' + 'Attendance' + ', ' + 'Progression, Overlap\n';

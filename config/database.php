@@ -63,7 +63,7 @@ return [
             'prefix'    => '',
             'strict'    => false,
         ],
-		'bbyArgus'=> [
+		'oldargus'=> [
             'driver'    => 'mysql',
             'host'      => env('DB2_HOST', 'localhost'),
             'database'  => env('DB2_DATABASE', 'bbyargusdb'),

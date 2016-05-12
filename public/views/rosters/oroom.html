@@ -62,7 +62,7 @@
             <button class='btn btn-primary pull-right fa fa-file-excel-o' data-ng-click='printList()'>
                 Download List
             </button>
-            <table id="refTable" class="table footable  table-bordered toggle-arrow-tiny" data-page-size="1000">
+            <table id="refTable" class="table footable  table-bordered table-responsive  toggle-arrow-tiny" data-page-size="1000">
                 <thead>
                 <tr>
                     <th data-toggle="true">First Name</th>
@@ -71,6 +71,7 @@
                     <th>Grade</th>
                     <th>Pending Days</th>
                     <th data-ng-show="showToUser()"> referred</th>
+                    <th >Debt</th>
                     <th>Referral Type</th>
                     <th>8th Period</th>
                     <th>Overlap</th>
@@ -90,6 +91,8 @@
                     <td>{{item.Grade}}</td>
                     <td>{{item.counters.ORoomsToBeServed}}</td>
                     <td data-ng-show="showToUser()">{{item.referred.length}}</td>
+                    <td > {{item.counters.debt}}</td>
+
                     <td> {{item.referred[0].referral_type.Name}}
                     <td>{{item.classes[0].professor_class.room.Name}}</td>
                     <td>{{item.overlap.msg}}</td>

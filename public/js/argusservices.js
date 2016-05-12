@@ -317,25 +317,24 @@ function formatDate(date) {
 /* O-Room */
 (function (app) {
 	app
-		.factory("OroomService", ["$resource", "ReferralTypesService", "UtilService", "$filter",
-			function ($resource, types, UtilService, $filter) {
+		.factory("OroomService", ["$resource", "ReferralTypesService", "UtilService", "$filter",'notify',
+			function ($resource, types, UtilService, $filter,notify) {
 				var resource = $resource('api/oroom/:id', {}, {
 					update: {
 						method: 'PUT'
 					}
 				});
 
-				var utils = {};
-
-				utils.getList = function (date, periodIds) {
+				resource.getList = function (date, periodIds) {
 					var list = resource.get({roster: true, Date: date, 'Periods[]': periodIds}, function (data) {
-						utils.markOverlaps(data.OroomList);
-						utils.markActions(data.OroomList);
+						resource.count = data.OroomListCount;
+						resource.markOverlaps(data.OroomList);
+						resource.markActions(data.OroomList);
 					});
 					return list.$promise;
 				};
 
-				utils.markOverlaps = function (students) {
+				resource.markOverlaps = function (students) {
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
 						student.referred = $filter('filter')(student.referred, function (o) {
@@ -364,7 +363,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markOverlapsReport = function (students) {
+				resource.markOverlapsReport = function (students) {
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
 						student.referred = $filter('filter')(student.referred, function (o) {
@@ -393,7 +392,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markActions = function (students) {
+				resource.markActions = function (students) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]  )
 						ref = student.referred[0];
@@ -431,20 +430,20 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markFromStatus = function (students) {
+				resource.markFromStatus = function (students) {
 
 				};
 
-				utils.copyUpdatedResourceAndMarkActions = function (student, data) {
+				resource.copyUpdatedResourceAndMarkActions = function (student, data) {
 					if (data.referrals && data.referrals.length != 0)
 						student.referred = data.referrals;
 					else
 						student.referred[0] = data.referral;
 
-					utils.markActions([student]);
+					resource.markActions([student]);
 				};
 
-				utils.updateAttendance = function (date, student) {
+				resource.updateAttendance = function (date, student) {
 					$toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 						return o.remove;
 					});
@@ -464,13 +463,30 @@ function formatDate(date) {
 
 					};
 					var request = resource.update(urlEncoded, payload, function (data) {
-						utils.copyUpdatedResourceAndMarkActions(student, data);
+						resource.copyUpdatedResourceAndMarkActions(student, data);
+						resource.count--;
+					}, function(data){
+						if(data.status = 409) {// conflict.. referral already taken
+							resource.copyUpdatedResourceAndMarkActions(student, data);
+							resource.count--;
+						}else{
+							notify('error, Before continuing please contact the system admin');
+						}
 					});
 
 					return request.$promise;
 				};
 
-				return angular.extend(resource, utils);
+				resource.count = 0;
+
+				resource.getCount =  function(){
+					resource.get({count: true, roster: true},function(data){
+						resource.count  = data.OroomList;
+					});
+
+				};
+
+				return resource;
 			}]);
 }(angular.module("Argus")));
 
@@ -485,9 +501,8 @@ function formatDate(date) {
 					}
 				});
 
-				var utils = {};
 
-				utils.markOverlaps = function (students) {
+				resource.markOverlaps = function (students) {
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
 						student.referred = $filter('filter')(student.referred, function (o) {
@@ -507,7 +522,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markOverlapsReport = function (students) {
+				resource.markOverlapsReport = function (students) {
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
 						student.referred = $filter('filter')(student.referred, function (o) {
@@ -526,7 +541,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markActions = function (students) {
+				resource.markActions = function (students) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]  )
 						switch (student.referred[0].ActivityTypeId) {
@@ -554,17 +569,17 @@ function formatDate(date) {
 					});
 				};
 
-				utils.copyUpdatedResourceAndMarkActions = function (student, data) {
-					debugger;
+				resource.copyUpdatedResourceAndMarkActions = function (student, data) {
 					angular.extend(student.referred[0], data.referral);
-					utils.markActions([student]);
+					resource.markActions([student]);
 				};
 
-				utils.separateLists = function (students) {
+				resource.separateLists = function (students) {
 
 				};
 
-				utils.updateAttendance = function (date, student) {
+
+				resource.updateAttendance = function (date, student) {
 					var urlEncoded = {id: student.referred[0].Id};
 					var payload = {
 						ActionType: student.ActivityTypeId,
@@ -573,21 +588,32 @@ function formatDate(date) {
 						Date: date
 					};
 					return resource.update(urlEncoded, payload, function (data) {
-						utils.copyUpdatedResourceAndMarkActions(student, data);
+						resource.copyUpdatedResourceAndMarkActions(student, data);
+						resource.count--;
 					}).$promise;
 
 
 				};
 
-				utils.getList = function (date) {
+				resource.getList = function (date) {
 					var list = resource.get({Date: date}, function (data) {
-						utils.markOverlaps(data.lunchStudents);
-						utils.markActions(data.lunchStudents);
+						resource.count = data.lunchStudentsCount;
+						resource.markOverlaps(data.lunchStudents);
+						resource.markActions(data.lunchStudents);
 					});
 					return list.$promise;
 				};
 
-				utils.saveReferral = function (date, student) {
+				resource.count = 0;
+
+				resource.getCount =  function(){
+					resource.get({count: true, roster: true},function(data){
+						resource.count  = data.lunchStudentsCount;
+					});
+
+				};
+
+				resource.saveReferral = function (date, student) {
 					var urlEncoded = {};
 					var payload = {
 						StudentId: student.Id,
@@ -595,11 +621,11 @@ function formatDate(date) {
 						TardyTime: student.tardyTime,
 						Date: date
 					};
-					return resource.save(urlEncoded, payload).$promise;
+					return resource.save(urlEncoded, payload,function(){resource.count++;}).$promise;
 				};
 
 
-				return angular.extend(utils, resource);
+				return resource;
 
 			}]);
 
@@ -1103,7 +1129,7 @@ function formatDate(date) {
 						case 51: // cleared
 							student.status = {class: 'bg-green'};
 							if (student.referred[0].RefferalStatus == 2)
-								ref.consequence = {referral_type: {Name: 'Cleared'}};
+								student.referred[0].consequence = {referral_type: {Name: 'Cleared'}};
 							break;
 						case 53:// Left School
 						case 54:// School Absent
@@ -1168,7 +1194,6 @@ function formatDate(date) {
 				var referralIds = student.referred.map(function (o) {
 					return o.Id;
 				});
-
 				var urlEncoded = {id: student.Id};
 				var payload = {
 					param: 'attendance',
