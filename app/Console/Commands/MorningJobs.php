@@ -34,6 +34,9 @@ use App\Helpers\ReteachHelper;
 
 use File;
 
+use App\Helpers\ScheduleHelper;
+
+
 class MorningJobs extends Command
 {
 	/**
@@ -84,44 +87,18 @@ class MorningJobs extends Command
 
 		//$this->moveAndMarkOSSOverlaps();
 
-		//$this->deleteScheduleInfo(1);
-
-		//$this->updateSchoolSchedule(2,'StudentScheduleListing_estacado_4-27.xlsx');
-
 		//$this->restoreReferralsFromActivityLog();
 
 		//ReteachHelper::markReteachAttendanceDunbar();
-
-
-		$schoolId = 2;
-		$date = new Carbon('May 03 2016');
-		LunchDetentionHelper::markAllPresentForDate($schoolId,$date);
-
+		$filename1 ='StudentScheduleListingDunbar_4-19';
+		$filename2 = 'StudentScheduleListing_estacado_4-27';
+		$this->testUploadSSL(1, $filename1.'.xlsx');
 	}
 
-	private function deleteScheduleInfo($schoolId)
-	{
-		$this->deleteAllClassStudentsFromSchool($schoolId);
-		//$this->deleteAllProfessorClassesFromSchool($schoolId);
-	}
-
-	private function deleteAllProfessorClassesFromSchool($schoolId)
-	{
-		$professorclasses = Professorclasses::whereHas('user', function ($q) use ($schoolId) {
-			$q->where('SchoolId', $schoolId);
-		});
-		$professorclasses->delete();
-		print_r("professorclassses = " . $professorclasses->get()->count() . "\n");
-	}
-
-	private function deleteAllClassStudentsFromSchool($schoolId)
-	{
-		$classstudents = Classstudents::whereHas('user', function ($q) use ($schoolId) {
-			$q->where('SchoolId', $schoolId);
-		});
-
-		$classstudents->delete();
-		print_r("classstudents = " . $classstudents->get()->count() . "\n");
+	private function testUploadSSL($schoolId,$file){
+		ScheduleHelper::deleteScheduleInfoFromSchoolId($schoolId);
+		$file = storage_path() . '/2016_spring_excel/' . $file;
+		\App\Helpers\ScheduleHelper::store($file, $schoolId);
 	}
 
 	private function moveFromFollowupReteach()
@@ -240,11 +217,7 @@ class MorningJobs extends Command
 		dd($reteach->count());
 	}
 
-	private function updateSchoolSchedule($schoolId, $fileName)
-	{
-		$file = storage_path() . '/2016_spring_excel/' . $fileName;
-		\App\Helpers\ScheduleHelper::store($file, $schoolId);
-	}
+
 
 	private function copyOldDatabaseAECToNewDatabase()
 	{

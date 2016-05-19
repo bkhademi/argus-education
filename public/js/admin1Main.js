@@ -257,36 +257,6 @@
 		}]);
 }(angular.module('Argus')));
 
-(function (app) {
-	"use strict";
-	app.
-		controller("ScheduleController",
-			["$scope", '$modal', 'notify', '$http',
-				function ($scope, assignmentsService, teachers, referrals, students, $modal, notify, $http, reteach, ProfessorClassesService) {
-					$scope.currentDate = new Date(); // date on the datepicker
-
-					$scope.dropzoneConfig = {
-						maxFileSize:1,
-
-						options: {// passed into the Dropzone constructor
-							url: api+'schedule',
-							paramName:"file",
-							acceptedFiles: ".xlsx",
-							uploadMultiple: false,
-							headers: { 'Authorization':'Bearer '+ localStorage.getItem('satellizer_token') }
-
-						},
-						eventHandlers: {
-							success: function (file, response) {
-							},
-						},
-
-					}; // end dropzoneConfig
-
-
-				}])
-
-}(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
@@ -920,6 +890,36 @@
 
 
 		}]);
+
+}(angular.module('Argus')));
+(function (app) {
+	"use strict";
+	app.
+		controller("ScheduleController",
+			["$scope", '$modal', 'notify', '$http',
+				function ($scope, assignmentsService, teachers, referrals, students, $modal, notify, $http, reteach, ProfessorClassesService) {
+					$scope.currentDate = new Date(); // date on the datepicker
+
+					$scope.dropzoneConfig = {
+						maxFileSize:1,
+
+						options: {// passed into the Dropzone constructor
+							url: api+'schedule',
+							paramName:"file",
+							acceptedFiles: ".xlsx",
+							uploadMultiple: false,
+							headers: { 'Authorization':'Bearer '+ localStorage.getItem('satellizer_token') }
+
+						},
+						eventHandlers: {
+							success: function (file, response) {
+							},
+						},
+
+					}; // end dropzoneConfig
+
+
+				}])
 
 }(angular.module('Argus')));
 /* global angular */
@@ -2068,25 +2068,6 @@
  * and open the template in the editor.
  */
 
-/* global angular */
-
-(function (app) {
-	app.controller('OSSLiveCtrl', ['$scope', '$interval', 'OSSService',
-		function ($scope, $interval, osss) {
-			var parentScope = $scope.$parent;
-			parentScope.child = $scope;
-			$scope.getList = function(date) {
-				$scope.oss = osss.getOSSList(date);
-			};
-			$scope.getList($scope.currentDate);
-		}]);
-}(angular.module('Argus')));
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 /* global angular */
 
@@ -2148,6 +2129,25 @@
 			$scope.getList($scope.currentDate);
 
 
+		}]);
+}(angular.module('Argus')));
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/* global angular */
+
+(function (app) {
+	app.controller('OSSLiveCtrl', ['$scope', '$interval', 'OSSService',
+		function ($scope, $interval, osss) {
+			var parentScope = $scope.$parent;
+			parentScope.child = $scope;
+			$scope.getList = function(date) {
+				$scope.oss = osss.getOSSList(date);
+			};
+			$scope.getList($scope.currentDate);
 		}]);
 }(angular.module('Argus')));
 (function (app) {
@@ -2647,6 +2647,57 @@
 		}]);
 
 }(angular.module('Argus')));
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+/* global angular */
+
+(function (app) {
+	app.controller('attendanceRostersCtrl',
+		['$scope', '$modal', 'notify',  'StudentsService','OroomService', 'LunchService','ISSService','OSSService',
+			function ($scope, $modal, notify, students, orooms, lunchs, isss, osss) {
+				$scope.currentList = 'oroom';
+				$scope.count =  {};
+				$scope.refTable = [];
+				$scope.lunchTableA = [];
+				$scope.lunchTableB = [];
+				$scope.iss = [];
+				$scope.oss = [];
+				$scope.currentDate = formatDate(new Date());
+
+				$scope.activities = [
+					{name: "Present", Id: 38},
+					{name: "No Show", Id: 39},
+					{name: "Left School", Id: 40},
+					{name: "School Absent", Id: 41},
+					{name: "Sent Out", Id: 42},
+					{name: "Walked Out", Id: 42},
+					{name: "Other", Id: 44}
+				];
+				$scope.download = function (text,type) {
+					type = type? type:'';
+					//console.log(text);
+					var element = document.createElement('a');
+					element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+					element.setAttribute('download', 'roster'+type+'.csv');
+					element.style.display = 'none';
+					document.body.appendChild(element);
+					element.click();
+					document.body.removeChild(element);
+				};
+
+				$scope.oroom = orooms;
+				$scope.lunch = lunchs;
+				lunchs.getCount();
+				orooms.getCount();
+				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
+				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
+			}]);
+}(angular.module('Argus')));
 /* global angular */
 
 (function (app) {
@@ -2935,27 +2986,6 @@
 /* global angular */
 
 (function (app) {
-    app.controller('OSSRosterController',
-        ['$scope', 'notify', '$modal', 'OSSService', 'FormatTimeService', 'ISSService', 'CountersService',
-            function ($scope, notify, $modal, osss, time, isss, counters) {
-                $scope.currentDate = new Date();
-                $scope.$watch('form.date.$viewValue', function (newV, oldV) {
-                    if (newV) {
-                        $scope.currentDate = newV;
-                        $scope.oss = osss.getOSSList($scope.currentDate, function(data){
-                            $scope.count.oss = data.length;
-                        });
-                    }
-                });
-
-
-
-
-            }]);
-}(angular.module('Argus')));
-/* global angular */
-
-(function (app) {
     app.controller('OroomRosterCtrl', ['$scope', 'MyNotify', '$modal', 'OroomService', "AECListService", 'UtilService',
         function ($scope, notify, $modal, orooms, aec, utils) {
             $scope.currentDate = new Date();
@@ -3083,56 +3113,26 @@
         }]);
 }(angular.module('Argus')));
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 /* global angular */
 
 (function (app) {
-	app.controller('attendanceRostersCtrl',
-		['$scope', '$modal', 'notify',  'StudentsService','OroomService', 'LunchService','ISSService','OSSService',
-			function ($scope, $modal, notify, students, orooms, lunchs, isss, osss) {
-				$scope.currentList = 'oroom';
-				$scope.count =  {};
-				$scope.refTable = [];
-				$scope.lunchTableA = [];
-				$scope.lunchTableB = [];
-				$scope.iss = [];
-				$scope.oss = [];
-				$scope.currentDate = formatDate(new Date());
+    app.controller('OSSRosterController',
+        ['$scope', 'notify', '$modal', 'OSSService', 'FormatTimeService', 'ISSService', 'CountersService',
+            function ($scope, notify, $modal, osss, time, isss, counters) {
+                $scope.currentDate = new Date();
+                $scope.$watch('form.date.$viewValue', function (newV, oldV) {
+                    if (newV) {
+                        $scope.currentDate = newV;
+                        $scope.oss = osss.getOSSList($scope.currentDate, function(data){
+                            $scope.count.oss = data.length;
+                        });
+                    }
+                });
 
-				$scope.activities = [
-					{name: "Present", Id: 38},
-					{name: "No Show", Id: 39},
-					{name: "Left School", Id: 40},
-					{name: "School Absent", Id: 41},
-					{name: "Sent Out", Id: 42},
-					{name: "Walked Out", Id: 42},
-					{name: "Other", Id: 44}
-				];
-				$scope.download = function (text,type) {
-					type = type? type:'';
-					//console.log(text);
-					var element = document.createElement('a');
-					element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-					element.setAttribute('download', 'roster'+type+'.csv');
-					element.style.display = 'none';
-					document.body.appendChild(element);
-					element.click();
-					document.body.removeChild(element);
-				};
 
-				$scope.oroom = orooms;
-				$scope.lunch = lunchs;
-				lunchs.getCount();
-				orooms.getCount();
-				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
-				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
-			}]);
+
+
+            }]);
 }(angular.module('Argus')));
 /* global angular */
 
@@ -4635,6 +4635,12 @@
 		}]);
 
 }(angular.module('Argus')));
+(function (app) {
+	app.controller('ActivitiesCtrl', ['$scope', function ($scope) {
+			
+		}]);
+}(angular.module('Argus')));
+
 (function(app){
 	app.controller('ASPAttendancesCtrl',['$scope','ASPService',function($scope,asp){
 		$scope.currentDate = new Date();
@@ -4672,12 +4678,6 @@
 
 
 	}])
-}(angular.module('Argus')));
-
-(function (app) {
-	app.controller('ActivitiesCtrl', ['$scope', function ($scope) {
-			
-		}]);
 }(angular.module('Argus')));
 
 (function (app) {

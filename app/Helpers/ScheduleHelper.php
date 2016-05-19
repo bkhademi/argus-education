@@ -19,15 +19,16 @@ use App\Useractions;
 use DB;
 use Excel;
 
+
 class ScheduleHelper
 {
 
 
 	public static function store($file, $schoolId)
 	{
-		//DB::beginTransaction();
 		Excel::load($file, function ($reader) use ($schoolId) {
 			//		Info for current student
+
 			$currentStudent = new StudentInfo();
 			$new = true;
 			$adding = 0;
@@ -234,9 +235,30 @@ class ScheduleHelper
 		});
 	}
 
+	public static function deleteScheduleInfoFromSchoolId($schoolId){
+		static::deleteAllClassStudentsFromSchoolId($schoolId);
+		//static::deleteAllProfessorClassesFromSchool($schoolId); // removes Assignments too
+	}
+
+	public static function deleteAllClassStudentsFromSchoolId($schoolId){
+		$classstudents = Classstudents::whereHas('user', function ($q) use ($schoolId) {
+			$q->where('SchoolId', $schoolId);
+		});
+
+		$classstudents->delete();
+		print_r("classstudents = " . $classstudents->get()->count() . "\n");
+	}
+
+	public static function deleteAllProfessorClassesFromSchoolId($schoolId){
+		$professorclasses = Professorclasses::whereHas('user', function ($q) use ($schoolId) {
+			$q->where('SchoolId', $schoolId);
+		});
+		$professorclasses->delete();
+		print_r("professorclassses = " . $professorclasses->get()->count() . "\n");
+	}
+
 	public static function updateReteachPeriodsForSchool($file, $schoolId)
 	{
-		DB::beginTransaction();
 		Excel::load($file, function ($reader) use ($schoolId) {
 			$rows = $reader->toObject();
 			forEach ($rows as $row) {
