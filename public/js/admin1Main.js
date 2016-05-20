@@ -1,3 +1,25 @@
+/**
+ * Created by Brandon on 5/19/2016.
+ */
+(function (app) {
+
+   app.controller("CompiledListCtrl",function($scope,referrals,StudentsService){
+       $scope.refTable = referrals.getList();
+       $scope.refTable.then(processlist,error)
+       var button = {
+           name:"O-Room",
+           color: "Blue"
+       };
+       function processlist(list){
+           $scope.refTable = list.list;
+           angular.forEach(list.list,StudentsService.addTodaysAct);
+       }
+       function error (){
+           console.log("error");
+       }
+   })
+
+}(angular.module("Argus")));
 /* global angular */
 
 (function(app){
@@ -260,636 +282,665 @@
 /* global angular */
 
 (function (app) {
-	"use strict";
-	app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
-		function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
+    "use strict";
+    app.config(['$stateProvider', '$urlRouterProvider', '$ocLazyLoadProvider', '$provide',
+        function ($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, $provide) {
 
-			$stateProvider
-				.state('admin1', {
-					abstract: true,
-					url: "/admin1",
-					templateUrl: "views/common/contentArgusLeadCoordinator.html",
-					controller: "NavigationAdmin1Ctrl",
-					controllerAs: 'navigation',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'ui.slimscroll',
-									files: ['js/plugins/slimscroll/angular.slimscroll.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}
+            $stateProvider
+                .state('admin1', {
+                    abstract: true,
+                    url: "/admin1",
+                    templateUrl: "views/common/contentArgusLeadCoordinator.html",
+                    controller: "NavigationAdmin1Ctrl",
+                    controllerAs: 'navigation',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'ui.slimscroll',
+                                    files: ['js/plugins/slimscroll/angular.slimscroll.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }
 
-							]);
-						}
-					}
-				})
-				.state('admin1.dashboard', {
-					url: "/dashboard",
-					templateUrl: 'views/admin1/dashboard.html',
-					data: {pageTitle: 'Dashboard'},
-					controller: "DashAdmin1Ctrl",
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
-								}, {
-									name: 'angles',
-									files: ['js/plugins/chartJs/angles.js']
-								}, {
-									files: ['js/plugins/chartJs/Chart.min.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
-				})
-				/* AEC */
-				.state('admin1.referral', {
-					url: "/adminReferral",
-					templateUrl: 'views/admin1/Referral.html',
-					data: {pageTitle: 'Referral'},
-					controller: 'admin1referalController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
+                            ]);
+                        }
+                    }
+                })
+                .state('admin1.dashboard', {
+                    url: "/dashboard",
+                    templateUrl: 'views/admin1/dashboard.html',
+                    data: {pageTitle: 'Dashboard'},
+                    controller: "DashAdmin1Ctrl",
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/d3/d3.min.js', "js/plugins/jquery-tipsy/jquery.tipsy.js", "css/plugins/gauge/gauge_small.css", "css/plugins/gauge/gauge.css"]
+                                }, {
+                                    name: 'angles',
+                                    files: ['js/plugins/chartJs/angles.js']
+                                }, {
+                                    files: ['js/plugins/chartJs/Chart.min.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                /* AEC */
+                .state('admin1.referral', {
+                    url: "/adminReferral",
+                    templateUrl: 'views/admin1/Referral.html',
+                    data: {pageTitle: 'Referral'},
+                    controller: 'admin1referalController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin1.AECList', {
-					url: "/AECList",
-					templateUrl: 'views/sharedItems/manageAEC.html',
-					data: {pageTitle: 'AEC List'},
-					controller: 'manageAECController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
+                })
+                .state('admin1.AECList', {
+                    url: "/AECList",
+                    templateUrl: 'views/sharedItems/manageAEC.html',
+                    data: {pageTitle: 'AEC List'},
+                    controller: 'manageAECController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin1.pending', {
-					url: "/pending",
-					templateUrl: 'views/sharedItems/manageAECabsence.html',
-					data: {pageTitle: 'Pending'},
-					controller: 'manageAECAbsenceController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
-				})
+                })
+                .state('admin1.pending', {
+                    url: "/pending",
+                    templateUrl: 'views/sharedItems/manageAECabsence.html',
+                    data: {pageTitle: 'Pending'},
+                    controller: 'manageAECAbsenceController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
 
-				/* Reteach */
-				.state('admin1.reteachReferral', {
-					url: "/ReteachReferral",
-					templateUrl: 'views/reteach/Referral.html',
-					data: {pageTitle: 'Referral'},
-					controller: 'ReteachReferralCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
-								}
-							]);
-						}
-					}
+                /* Reteach */
+                .state('admin1.reteachReferral', {
+                    url: "/ReteachReferral",
+                    templateUrl: 'views/reteach/Referral.html',
+                    data: {pageTitle: 'Referral'},
+                    controller: 'ReteachReferralCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin1.reteachList', {
-					url: "/ReteachList",
-					templateUrl: 'views/reteach/manageReteach.html',
-					data: {pageTitle: 'List'},
-					controller: 'ManageReteachCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
+                })
+                .state('admin1.reteachList', {
+                    url: "/ReteachList",
+                    templateUrl: 'views/reteach/manageReteach.html',
+                    data: {pageTitle: 'List'},
+                    controller: 'ManageReteachCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
 
-				})
-				.state('admin1.reteachPending', {
-					url: "/ReteachFollowup",
-					templateUrl: 'views/reteach/manageReteachabsence.html',
-					data: {pageTitle: 'Pending'},
-					controller: 'ManageReteachAbsenceCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}
-							]);
-						}
-					}
-				})
+                })
+                .state('admin1.reteachPending', {
+                    url: "/ReteachFollowup",
+                    templateUrl: 'views/reteach/manageReteachabsence.html',
+                    data: {pageTitle: 'Pending'},
+                    controller: 'ManageReteachAbsenceCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
 
-				.state('admin1.studentData', {
-					url: "/studentData",
-					templateUrl: 'views/sharedItems/studentInfo.html',
-					data: {pageTitle: 'Student Data'},
-					controller: 'studentInfoCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}
-							]);
-						}
-					}
-				})
+                .state('admin1.studentData', {
+                    url: "/studentData",
+                    templateUrl: 'views/sharedItems/studentInfo.html',
+                    data: {pageTitle: 'Student Data'},
+                    controller: 'studentInfoCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
 
-				.state('admin1.oroomActivityLogAdmin', {
-					url: "/OroomActivityLogA",
-					templateUrl: 'views/admin2/oroomActivityLogAdmin.html',
-					data: {pageTitle: 'Oroom Activity Log'},
-					controller: 'oRoomActivityLogAdminCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								}, {
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								},
-							]);
-						}
-					}
-				})
+                .state('admin1.oroomActivityLogAdmin', {
+                    url: "/OroomActivityLogA",
+                    templateUrl: 'views/admin2/oroomActivityLogAdmin.html',
+                    data: {pageTitle: 'Oroom Activity Log'},
+                    controller: 'oRoomActivityLogAdminCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                }, {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }, {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                },
+                            ]);
+                        }
+                    }
+                })
 
-				.state('admin1.CoordinatorReferralSystem', {
-					url: "/OroomCoordinatorReferral",
-					templateUrl: 'views/admin2/referralSystem.html',
-					data: {pageTitle: 'Referral'},
-					controller: 'ORoomCoordinatorReferralCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['js/plugins/jasny/jasny-bootstrap.min.js']
-								}, {
-									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}, {
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}
-							]);
-						}
-					}
-				})
+                .state('admin1.CoordinatorReferralSystem', {
+                    url: "/OroomCoordinatorReferral",
+                    templateUrl: 'views/admin2/referralSystem.html',
+                    data: {pageTitle: 'Referral'},
+                    controller: 'ORoomCoordinatorReferralCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['js/plugins/jasny/jasny-bootstrap.min.js']
+                                }, {
+                                    files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }, {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
 
-				/* Attendance Rosters */
-				.state('admin1.attendanceRosters', {
-					url: "/attendanceRosters",
-					templateUrl: 'views/admin2/attendanceRosters.html',
-					data: {pageTitle: 'Referral'},
-					controller: 'attendanceRostersCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
-								},
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}
+                /* Attendance Rosters */
+                .state('admin1.attendanceRosters', {
+                    url: "/attendanceRosters",
+                    templateUrl: 'views/admin2/attendanceRosters.html',
+                    data: {pageTitle: 'Referral'},
+                    controller: 'attendanceRostersCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                                },
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }
 
-							]);
-						}
-					}
-				})
-				.state('admin1.attendanceRosters.oroom', {
-					url: "/Oroom",
-					templateUrl: 'views/rosters/oroom.html',
-					data: {pageTitle: 'oroom'},
-					controller: 'OroomRosterCtrl',
-					resolve: {}
-				})
-				.state('admin1.attendanceRosters.lunchDetention', {
-					url: "/LunchDetention",
-					templateUrl: 'views/rosters/lunchDetention.html',
-					data: {pageTitle: 'LunchD'},
-					controller: 'LunchDetentionRosterCtrl',
-					resolve: {}
-				})
-				.state('admin1.attendanceRosters.iss', {
-					url: "/ISS",
-					templateUrl: 'views/rosters/iss.html',
-					data: {pageTitle: 'ISS'},
-					controller: 'ISSRosterController',
-					resolve: {}
-				})
-				.state('admin1.attendanceRosters.oss', {
-					url: "/OSS",
-					templateUrl: 'views/rosters/oss.html',
-					data: {pageTitle: 'OSS'},
-					controller: 'OSSRosterController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									serie: true,
-									name: 'angular-flot',
-									files: [
-										'js/plugins/flot/jquery.flot.js',
-										'js/plugins/flot/jquery.flot.time.js',
-										'js/plugins/flot/jquery.flot.tooltip.min.js',
-										'js/plugins/flot/jquery.flot.spline.js',
-										'js/plugins/flot/jquery.flot.resize.js',
-										'js/plugins/flot/jquery.flot.pie.js',
-										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js']
-								}
-							])
-								;
-						}
-					}
-				})
+                            ]);
+                        }
+                    }
+                })
+                .state('admin1.attendanceRosters.oroom', {
+                    url: "/Oroom",
+                    templateUrl: 'views/rosters/oroom.html',
+                    data: {pageTitle: 'oroom'},
+                    controller: 'OroomRosterCtrl',
+                    resolve: {}
+                })
+                .state('admin1.attendanceRosters.lunchDetention', {
+                    url: "/LunchDetention",
+                    templateUrl: 'views/rosters/lunchDetention.html',
+                    data: {pageTitle: 'LunchD'},
+                    controller: 'LunchDetentionRosterCtrl',
+                    resolve: {}
+                })
+                .state('admin1.attendanceRosters.iss', {
+                    url: "/ISS",
+                    templateUrl: 'views/rosters/iss.html',
+                    data: {pageTitle: 'ISS'},
+                    controller: 'ISSRosterController',
+                    resolve: {}
+                })
+                .state('admin1.attendanceRosters.oss', {
+                    url: "/OSS",
+                    templateUrl: 'views/rosters/oss.html',
+                    data: {pageTitle: 'OSS'},
+                    controller: 'OSSRosterController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    serie: true,
+                                    name: 'angular-flot',
+                                    files: [
+                                        'js/plugins/flot/jquery.flot.js',
+                                        'js/plugins/flot/jquery.flot.time.js',
+                                        'js/plugins/flot/jquery.flot.tooltip.min.js',
+                                        'js/plugins/flot/jquery.flot.spline.js',
+                                        'js/plugins/flot/jquery.flot.resize.js',
+                                        'js/plugins/flot/jquery.flot.pie.js',
+                                        'js/plugins/flot/curvedLines.js',
+                                        'js/plugins/flot/angular-flot.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
 
-				.state('admin1.issFollowup', {
-					url: '/ISSFollowup',
-					templateUrl: 'views/iss/issFollowupList.html',
-					data: {pageTitle: 'ISS Followup'},
-					controller: 'IssFollowupListCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}
-							])
-								;
-						}
-					}
-				})
+                .state('admin1.issFollowup', {
+                    url: '/ISSFollowup',
+                    templateUrl: 'views/iss/issFollowupList.html',
+                    data: {pageTitle: 'ISS Followup'},
+                    controller: 'IssFollowupListCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
 
-				.state('admin1.parentMeetingList', {
-					url: '/Parent Meeting List',
-					templateUrl: 'views/iss/parentMeeting.html',
-					data: {pageTitle: 'Parent Meeting List'},
-					controller: 'ParentMeetingCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
-								}
-							])
-								;
-						}
-					}
-				})
-				.state('admin1.parentMeetingFollowup', {
-					url: '/Parent Meeting Followup',
-					templateUrl: 'views/iss/parentMeetingFollowup.html',
-					data: {pageTitle: 'Parent Meeting List'},
-					controller: 'ParentMeetingFollowupCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
-								}
-							])
-								;
-						}
-					}
-				})
+                .state('admin1.parentMeetingList', {
+                    url: '/Parent Meeting List',
+                    templateUrl: 'views/iss/parentMeeting.html',
+                    data: {pageTitle: 'Parent Meeting List'},
+                    controller: 'ParentMeetingCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
+                .state('admin1.parentMeetingFollowup', {
+                    url: '/Parent Meeting Followup',
+                    templateUrl: 'views/iss/parentMeetingFollowup.html',
+                    data: {pageTitle: 'Parent Meeting List'},
+                    controller: 'ParentMeetingFollowupCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['css/plugins/clockpicker/clockpicker.css', 'js/plugins/clockpicker/clockpicker.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    files: ['css/plugins/iCheck/custom.css', 'js/plugins/iCheck/icheck.min.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
 
-				/* Reports */
-				.state('admin1.reports', {
-					url: '/Reports',
-					templateUrl: 'views/reports/reports.html',
-					data: {pageTitle: 'Reports'},
-					controller: 'ReportsCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
-								}, {
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}
-							])
-								;
-						}
-					}
-				})
-				.state('admin1.reports.eod', {
-					url: '/EOD',
-					templateUrl: 'views/reports/reports.eod.html',
-					data: {pageTitle: 'Reports'},
-					controller: 'ReportsEODCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									serie: true,
-									name: 'angular-flot',
-									files: [
-										'js/plugins/flot/jquery.flot.js',
-										'js/plugins/flot/jquery.flot.time.js',
-										'js/plugins/flot/jquery.flot.tooltip.min.js',
-										'js/plugins/flot/jquery.flot.spline.js',
-										'js/plugins/flot/jquery.flot.resize.js',
-										'js/plugins/flot/jquery.flot.pie.js',
-										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('admin1.reports.oroomActivity', {
-					url: '/OroomActivity',
-					templateUrl: 'views/reports/reports.oroomActivity.html',
-					data: {pageTitle: 'OroomActivity'},
-					controller: 'ReportsOroomActivityCtrl',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									serie: true,
-									name: 'angular-flot',
-									files: [
-										'js/plugins/flot/jquery.flot.js',
-										'js/plugins/flot/jquery.flot.time.js',
-										'js/plugins/flot/jquery.flot.tooltip.min.js',
-										'js/plugins/flot/jquery.flot.spline.js',
-										'js/plugins/flot/jquery.flot.resize.js',
-										'js/plugins/flot/jquery.flot.pie.js',
-										'js/plugins/flot/curvedLines.js',
-										'js/plugins/flot/angular-flot.js']
-								}
-							]);
-						}
-					}
-				})
-				.state('admin1.reports.progression', {
-					url: '/Progression',
-					templateUrl: 'views/reports/reports.progression.html',
-					data: {pageTitle: 'Reports'},
-					controller: 'ReportsProgressionCtrl'
-				})
-				.state('admin1.reports.atRisk', {
-					url: '/At_Risk',
-					templateUrl: 'views/reports/reports.atRisk.html',
-					data: {pageTitle: 'Reports'},
-					controller: 'ReportsAtRiskCtrl'
-				})
+                /* Reports */
+                .state('admin1.reports', {
+                    url: '/Reports',
+                    templateUrl: 'views/reports/reports.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.css', 'js/plugins/datapicker/angular-datepicker.js']
+                                }, {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }
+                            ])
+                                ;
+                        }
+                    }
+                })
+                .state('admin1.reports.eod', {
+                    url: '/EOD',
+                    templateUrl: 'views/reports/reports.eod.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsEODCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    serie: true,
+                                    name: 'angular-flot',
+                                    files: [
+                                        'js/plugins/flot/jquery.flot.js',
+                                        'js/plugins/flot/jquery.flot.time.js',
+                                        'js/plugins/flot/jquery.flot.tooltip.min.js',
+                                        'js/plugins/flot/jquery.flot.spline.js',
+                                        'js/plugins/flot/jquery.flot.resize.js',
+                                        'js/plugins/flot/jquery.flot.pie.js',
+                                        'js/plugins/flot/curvedLines.js',
+                                        'js/plugins/flot/angular-flot.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin1.reports.oroomActivity', {
+                    url: '/OroomActivity',
+                    templateUrl: 'views/reports/reports.oroomActivity.html',
+                    data: {pageTitle: 'OroomActivity'},
+                    controller: 'ReportsOroomActivityCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    serie: true,
+                                    name: 'angular-flot',
+                                    files: [
+                                        'js/plugins/flot/jquery.flot.js',
+                                        'js/plugins/flot/jquery.flot.time.js',
+                                        'js/plugins/flot/jquery.flot.tooltip.min.js',
+                                        'js/plugins/flot/jquery.flot.spline.js',
+                                        'js/plugins/flot/jquery.flot.resize.js',
+                                        'js/plugins/flot/jquery.flot.pie.js',
+                                        'js/plugins/flot/curvedLines.js',
+                                        'js/plugins/flot/angular-flot.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin1.reports.progression', {
+                    url: '/Progression',
+                    templateUrl: 'views/reports/reports.progression.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsProgressionCtrl'
+                })
+                .state('admin1.reports.atRisk', {
+                    url: '/At_Risk',
+                    templateUrl: 'views/reports/reports.atRisk.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ReportsAtRiskCtrl'
+                })
 
-				//update schedules
-				.state('admin1.schedule', {
-					url: '/schedule',
-					templateUrl: 'views/admin1/schedule.html',
-					data: {pageTitle: 'Reports'},
-					controller: 'ScheduleController',
-					resolve: {
-						loadPlugin: function ($ocLazyLoad) {
-							return $ocLazyLoad.load([
-								{
-									name: 'datePicker',
-									files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
-								}, {
-									files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
-								},
-								{
-									name: 'ui.footable',
-									files: ['js/plugins/footable/angular-footable.js']
-								}, {
-									insertBefore: '#loadBefore',
-									name: 'localytics.directives',
-									files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
-								},
-								{
-									name: 'cgNotify',
-									files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
-								}, {
-									files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
-								}
-							]);
-						}
-					}
-				})
+                //update schedules
+                .state('admin1.schedule', {
+                    url: '/schedule',
+                    templateUrl: 'views/admin1/schedule.html',
+                    data: {pageTitle: 'Reports'},
+                    controller: 'ScheduleController',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                }, {
+                                    files: ['css/plugins/dropzone/basic.css', 'css/plugins/dropzone/dropzone.css', 'js/plugins/dropzone/dropzone.js']
+                                }
+                            ]);
+                        }
+                    }
+                })
+                .state('admin1.compList', {
+                    url: '/compList',
+                    templateUrl: 'views/admin1/compList.html',
+                    data: {pageTitle: 'Compiled List'},
+                    controller: 'CompiledListCtrl',
+                    resolve: {
+                        loadPlugin: function ($ocLazyLoad) {
+                            return $ocLazyLoad.load([
+                                {
+                                    name: 'datePicker',
+                                    files: ['css/plugins/datapicker/angular-datapicker.min.css', 'js/plugins/datapicker/angular-datepicker.min.js']
+                                }, {
+                                    files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                                },
+                                {
+                                    name: 'ui.footable',
+                                    files: ['js/plugins/footable/angular-footable.js']
+                                }, {
+                                    insertBefore: '#loadBefore',
+                                    name: 'localytics.directives',
+                                    files: ['css/plugins/chosen/chosen.css', 'js/plugins/chosen/chosen.jquery.js', 'js/plugins/chosen/chosen.js']
+                                },
+                                {
+                                    name: 'cgNotify',
+                                    files: ['css/plugins/angular-notify/angular-notify.min.css', 'js/plugins/angular-notify/angular-notify.min.js']
+                                },
+                            ]);
+                        }
+                    }
+                })
+            ;
 
-			;
 
-
-		}]);
+        }]);
 
 }(angular.module('Argus')));
 (function (app) {
@@ -2192,139 +2243,171 @@
 /* global angular */
 
 (function (app) {
-	app
-		.controller("ProfileCtrl",
-			["$scope", "StudentsService", "$http", '$rootScope', 'ProfessorClassesService', 'RoomsService', function ($scope, students, $http, $rootScope, professorclasses, rooms) {
-					$scope.schedule = []; // holds  student's schedule
-					$scope.activities = []; // holds student'activities
-					$scope.checks = [];
-					$scope.currentDate = new Date();
+    app
+        .controller("ProfileCtrl",
+            ["$scope", "StudentsService", "$http", '$rootScope', 'ProfessorClassesService', 'RoomsService', 'ClassStudentsService', 'notify',
+                function ($scope, students, $http, $rootScope, professorclasses, rooms, ClassStuSer, notify) {
+                    $scope.schedule = []; // holds  student's schedule
+                    $scope.activities = []; // holds student'activities
+                    $scope.checks = [];
+                    $scope.currentDate = new Date();
+                    $scope.classes = professorclasses.query();
 
-					$scope.$watch('checks', function (n, o) {
+                    $scope.$watch('checks', function (n, o) {
 //			console.log(n);
-					}, true);
-					$scope.role = $rootScope.currentUser.role;
-					$scope.updateStudent = function () {
-						students.update({id: $scope.student.Id, updateStudent: true}, {
-							GuardianName: $scope.student.GuardianName,
-							GuardianPhone: $scope.student.GuardianPhone,
-							GuardianMPhone: $scope.student.GuardianMPhone,
-							GuardianEmail: $scope.student.GuardianEmail
-						});
-					};
-					$scope.rooms = rooms.query();
-
-					$scope.onRoomChanged = function (professorclass) {
-						console.log(professorclass);
-						professorclasses.update({id: professorclass.Id}, {RoomId: professorclass.room.Id}, function (data) {
-							console.log('success');
-						});
-					};
-
-					$scope.downloadActivity = function () {
-						var text = '';
-						var heading = 'Date,ActionBy,Activity,Comment \n';
-						text += heading;
-						angular.forEach($scope.activities, function (act) {
-							text += '"' + act.ActionDate.split(' ')[0] + '",';
-							text += '"' + (act.user && act.user.FirstName )+ ', ' + (act.user && act.user.LastName )+ '",';
-							text += '"' + act.activity.Name + '",';
-							text += '"' + (act.Comment || '')  + '",';
-							text += "\n";
-						});
+                    }, true);
+                    $scope.role = $rootScope.currentUser.role;
+                    $scope.downloadActivity = function () {
+                        var text = '';
+                        var heading = 'Date,ActionBy,Activity,Comment \n';
+                        text += heading;
+                        angular.forEach($scope.activities, function (act) {
+                            text += '"' + act.ActionDate.split(' ')[0] + '",';
+                            text += '"' + (act.user && act.user.FirstName ) + ', ' + (act.user && act.user.LastName ) + '",';
+                            text += '"' + act.activity.Name + '",';
+                            text += '"' + (act.Comment || '') + '",';
+                            text += "\n";
+                        });
 
 
-						download(text, $scope.student);
-					};
-					var download = function (text, student) {
+                        download(text, $scope.student);
+                    };
+                    var download = function (text, student) {
 
-						//console.log(text);
-						var element = document.createElement('a');
-						element.setAttribute('href', 'data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURI(text));
-						element.setAttribute('download', 'ActivityFor-' + student.user.FirstName + '_' + student.user.LastName + '.csv');
-						element.style.display = 'none';
-						document.body.appendChild(element);
-						element.click();
-						document.body.removeChild(element);
-					};
-
-
-					//console.log($scope.student)// contains the student to display 
-
-					$scope.$watch('student', function (newVal, oldVal) {
-
-						$scope.schedule = newVal.classes;
-						var parentName = newVal.GuardianName ? newVal.GuardianName.split(',') : ["No", " name"];
-						$scope.parents = [{
-								fn: parentName[0],
-								ln: parentName[1],
-								phone: newVal.GuardianPhone || "none",
-								mphone: 'None',
-								email: 'None'}];
-
-						$scope.activities = newVal.user.activities_affected;
-
-					});
-
-					/*******************  Right Side Controllers*********************/
-					$scope.currentDate;
-					$scope.$watch("profileForm.date.$modelValue", function (newVal, oldVal) {
-						//console.info("date changedto :" + newVal)
-					});
+                        //console.log(text);
+                        var element = document.createElement('a');
+                        element.setAttribute('href', 'data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURI(text));
+                        element.setAttribute('download', 'ActivityFor-' + student.user.FirstName + '_' + student.user.LastName + '.csv');
+                        element.style.display = 'none';
+                        document.body.appendChild(element);
+                        element.click();
+                        document.body.removeChild(element);
+                    };
 
 
-					$scope.showDetail = false;
-					$scope.toggleShowDetail = function (index) {
-						$scope.showDetail = !$scope.showDetail;
-						$scope.selected = $scope.activities[index];
-					};
+                    //console.log($scope.student)// contains the student to display
 
-					$scope.showComment = false;
-					$scope.toggleShowComment = function (index) {
-						$scope.showComment = !$scope.showComment;
-						$scope.selected = $scope.activities[index];
-					};
+                    $scope.$watch('student', function (newVal, oldVal) {
 
-					$scope.addComment = function () {
-						var entry =
-							{date: formatDate(new Date),
-								activity: "comment",
-								Comment: $scope.comment,
-								staff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName};
-						$scope.activities.push(entry);
-						$scope.comment = '';
-					};
+                        $scope.schedule = newVal.classes;
+                        var parentName = newVal.GuardianName ? newVal.GuardianName.split(',') : ["No", " name"];
+                        $scope.parents = [{
+                            fn: parentName[0],
+                            ln: parentName[1],
+                            phone: newVal.GuardianPhone || "none",
+                            mphone: 'None',
+                            email: 'None'
+                        }];
 
-					$scope.graduationYear = 2015 + (12 - parseInt($scope.student.Grade, 10));
+                        $scope.activities = newVal.user.activities_affected;
 
-					function formatDate(date) {
-						return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-					}
+                    });
 
-					$scope.filter = [];
-					$scope.getActivities = function () {
-						return ($scope.activities || []).map(function (w) {
-							return w.activity.Name;
-						}).filter(function (w, idx, arr) {
-							return arr.indexOf(w) === idx;
-						});
-					};
-
-					$scope.filterByCategory = function (act) {
-						return $scope.filter[act.activity.Name] || noFilter($scope.filter);
-					};
-					// date selected on the checkboxes;
-					function noFilter(filterObj) {
-						for (var key in filterObj) {
-							if (filterObj[key]) {
-								return false;
-							}
-						}
-						return true;
-					}
+                    /*******************  Right Side Controllers*********************/
+                    $scope.currentDate;
+                    $scope.$watch("profileForm.date.$modelValue", function (newVal, oldVal) {
+                        //console.info("date changedto :" + newVal)
+                    });
 
 
-				}]);
+                    $scope.showDetail = false;
+                    $scope.toggleShowDetail = function (index) {
+                        $scope.showDetail = !$scope.showDetail;
+                        $scope.selected = $scope.activities[index];
+                    };
+
+                    $scope.showComment = false;
+                    $scope.toggleShowComment = function (index) {
+                        $scope.showComment = !$scope.showComment;
+                        $scope.selected = $scope.activities[index];
+                    };
+
+                    $scope.addComment = function () {
+                        var entry =
+                        {
+                            date: formatDate(new Date),
+                            activity: "comment",
+                            Comment: $scope.comment,
+                            staff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName
+                        };
+                        $scope.activities.push(entry);
+                        $scope.comment = '';
+                    };
+
+                    $scope.graduationYear = 2015 + (12 - parseInt($scope.student.Grade, 10));
+
+                    function formatDate(date) {
+                        return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+                    }
+
+                    $scope.filter = [];
+                    $scope.getActivities = function () {
+                        return ($scope.activities || []).map(function (w) {
+                            return w.activity.Name;
+                        }).filter(function (w, idx, arr) {
+                            return arr.indexOf(w) === idx;
+                        });
+                    };
+
+                    $scope.filterByCategory = function (act) {
+                        return $scope.filter[act.activity.Name] || noFilter($scope.filter);
+                    };
+                    // date selected on the checkboxes;
+                    function noFilter(filterObj) {
+                        for (var key in filterObj) {
+                            if (filterObj[key]) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+
+                    $scope.enableClassEdit = function ($index, classes) {
+                        classes[$index].editing = true
+                    };
+
+                    $scope.submitClassChange = function ($index, classes) {
+                        var newClass = $scope.student.ProfessorClass;
+                        var classToBeModified = classes[$index];
+                        ClassStuSer.update({id: classToBeModified.Id}, {professorClassId: newClass.Id}, function (data) {
+                            console.log('success');
+                            notify("Hooray! Class Successfully Changed!");
+                            classToBeModified.professor_class = newClass;
+                            classes[$index].editing = false;
+                        }, function (error) {
+                            notify("Ops! Something went wrong, please try again")
+                        });
+
+                    };
+                    $scope.cancelClassChange = function ($index, classes) {
+                        classes[$index].editing = false
+                    };
+                    $scope.enableContactEdit = function () {
+                        $scope.student.GuardianNameCopy = $scope.student.GuardianName;
+                        $scope.student.GuardianPhoneCopy = $scope.student.GuardianPhone;
+                        $scope.student.GuardianMPhoneCopy = $scope.student.GuardianMPhone;
+                        $scope.student.contactEdit = true;
+                    };
+                    $scope.submitContactChange = function(){
+                        students.update({id: $scope.student.Id, updateStudent: true}, {
+                            GuardianName: $scope.student.GuardianNameCopy,
+                            GuardianPhone: $scope.student.GuardianPhoneCopy,
+                            GuardianMPhone: $scope.student.GuardianMPhoneCopy
+
+                        },function(){
+                            notify("Hooray! Parent Contact Updated!");
+                            $scope.student.GuardianName = $scope.student.GuardianNameCopy;
+                            $scope.student.GuardianPhone = $scope.student.GuardianPhoneCopy;
+                            $scope.student.GuardianMPhone = $scope.student.GuardianMPhoneCopy;
+                            $scope.student.contactEdit = false;
+                        },function(error){
+                            notify("Ops! Something went wrong, please try again");
+                        });
+                    };
+                    $scope.cancelContactChange = function(){
+                        $scope.student.contactEdit = false;
+                    };
+                }]);
 
 }(angular.module('Argus')));
 /* global angular */

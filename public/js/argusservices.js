@@ -19,6 +19,9 @@ function formatDate(date) {
 			});
 
 			var utils = {};
+			utils.getList = function(){
+				return resource.get({list:true}).$promise;
+			}
 			utils.deleteReferralsFromStudent = function (student) {
 				var toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 					return o.remove;
@@ -196,7 +199,20 @@ function formatDate(date) {
 		}]);
 
 }(angular.module("Argus")));
+/* ClassStudentsService */
+(function (app) {
+	'use strict';
+	app
+		.factory('ClassStudentsService', ['$resource', function ($resource) {
+			var ref = $resource('api/classstudents/:id', {}, {
+				update: {
+					method: 'PUT'
+				}
+			});
+			return ref;
+		}]);
 
+}(angular.module("Argus")));
 /* STUDENTS */
 (function (app) {
 	'use strict';
@@ -239,7 +255,7 @@ function formatDate(date) {
 (function (app) {
 	'use strict';
 	app
-		.factory('StudentsService', ['$resource', function ($resource) {
+		.factory('StudentsService', ['$resource','$filter', function ($resource,$filter) {
 			var studentsResource = $resource('api/students/:id', {}, {
 				update: {
 					method: 'PUT'
@@ -250,7 +266,59 @@ function formatDate(date) {
 			obj.refresh = function () {
 				obj.students = studentsResource.query({admin: true, light: true});
 			};
-
+			obj.addTodaysAct = function(student){
+				student.buttons = [];
+				student.aec = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 12;
+				});
+				student.orm = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 1 || referral.ReferralTypeId == 2 || referral.ReferralTypeId == 3
+						|| referral.ReferralTypeId == 16 || referral.ReferralTypeId == 19;
+				});
+				student.reteach = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 18;
+				});
+				student.ldentention = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 9;
+				});
+				student.iss = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 5 || referral.ReferralTypeId == 6 || referral.ReferralTypeId == 7
+						|| referral.ReferralTypeId == 10 || referral.ReferralTypeId == 15 || referral.ReferralTypeId == 17;
+				});
+				student.oss = $filter("filter")(student.referred,function(referral){
+					return referral.ReferralTypeId == 11;
+				});
+				var name = student.user.FirstName;
+				if(student.oss.length > 0){
+					student.buttons.push({name:"OSS", color:"OSS", description:""})
+				}
+				if(student.iss.length > 0){
+					var reftype = "Referral Type: " + student.iss[0].referral_type.Name;
+					var user = "Assigned By: " + student.iss[0].user.FirstName
+					student.buttons.push({name:"ISS", color:"ISS", description: reftype + ", " + user })
+				}
+				if(student.orm.length > 0){
+					var reftype = "Referral Type: " + student.orm[0].referral_type.Name;
+					var user = "Assigned By: " + (student.orm[0].teacher.Id == 0 ? student.orm[0].user.FirstName :
+						student.orm[0].teacher.FirstName + " " + student.orm[0].teacher.LastName);
+					student.buttons.push({name:"O-Room", color:"O-Room", description: reftype + ", " + user})
+				}
+				if(student.reteach.length > 0){
+					var reftype = "Referral Type: " + student.reteach[0].referral_type.Name;
+					var user = "Assigned By: " + student.reteach[0].teacher.FirstName + " " +
+						student.reteach[0].teacher.LastName
+					student.buttons.push({name:"ReTeach", color:"ReTeach", description: reftype + ", " + user})
+				}
+				if(student.aec.length > 0){
+					var reftype = "Referral Type: " + student.aec[0].referral_type.Name;
+					var num_assignments = "Number of Assignments: " + student.aec.length
+					student.buttons.push({name:"AEC", color:"AEC", description: reftype = reftype + ", " + num_assignments})
+				}
+				if(student.ldentention.length > 0){
+					var tardy_period = "Tardy Period: " + student.ldentention[0].period.Number
+					student.buttons.push({name:"Lunch Detention", color:"Ldetention", description: tardy_period})
+				}
+			};
 			return angular.extend(studentsResource, obj);
 		}]);
 

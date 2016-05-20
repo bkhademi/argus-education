@@ -130,6 +130,11 @@ class StudentsController extends Controller {
 					;
 					
 				}])
+			->with(['referred' => function($q){
+				$q -> where('Date',Carbon::today())
+				->with('referralType','teacher','user','period')
+				;
+			}])
 			->with('counters')
 			->with(['classes' => function($q) {
 					$q->with(['professor_class' => function($q) {

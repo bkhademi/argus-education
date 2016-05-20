@@ -30,7 +30,35 @@ class ReferralsController extends Controller
         // UserId = Teacher's Id of the referral,, get the refferrals of a given teacher
         // if using user authentication use that user id else use the url  encoded userid  "url/?userId=userid"
 
+        if($request->has('list')){
+            $schoolId = $this->user->SchoolId;
+            $date = $this->getDate($request);
+            $list = Students
+                ::with('counters', 'user')
+                ->withPeriodRoomsWherePeriodsIn($request->Periods)
+                ->with(['referred' => function ($q) use ($date) {
+                    $q
+                        ->where('Date', $date)
+                        ->with('user', 'teacher', 'referralType', 'assignment', 'activity','consequence.referralType',
+                            'period')
+                        ->sortByPriority();
 
+                }])
+                ->ofSchoolId( $schoolId)
+                ->whereHas('counters', function ($q) {
+                    //$q->where('ORoomsToBeServed', '>', 0);
+                })
+                ->whereHas('referred', function ($q) use ($date) { // not processed with oroom referrals for $date
+                    $q
+                        ->where('Date', $date)
+                    ;
+                })
+                ->join('aspnetusers', 'aspnetusers.id', '=', 'students.Id')
+                ->orderBy('LastName', 'ASC')
+                ->select('students.*')
+                ->get();
+            return compact('list');
+        }
         if ($request->has('StudentId')) {
             $studentId = $request->StudentId;
             $referrals = Referrals

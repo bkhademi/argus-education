@@ -319,7 +319,8 @@
 								templateUrl: 'views/modals/ProfileModal.html',
 								//template:'<div> MODAL : true in Referral IN </div>',
 								size: 'lg',
-								controller: function ($scope, student, PeriodsService) {
+								controller: function ($scope, student, StudentsService) {
+									StudentsService.addTodaysAct(student);
 									$scope.student = student;
 								},
 								resolve: {

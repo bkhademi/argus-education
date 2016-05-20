@@ -19,7 +19,6 @@ use App\Useractions;
 use DB;
 use Excel;
 
-
 class ScheduleHelper
 {
 

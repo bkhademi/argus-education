@@ -74,7 +74,7 @@ class ClassStudentsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Classstudents::find($id)->update(['ProfessorClassId'=> $request -> professorClassId]);
     }
 
     /**

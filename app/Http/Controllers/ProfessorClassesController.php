@@ -82,7 +82,7 @@ class ProfessorClassesController extends Controller
     public function update(Request $request, $id)
     {
         //
-		$class = Professorclasses::find($id)->update(['RoomId'=>$request->RoomId]);
+		;
 		
 		return $this->updated();
 		
