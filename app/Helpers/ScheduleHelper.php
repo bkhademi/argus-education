@@ -25,9 +25,13 @@ class ScheduleHelper
 
 	public static function store($file, $schoolId)
 	{
-		Excel::load($file, function ($reader) use ($schoolId) {
-			//		Info for current student
 
+		Excel::load($file, function ($reader) use ($schoolId) {
+//			$reader->each(function($row){
+//				dd($row);
+//			});
+
+			//		Info for current student
 			$currentStudent = new StudentInfo();
 			$new = true;
 			$adding = 0;
@@ -35,14 +39,15 @@ class ScheduleHelper
 			$school = Schools::find($schoolId);
 			$term = 'S2';
 			$defaultDepartmentId = 1;
-			$studentRoleId = Roles::where('Name', 'Student')->first()->Id;
-			$teacherRoleId = Roles::where('Name', 'Teacher')->first()->Id;
+			$studentRoleId = 'ZSkug3NklRxA2SyJlo3IaQfs2bvkdyXXG3jPGzEfZ0b0pXHafuLwJM77FdZIO3iklYqBRit5qXJXmajNY4WWCX4sFYogV7ekzfrKiH4LKB8VJr1THRZ0si4fcCaiQF7j';
+			$teacherRoleId = 'QigWQBHjyc3ozmqqhOY79keLweUDzs5xTFYnhWcrb6EhomjeYEaIefz5qINnLyDmeGFkvx4489l2CXR6PguzJ9VyQ8uM9OW8JzHN3Gx35spNj4ipPdW8qn58Ly5mMQSy';
 			// check for new students and add them
 			print_r("Now checking for new Students <br /> \n");
+
 			$rows = $reader->toObject();
 			foreach ($rows as $row) {
 				if (!$row->term_day_period) {
-					print_r("End Of First Loop  <br > \n");
+					print_r("End Of File  <br > \n");
 					break;
 				}
 				$teacherName = explode(',', $row->teacher_name);
@@ -50,11 +55,11 @@ class ScheduleHelper
 				$teacherLast = trim($teacherName[0]);
 
 				// check if it is a new student
-				if ($row->student_id)
+				if ($row->student_id) {
+					$currentStudent->clear();// its a new student, so clear all of its properties
 					$stu = $currentStudent->populate($row);
-
-				if (!$stu) {
-
+				}
+				//if (!$stu) {
 					$termPeriod = explode('/', $row->term_day_period);
 					$periodNo = $termPeriod[2];
 					$term = $termPeriod[0];
@@ -70,21 +75,11 @@ class ScheduleHelper
 					$period = Periods::where('Number', $periodNo)->firstOrfail();
 
 					//student
-					$student = User::where('UserName', $currentStudent->studentId)->first();
-					if (!$student) {
+					$currentStudent->get();
+					if (!$currentStudent->student) {
 						$adding++;
-
-						$student = User::create(['id' => str_random(128), 'FirstName' => $currentStudent->studentFirst, 'LastName' => $currentStudent->studentLast,
-							'SchoolId' => $school->Id, 'UserName' => $currentStudent->studentId]);
-						$student->roles()->attach($studentRoleId);
-
-						$stu = Students::create(['Id' => $student->id,
-							'StudentId' => $currentStudent->studentId, 'Grade' => $currentStudent->studentGrade]);
-						\App\Counters::create(['Id' => $student->id]);
+						$currentStudent->create($schoolId);
 						$newStudents[] = clone $currentStudent;
-					} else {
-						if (!$student->roles()->get()->toArray())
-							$student->roles()->attach($studentRoleId);
 					}
 
 					// create teacher if not exists
@@ -94,10 +89,6 @@ class ScheduleHelper
 							'LastName' => $teacherLast, 'SchoolId' => $school->Id]);
 						//Userroles::insert(['UserId'=>$teacher->id, 'RoleId'=>$teacherRole->Id]);
 						$teacher->roles()->attach($teacherRoleId);
-					} else {
-						if (!$teacher->roles()->get()->toArray())
-							$teacher->roles()->attach($teacherRoleId);
-						//Userroles::insert(['UserId'=>$teacher->id, 'RoleId'=>$teacherRole->Id]);
 					}
 
 					// add the Room if not exists
@@ -105,32 +96,19 @@ class ScheduleHelper
 					$room = Rooms::firstOrCreate(['Name' => $roomNo, 'SchoolId' => $school->Id]);
 
 					//first add the professorClass (UserId, ClassId, PeriodId, RoomId)
-					if (!$teacher->id) {
-						print_r($teacher->toArray());
-						echo('no teacherid');
-						return;
-					}
-
 					$professorClass = Professorclasses::firstOrCreate(['UserId' => $teacher->id, 'ClassId' => $classDb->Id,
 						'PeriodId' => $period->Id, 'RoomId' => $room->Id]);
 
-					if (!$student->id) {
-						print_r($student->toArray());
-						echo('no student');
-						return;
-					}
-
 					//Second add the classtudent combo (StudentId, ProfessorClassId)
 					$classstudent = Classstudents::firstOrcreate(
-						['StudentId' => $student->id, 'ProfessorClassId' => $professorClass->Id]
+						['StudentId' => $currentStudent->student->Id, 'ProfessorClassId' => $professorClass->Id]
 					);
 					// check if a new one was created..
 					// if a new one was created and the size of the classes >  this  new class period
 					// it means that the class changed,, so we need to remove the old one
-					// find another class with the same period  and delete  it 
-				}
+					// find another class with the same period  and delete  it
+				//}
 			}
-
 			print_r($adding . " New Students were Added  <br /> \n");
 			// loop to print added students
 			foreach ($newStudents as $stu)
@@ -234,12 +212,14 @@ class ScheduleHelper
 		});
 	}
 
-	public static function deleteScheduleInfoFromSchoolId($schoolId){
+	public static function deleteScheduleInfoFromSchoolId($schoolId)
+	{
 		static::deleteAllClassStudentsFromSchoolId($schoolId);
 		//static::deleteAllProfessorClassesFromSchool($schoolId); // removes Assignments too
 	}
 
-	public static function deleteAllClassStudentsFromSchoolId($schoolId){
+	public static function deleteAllClassStudentsFromSchoolId($schoolId)
+	{
 		$classstudents = Classstudents::whereHas('user', function ($q) use ($schoolId) {
 			$q->where('SchoolId', $schoolId);
 		});
@@ -248,7 +228,8 @@ class ScheduleHelper
 		print_r("classstudents = " . $classstudents->get()->count() . "\n");
 	}
 
-	public static function deleteAllProfessorClassesFromSchoolId($schoolId){
+	public static function deleteAllProfessorClassesFromSchoolId($schoolId)
+	{
 		$professorclasses = Professorclasses::whereHas('user', function ($q) use ($schoolId) {
 			$q->where('SchoolId', $schoolId);
 		});
@@ -316,13 +297,12 @@ class ScheduleHelper
 		// at this point reteachClass exists
 		//check if student already has a reteach class
 		if ($student->classes->count() > 0) {// update that class' professorClass
-			$student->classes[0]->ProfessorClassId  = $professorClass->Id;
+			$student->classes[0]->ProfessorClassId = $professorClass->Id;
 			$student->classes[0]->save();
 		} else {// add that reteach professorclasss to the student
-			$reteachClassstudent  = new Classstudents(['ProfessorClassId'=>$professorClass->Id]);
+			$reteachClassstudent = new Classstudents(['ProfessorClassId' => $professorClass->Id]);
 			$student->classes()->save($reteachClassstudent);
 		}
-
 
 
 	}
@@ -336,6 +316,18 @@ class StudentInfo
 	public $studentFirst = null;
 	public $studentLast = null;
 	public $studentGrade = null;
+	public $student = null;
+	private $students = null;
+	private  $roleId = 'ZSkug3NklRxA2SyJlo3IaQfs2bvkdyXXG3jPGzEfZ0b0pXHafuLwJM77FdZIO3iklYqBRit5qXJXmajNY4WWCX4sFYogV7ekzfrKiH4LKB8VJr1THRZ0si4fcCaiQF7j';
+	public function __construct($schoolId = null)
+	{
+		if ($schoolId) {
+			$this->students = Students::whereHas('user', function ($q) use ($schoolId) {
+				$q->where('SchoolId', $schoolId);
+			})->get();
+		}
+	}
+
 
 	public function clear()
 	{
@@ -343,6 +335,7 @@ class StudentInfo
 		$this->studentFirst = null;
 		$this->studentLast = null;
 		$this->studentGrade = null;
+		$this->student = null;
 	}
 
 	public function populate($row)
@@ -352,7 +345,12 @@ class StudentInfo
 		$this->studentLast = trim($name[0]);
 		$this->studentId = $row->student_id;
 		$this->studentGrade = $row->grade;
-		return Students::where('StudentId', $this->studentId . 'a')->first();
+
+		if ($this->students) {
+			return $this->students->where('StudentId', $this->studentId);
+		} else {
+			return Students::where('StudentId', $this->studentId)->first();
+		}
 	}
 
 	public function __toString()
@@ -361,6 +359,25 @@ class StudentInfo
 		$this->studentFirst . ', ' .
 		$this->studentLast . ', ' .
 		$this->studentGrade . "<br />\n";
+	}
+
+	public function create($schoolId){
+		$student = User::create(['id' => str_random(128), 'FirstName' => $this->studentFirst, 'LastName' => $this->studentLast,
+			'SchoolId' => $schoolId, 'UserName' => $this->studentId]);
+		$student->roles()->attach($this->roleId);
+
+		$stu = Students::create(['Id' => $student->id,
+			'StudentId' => $this->studentId, 'Grade' => $this->studentGrade]);
+		\App\Counters::create(['Id' => $student->id]);
+
+		$this->student =  $stu;
+	}
+
+	public function get(){
+		if($this->student) {
+			return;
+		}
+		$this->student = Students::where('StudentId',$this->studentId)->first();
 	}
 
 
