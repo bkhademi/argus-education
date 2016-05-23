@@ -6,10 +6,6 @@
    app.controller("CompiledListCtrl",function($scope,referrals,StudentsService){
        $scope.refTable = referrals.getList();
        $scope.refTable.then(processlist,error)
-       var button = {
-           name:"O-Room",
-           color: "Blue"
-       };
        function processlist(list){
            $scope.refTable = list.list;
            angular.forEach(list.list,StudentsService.addTodaysAct);
