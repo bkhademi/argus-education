@@ -44,10 +44,14 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
+
         $schoolId = $this->user->SchoolId;
         $file = Input::file('file');
 
         if($file){
+            set_time_limit(120);
+            ScheduleHelper::deleteScheduleInfoFromSchoolId($schoolId);
+            dd('done deleting');
             ScheduleHelper::store($file,$schoolId);
         }
 
