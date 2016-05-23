@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class BbyArgusGeneralDB2Controller extends Controller
+use App\Activities;
+
+class ActivitiesAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +19,7 @@ class BbyArgusGeneralDB2Controller extends Controller
     public function index()
     {
         //
+		return Activities::all();
     }
 
     /**

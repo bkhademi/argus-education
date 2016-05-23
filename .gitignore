@@ -6,3 +6,5 @@ Homestead.json
 .env2
 /nbproject
 .DS_Store
+.idea
+newsteineducation.db
