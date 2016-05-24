@@ -131,7 +131,7 @@ class StudentsController extends Controller {
 					
 				}])
 			->with(['referred' => function($q){
-				$q -> where('Date',Carbon::today())
+				$q -> where('Date','<=',Carbon::today())
 				->with('referralType','teacher','user','period')
 				;
 			}])

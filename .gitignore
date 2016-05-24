@@ -9,3 +9,4 @@ Homestead.json
 .idea
 newsteineducation.db
 public/js/admin1Main.js
+public/js/argusCore.min.js
