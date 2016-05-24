@@ -13,7 +13,8 @@ use App\Useractions;
 use Carbon\Carbon;
 use DB;
 
-class StudentsController extends Controller {
+class StudentsController extends Controller
+{
 	/*	 * syk 
 	 * Display a listing of the resource.
 	 * Finds the students of a given teacher
@@ -25,7 +26,8 @@ class StudentsController extends Controller {
 	 * @return \Illuminate\Http\Response
 	 */
 
-	public function index(Request $request) {
+	public function index(Request $request)
+	{
 		//get the school of the user
 		$schoolId = $this->user->SchoolId;
 
@@ -34,13 +36,13 @@ class StudentsController extends Controller {
 		if ($request->has('allStudents') && $this->user->roles[0]->Id === $adminRoleId) {
 			$schoolId = $request->schoolId;
 			return Students
-					::with(['user' => function($q)use($schoolId) {
-							$q->where('SchoolId', $schoolId);
-						}])
-					->whereHas('user', function($q)use($schoolId) {
-						$q->where('SchoolId', $schoolId);
-					})
-					->get();
+				::with(['user' => function ($q) use ($schoolId) {
+					$q->where('SchoolId', $schoolId);
+				}])
+				->whereHas('user', function ($q) use ($schoolId) {
+					$q->where('SchoolId', $schoolId);
+				})
+				->get();
 		}
 
 		// requesting the students of a given teacher
@@ -49,10 +51,10 @@ class StudentsController extends Controller {
 		} else if ($request->has('admin')) {
 			if ($request->has('light')) {
 				return Students::with('user')
-						->whereHas('user', function($q)use($schoolId) {
-							$q->where('SchoolId', $schoolId);
-						})
-						->get()->all();
+					->whereHas('user', function ($q) use ($schoolId) {
+						$q->where('SchoolId', $schoolId);
+					})
+					->get()->all();
 			} else {
 				return Students::with('user.activitiesAffected')->get()->all();
 			}
@@ -61,18 +63,17 @@ class StudentsController extends Controller {
 		}
 
 		//$userId = isset($this->userId) ? $this->userId : $request->input('userId');
-		
+
 		$teacherWithClassStudents = User::with('classstudents.user.student')->find($id);
 		$uniqueIDs = $teacherWithClassStudents->classStudents->unique('StudentId')->pluck('StudentId');
 		$teacherWithClassStudents = User::with('student')
-				->with(['student.classes' => function($q) {
-						$q->whereHas('professor_class', function($q) {
-								$q->where('PeriodId', 9);
-							})
-						->with('professor_class.classs', 'professor_class.room')
-						;
-					}])
-				->wherein('id', $uniqueIDs)->get();
+			->with(['student.classes' => function ($q) {
+				$q->whereHas('professor_class', function ($q) {
+					$q->where('PeriodId', 9);
+				})
+					->with('professor_class.classs', 'professor_class.room');
+			}])
+			->wherein('id', $uniqueIDs)->get();
 		return $teacherWithClassStudents;
 	}
 
@@ -81,20 +82,22 @@ class StudentsController extends Controller {
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function create() {
+	public function create()
+	{
 		//
 	}
 
 	/**
 	 * @incoming
 	 * UserInfo, StuInfo, ProfessorClasses
-	 * 
+	 *
 	 * Store a newly created resource in storage.
 	 *
-	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Illuminate\Http\Request $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store(Request $request) {
+	public function store(Request $request)
+	{
 		DB::beginTransaction();
 		//
 
@@ -117,84 +120,90 @@ class StudentsController extends Controller {
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  int  $id
+	 * @param  int $id
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show($id) {
+	public function show($id)
+	{
 		//
 		$student = Students
-			::with(['user.activitiesAffected' => function($q) {
-					$q->with('user', 'activity')
-					->orderBy('ActionDate','DESC')
+			::with(['user.activitiesAffected' => function ($q) {
+				$q->with('user', 'activity')
+					->orderBy('ActionDate', 'DESC');
 
-					;
-					
-				}])
-			->with(['referred' => function($q){
-				$q -> where('Date','<=',Carbon::today())
-				->with('referralType','teacher','user','period')
-				;
+			}])
+			->with(['referred' => function ($q) {
+				$q->where('Date', '<=', Carbon::today())
+					->with('referralType', 'teacher', 'user', 'period');
 			}])
 			->with('counters')
-			->with(['classes' => function($q) {
-					$q->with(['professor_class' => function($q) {
-							$q->with('classs', 'user', 'room');
-						}]);
-				}])
-				->findOrFail($id)
-			;
-
-			return $student;
-		}
-
-		/**
-		 * Show the form for editing the specified resource.
-		 *
-		 * @param  int  $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function edit($id) {
-			//
-		}
-
-		/**
-		 * Update the specified resource in storage.
-		 *
-		 * @param  \Illuminate\Http\Request  $request
-		 * @param  int  $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function update(Request $request, $id) {
-			if ($request->has('updateStudent')) {
-				$updated = Students::find($id)
-					->update($request->except('updateStudent'));
-				return $this->updated();
-			}
-
-			$student = Students::find($id);
-			$student->update($request->all());
-
-			$action = Useractions::create(['ActionDate' => Carbon::today(),
-					'ActionByUserId' => $this->userId, 'ActionToUserId' => $id, 'ActionType' => 22,
-					//'Comment'=>'Student was Rescheduled from '.$request->oldDate.' to '.$request->newDate,
-					'Comment' => $request->ParentNotifiedComment,
-					'ParentNotified' => $request->ParentNotified,
-					'StudentNotified' => $request->ParentNotified,
-					//'Excused'=> $request->excused?1:0
-			]);
-
-			return $student;
-		}
-
-		/**
-		 * Remove the specified resource from storage.
-		 *
-		 * @param  int  $id
-		 * @return \Illuminate\Http\Response
-		 */
-		public function destroy($id) {
-			//
-		}
-
+			->with(['classes' => function ($q) {
+				$q->with(['professor_class' => function ($q) {
+					$q->with('classs', 'user', 'room');
+				}]);
+			}])
+			->findOrFail($id);
+		$referred = $student->referred;
+		$student->load(['referred'=>function($q){
+			$q->where('Date',Carbon::today());
+		}]);
+		$student->referredAll = $referred;
+		
+		return $student;
 	}
+
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($id)
+	{
+		//
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request $request
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, $id)
+	{
+		if ($request->has('updateStudent')) {
+			$updated = Students::find($id)
+				->update($request->except('updateStudent'));
+			return $this->updated();
+		}
+
+		$student = Students::find($id);
+		$student->update($request->all());
+
+		$action = Useractions::create(['ActionDate' => Carbon::today(),
+			'ActionByUserId' => $this->userId, 'ActionToUserId' => $id, 'ActionType' => 22,
+			//'Comment'=>'Student was Rescheduled from '.$request->oldDate.' to '.$request->newDate,
+			'Comment' => $request->ParentNotifiedComment,
+			'ParentNotified' => $request->ParentNotified,
+			'StudentNotified' => $request->ParentNotified,
+			//'Excused'=> $request->excused?1:0
+		]);
+
+		return $student;
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int $id
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy($id)
+	{
+		//
+	}
+
+}
 	
