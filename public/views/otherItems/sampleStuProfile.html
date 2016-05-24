@@ -329,23 +329,16 @@
                 </table>
 
                 <div style="height: 300px;overflow-y: auto;">
-                    <table class="table table-striped table-bordered" id="dateSpecificActivity"
-                           data-ng-hide="showDetail">
+                    <table class="table table-striped table-bordered" data-ng-hide="showDetail">
                         <tbody>
                         <tr class="text-center" data-ng-repeat="activity in filtered = (activities | filter:filterByCategory)"
-                            data-ng-click="toggleShowDetail($index)">
-                            <td>{{activity.ActionDate.split(' ')[0]}}</td>
+                            data-ng-dblclick="toggleShowDetail($index)">
+                            <td>{{activity.ActionDate.split(' ')[0] | date:'EEE, MMM d'}}</td>
                             <td>{{activity.activity.Name}}</td>
-                            <!--                                <td>
-                                                                <label class="btn btn-primary  ng-valid" ng-model="activity.parentNotified" btn-checkbox=""> <i class="fa fa-home"></i></label>
-                                                                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.studentNotified" btn-checkbox=""><i class="fa fa-user"></i></label>
-                                                                <label class="btn btn-primary ng-pristine ng-untouched ng-valid" ng-model="activity.finished" btn-checkbox=""><i class="fa fa-check"></i></label>
-
-                                                            </td>-->
                         </tr>
                         </tbody>
                     </table>
-                    <div id="activityContainer" data-ng-show="showDetail" data-ng-click="toggleShowDetail()">
+                    <div id="activityContainer" data-ng-show="showDetail" data-ng-dblclick="toggleShowDetail()">
                         <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html'">
                         </span>
                     </div>
@@ -417,7 +410,7 @@
 </section>
 <style>
     .AEC {
-        opacity: .4;
+        opacity: .7;
         background-color: #6A267F;
         border-color: #6A267F;
         color: #FFFFFF;
@@ -430,7 +423,7 @@
     }
 
     .O-Room {
-        opacity:.4;
+        opacity:.7;
         background-color: #003883;
         border-color: #003883;
         color: #FFFFFF;
@@ -443,7 +436,7 @@
     }
 
     .Re-Teach {
-        opacity: .4;
+        opacity: .7;
         background-color: #9C00CC;
         border-color: #9C00CC;
         color: #FFFFFF;
@@ -457,7 +450,7 @@
     }
 
     .Ldetention {
-        opacity: .4;
+        opacity: .7;
         background-color: #F5540E;
         border-color: #F5540E;
         color: #FFFFFF;
@@ -471,7 +464,7 @@
 
 
     .ISS {
-        opacity: .4;
+        opacity: .7;
         background-color: #3072ab;
         border-color: #3072ab;
         color: #FFFFFF;
@@ -484,7 +477,7 @@
     }
 
     .OSS {
-        opacity: .4;
+        opacity: .7;
         background-color: #5e89c1;
         border-color: #5e89c1;
         color: #FFFFFF;

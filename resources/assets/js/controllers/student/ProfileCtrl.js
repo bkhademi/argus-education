@@ -48,15 +48,6 @@
                     $scope.$watch('student', function (newVal, oldVal) {
 
                         $scope.schedule = newVal.classes;
-                        var parentName = newVal.GuardianName ? newVal.GuardianName.split(',') : ["No", " name"];
-                        $scope.parents = [{
-                            fn: parentName[0],
-                            ln: parentName[1],
-                            phone: newVal.GuardianPhone || "none",
-                            mphone: 'None',
-                            email: 'None'
-                        }];
-
                         $scope.activities = newVal.user.activities_affected;
 
                     });
