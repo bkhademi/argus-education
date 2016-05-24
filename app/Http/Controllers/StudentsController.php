@@ -134,7 +134,10 @@ class StudentsController extends Controller
 			}])
 			->with(['referred' => function ($q) {
 				$q->where('Date', '<=', Carbon::today())
-					->with('referralType', 'teacher', 'user', 'period');
+					->with('referralType', 'teacher', 'user', 'period')
+					->orderBy('Date','DESC')
+					->orderBy('updated_at','DESC')
+				;
 			}])
 			->with('counters')
 			->with(['classes' => function ($q) {
@@ -145,7 +148,9 @@ class StudentsController extends Controller
 			->findOrFail($id);
 		$referred = $student->referred;
 		$student->load(['referred'=>function($q){
-			$q->where('Date',Carbon::today());
+			$q->where('Date',Carbon::today())
+				->with('referralType', 'teacher', 'user', 'period')
+			;
 		}]);
 		$student->referredAll = $referred;
 		
