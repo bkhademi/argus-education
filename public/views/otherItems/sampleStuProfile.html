@@ -331,16 +331,26 @@
                 <div style="height: 300px;overflow-y: auto;">
                     <table class="table table-striped table-bordered" data-ng-hide="showDetail">
                         <tbody>
-                        <tr class="text-center" data-ng-repeat="activity in filtered = (activities | filter:filterByCategory)"
-                            data-ng-dblclick="toggleShowDetail($index)">
-                            <td>{{activity.ActionDate.split(' ')[0] | date:'EEE, MMM d'}}</td>
-                            <td>{{activity.activity.Name}}</td>
+                        <tr class="text-center" data-ng-repeat="referral in referrals | buttonFilter: selectedButton" data-ng-dblclick="toggleShowDetail($index)">
+                            <td>{{referral.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
+                            <td>{{referral.referral_type.Name}}</td>
                         </tr>
                         </tbody>
                     </table>
-                    <div id="activityContainer" data-ng-show="showDetail" data-ng-dblclick="toggleShowDetail()">
-                        <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html'">
-                        </span>
+                    <div id="activityContainer" data-ng-if="showDetail" data-ng-dblclick="toggleShowDetail()">
+                        <div data-ng-if="selected.ReferralTypeId != 12 && selected.ReferralTypeId != 18 &&
+                        selected.ReferralTypeId != 9">
+                            <span data-ng-include=" 'views/otherItems/sampleActivityDetail.html'"></span>
+                        </div>
+                        <div data-ng-if="selected.ReferralTypeId == 12">
+                            <span data-ng-include=" 'views/otherItems/sampleActivityDetailAEC.html'"></span>
+                        </div>
+                        <div data-ng-if="selected.ReferralTypeId == 9">
+                            <span data-ng-include=" 'views/otherItems/sampleActivityDetailLD.html'"></span>
+                        </div>
+                        <div data-ng-if="selected.ReferralTypeId == 18">
+                            <span data-ng-include=" 'views/otherItems/sampleActivityDetailRT.html'"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -505,3 +515,5 @@
     }
 
 </style>
+<!--activity in filtered = (activities | filter:filterByCategory)"-->
+<!--data-ng-dblclick="toggleShowDetail($index)-->

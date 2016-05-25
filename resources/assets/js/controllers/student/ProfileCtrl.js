@@ -49,7 +49,25 @@
 
                         $scope.schedule = newVal.classes;
                         $scope.activities = newVal.user.activities_affected;
-
+                        $scope.referrals = newVal.referredAll;
+                        for (var i = 0; i< $scope.referrals.length;i++){
+                            if ($scope.referrals[i].ReferralTypeId === 1 || $scope.referrals[i].ReferralTypeId === 2
+                                || $scope.referrals[i].ReferralTypeId === 3 || $scope.referrals[i].ReferralTypeId === 16
+                            || $scope.referrals[i].ReferralTypeId === 19){
+                                var oldRefName = $scope.referrals[i].referral_type.Name;
+                                $scope.referrals[i].referral_type.Name = "O-Room: ";
+                                var newRefName = $scope.referrals[i].referral_type.Name + oldRefName ;
+                                $scope.referrals[i].referral_type.Name = newRefName;
+                            }
+                            if ($scope.referrals[i].ReferralTypeId === 5 || $scope.referrals[i].ReferralTypeId === 6
+                                || $scope.referrals[i].ReferralTypeId === 7 || $scope.referrals[i].ReferralTypeId === 10
+                                || $scope.referrals[i].ReferralTypeId === 15 || $scope.referrals[i].ReferralTypeId === 17){
+                                var oldRefName = $scope.referrals[i].referral_type.Name;
+                                $scope.referrals[i].referral_type.Name = "ISS: ";
+                                var newRefName = $scope.referrals[i].referral_type.Name + oldRefName ;
+                                $scope.referrals[i].referral_type.Name = newRefName;
+                            }
+                        }
                     });
 
                     /*******************  Right Side Controllers*********************/
@@ -62,7 +80,7 @@
                     $scope.showDetail = false;
                     $scope.toggleShowDetail = function (index) {
                         $scope.showDetail = !$scope.showDetail;
-                        $scope.selected = $scope.activities[index];
+                        $scope.selected = $scope.referrals[index];
                     };
 
                     $scope.showComment = false;
@@ -156,6 +174,21 @@
                     $scope.cancelContactChange = function(){
                         $scope.student.contactEdit = false;
                     };
-                }]);
+
+                }])//End of Profile Controller
+
+        .filter("buttonFilter", function(){
+            return function(listActivities,filteredActivities){
+                var filteredList = [];
+                for (var i = 0; i<listActivities.length; i++){
+                    if(listActivities[i].ReferralTypeId === 1 || listActivities[i].ReferralTypeId === 2
+                        || listActivities[i].ReferralTypeId === 3 || listActivities[i].ReferralTypeId === 16
+                        || listActivities[i].ReferralTypeId === 19){
+                        filteredList.push(listActivities[i]);
+                    }
+                }
+                return filteredList;
+            }
+        })
 
 }(angular.module('Argus')));

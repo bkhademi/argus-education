@@ -1,41 +1,41 @@
 ﻿<br>
 <div>
-    <table class="table text-center table-sm">
+    <table class="table text-center">
         <tr>
-            <th class="text-center" colspan="4">{{selected.referral_type.Name}}</th>
+            <th colspan="4">Type:</th>
+
         </tr>
         <tr>
             <th>Referred Date:</th>
-            <td class="table text-left"></td>
+            <td></td>
             <th>Referred By:</th>
-            <td class="table text-left">{{selected.teacher.FirstName + " " + selected.teacher.LastName }}
-            </td>
+            <td></td>
         </tr>
         <tr>
-            <th>Doc By:</th>
+            <th>Assignments</th>
+            <td colspan="3"></td>
+        </tr>
+        <tr>
+            <th>Documented By:</th>
             <td class="table text-left">{{selected.user.FirstName + " " + selected.user.LastName}}</td>
-            <th>Serve On:</th>
+            <th>To Serve On:</th>
             <td class="table text-left">{{selected.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
         </tr>
         <tr>
-            <th class="table text-center" colspan="4">Referral Detail:</th>
-        </tr>
-        <tr></tr>
-        <tr>
             <th>Action:</th>
-            <td class="table text-left">{{selected.activity.Name}}</td>
+            <td></td>
             <th>Progression:</th>
-            <td class="table text-left">{{selected.consequence.referral_type.Name}}</td>
+            <td></td>
         </tr>
         <tr>
-            <th class="table text-center" colspan="4">Action Detail:</th>
+            <th colspan="4">Action Detail:</th>
         </tr>
         <tr></tr>
     </table>
 </div>
 <style>
-.table td {
-text-align: left;  }
+.table td, .table th {
+text-align: center;  }
 </style>
 <!--        <tr>
                 <th>Status</th>
