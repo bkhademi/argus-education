@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use DB;
 use App\Referraltypes;
 use App\Students;
+use App\Referralactions;
 
 class ORoomController extends Controller
 {
@@ -186,6 +187,12 @@ class ORoomController extends Controller
                 'Date' => $date
             ]);
 
+            $referralAction = Referralactions::create([
+                'ReferralId'=>$referral->Id,
+                'ActivityId'=>$useraction->Id,
+                'Type'=>0
+            ]);
+
             /* for table RelationShip Between  Refferals and UserActions */
             //ReferralsActions::create(['ReferralId'=>$referral->Id, 'UseractionId'=>$useraction->Id ]);
             // now this referral is linked to an action(s)
@@ -268,9 +275,11 @@ class ORoomController extends Controller
             $content = array_merge($request->except('reftable','ReferredInAt'),['ReferredInAt'=>$referredInTime]);
             $updated = Oroomactivity::findOrFail($id)->update($content);
             return Oroomactivity::findOrFail($id);
-        } else if ($request->has('ormlist')) {
+        }
+		else if ($request->has('ormlist')) {
             //work some logic with the counters
-        } else if ($request->has('attendance')) {
+        }
+		else if ($request->has('attendance')) {
 
             $referral = Referrals::find($id);
             if($referral->RefferalStatus == 1){
@@ -287,14 +296,6 @@ class ORoomController extends Controller
                 'ActionToUserId' => $referral->StudentId,
                 'Comment' => $request->Comment
             ]);
-
-
-
-//            if ($referral) {
-//                $referral->update(['ActivityTypeId' => $request->ActionType]);
-//            }
-
-            // if( $referral->RefferalStatus == 1 )   ,  return; // already taked attendance;
 
             //present
             if ($request->ActionType == 24) {
@@ -316,34 +317,18 @@ class ORoomController extends Controller
 
                 $pendingReferrals->update(['Date' => $tomorrow]);
 
-
-                //if AEC was completed mark it as AEC present complete
-//					$AECPresentActivityId = 49;
-//					if ($request->aecComplete) {
-//						$pendingAECReferrals = Referrals
-//							::where('Date', $today)
-//							->where('RefferalStatus', 0)
-//							->where('ReferralTypeId', 12)
-//							->where('StudentId', $referral->StudentId);
-//
-//						$pendingAECReferrals->update(['RefferalStatus' => 0, 'Overlap' => 1, 'OverlapId' => 6, 'OverlapActionId' => $request->ActionType]);
-//
-//						$useraction = Useractions::create([
-//								'ActionDate' => $today,
-//								'ActionByUserId' => $this->userId,
-//								'ActionType' => 49,
-//								'ActionToUserId' => $referral->StudentId,
-//								'Comment' => $request->Comment . ' In ORoom '
-//						]);
-//					} else {// Reschedule To Next Day 
-//					}
-
-
                 if ($referral->ReferralTypeId !== 3) {// no ORM+1, set debt to 0
                     $counters->debt = 0;
                 } else {
                     $msg = 'Present, Oroom + 1 Completed, Oroom(s) Left ';
                 }
+
+				Referralactions::create([
+					'ReferralId'=>$referral->Id,
+					'ActivityId'=>$useraction->Id,
+					'Type'=>1
+				]);
+
             }
             //ditch (No Show, Sent Out, Walked Out
             else if ($request->ActionType == 25 || $request->ActionType == 28 || $request->ActionType == 29) {

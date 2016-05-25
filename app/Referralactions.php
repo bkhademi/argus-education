@@ -10,4 +10,8 @@ class Referralactions extends Model
 	protected $guarded = [];
 	public $incrementing = false;
 
+	public function userAction(){
+		return $this->hasOne('App\Useractions','Id','ActivityId');
+	}
+
 }

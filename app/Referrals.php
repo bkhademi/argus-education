@@ -79,6 +79,10 @@ class Referrals extends Model
 		return $this->hasOne('App\Activities', 'Id', 'OverlapActionId');
 	}
 
+	public function actions(){
+		return $this->hasMany('App\Referralactions','ReferralId', 'Id');
+	}
+
 	public function scopeofTypes($q, $types)
 	{
 		return $q->whereIn('ReferralTypeId', $types);

@@ -134,7 +134,9 @@ class StudentsController extends Controller
 			}])
 			->with(['referred' => function ($q) {
 				$q->where('Date', '<=', Carbon::today())
-					->with('referralType', 'teacher', 'user', 'period')
+					->with('referralType', 'teacher',
+						'user', 'period','activity',
+						'consequence.referralType','actions.userAction.activity')
 					->orderBy('Date','DESC')
 					->orderBy('updated_at','DESC')
 				;
