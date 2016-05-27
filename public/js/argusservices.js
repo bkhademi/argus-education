@@ -268,6 +268,7 @@ function formatDate(date) {
 			};
 			obj.addTodaysAct = function(student){
 				student.buttons = [];
+				student.referred = student. ;
 				student.aec = $filter("filter")(student.referred,function(referral){
 					return referral.ReferralTypeId == 12;
 				});

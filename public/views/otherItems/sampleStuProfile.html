@@ -278,28 +278,32 @@
                     </form>
                     <br>
                     <div class="text-center">
-                        <button class="btn btn-primary" data-ng-click="downloadActivity()"> Download Activity</button>
-                    </div>
-                    <br>
-                    <div class="text-center">
                         <form role="form">
-                            <div class="btn-group text-center" >
-                                <label class="btn btn-default Ldetention" style="margin-right: 5px" ng-model="filter['LDT']" btn-checkbox="">
+                            <div class="btn-group text-center">
+                                <label class="btn btn-default Ldetention" style="margin-right: 5px"
+                                       ng-model="filter['LDT']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     LDT
                                 </label>
-                                <label class="btn btn-default O-Room" style="margin-right: 5px" ng-model="filter['ORM']" btn-checkbox="">
+                                <label class="btn btn-default O-Room" style="margin-right: 5px" ng-model="filter['ORM']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     ORM
                                 </label>
-                                <label class="btn btn-default ISS" style="margin-right: 5px" ng-model="filter['ISS']" btn-checkbox="">
+                                <label class="btn btn-default ISS" style="margin-right: 5px" ng-model="filter['ISS']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     ISS
                                 </label>
-                                <label class="btn btn-default OSS" style="margin-right: 5px" ng-model="filter['OSS']" btn-checkbox="">
+                                <label class="btn btn-default OSS" style="margin-right: 5px" ng-model="filter['OSS']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     OSS
                                 </label>
-                                <label class="btn btn-default AEC" style="margin-right: 5px" ng-model="filter['AEC']" btn-checkbox="">
+                                <label class="btn btn-default AEC" style="margin-right: 5px" ng-model="filter['AEC']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     AEC
                                 </label>
-                                <label class="btn btn-default Re-Teach" style="margin-right: 5px" ng-model="filter['RET']" btn-checkbox="">
+                                <label class="btn btn-default Re-Teach" style="margin-right: 5px"
+                                       ng-model="filter['RET']"
+                                       data-ng-change="filterSelect()" btn-checkbox="">
                                     RET
                                 </label>
                             </div>
@@ -316,8 +320,130 @@
 
                         </form>
                     </div>
-                </div>
+                    <div data-ng-show="filter['LDT']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="5" style="color:#F5540E;">Lunch Detention</th>
+                            </tr>
+                            <tr>
+                                <th>Referrals</th>
+                                <th>Present</th>
+                                <th>Truant</th>
+                                <th>Re-Schld</th>
+                                <th>Cleared</th>
+                            </tr>
+                            <tr class="text-center">
+                                <td>{{counters.ldtCounters[0]}}</td>
+                                <td>{{counters.ldtCounters[1]}}</td>
+                                <td>{{counters.ldtCounters[2]}}</td>
+                                <td>{{counters.ldtCounters[3]}}</td>
+                                <td>{{counters.ldtCounters[4]}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div data-ng-show="filter['ORM']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="5" style="color:#003883;">O-Room</th>
+                            </tr>
+                            <tr>
+                                <th>Referrals</th>
+                                <th>Present</th>
+                                <th>Truant</th>
+                                <th>Re-Schld</th>
+                                <th>Cleared</th>
+                            </tr>
+                            <tr class="text-center">
+                                <td>{{counters.ormCounters[0]}}</td>
+                                <td>{{counters.ormCounters[1]}}</td>
+                                <td>{{counters.ormCounters[2]}}</td>
+                                <td>{{counters.ormCounters[3]}}</td>
+                                <td>{{counters.ormCounters[4]}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div data-ng-show="filter['ISS']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="5" style="color:#3072ab">In School Suspension</th>
+                            </tr>
+                            <tr class="text-center ">
+                                <th>Referrals</th>
+                                <th>Present</th>
+                                <th>Truant</th>
+                                <th>Re-Schld</th>
+                                <th>Cleared</th>
+                            </tr>
+                            <tr class="text-center ">
+                                <td>{{counters.issCounters[0]}}</td>
+                                <td>{{counters.issCounters[1]}}</td>
+                                <td>{{counters.issCounters[2]}}</td>
+                                <td>{{counters.issCounters[3]}}</td>
+                                <td>{{counters.issCounters[4]}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div data-ng-show="filter['OSS']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="2" style="color:#5e89c1;">Out of School Suspension
+                                </th>
+                            </tr>
+                            <tr class="text-center">
+                                <th>Referrals</th>
+                                <td>{{counters.ossCounters[0]}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div data-ng-show="filter['AEC']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="5" style="color:#6A267F;">Academic Enrichment Center
+                                </th>
+                            </tr>
+                            <tr class="text-center ">
+                                <th>Referrals</th>
+                                <th>Present</th>
+                                <th>Truant</th>
+                                <th>Re-Schld</th>
+                                <th>Cleared</th>
+                            </tr>
+                            <tr class="text-center ">
+                                <td>{{aecCounters[0]}}</td>
+                                <td>{{aecCounters[1]}}</td>
+                                <td>{{aecCounters[2]}}</td>
+                                <td>{{aecCounters[3]}}</td>
+                                <td>{{aecCounters[4]}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div data-ng-show="filter['RET']">
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th class="text-center " colspan="5" style="color:#9C00CC">Re-Teach</th>
+                            </tr>
+                            <tr class="text-center ">
+                                <th>Referrals</th>
+                                <th>Present</th>
+                                <th>Truant</th>
+                                <th>Re-Schld</th>
+                                <th>Cleared</th>
+                            </tr>
+                            <tr class="text-center ">
+                                <td>{{counters.retCounters[0]}}</td>
+                                <td>{{counters.retCounters[1]}}</td>
+                                <td>{{counters.retCounters[2]}}</td>
+                                <td>{{counters.retCounters[3]}}</td>
+                                <td>{{counters.retCounters[4]}}</td>
+                            </tr>
+                        </table>
+                    </div>
 
+                    <!--<div class="text-center">-->
+                    <!--<button class="btn btn-primary" data-ng-click="downloadActivity()"> Download Activity</button>-->
+                    <!--</div>-->
+                    <br>
+                </div>
                 <table class="table table-striped table-bordered" id="dateSpecificActivity" data-ng-hide="showDetail">
                     <thead>
                     <tr>
@@ -331,7 +457,8 @@
                 <div style="height: 300px;overflow-y: auto;">
                     <table class="table table-striped table-bordered" data-ng-hide="showDetail">
                         <tbody>
-                        <tr class="text-center" data-ng-repeat="referral in referrals | buttonFilter: selectedButton" data-ng-dblclick="toggleShowDetail($index)">
+                        <tr class="text-center" data-ng-repeat="referral in referrals | buttonFilter: selectedButtons"
+                            data-ng-dblclick="toggleShowDetail(referral)">
                             <td>{{referral.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
                             <td>{{referral.referral_type.Name}}</td>
                         </tr>
@@ -425,21 +552,23 @@
         border-color: #6A267F;
         color: #FFFFFF;
     }
+
     .AEC:hover, .AEC.btn-default.active {
-        opacity: 1 ;
+        opacity: 1;
         background-color: #6A267F;
         border-color: #6A267F;
         color: #FFFFFF;
     }
 
     .O-Room {
-        opacity:.7;
+        opacity: .7;
         background-color: #003883;
         border-color: #003883;
         color: #FFFFFF;
     }
-     .O-Room:hover, .O-Room.btn-default.active {
-        opacity: 1 ;
+
+    .O-Room:hover, .O-Room.btn-default.active {
+        opacity: 1;
         background-color: #003883;
         border-color: #003883;
         color: #FFFFFF;
@@ -453,7 +582,7 @@
     }
 
     .Re-Teach:hover, .Re-Teach.btn-default.active {
-        opacity: 1 ;
+        opacity: 1;
         background-color: #9C00CC;
         border-color: #9C00CC;
         color: #FFFFFF;
@@ -465,13 +594,13 @@
         border-color: #F5540E;
         color: #FFFFFF;
     }
+
     .Ldetention:hover, .Ldetention.btn-default.active {
-        opacity: 1 ;
+        opacity: 1;
         background-color: #F5540E;
         border-color: #F5540E;
         color: #FFFFFF;
     }
-
 
     .ISS {
         opacity: .7;
@@ -479,8 +608,9 @@
         border-color: #3072ab;
         color: #FFFFFF;
     }
+
     .ISS:hover, .ISS.btn-default.active {
-        opacity: 1 ;
+        opacity: 1;
         background-color: #3072ab;
         border-color: #3072ab;
         color: #FFFFFF;
@@ -494,7 +624,7 @@
     }
 
     .OSS:hover, .OSS.btn-default.active {
-        opacity: 1 ;
+        opacity: 1;
         background-color: #5e89c1;
         border-color: #5e89c1;
         color: #FFFFFF;

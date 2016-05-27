@@ -1,42 +1,44 @@
 ﻿<br>
 <div>
-    <table class="table text-center table-sm">
+    <table class="table">
         <tr>
             <th class="text-center" colspan="4">{{selected.referral_type.Name}}</th>
         </tr>
         <tr>
-            <th>Referred Date:</th>
-            <td class="table text-left"></td>
-            <th>Referred By:</th>
-            <td class="table text-left">{{selected.teacher.FirstName + " " + selected.teacher.LastName }}
+            <th class="text-right">Referred Date:</th>
+            <td class="text-left"></td>
+        </tr>
+        <tr>
+            <th class="text-right" >Referred By:</th>
+            <td class="text-left">{{selected.teacher.FirstName + " " + selected.teacher.LastName }}
             </td>
         </tr>
         <tr>
-            <th>Doc By:</th>
-            <td class="table text-left">{{selected.user.FirstName + " " + selected.user.LastName}}</td>
-            <th>Serve On:</th>
-            <td class="table text-left">{{selected.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
+            <th class="text-right">Documented By:</th>
+            <td class="text-left">{{selected.user.FirstName + " " + selected.user.LastName}}</td>
         </tr>
         <tr>
-            <th class="table text-center" colspan="4">Referral Detail:</th>
+            <th class="text-right">Serve On:</th>
+            <td class="text-left">{{selected.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
+        </tr>
+        <tr>
+            <th class="text-center" colspan="4">Referral Detail:</th>
         </tr>
         <tr></tr>
         <tr>
-            <th>Action:</th>
-            <td class="table text-left">{{selected.activity.Name}}</td>
-            <th>Progression:</th>
-            <td class="table text-left">{{selected.consequence.referral_type.Name}}</td>
+            <th class="text-right">Attendance:</th>
+            <td class="text-left">{{selected.activity.Name}}</td>
         </tr>
         <tr>
-            <th class="table text-center" colspan="4">Action Detail:</th>
+            <th class="text-right">Progression:</th>
+            <td class="text-left">{{selected.consequence.referral_type.Name}}</td>
+        </tr>
+        <tr>
+            <th class="text-center" colspan="4">Action Detail:</th>
         </tr>
         <tr></tr>
     </table>
 </div>
-<style>
-.table td {
-text-align: left;  }
-</style>
 <!--        <tr>
                 <th>Status</th>
                 <td colspan="4" style="text-align:left">

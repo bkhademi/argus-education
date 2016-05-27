@@ -1,26 +1,32 @@
 ﻿<br>
 <div>
-    <table class="table text-center">
+    <table class="table">
         <tr>
             <th colspan="4">{{selected.referral_type.Name}}</th>
         </tr>
         <tr>
-            <th>Referred Date:</th>
-            <td></td>
-            <th>Tardy Period:</th>
-            <td></td>
+            <th class="text-right">Referred Date:</th>
+            <td class="text-left"></td>
         </tr>
         <tr>
-            <th>Documented By:</th>
-            <td class="table text-left">{{selected.user.FirstName}}</td>
-            <th>To Serve On:</th>
-            <td class="table text-left">{{selected.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
+            <th class="text-right">Tardy Period:</th>
+            <td class="text-left"></td>
         </tr>
         <tr>
-            <th>Action:</th>
-            <td></td>
-            <th>Progression:</th>
-            <td></td>
+            <th class="text-right">Documented By:</th>
+            <td class="text-left">{{selected.user.FirstName + " " + selected.user.LastName}}</td>
+        </tr>
+        <tr>
+            <th class="text-right">To Serve On:</th>
+            <td class="text-left">{{selected.Date.split(' ')[0] | date:'EEE, MMM d'}}</td>
+        </tr>
+        <tr>
+            <th class="text-right">Attendance:</th>
+            <td class="text-left">{{selected.activity.Name}}</td>
+        </tr>
+        <tr>
+            <th class="text-right">Progression:</th>
+            <td class="text-left">{{selected.consequence.referral_type.Name}}</td>
         </tr>
         <tr>
             <th colspan="4">Action Detail:</th>
