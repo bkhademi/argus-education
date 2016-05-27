@@ -268,25 +268,24 @@ function formatDate(date) {
 			};
 			obj.addTodaysAct = function(student){
 				student.buttons = [];
-				student.referred = student. ;
-				student.aec = $filter("filter")(student.referred,function(referral){
+				student.aec = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 12;
 				});
-				student.orm = $filter("filter")(student.referred,function(referral){
+				student.orm = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 1 || referral.ReferralTypeId == 2 || referral.ReferralTypeId == 3
 						|| referral.ReferralTypeId == 16 || referral.ReferralTypeId == 19;
 				});
-				student.reteach = $filter("filter")(student.referred,function(referral){
+				student.reteach = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 18;
 				});
-				student.ldentention = $filter("filter")(student.referred,function(referral){
+				student.ldentention = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 9;
 				});
-				student.iss = $filter("filter")(student.referred,function(referral){
+				student.iss = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 5 || referral.ReferralTypeId == 6 || referral.ReferralTypeId == 7
 						|| referral.ReferralTypeId == 10 || referral.ReferralTypeId == 15 || referral.ReferralTypeId == 17;
 				});
-				student.oss = $filter("filter")(student.referred,function(referral){
+				student.oss = $filter("filter")(student.todayReferred,function(referral){
 					return referral.ReferralTypeId == 11;
 				});
 				var name = student.user.FirstName;
@@ -465,38 +464,49 @@ function formatDate(date) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]  )
 						ref = student.referred[0];
-						switch (ref.ActivityTypeId) {
-
-							case 24:// Present
-								if (ref.RefferalStatus == 1)
-									ref.consequence = {referral_type: {Name: 'Completed'}};
-								student.status = {class: 'bg-green'};
-								break;
-							case 88://
-								if (ref.RefferalStatus == 1)
-									ref.consequence = {referral_type: {Name: 'Cleared'}};
-								student.status = {class: 'bg-green'};
-								break;
-							case 28:// Sent Out
-							case 29:// Walked Out
-							case 25:// No Show
-								student.status = {class: 'bg-danger'};
-								delete student.overlap.class;
-								break;
-							case 26:// Left School
-							case 27:// School Absent
-							case 30:// Other
-								student.status = {class: 'bg-gray'};
-								if (ref.RefferalStatus == 1)
-									ref.consequence = {referral_type: {Name: 'ORoom → Re-ORoom'}};
-								delete student.overlap.class;
-								break;
-							default:
-								console.log('wrong Activity Type');
-
-						}
-						;
+						student.status = resource.markActionToReferral(ref,student);
 					});
+				};
+
+				resource.markActionToReferral = function(ref,student){
+					var status = {};
+					switch (ref.ActivityTypeId) {
+						case 24:// Present
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'Completed'}};
+							status = {class: 'bg-green'};
+							break;
+						case 88://
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'Cleared'}};
+							status = {class: 'bg-green'};
+							break;
+						case 28:// Sent Out
+						case 29:// Walked Out
+						case 25:// No Show
+							status = {class: 'bg-danger'};
+							student && student.overlap && delete student.overlap.class;
+							break;
+						case 26:// Left School
+						case 27:// School Absent
+						case 30:// Other
+							status = {class: 'bg-gray'};
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'ORoom → Re-ORoom'}};
+							student && student.overlap && delete student.overlap.class;
+							break;
+						default:
+							console.log('wrong Activity Type');
+
+					}
+					return status;
+				};
+
+				resource.markActionsToReferrals = function(referrals){
+					angular.forEach(referrals,function(ref){
+						if(types.isORM(ref.ReferralTypeId))
+							ref.status = resource.markActionToReferral(ref);
+					})
 				};
 
 				resource.markFromStatus = function (students) {
@@ -562,8 +572,8 @@ function formatDate(date) {
 /* Lunch */
 (function (app) {
 	app
-		.factory("LunchService", ["$resource", "UtilService", '$filter',
-			function ($resource, UtilService, $filter) {
+		.factory("LunchService", ["$resource","ReferralTypesService", "UtilService", '$filter',
+			function ($resource,types, UtilService, $filter) {
 				var resource = $resource('api/lunch/:id', {}, {
 					update: {
 						method: 'PUT'
@@ -613,29 +623,39 @@ function formatDate(date) {
 				resource.markActions = function (students) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]  )
-						switch (student.referred[0].ActivityTypeId) {
-							case 0 :
-								console.log('N/A');
-								break;
-							case 31:// Present
-								student.status = {class: 'bg-green'};
-								break;
-							case 35:// Sent Out
-							case 36:// Walked Out
-							case 32:// No Show
-								student.status = {class: 'bg-danger'};
-								break;
-							case 33:// Left School
-							case 34:// School Absent
-							case 37:// Other
-								student.status = {class: 'bg-gray'};
-								break;
-							default:
-								console.log('wrong Activity Type');
-
-						}
-						;
+						ref = student.referred[0];
+						student.status = resource.markActionToReferral(ref,student);
 					});
+				};
+
+				resource.markActionToReferral = function (ref, student) {
+					var status = {};
+					switch (ref.ActivityTypeId) {
+						case 31:// Present
+							status = {class: 'bg-green'};
+							break;
+						case 35:// Sent Out
+						case 36:// Walked Out
+						case 32:// No Show
+							status = {class: 'bg-danger'};
+							break;
+						case 33:// Left School
+						case 34:// School Absent
+						case 37:// Other
+							status = {class: 'bg-gray'};
+							break;
+						default:
+							console.log('wrong Activity Type');
+
+					};
+					return status;
+				};
+
+				resource.markActionsToReferrals = function(referrals){
+					angular.forEach(referrals,function(ref){
+						if(types.isLD(ref.ReferralTypeId))
+						ref.status = resource.markActionToReferral(ref);
+					})
 				};
 
 				resource.copyUpdatedResourceAndMarkActions = function (student, data) {
@@ -703,8 +723,8 @@ function formatDate(date) {
 /* ISS */
 (function (app) {
 	app
-		.factory("ISSService", ["$resource", "UtilService", '$filter',
-			function ($resource, UtilService, $filter) {
+		.factory("ISSService", ["$resource","ReferralTypesService","UtilService", '$filter',
+			function ($resource, types,UtilService, $filter) {
 				var resource = $resource('api/iss/:id', {}, {
 					update: {
 						method: 'PUT'
@@ -807,41 +827,51 @@ function formatDate(date) {
 				utils.markActions = function (students) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]
-						switch (student.referred[0].ActivityTypeId) {
-							case 0 :
-								console.log('N/A');
-								break;
-							case 38:// Present
-								if (student.referred[0].RefferalStatus == 1)
-									student.referred[0].consequence = {referral_type: {Name: 'Present'}};
-								student.status = {class: 'bg-green'};
-								break;
-							case 87:// clear
-								if (student.referred[0].RefferalStatus == 1)
-									student.referred[0].consequence = {referral_type: {Name: 'Cleared'}};
-								student.status = {class: 'bg-green'};
-								break;
-							case 42:// Sent Out
-							case 43:// Walked Out
-							case 39:// No Show
-								student.status = {class: 'bg-danger'};
-								delete student.overlap.class;
-								break;
-							case 40:// Left School
-							case 41:// School Absent
-							case 47:// Other
-							case 91:// Other
-							case 86:// reassign
-								student.status = {class: 'bg-gray'};
-								if (student.referred[0].RefferalStatus == 1)
-									student.referred[0].consequence = {referral_type: {Name: 'ISS → Re-ISS'}};
-								delete student.overlap.class;
-								break;
-							default:
-								console.log('wrong Activity Type');
+						ref = student.referred[0];
+						student.status = resource.markActionToReferral(ref,student);
+					});
+				};
 
-						}
-						;
+				utils.markActionToReferral = function(ref,student){
+					var status = {};
+					switch (ref.ActivityTypeId) {
+						case 38:// Present
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'Present'}};
+							status = {class: 'bg-green'};
+							break;
+						case 87:// clear
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'Cleared'}};
+							status = {class: 'bg-green'};
+							break;
+						case 42:// Sent Out
+						case 43:// Walked Out
+						case 39:// No Show
+							status = {class: 'bg-danger'};
+							student && student.overlap && delete student.overlap.class;
+							break;
+						case 40:// Left School
+						case 41:// School Absent
+						case 47:// Other
+						case 91:// Other
+						case 86:// reassign
+							status = {class: 'bg-gray'};
+							if (ref.RefferalStatus == 1)
+								ref.consequence = {referral_type: {Name: 'ISS → Re-ISS'}};
+							student && student.overlap && delete student.overlap.class;
+							break;
+						default:
+							console.log('wrong Activity Type');
+
+					};
+					return status;
+				}
+
+				utils.markActionsToReferrals = function(referrals){
+					angular.forEach(referrals,function(ref){
+						if(types.isISS(ref.ReferralTypeId))
+						ref.status = resource.markActionToReferral(ref);
 					});
 				};
 
@@ -1160,11 +1190,8 @@ function formatDate(date) {
 					var assignments = {completed: [], incompleted: []};
 					student.activity = student.referred[0].activity || {};
 					student.ActivityTypeId = student.referred[0].ActivityTypeId;
-					var onlyAEC = $filter('filter')(student.referred, function (o) {
-						return o.ReferralTypeId === 12;
-					})
-					student.referred = onlyAEC;
-					angular.forEach(onlyAEC, function (ref) {
+
+					angular.forEach(student.referred, function (ref) {
 						ref.HasFolder = (ref.HasFolder === 1 || ref.hasFolder ) ? true : false;
 						if (ref.ActivityTypeId === 49) {// present, check what assignments were completed
 							ref.AssignmentCompleted = (ref.AssignmentCompleted === 1 || ref.AssignmentCompleted) ? true : false;
@@ -1918,6 +1945,7 @@ function formatDate(date) {
 			iss: [5, 6, 7, 10, 15, 17],
 			reteach: [18],
 			oss: [11],
+			lunch:[9],
 			isAEC: function (type) {
 				return this.aec.indexOf(type) !== -1;
 			},
@@ -1932,6 +1960,9 @@ function formatDate(date) {
 			},
 			isReteach: function (type) {
 				return this.reteach.indexOf(type) !== -1;
+			},
+			isLD:function (type) {
+				return this.lunch.indexOf(type) !== -1;
 			}
 		};
 	});

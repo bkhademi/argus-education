@@ -45,20 +45,15 @@
                     //console.log($scope.student)// contains the student to display
 
                     $scope.$watch('student', function (newVal, oldVal) {
-
                         $scope.schedule = newVal.classes;
                         $scope.activities = newVal.user.activities_affected;
-                        $scope.referrals = newVal.referredAll;
-                        oser.markOverlaps([$scope.student]);
-                        aecser.markOverlaps([$scope.student]);
-                        retser.markOverlaps([$scope.student]);
-                        issser.markOverlaps([$scope.student]);
-                        ldser.markOverlaps([$scope.student]);
-                        oser.markActions([$scope.student]);
+                        $scope.referrals = newVal.referred;
+                        oser.markActionsToReferrals($scope.referrals);
                         aecser.markActions([$scope.student]);
                         retser.markActions([$scope.student]);
-                        issser.markActions([$scope.student]);
-                        ldser.markActions([$scope.student]);
+                        issser.markActionsToReferrals($scope.referrals);
+                        ldser.markActionsToReferrals($scope.referrals);
+                        debugger;
                         for (var i = 0; i < $scope.referrals.length; i++) {
                             if ($scope.referrals[i].ReferralTypeId === 1 || $scope.referrals[i].ReferralTypeId === 2
                                 || $scope.referrals[i].ReferralTypeId === 3 || $scope.referrals[i].ReferralTypeId === 16
