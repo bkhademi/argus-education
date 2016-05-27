@@ -57,6 +57,10 @@ class ReferralsController extends Controller
                 ->orderBy('LastName', 'ASC')
                 ->select('students.*')
                 ->get();
+
+            foreach($list as $stu){
+                $stu->todayReferred = $stu->referred;
+            }
             return compact('list');
         }
         if ($request->has('StudentId')) {
