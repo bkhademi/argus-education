@@ -41,7 +41,6 @@
                         document.body.removeChild(element);
                     };
 
-
                     //console.log($scope.student)// contains the student to display
 
                     $scope.$watch('student', function (newVal, oldVal) {
@@ -49,11 +48,10 @@
                         $scope.activities = newVal.user.activities_affected;
                         $scope.referrals = newVal.referred;
                         oser.markActionsToReferrals($scope.referrals);
-                        aecser.markActions([$scope.student]);
-                        retser.markActions([$scope.student]);
+                        aecser.markActionsToReferrals($scope.referrals);
+                        retser.markActionsToReferrals($scope.referrals);
                         issser.markActionsToReferrals($scope.referrals);
                         ldser.markActionsToReferrals($scope.referrals);
-                        debugger;
                         for (var i = 0; i < $scope.referrals.length; i++) {
                             if ($scope.referrals[i].ReferralTypeId === 1 || $scope.referrals[i].ReferralTypeId === 2
                                 || $scope.referrals[i].ReferralTypeId === 3 || $scope.referrals[i].ReferralTypeId === 16
@@ -202,12 +200,6 @@
 
                     };
                     $scope.counters = ProfileCounters;
-                    // $scope.ormCounters = ProfileCounters.ormCounters;
-                    // $scope.aecCounters = ProfileCounters.aecCounters;
-                    // $scope.retCounters = ProfileCounters.retCounters;
-                    // $scope.ldtCounters = ProfileCounters.ldtCounters;
-                    // $scope.issCounters = ProfileCounters.issCounters;
-                    // $scope.ossCounters = ProfileCounters.ossCounters;
 
                 }])//End of Profile Controller
 
