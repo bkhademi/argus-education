@@ -3,18 +3,20 @@
 (function (app) {
     app
         .controller("ProfileCtrl",
-            ["$scope", "StudentsService", "$http", '$rootScope', 'ProfessorClassesService', 'RoomsService', 'ClassStudentsService',
+            ["$scope", "StudentsService", '$rootScope', 'ProfessorClassesService','ClassStudentsService',
                 'notify', 'ProfileCounters', 'OroomService', 'AECListService', 'ReteachListService', 'ISSService',
-                'LunchService',
-                function ($scope, students, $http, $rootScope, professorclasses, rooms, ClassStuSer, notify, ProfileCounters,
-                          oser, aecser, retser, issser, ldser) {
+                'LunchService','UtilService',
+                function ($scope, students,$rootScope, professorclasses, ClassStuSer, notify, ProfileCounters,
+                          oser, aecser, retser, issser, ldser, utils) {
                     $scope.schedule = []; // holds  student's schedule
                     $scope.activities = []; // holds student'activities
-                    $scope.checks = [];
                     $scope.currentDate = new Date();
                     $scope.classes = professorclasses.query();
                     $scope.role = $rootScope.currentUser.role;
+
+                    // TODO : change to adapt to new table. used to be useractions, now referrals
                     $scope.downloadActivity = function () {
+                        // create csv content
                         var text = '';
                         var heading = 'Date,ActionBy,Activity,Comment \n';
                         text += heading;
@@ -25,23 +27,11 @@
                             text += '"' + (act.Comment || '') + '",';
                             text += "\n";
                         });
-
-
-                        download(text, $scope.student);
-                    };
-                    var download = function (text, student) {
-
-                        //console.log(text);
-                        var element = document.createElement('a');
-                        element.setAttribute('href', 'data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURI(text));
-                        element.setAttribute('download', 'ActivityFor-' + student.user.FirstName + '_' + student.user.LastName + '.csv');
-                        element.style.display = 'none';
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
+                        // download as csv
+                        var stu = $scope.student.user;
+                        utils.download(text, 'HistoryFor-'+stu.FirstName+'_'+stu.LastName);
                     };
 
-                    //console.log($scope.student)// contains the student to display
 
                     $scope.$watch('student', function (newVal, oldVal) {
                         $scope.schedule = newVal.classes;
@@ -73,9 +63,12 @@
                     });
 
                     /*******************  Right Side Controllers*********************/
-                    $scope.currentDate;
+                    $scope.filter = []; // array stores status of filter buttons. eg. filter['LDT'] = true.
+                    $scope.counters = ProfileCounters;
+
+                    // TODO: what to do when date picker is changed?
                     $scope.$watch("profileForm.date.$modelValue", function (newVal, oldVal) {
-                        //console.info("date changedto :" + newVal)
+                        //console.info("date changedto :" + newVal) 
                     });
 
 
@@ -85,56 +78,11 @@
                         $scope.selected = referral;
                     };
 
-                    $scope.showComment = false;
-                    $scope.toggleShowComment = function (index) {
-                        $scope.showComment = !$scope.showComment;
-                        $scope.selected = $scope.activities[index];
-                    };
-
-                    $scope.addComment = function () {
-                        var entry =
-                        {
-                            date: formatDate(new Date),
-                            activity: "comment",
-                            Comment: $scope.comment,
-                            staff: $rootScope.currentUser.FirstName + ' ' + $rootScope.currentUser.LastName
-                        };
-                        $scope.activities.push(entry);
-                        $scope.comment = '';
-                    };
-
                     $scope.graduationYear = 2015 + (12 - parseInt($scope.student.Grade, 10));
-
-                    function formatDate(date) {
-                        return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-                    }
-
-                    $scope.filter = [];
-                    $scope.getActivities = function () {
-                        return ($scope.activities || []).map(function (w) {
-                            return w.activity.Name;
-                        }).filter(function (w, idx, arr) {
-                            return arr.indexOf(w) === idx;
-                        });
-                    };
-
-                    $scope.filterByCategory = function (act) {
-                        return $scope.filter[act.activity.Name] || noFilter($scope.filter);
-                    };
-                    // date selected on the checkboxes;
-                    function noFilter(filterObj) {
-                        for (var key in filterObj) {
-                            if (filterObj[key]) {
-                                return false;
-                            }
-                        }
-                        return true;
-                    }
 
                     $scope.enableClassEdit = function ($index, classes) {
                         classes[$index].editing = true
                     };
-
                     $scope.submitClassChange = function ($index, classes) {
                         var newClass = $scope.student.ProfessorClass;
                         var classToBeModified = classes[$index];
@@ -151,6 +99,7 @@
                     $scope.cancelClassChange = function ($index, classes) {
                         classes[$index].editing = false
                     };
+
                     $scope.enableContactEdit = function () {
                         $scope.student.GuardianNameCopy = $scope.student.GuardianName;
                         $scope.student.GuardianPhoneCopy = $scope.student.GuardianPhone;
@@ -176,6 +125,8 @@
                     $scope.cancelContactChange = function () {
                         $scope.student.contactEdit = false;
                     };
+
+
                     $scope.filterSelect = function () {
                         var activeButtons = [];
                         if ($scope.filter['LDT'] == true) {
@@ -199,10 +150,9 @@
                         $scope.selectedButtons = activeButtons;
 
                     };
-                    $scope.counters = ProfileCounters;
 
                 }])//End of Profile Controller
-
+        // TODO: use ReferralTypes factory to simplify checking referral type
         .filter("buttonFilter", function (ProfileCounters) {
             return function (listActivities, selectedButtons) {
                 if (!selectedButtons) {
