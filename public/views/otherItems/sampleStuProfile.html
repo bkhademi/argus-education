@@ -279,28 +279,32 @@
                     <div class="text-center">
                         <form role="form">
                             <div class="btn-group text-center">
-                                <label class="btn btn-default Ldetention" style="margin-right: 5px"
+                                <label id="LDT" class="btn btn-default Ldetention" style="margin-right: 5px"
                                        ng-model="filter['LDT']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     LDT
                                 </label>
-                                <label class="btn btn-default O-Room filter" style="margin-right: 5px" ng-model="filter['ORM']"
+                                <label id="ORM" class="btn btn-default O-Room filter" style="margin-right: 5px"
+                                       ng-model="filter['ORM']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     ORM
                                 </label>
-                                <label class="btn btn-default ISS" style="margin-right: 5px" ng-model="filter['ISS']"
+                                <label id="ISS" class="btn btn-default ISS" style="margin-right: 5px"
+                                       ng-model="filter['ISS']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     ISS
                                 </label>
-                                <label class="btn btn-default OSS" style="margin-right: 5px" ng-model="filter['OSS']"
+                                <label id="OSS" class="btn btn-default OSS" style="margin-right: 5px"
+                                       ng-model="filter['OSS']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     OSS
                                 </label>
-                                <label class="btn btn-default AEC" style="margin-right: 5px" ng-model="filter['AEC']"
+                                <label id="AEC" class="btn btn-default AEC" style="margin-right: 5px"
+                                       ng-model="filter['AEC']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     AEC
                                 </label>
-                                <label class="btn btn-default Re-Teach" style="margin-right: 5px"
+                                <label id="RET" class="btn btn-default Re-Teach" style="margin-right: 5px"
                                        ng-model="filter['RET']"
                                        data-ng-change="filterSelect()" btn-checkbox="">
                                     RET
@@ -547,24 +551,24 @@
 </section>
 <style>
     .AEC {
-        opacity: .7;
-        background-color: #6A267F;
-        border-color: #6A267F;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #6A267F !important;
+        border-color: #6A267F !important;
+        color: #FFFFFF !important;
     }
 
     .AEC:hover, .AEC.btn-default.active {
         opacity: 1;
-        background-color: #6A267F;
-        border-color: #6A267F;
-        color: #FFFFFF;
+        background-color: #6A267F !important;
+        border-color: #6A267F !important;
+        color: #FFFFFF !important;
     }
 
     .O-Room {
-        opacity: .7;
-        background-color: #003883;
-        border-color: #003883;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #003883 !important;
+        border-color: #003883 !important;
+        color: #FFFFFF !important;
     }
 
     .O-Room:hover, .O-Room.btn-default.active {
@@ -575,24 +579,24 @@
     }
 
     .Re-Teach {
-        opacity: .7;
-        background-color: #9C00CC;
-        border-color: #9C00CC;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #9C00CC !important;
+        border-color: #9C00CC !important;
+        color: #FFFFFF !important;
     }
 
     .Re-Teach:hover, .Re-Teach.btn-default.active {
         opacity: 1;
-        background-color: #9C00CC;
+        background-color: #9C00CC ;
         border-color: #9C00CC;
         color: #FFFFFF;
     }
 
     .Ldetention {
-        opacity: .7;
-        background-color: #F5540E;
-        border-color: #F5540E;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #F5540E !important;
+        border-color: #F5540E !important;
+        color: #FFFFFF !important;
     }
 
     .Ldetention:hover, .Ldetention.btn-default.active {
@@ -603,10 +607,10 @@
     }
 
     .ISS {
-        opacity: .7;
-        background-color: #3072ab;
-        border-color: #3072ab;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #3072ab !important;
+        border-color: #3072ab !important;
+        color: #FFFFFF !important;
     }
 
     .ISS:hover, .ISS.btn-default.active {
@@ -617,10 +621,10 @@
     }
 
     .OSS {
-        opacity: .7;
-        background-color: #5e89c1;
-        border-color: #5e89c1;
-        color: #FFFFFF;
+        opacity: .9 !important;
+        background-color: #5e89c1 !important;
+        border-color: #5e89c1 !important;
+        color: #FFFFFF !important;
     }
 
     .OSS:hover, .OSS.btn-default.active {
@@ -628,6 +632,12 @@
         background-color: #5e89c1;
         border-color: #5e89c1;
         color: #FFFFFF;
+    }
+
+    .notSelected {
+        background-color: lightgrey;
+        border-color: lightgrey;
+        color: #b3a9a9;
     }
 
 </style>

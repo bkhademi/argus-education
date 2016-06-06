@@ -182,21 +182,118 @@
                         var activeButtons = [];
                         if ($scope.filter['LDT'] == true) {
                             activeButtons.push('LDT');
+                            $("#LDT").addClass("Ldetention");
+                            if(!$scope.filter['ORM']){
+                                $("#ORM").removeClass("O-Room").addClass("notSelected");
+                            }
+                            if(!$scope.filter['AEC']){
+                                $("#AEC").removeClass("AEC").addClass("notSelected");
+                            }
+                            if(!$scope.filter['RET']){
+                                $("#RET").removeClass("Re-Teach").addClass("notSelected");
+                            }
+                            if(!$scope.filter['ISS']){
+                                $("#ISS").removeClass("ISS").addClass("notSelected");
+                            }
+                            if(!$scope.filter['OSS']){
+                                $("#OSS").removeClass("OSS").addClass("notSelected");
+                            }
                         }
                         if ($scope.filter['ORM'] === true) {
                             activeButtons.push('ORM');
+                            $("#ORM").addClass("O-Room");
+                            if(!$scope.filter['LDT']){
+                                $("#LDT").removeClass("O-Ldetention").addClass("notSelected");
+                            }
+                            if(!$scope.filter['AEC']){
+                                $("#AEC").removeClass("AEC").addClass("notSelected");
+                            }
+                            if(!$scope.filter['RET']){
+                                $("#RET").removeClass("Re-Teach").addClass("notSelected");
+                            }
+                            if(!$scope.filter['ISS']){
+                                $("#ISS").removeClass("ISS").addClass("notSelected");
+                            }
+                            if(!$scope.filter['OSS']){
+                                $("#OSS").removeClass("OSS").addClass("notSelected");
+                            }
                         }
                         if ($scope.filter['AEC'] === true) {
                             activeButtons.push('AEC');
+                            $("#AEC").addClass("AEC");
+
+                            if(!$scope.filter['ORM']){
+                                $("#ORM").removeClass("O-Room").addClass("notSelected");
+                            }
+                            if(!$scope.filter['LDT']){
+                                $("#LDT").removeClass("Ldetention").addClass("notSelected");
+                            }
+                            if(!$scope.filter['RET']){
+                                $("#RET").removeClass("Re-Teach").addClass("notSelected");
+                            }
+                            if(!$scope.filter['ISS']){
+                                $("#ISS").removeClass("ISS").addClass("notSelected");
+                            }
+                            if(!$scope.filter['OSS']){
+                                $("#OSS").removeClass("OSS").addClass("notSelected");
+                            }
                         }
                         if ($scope.filter['RET'] === true) {
                             activeButtons.push('RET');
+                            $("#RET").addClass("Re-Teach");
+                            if(!$scope.filter['ORM']){
+                                $("#ORM").removeClass("O-Room").addClass("notSelected");
+                            }
+                            if(!$scope.filter['AEC']){
+                                $("#AEC").removeClass("AEC").addClass("notSelected");
+                            }
+                            if(!$scope.filter['LDT']){
+                                $("#LDT").removeClass("Ldetention").addClass("notSelected");
+                            }
+                            if(!$scope.filter['ISS']){
+                                $("#ISS").removeClass("ISS").addClass("notSelected");
+                            }
+                            if(!$scope.filter['OSS']){
+                                $("#OSS").removeClass("OSS").addClass("notSelected");
+                            }
                         }
                         if ($scope.filter['ISS'] === true) {
                             activeButtons.push('ISS');
+                            $("#ISS").addClass("ISS");
+                            if(!$scope.filter['ORM']){
+                                $("#ORM").removeClass("O-Room").addClass("notSelected");
+                            }
+                            if(!$scope.filter['AEC']){
+                                $("#AEC").removeClass("AEC").addClass("notSelected");
+                            }
+                            if(!$scope.filter['RET']){
+                                $("#RET").removeClass("Re-Teach").addClass("notSelected");
+                            }
+                            if(!$scope.filter['LDT']){
+                                $("#LDT").removeClass("Ldetention").addClass("notSelected");
+                            }
+                            if(!$scope.filter['OSS']){
+                                $("#OSS").removeClass("OSS").addClass("notSelected");
+                            }
                         }
                         if ($scope.filter['OSS'] === true) {
                             activeButtons.push('OSS');
+                            $("#OSS").addClass("OSS");
+                            if(!$scope.filter['ORM']){
+                                $("#ORM").removeClass("O-Room").addClass("notSelected");
+                            }
+                            if(!$scope.filter['AEC']){
+                                $("#AEC").removeClass("AEC").addClass("notSelected");
+                            }
+                            if(!$scope.filter['RET']){
+                                $("#RET").removeClass("Re-Teach").addClass("notSelected");
+                            }
+                            if(!$scope.filter['ISS']){
+                                $("#ISS").removeClass("ISS").addClass("notSelected");
+                            }
+                            if(!$scope.filter['LDT']){
+                                $("#LDT").removeClass("Ldetention").addClass("notSelected");
+                            }
                         }
                         $scope.selectedButtons = activeButtons;
 
