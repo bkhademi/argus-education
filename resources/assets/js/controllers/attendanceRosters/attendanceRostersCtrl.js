@@ -16,19 +16,10 @@
 				$scope.refTable = [];
 				$scope.lunchTableA = [];
 				$scope.lunchTableB = [];
-				$scope.iss = [];
-				$scope.oss = [];
+				$scope.iss = {};
+				$scope.oss = {};
 				$scope.currentDate = formatDate(new Date());
 
-				$scope.activities = [
-					{name: "Present", Id: 38},
-					{name: "No Show", Id: 39},
-					{name: "Left School", Id: 40},
-					{name: "School Absent", Id: 41},
-					{name: "Sent Out", Id: 42},
-					{name: "Walked Out", Id: 42},
-					{name: "Other", Id: 44}
-				];
 				$scope.download = function (text,type) {
 					type = type? type:'';
 					//console.log(text);
@@ -43,9 +34,11 @@
 
 				$scope.oroom = orooms;
 				$scope.lunch = lunchs;
+				$scope.iss = isss;
+				$scope.oss = osss;
 				lunchs.getCount();
 				orooms.getCount();
-				isss.get({count:true, roster:true}, function(data){$scope.count.iss = data.count;});
-				osss.get({count:true, param:'ossList', }, function(data){$scope.count.oss = data.count;});
+				isss.getCount();
+				osss.getCount();
 			}]);
 }(angular.module('Argus')));

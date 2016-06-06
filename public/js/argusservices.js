@@ -18,11 +18,10 @@ function formatDate(date) {
 				}
 			});
 
-			var utils = {};
-			utils.getList = function(){
+			resource.getList = function(){
 				return resource.get({list:true}).$promise;
-			}
-			utils.deleteReferralsFromStudent = function (student) {
+			};
+			resource.deleteReferralsFromStudent = function (student) {
 				var toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 					return o.remove;
 				});
@@ -42,7 +41,7 @@ function formatDate(date) {
 				return request.$promise;
 			};
 
-			return angular.extend(utils, resource);
+			return resource;
 
 
 		}]);
@@ -55,15 +54,12 @@ function formatDate(date) {
 		.factory('MyNotify', ['notify', function (notify) {
 			var templateUrl = 'views/common/notify.html';
 
-			var customNotify = function (msg, type) {
+			return function (msg, type) {
 				notify.closeAll();
 				var classes = 'alert-'.concat(type);
 
 				notify({message: msg, templateUrl: templateUrl, classes: classes});
 			};
-
-
-			return customNotify;
 		}]);
 
 }(angular.module("Argus")));
@@ -74,12 +70,11 @@ function formatDate(date) {
 	'use strict';
 	app
 		.factory('AdminReferralsService', ['$resource', function ($resource) {
-			var ref = $resource('api/admin_referrals/:id', {}, {
+			return $resource('api/admin_referrals/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -95,8 +90,7 @@ function formatDate(date) {
 			}
 		});
 
-		var utils = {};
-		utils.deleteReferralsFromStudent = function (date, student) {
+		resource.deleteReferralsFromStudent = function (date, student) {
 			var toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 				return o.remove;
 			});
@@ -117,7 +111,7 @@ function formatDate(date) {
 			return request.$promise;
 		};
 
-		return angular.extend(utils, resource);
+		return resource;
 
 
 	}]);
@@ -128,12 +122,11 @@ function formatDate(date) {
 	'use strict';
 	app
 		.factory('AdminActivitiesService', ['$resource', function ($resource) {
-			var ref = $resource('api/admin_activities/:id', {}, {
+			return $resource('api/admin_activities/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -144,12 +137,11 @@ function formatDate(date) {
 
 	app
 		.factory('AdminUsersService', ['$resource', function ($resource) {
-			var ref = $resource('api/admin_users/:id', {}, {
+			return $resource('api/admin_users/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -160,12 +152,11 @@ function formatDate(date) {
 
 	app
 		.factory('UsersService', ['$resource', function ($resource) {
-			var ref = $resource('api/users/:id', {}, {
+			return $resource('api/users/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -175,12 +166,11 @@ function formatDate(date) {
 	'use strict';
 	app
 		.factory('RolesService', ['$resource', function ($resource) {
-			var ref = $resource('api/roles/:id', {}, {
+			return $resource('api/roles/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -190,26 +180,25 @@ function formatDate(date) {
 	'use strict';
 	app
 		.factory('SchoolsService', ['$resource', function ($resource) {
-			var ref = $resource('api/schools/:id', {}, {
+			return $resource('api/schools/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
+
 /* ClassStudentsService */
 (function (app) {
 	'use strict';
 	app
 		.factory('ClassStudentsService', ['$resource', function ($resource) {
-			var ref = $resource('api/classstudents/:id', {}, {
+			return $resource('api/classstudents/:id', {}, {
 				update: {
 					method: 'PUT'
 				}
 			});
-			return ref;
 		}]);
 
 }(angular.module("Argus")));
@@ -392,6 +381,7 @@ function formatDate(date) {
 						method: 'PUT'
 					}
 				});
+				resource.count = 0;
 
 				resource.getList = function (date, periodIds) {
 					var list = resource.get({roster: true, Date: date, 'Periods[]': periodIds}, function (data) {
@@ -556,7 +546,6 @@ function formatDate(date) {
 					return request.$promise;
 				};
 
-				resource.count = 0;
 
 				resource.getCount =  function(){
 					resource.get({count: true, roster: true},function(data){
@@ -579,7 +568,7 @@ function formatDate(date) {
 						method: 'PUT'
 					}
 				});
-
+				resource.count = 0;
 
 				resource.markOverlaps = function (students) {
 					angular.forEach(students, function (student) {
@@ -633,6 +622,7 @@ function formatDate(date) {
 					switch (ref.ActivityTypeId) {
 						case 31:// Present
 							status = {class: 'bg-green'};
+							ref.consequence = {referral_type:{Name:'Completed'}};
 							break;
 						case 35:// Sent Out
 						case 36:// Walked Out
@@ -693,7 +683,7 @@ function formatDate(date) {
 					return list.$promise;
 				};
 
-				resource.count = 0;
+
 
 				resource.getCount =  function(){
 					resource.get({count: true, roster: true},function(data){
@@ -713,7 +703,6 @@ function formatDate(date) {
 					return resource.save(urlEncoded, payload,function(){resource.count++;}).$promise;
 				};
 
-
 				return resource;
 
 			}]);
@@ -730,15 +719,14 @@ function formatDate(date) {
 						method: 'PUT'
 					}
 				});
+				resource.count = 0;
 
-				var utils = {};
-
-				utils.copyUpdatedResourceAndMarkActions = function (student, data) {
+				resource.copyUpdatedResourceAndMarkActions = function (student, data) {
 					student.referred = data.referrals;
-					utils.markActions([student]);
+					resource.markActions([student]);
 				};
 
-				utils.updateAttendance = function (date, student) {
+				resource.updateAttendance = function (date, student) {
 					$toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 						return o.remove;
 					});
@@ -759,16 +747,16 @@ function formatDate(date) {
 					};
 
 					var request = resource.update(urlEncoded, payload, function (data) {
-						utils.copyUpdatedResourceAndMarkActions(student, data);
+						resource.copyUpdatedResourceAndMarkActions(student, data);
 					});
 					return request.$promise;
 				};
 
-				utils.semiUpdateAttendance = function (date, student) { // support staff
+				resource.semiUpdateAttendance = function (date, student) { // support staff
 
 				};
 
-				utils.markOverlaps = function (students) {
+				resource.markOverlaps = function (students) {
 
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
@@ -797,7 +785,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markOverlapsReport = function (students) {
+				resource.markOverlapsReport = function (students) {
 					angular.forEach(students, function (student) {
 						var overlap = UtilService.getStudentOverlaps(student);
 						student.referred = $filter('filter')(student.referred, function (o) {
@@ -824,7 +812,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markActions = function (students) {
+				resource.markActions = function (students) {
 					angular.forEach(students, function (student) {
 						// only use the highest priority referral(  [0]
 						ref = student.referred[0];
@@ -832,7 +820,7 @@ function formatDate(date) {
 					});
 				};
 
-				utils.markActionToReferral = function(ref,student){
+				resource.markActionToReferral = function(ref,student){
 					var status = {};
 					switch (ref.ActivityTypeId) {
 						case 38:// Present
@@ -868,24 +856,30 @@ function formatDate(date) {
 					return status;
 				}
 
-				utils.markActionsToReferrals = function(referrals){
+				resource.markActionsToReferrals = function(referrals){
 					angular.forEach(referrals,function(ref){
 						if(types.isISS(ref.ReferralTypeId))
 						ref.status = resource.markActionToReferral(ref);
 					});
 				};
 
-				utils.getList = function (date, callback) {
+				resource.getList = function (date, callback) {
 					var list = resource.query({roster: true, Date: date}, function (data) {
 						callback && callback(data);
-						utils.markOverlaps(data);
-						utils.markActions(data);
+						resource.markOverlaps(data);
+						resource.markActions(data);
 					});
 
 					return list;
 				};
 
-				return angular.extend(resource, utils);
+				resource.getCount = function(){
+					resource.get({count:true, roster:true}, function(data){
+						resource.count = data.count;
+					})
+				};
+
+				return resource;
 			}]);
 }(angular.module("Argus")));
 
@@ -897,14 +891,15 @@ function formatDate(date) {
 			var resource = $resource('api/issfollowup/:id', {}, {
 				update: {method: 'PUT'}
 			});
-			var utils = {};
-			utils.getList = function () {
+			resource.count = 0;
+
+			resource.getList = function () {
 				return resource.query({roster: true}, function (data) {
 
 				});
 			};
 
-			utils.updateAttendance = function (student, date) {
+			resource.updateAttendance = function (student, date) {
 				var urlEncoded = {id: student.Id};
 				var payload = {Comment: student.comment || '', StudentId: student.StudentId};
 				switch (student.ActivityTypeId) {
@@ -926,7 +921,7 @@ function formatDate(date) {
 				return resource.update(urlEncoded, payload).$promise;
 			}
 
-			return angular.extend(utils, resource);
+			return  resource;
 
 		}]);
 }(angular.module('Argus')));
@@ -940,10 +935,9 @@ function formatDate(date) {
 					method: 'PUT'
 				}
 			});
+			resource.count = 0;
 
-			var utils = {};
-
-			utils.markOverlaps = function (students) {
+			resource.markOverlaps = function (students) {
 				angular.forEach(students, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
 
@@ -960,9 +954,9 @@ function formatDate(date) {
 					student.overlap = overlap;
 
 				})
-			}
+			};
 
-			utils.markOverlapsReport = function (students) {
+			resource.markOverlapsReport = function (students) {
 				angular.forEach(students, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
 
@@ -979,9 +973,9 @@ function formatDate(date) {
 					student.overlap = overlap;
 
 				})
-			}
+			};
 
-			utils.getParentMeetingList = function () {
+			resource.getParentMeetingList = function () {
 				return resource.query({param: 'parentMeetingList'}, function (data) {
 					angular.forEach(data, function (ref) {
 						debugger;
@@ -992,7 +986,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.updateParentMeetingInformation = function (referral) {
+			resource.updateParentMeetingInformation = function (referral) {
 				var urlEncoded = {id: referral.Id};
 				var payload = {};
 				payload.PMPInfo = true;
@@ -1006,7 +1000,7 @@ function formatDate(date) {
 				}).$promise;
 			};
 
-			utils.updateParentMeetingAttendance = function (referral) {
+			resource.updateParentMeetingAttendance = function (referral) {
 				var urlEncoded = {id: referral.Id};
 				var payload = {
 					StudentId: referral.student_user.id,
@@ -1043,11 +1037,17 @@ function formatDate(date) {
 				return resource.update(urlEncoded, payload).$promise;
 			};
 
-			utils.getOSSList = function (date, callback) {
+			resource.getOSSList = function (date, callback) {
 				return resource.query({param: 'ossList', Date: date}, callback);
-			}
+			};
 
-			return angular.extend(resource, utils);
+			resource.getCount = function(){
+				resource.get({count:true, param: 'ossList',},function(data){
+					resource.count = data.count;
+				})
+			};
+
+			return resource;
 
 		}]);
 }(angular.module("Argus")));
@@ -1061,11 +1061,12 @@ function formatDate(date) {
 					method: 'PUT'
 				}
 			});
-			var utils = {};
-			utils.getList = function (date) {
+			resource.count = 0;
+
+			resource.getList = function (date) {
 				return resource.query({roster: true});
 			};
-			utils.updateParentMeetingInformation = function (referral) {
+			resource.updateParentMeetingInformation = function (referral) {
 				var urlEncoded = {id: referral.Id};
 				var payload = {};
 				payload.PMPInfo = true;
@@ -1079,7 +1080,7 @@ function formatDate(date) {
 				}).$promise;
 			};
 
-			return angular.extend(resource, utils);
+			return resource;
 		}]);
 }(angular.module("Argus")));
 
@@ -1093,9 +1094,7 @@ function formatDate(date) {
 				}
 			});
 
-			var utils = {};
-
-			utils.markOverlaps = function (students) {
+			resource.markOverlaps = function (students) {
 				angular.forEach(students, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
 
@@ -1114,14 +1113,15 @@ function formatDate(date) {
 					student.overlap = overlap;
 
 				})
-			}
+			};
 
-			return angular.extend(resource, utils);
+			return resource;
 		}]);
 }(angular.module("Argus")));
 
 /* AEC List */
 (function (app) {
+	'use strict';
 	app.factory("AECListService", ["$http", '$resource', 'ReferralTypesService', '$filter', 'UtilService',
 		function ($http, $resource, types, $filter, UtilService) {
 
@@ -1130,9 +1130,8 @@ function formatDate(date) {
 					method: 'PUT'
 				}
 			});
-			var utils = {};
 
-			utils.markOverlaps = function (data, schoolId) {
+			resource.markOverlaps = function (data, schoolId) {
 
 				angular.forEach(data, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
@@ -1159,7 +1158,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.markOverlapsReport = function (data, schoolId) {
+			resource.markOverlapsReport = function (data, schoolId) {
 
 				angular.forEach(data, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
@@ -1184,7 +1183,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.markActions = function (data) {
+			resource.markActions = function (data) {
 				angular.forEach(data, function (student) {
 
 					var assignments = {completed: [], incompleted: []};
@@ -1242,7 +1241,56 @@ function formatDate(date) {
 				});
 			};
 
-			utils.markFromStatus = function (data) {
+			resource.markActionToReferral = function(ref,student){
+				var status = {};
+				switch (ref.ActivityTypeId) {
+					case 49:// present
+
+						if (ref.AssignmentCompleted) {
+							status = {class: 'bg-green'};
+							ref.activity.Name += 'complete'
+						} else {
+							status = {class: 'bg-green'};
+							ref.activity.Name += 'incomplete';
+						}
+						if (ref.RefferalStatus == 2)
+							ref.consequence = {referral_type: {Name: 'Completed'}};
+						break;
+					case 55: // sent out
+					case 56: // walked out
+					case 52: // no show
+						status = {class: 'bg-danger'};
+						break;
+
+					case 51: // cleared
+						status = {class: 'bg-green'};
+						if (ref.RefferalStatus == 2)
+							ref.consequence = {referral_type: {Name: 'Cleared'}};
+						break;
+					case 53:// Left School
+					case 54:// School Absent
+					case 57:// Other
+					case 50: // rescheduled
+						status = {class: 'bg-gray'};
+						if (ref.RefferalStatus == 2)
+							ref.consequence = {referral_type: {Name: 'AEC → Re-AEC'}};
+						break;
+				}
+				if (ref.RefferalStatus == 4) {
+					status = {class: 'bg-warning'};
+				}
+
+				return status;
+			};
+
+			resource.markActionsToReferrals = function(referrals){
+				angular.forEach(referrals, function(ref){
+					if(types.isAEC(ref.ReferralTypeId))
+						ref.status = resource.markActionToReferral(ref);
+				});
+			};
+
+			resource.markFromStatus = function (data) {
 				angular.forEach(data, function (student) {
 					angular.forEach(student.referred, function (ref) {
 						switch (ref.RefferalStatus) {
@@ -1263,7 +1311,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.copyUpdatedResourceAndMarkActions = function (student, data) {
+			resource.copyUpdatedResourceAndMarkActions = function (student, data) {
 				if (data.wasClear) {
 					student.referred = data.referrals;
 				} else {
@@ -1271,16 +1319,16 @@ function formatDate(date) {
 						angular.extend(student.referred[$index], ref);
 					});
 				}
-				utils.markActions([student]);
+				resource.markActions([student]);
 
 			};
 
-			utils.updateAttendance = function (currentDate, student) {
+			resource.updateAttendance = function (currentDate, student) {
 
 				if (student.ActivityTypeId == 50)
-					return utils.updateAttendanceReschedule(currentDate, student);
+					return resource.updateAttendanceReschedule(currentDate, student);
 				else if (student.ActivityTypeId == 51)
-					return utils.updateAttendanceClear(currentDate, student);
+					return resource.updateAttendanceClear(currentDate, student);
 
 				// sent when present
 				var referrals = student.referred.map(function (o) {
@@ -1300,12 +1348,12 @@ function formatDate(date) {
 				};
 
 				return resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				}).$promise;
 
 			};
 
-			utils.updateAttendanceReschedule = function (date, student) {
+			resource.updateAttendanceReschedule = function (date, student) {
 				debugger;
 
 				var referrals = student.referred.map(function (o) {
@@ -1322,12 +1370,12 @@ function formatDate(date) {
 				};
 
 				return resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				}).$promise;
 			};
 
-			utils.updateAttendanceClear = function (date, student) {
-				$toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
+			resource.updateAttendanceClear = function (date, student) {
+				 var $toRemoveReferralIds = $filter('filter')(student.referred, function (o) {
 					return o.remove;
 				});
 
@@ -1348,7 +1396,7 @@ function formatDate(date) {
 				};
 				debugger;
 				var request = resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				});
 
 				return request.$promise;
@@ -1356,7 +1404,7 @@ function formatDate(date) {
 			};
 
 			// data = { comment, date, excused, student}
-			utils.updateReschedule = function (currentDate, data) {
+			resource.updateReschedule = function (currentDate, data) {
 				var student = data.student;
 
 				var referrals = student.referred.map(function (o) {
@@ -1373,11 +1421,11 @@ function formatDate(date) {
 				};
 
 				return resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				}).$promise;
 			};
 
-			utils.updateClear = function (currentDate, student, comment) {
+			resource.updateClear = function (currentDate, student, comment) {
 				var referralsIds = student.referred.map(function (o) {
 					return o.Id;
 				});
@@ -1389,11 +1437,11 @@ function formatDate(date) {
 					ReferralIds: referralsIds
 				};
 				return resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				}).$promise;
 			};
 
-			utils.submitList = function (students, date) {
+			resource.submitList = function (students, date) {
 				var promises = [];
 				/*var overlaps = $filter('filter')(students, function (o) {
 				 o = o.overlap;
@@ -1421,7 +1469,7 @@ function formatDate(date) {
 
 			};
 
-			utils.updateOverlapAttendance = function (date, student) {
+			resource.updateOverlapAttendance = function (date, student) {
 				var referrals = student.referred.map(function (o) {
 					return {Id: o.Id, HasFolder: o.HasFolder || false};
 				});
@@ -1436,21 +1484,21 @@ function formatDate(date) {
 				};
 				var urlEncoded = {id: student.Id};
 				return resource.update(urlEncoded, payload, function (data) {
-					utils.copyUpdatedResourceAndMarkActions(student, data);
+					resource.copyUpdatedResourceAndMarkActions(student, data);
 				}).$promise;
 			};
 
-			utils.getList = function (date, callback) {
+			resource.getList = function (date, callback) {
 				var list = resource.query({Date: date}, function (data) {
 					callback && callback(data);
-					utils.markOverlaps(data);
-					utils.markActions(data);
-					utils.markFromStatus(data);
+					resource.markOverlaps(data);
+					resource.markActions(data);
+					resource.markFromStatus(data);
 				});
 				return list;
 			};
 
-			return angular.extend(resource, utils);
+			return resource;
 
 
 		}]);
@@ -1458,24 +1506,24 @@ function formatDate(date) {
 
 /* Reteach List */
 (function (app) {
-	app.factory("ReteachListService", ['$resource', 'UtilService', '$filter', function ($resource, UtilService, $filter) {
+	app.factory("ReteachListService", ['$resource','ReferralTypesService', 'UtilService', '$filter',
+		function ($resource, types, UtilService, $filter) {
 		var resource = $resource('api/reteachlist/:id', {}, {
 			update: {
 				method: 'PUT'
 			}
 		});
+			resource.count = 0;
 
-		var utils = {};
-
-		utils.copyUpdatedResourceAndMarkActions = function (student, data) {
+		resource.copyUpdatedResourceAndMarkActions = function (student, data) {
 			angular.forEach(data.referrals, function (ref, $index) {
 				angular.extend(student.referred[$index], ref);
 			});
-			utils.markActions([student]);
+			resource.markActions([student]);
 
 		};
 
-		utils.markOverlaps = function (students, schoolId) {
+		resource.markOverlaps = function (students, schoolId) {
 			angular.forEach(students, function (student) {
 				var overlap = UtilService.getStudentOverlaps(student);
 				//  get rid of other referrals and only leave reteach
@@ -1503,7 +1551,7 @@ function formatDate(date) {
 			})
 		};
 
-		utils.markOverlapsReport = function (students, schoolId) {
+		resource.markOverlapsReport = function (students, schoolId) {
 			angular.forEach(students, function (student) {
 				var overlap = UtilService.getStudentOverlaps(student);
 				//  get rid of other referrals and only leave reteach
@@ -1529,40 +1577,55 @@ function formatDate(date) {
 			})
 		};
 
-		utils.markActions = function (students) {
+		resource.markActions = function (students) {
 			//debugger;
 			angular.forEach(students, function (student) {
 				student.activity = student.referred[0].activity || {};
-				student.ActivityTypeId = student.referred[0].ActivityTypeId;
-				switch (student.ActivityTypeId) {
-					case 75: // sent out
-					case 70: // walked out
-					case 67: // no show
-						student.status = {class: 'bg-danger'};
-						break;
-
-					case 66: // cleared
-					case 64:// present
-						student.status = {class: 'bg-green'};
-						if (student.referred[0].RefferalStatus == 2)
-							student.referred[0].consequence = {referral_type: {Name: 'Completed'}};
-						break;
-					case 68:// Left School
-					case 69:// School Absent
-					case 71:// Other
-					case 65: // rescheduled
-						student.status = {class: 'bg-gray'};
-						if (student.referred[0].RefferalStatus == 2)
-							student.referred[0].consequence = {referral_type: {Name: 'Reteach → Re-Reteach'}};
-						break;
-				}
-				if (student.referred[0].RefferalStatus == 8) {
-					student.status = {class: 'bg-warning'};
-				}
+				ref = student.referred[0];
+				student.status = resource.markActionToReferral(ref,student);
 			});
 		};
 
-		utils.markFromStatus = function (data) {
+		resource.markActionToReferral = function(ref,student){
+			var status = {};
+			// color according to attendance taken
+			switch (ref.ActivityTypeId) {
+				case 75: // sent out
+				case 70: // walked out
+				case 67: // no show
+					status = {class: 'bg-danger'};
+					break;
+
+				case 66: // cleared
+				case 64:// present
+					status = {class: 'bg-green'};
+					if (ref.RefferalStatus == 2 )
+						ref.consequence = {referral_type: {Name: 'Completed'}};
+					break;
+				case 68:// Left School
+				case 69:// School Absent
+				case 71:// Other
+				case 65:// rescheduled
+					status = {class: 'bg-gray'};
+					if (ref.RefferalStatus == 2)
+						ref.consequence = {referral_type: {Name: 'Reteach → Re-Reteach'}};
+					break;
+			}
+			// if followup list
+			if (ref.RefferalStatus == 8) {
+				status = {class: 'bg-warning'};
+			}
+			return status;
+		};
+
+		resource.markActionsToReferrals = function(referrals){
+			angular.forEach(referrals, function(ref){
+				if(types.isReteach(ref.ReferralTypeId))
+					ref.status = resource.markActionToReferral(ref);
+			});
+		};
+
+		resource.markFromStatus = function (data) {
 			angular.forEach(data, function (student) {
 				angular.forEach(student.referred, function (ref) {
 					switch (ref.RefferalStatus) {
@@ -1583,7 +1646,7 @@ function formatDate(date) {
 			});
 		};
 
-		utils.updateAttendance = function (date, student) {
+		resource.updateAttendance = function (date, student) {
 
 
 			// sent when present
@@ -1605,21 +1668,21 @@ function formatDate(date) {
 			};
 
 			return resource.update(urlEncoded, payload, function (data) {
-				utils.copyUpdatedResourceAndMarkActions(student, data);
+				resource.copyUpdatedResourceAndMarkActions(student, data);
 			}).$promise;
 
 		};
 
 
-		utils.updateReschedule = function (date, student) {
+		resource.updateReschedule = function (date, student) {
 
 		};
 
-		utils.updateClear = function (date, student) {
+		resource.updateClear = function (date, student) {
 
 		};
 
-		utils.submitList = function (students, date) {
+		resource.submitList = function (students, date) {
 			var payload = {
 				param: 'commitReteach',
 				Date: date,
@@ -1639,17 +1702,17 @@ function formatDate(date) {
 
 		};
 
-		utils.getList = function (date, callback) {
+		resource.getList = function (date, callback) {
 			var list = resource.query({Date: date}, function (data) {
 				callback && callback(data);
-				utils.markOverlaps(data);
-				utils.markActions(data);
-				utils.markFromStatus(data);
+				resource.markOverlaps(data);
+				resource.markActions(data);
+				resource.markFromStatus(data);
 			});
 			return list;
 		};
 
-		return angular.extend(resource, utils);
+		return resource;
 	}]);
 }(angular.module("Argus")));
 
@@ -1663,15 +1726,14 @@ function formatDate(date) {
 					method: 'PUT'
 				}
 			});
+			resource.count = 0;
 
-			var utils = {};
-
-			utils.getList = function (date, callback) {
-				var list = resource.query({Date: date}, utils.markOverlaps);
+			resource.getList = function (date, callback) {
+				var list = resource.query({Date: date}, resource.markOverlaps);
 				return list;
 			};
 
-			utils.markOverlaps = function (data, schoolId) {
+			resource.markOverlaps = function (data, schoolId) {
 
 				angular.forEach(data, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
@@ -1696,7 +1758,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.updateAttendance = function (date, student) {
+			resource.updateAttendance = function (date, student) {
 				//  One Request
 				var referralIds = student.referred.map(function (o) {
 					return o.Id;
@@ -1716,8 +1778,13 @@ function formatDate(date) {
 
 			};
 
+			resource.getCount = function(){
+				resource.get({roster:true,count:true},function(data){
+					resource.count = data.aecAbsentCount;
+				});
+			};
 
-			return angular.extend(resource, utils);
+			return resource;
 
 		}]);
 }(angular.module("Argus")));
@@ -1732,17 +1799,15 @@ function formatDate(date) {
 					method: 'PUT'
 				}
 			});
+			resource.count = 0;
 
 
-			var utils = {};
-
-
-			utils.getList = function (date, callback) {
+			resource.getList = function (date, callback) {
 				var list = resource.query({Date: date});
 				return list;
 			};
 
-			utils.markOverlaps = function (data, schoolId) {
+			resource.markOverlaps = function (data, schoolId) {
 				angular.forEach(data, function (student) {
 					var overlap = UtilService.getStudentOverlaps(student);
 					//  get rid of other referrals and only leave AEC
@@ -1766,7 +1831,7 @@ function formatDate(date) {
 				});
 			};
 
-			utils.updateAttendance = function (date, student) {
+			resource.updateAttendance = function (date, student) {
 				//  One Request
 				var referralIds = student.referred.map(function (o) {
 					return o.Id;
@@ -1784,9 +1849,14 @@ function formatDate(date) {
 				};
 				return resource.update(urlEncoded, payload).$promise;
 			}
+			
+			resource.getCount = function(){
+				resource.get({roster:true, count:true},function(data){
+					resource.count = data.reteachAbsentCount;
+				})
+			};
 
-
-			return angular.extend(resource, utils);
+			return resource;
 
 		}]);
 }(angular.module("Argus")));

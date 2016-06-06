@@ -151,7 +151,8 @@ class StudentsController extends Controller
 		$referred = $student->referred; // today
 		$student->load(['referred'=>function($q){
 			$q->where('Date','<=',Carbon::today())
-				->with('referralType', 'teacher', 'user', 'period')
+				->with('referralType', 'teacher', 'user', 'period', 'activity',
+					'consequence.referralType','actions.userAction.activity')
 			;
 		}]);
 		$student->todayReferred = $referred;

@@ -74,7 +74,7 @@
 			isss.get({roster: true, count: true}, function (data) { vm.count.iss = parseInt(data.count); });
 
 			lunchs.get({count: true, roster: true}, function (data) { vm.count.lunch = data.lunchStudentsCount; });
-			orooms.get({count: true, roster: true}, function (data) { vm.count.oroom = data.OroomList; });
+			orooms.get({count: true, roster: true}, function (data) { orooms.count = data.OroomList; vm.count.oroom = orooms.count; });
 
 			aecs.get({roster: true, count: true}, function (data) { vm.count.aec = data.aecCount; });
 			aecfs.get({roster: true, count: true}, function (data) { vm.count.aecFollowup = data.aecAbsentCount; });

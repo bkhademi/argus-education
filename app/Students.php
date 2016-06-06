@@ -93,4 +93,10 @@ class Students extends Model
 		}]);
 	}
 
+	public function scopeSortByLastName($q){
+		return $q->join('aspnetusers', 'aspnetusers.id', '=', 'students.Id')
+			->orderBy('LastName', 'ASC')
+			->select('students.*');
+	}
+
 }

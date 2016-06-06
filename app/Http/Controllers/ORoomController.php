@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ORoomHelper;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -9,10 +10,8 @@ use App\Oroomactivity;
 use App\Referrals;
 use App\Useractions;
 use App\Counters;
-use App\Activities;
 use Carbon\Carbon;
 use DB;
-use App\Referraltypes;
 use App\Students;
 use App\Referralactions;
 
@@ -35,87 +34,36 @@ class ORoomController extends Controller
         $date = $this->getDate($request);
 
         if ($request->has('roster')) {
-            $OroomList = Students
-                ::with('counters', 'user')
-                ->withPeriodRoomsWherePeriodsIn($request->Periods)
-                ->with(['referred' => function ($q) use ($date) {
-                    $q
-                        ->whereNotIn('ReferralTypeId', [9])// dont load LD
-                        ->where('Date', $date)
-                        ->with('user', 'teacher', 'referralType', 'assignment', 'activity','consequence.referralType')
-                        ->sortByPriority();
+            $OroomList = ORoomHelper::getORMList($schoolId,$date,$request->Periods);
 
-                }])
-                ->ofSchoolId( $schoolId)
-                ->whereHas('counters', function ($q) {
-                    //$q->where('ORoomsToBeServed', '>', 0);
-                })
-                ->whereHas('referred', function ($q) use ($date) { // not processed with oroom referrals for $date
-                    $q
-                        ->whereIn('ReferralTypeId',Referrals::$oroomReferralTypes)
-                        ->where('Date', $date)
-                    ;
-                })
-                ->join('aspnetusers', 'aspnetusers.id', '=', 'students.Id')
-                ->orderBy('LastName', 'ASC')
-                ->select('students.*')
-                ->get();
-            $reftable = collect([]);
-        }
-        else {
-            $OroomList = Students
-                ::with(['counters' => function ($q) {
-                    $q->select('Id', 'ORoomsToBeServed', 'ISSDays');
-                }])
-                ->with(['referred'=>function($q){
-                        $q->where('Date','2016-01-31 18:34:25');
-                    }])
-                ->with('user')
-                ->whereHas('counters', function ($q) {
-                    $q->where('OroomsToBeServed', '>', 0);
-                })
-                ->wherehas('user', function ($q) use ($schoolId) { // from the school the user requested
-                    $q->where('SchoolId', $schoolId);
-                })
-                ->join('aspnetusers', 'aspnetusers.id', '=', 'students.Id')
-                ->orderBy('LastName', 'ASC')
-                ->select('students.Id', 'students.Grade')
-                ->get();
+            // get referrals that do not have overlap with iss
+            $refsWithNoISSOverlaps = $OroomList->reject(function($student){
+                $issReferralTypes = collect(Referrals::$issReferralTypes);
+                // filter referrals to get only iss referrals
+                $issOnly = $student->referred->filter(function($item)use ($issReferralTypes){
+                    // true if  is iss referral && is not cleared (has valid Overlap)
+                    return   $issReferralTypes->contains($item->ReferralTypeId) && $item->ActivityTypeId != 87 ;
+                });
 
-
-            $reftable = Oroomactivity
-                ::with('student.student.counters', 'teacher', 'period', 'activity')
-                ->where('Date', $date)
-                ->wherehas('student', function ($q) use ($schoolId) { // from the school the user requested
-                    $q->where('SchoolId', $schoolId);
-                })
-                ->orderBy('Id', 'DESC')
-                ->get();
-
-
-        }
-        $refsWithNoOverlaps = $OroomList->reject(function($student){
-            // filter referrals to get only iss referrals
-            $student->referred = $student->referred->filter(function($item){
-                $issReferrals = collect(Referrals::$issReferralTypes);
-                // true if  is iss referral && is not cleared (has valid Overlap)
-                return   $issReferrals->contains($item->ReferralTypeId) && $item->ActivityTypeId != 87 ;
+                return  $issOnly->count() > 0;
             });
-
-            return  $student->referred->count() > 0;
-        });
-        $OroomListCount = $refsWithNoOverlaps->count();
-        $reftableListCount = $reftable->count();
-
-        if ($request->has('count')) {
-            $OroomList = $refsWithNoOverlaps->count();
-            $reftable = $reftable->count();
-        }
-        if($request->has('roster'))
-            foreach($refsWithNoOverlaps as $student){
-                if($student->toArray()['referred'][0]['RefferalStatus'] ==1)
+            $OroomListCount = $refsWithNoISSOverlaps->count();
+            //  subtract students that had already been taken attendance on
+            foreach($OroomList as $student){
+                if($student->referred[0]['RefferalStatus'] ==1)
                     $OroomListCount--;
             }
+        }
+        // needed for oroom activity log (oroom during day)
+        else {
+            $reftable = ORoomHelper::getOroomDuringDayList($schoolId,$date);
+            $reftableListCount = $reftable->count();
+        }
+
+
+        if ($request->has('count')) {
+            $OroomList = $OroomListCount;
+        }
 
         return compact('OroomList', 'reftable', 'OroomListCount', 'reftableListCount');
     }
@@ -262,7 +210,6 @@ class ORoomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //DB::beginTransaction();
 
         $schoolId = $this->user->SchoolId;
 
@@ -280,8 +227,9 @@ class ORoomController extends Controller
             //work some logic with the counters
         }
 		else if ($request->has('attendance')) {
-
             $referral = Referrals::find($id);
+
+            // attendance was already taken
             if($referral->RefferalStatus == 1){
                 $referral->load('activity','consequence');
                 return response(['msg'=>'Attendance was already taken, may be by another user','referral'=>$referral],409);
@@ -289,7 +237,13 @@ class ORoomController extends Controller
 
             $counters = Counters::find($referral->StudentId);
 
-            $useraction = Useractions::create([
+            $pendingReferrals = Referrals::where('Date',$today)
+                ->where('RefferalStatus',0)
+                ->ofTypes(Referrals::$oroomReferralTypes)
+                ->where('StudentId',$referral->StudentId)
+                ;
+
+            $useraction = new Useractions([
                 'ActionDate' => $today,
                 'ActionByUserId' => $this->userId,
                 'ActionType' => $request->ActionType,
@@ -303,106 +257,91 @@ class ORoomController extends Controller
                 $counters->decrement('ORoomsToBeServed');
                 $referral->update(['RefferalStatus' => 1, 'ActivityTypeId' => $request->ActionType]);
 
-
                 /*
                     SHOULD ONLY MOVE OROOMS BECAUSE, IF IT HAS ISS THIS CAN'T HAPPEN
                 */
-                $pendingReferrals = Referrals// move other today's referrals for tomorrow
-                ::where('Date', $today)
-                    ->where('RefferalStatus', 0)// pending
-                    ->whereIn('ReferralTypeId', Referrals::$oroomReferralTypes)// Orooms
-                    ->where('StudentId', $referral->StudentId);
-
-
-
                 $pendingReferrals->update(['Date' => $tomorrow]);
 
-                if ($referral->ReferralTypeId !== 3) {// no ORM+1, set debt to 0
+                // no ORM+1, set debt to 0
+                if ($referral->ReferralTypeId !== 3) {
                     $counters->debt = 0;
-                } else {
+                }
+                else {
                     $msg = 'Present, Oroom + 1 Completed, Oroom(s) Left ';
                 }
-
-				Referralactions::create([
-					'ReferralId'=>$referral->Id,
-					'ActivityId'=>$useraction->Id,
-					'Type'=>1
-				]);
 
             }
             //ditch (No Show, Sent Out, Walked Out
             else if ($request->ActionType == 25 || $request->ActionType == 28 || $request->ActionType == 29) {
-
                 // before start rotating referrals , make a copy,
                 $referralCopy = $referral->replicate();
                 $referralCopy->save();
                 $referralCopy->update(['created_at'=>$referral->created_at]);
 
+                // record attendance on referral and mark status as attendance taken
                 $referral->update(['RefferalStatus' => 1, 'ActivityTypeId'=> $request->ActionType]);
-                // link the current to the copy
-                /*
-                 * $referral->Next = $currentReferralCopy->Id
-                 */
 
-                $pendingReferrals = Referrals// move other today's referrals for tomorrow
-                ::where('Date', $today)
-                    ->where('RefferalStatus', 0) // pending
-                    ->whereNotIn('ReferralTypeId', [12, 18]) //Dont move AEC or Reteach. Leave as it is
-                    ->where('StudentId', $referral->StudentId)
-                    ->update(['Date' => $tomorrow]);
-
+                // move other today's referrals for tomorrow
+                $pendingReferrals->update(['Date' => $tomorrow]);
 
                 // beyond this point, a consequence will be created,, either ORM -> ISS (),  ORM+1 -> ISS (),  ORM->ORM+1 ()
 
-                // assume consequence will be ORM + 1
-                $consequence = Referrals::create([ // create new consequence for tomorrow
+                $consequence = new Referrals([
                     'UserId' => $this->userId,
                     'StudentId' => $referral->StudentId,
                     'TeacherId' => 0,
-                   // 'ReferralTypeId' => 0,
                     'Date' => $tomorrow //  defaults to tomorrow
                 ]);
 
                 // additionally, an action will be logged in Useractions, the action type will differ. either ORM+1->ISS(45), ORM->ISS(45) or  ORM->ORM+1, (comment will differ too)
-                $useraction   = Useractions::create([
+                $consequenceUseraction   = new Useractions([
                     'ActionDate' => $today,
                     'ActionByUserId' => $this->userId,
                     'ActionToUserId' => $referral->StudentId,
                 ]);
+
+                // referral type is ORM+1
                 if($referral->ReferralTypeId === 3 ){
                     $comment  = '[Student Ditched ORoom on ' . $today . '  and referral was ORM+1. Assigning ISS (System)]';
                     $extra = '';
                     $consequenceTypeId = 17; // ORM+1 -> ISS
-                }else if($counters->debt === 1) {
+                }
+                // student's debt is 1
+                else if($counters->debt === 1) {
                     $comment = '[Student Ditched ORoom on ' . $today. '  and debt was 1. Assigning ISS (System)]';
                     $extra = "regular o-room and debt was 1";
                     $consequenceTypeId = 6; // ORM -> ISS
                 }
 
-                if ($referral->ReferralTypeId === 3 || $counters->debt === 1) {// if referral type is oroom + 1 or debt === 1  then create an iss
+                // if referral type is oroom + 1 OR debt === 1  then consequuence is ISS
+                if ($referral->ReferralTypeId === 3 || $counters->debt === 1) {
                     $msg = "Ditched O-Room. $extra Assigned ISS*";
                     $counters->increment('ISSDays');
-                    $useraction->update([
+                    $consequenceUseraction->fill([
                             'ActionType' => 45, // ORM +1 -> ISS
                             'Comment' => $comment
                         ]);
 
-                    $consequence->update(['ReferralTypeId'=>$consequenceTypeId]);
+                    $consequence->fill(['ReferralTypeId'=>$consequenceTypeId]);
 
                     $counters->debt = 0;
-                } else { // if referral is not orm + 1  and debt is not 1 then create an orm+1
+                }
+                // if referral is not orm + 1  and debt is not 1 then create an orm+1
+                else {
                         $msg = 'Assigned Oroom + 1';
                         $counters->increment('ORoomsToBeServed');
                         $counters->debt = 1;
-                        $useraction->update([
-                            'ActionType' => 7, // ORM -> ORM + 1
-                            'Comment' => '[Student Ditched ORoom on ' . $today . '  and debt was 0. Assigning Oroom + 1 (System)]'
-                        ]);
+                        $consequenceUseraction->fill([
+                                'ActionType' => 7, // ORM -> ORM + 1
+                                'Comment' => '[Student Ditched ORoom on ' . $today . '  and debt was 0. Assigning Oroom + 1 (System)]'
+                            ]);
 
-                        $consequence->update(['ReferralTypeId' => 3]); // ORM + 1
+                        $consequence->fill(['ReferralTypeId' => 3]); // ORM + 1
                 }
-                // mark current with the action type and set status to 1 so it wont be rotated
-                $referral->update([ 'ConsequenceId'=>$consequence->Id]);
+
+                $consequenceUseraction->save();
+                $consequence->save();
+                $referral->update(['ConsequenceId'=>$consequence->Id]);
             }
             // clear Oroom referrals
             else if($request->ActionType == 88){
@@ -417,7 +356,6 @@ class ORoomController extends Controller
                     Counters::find($request->StudentId)->update(['debt'=>0]);
                 }
 
-
                 if($request->RemoveAll){
                     $msg = 'Removing/Clearing All ORM referrals';
                     // grab 1 from the referrals to remove to use as trace
@@ -428,8 +366,6 @@ class ORoomController extends Controller
                     Counters::find($request->StudentId)->decrement('ORoomsToBeServed');// decrease one here as 1 will not be removed
                 }else{
                     $msg = 'Removing '. count($toRemoveReferralIds) .' Oroom refferals and ';
-                    // grab 1 from the referrals to remove to use as trace
-
 
                     $moveDate = new Carbon($request->MoveClearToDate);
                     if ($moveDate->eq(Carbon::today())) { // leave trace and use as real,
@@ -450,10 +386,10 @@ class ORoomController extends Controller
                     }
                     $msg .= $moveDate->toDateString();
                 }
-
+                $referral = $traceReferral;
                 $result = Referrals::decreaseCountersAndRemoveReferrals($toRemoveReferralIds,$request->StudentId);
                 $referrals = $this->getORMReferrals($today,$request->StudentId);
-                $useraction->update(['Comment' => $useraction->Comment . "[Clearing " . count($toRemoveReferralIds) . " Oroom referrals (System)]"]);
+                $useraction->fill(['Comment' => $useraction->Comment . "[Clearing " . count($toRemoveReferralIds) . " Oroom referrals (System)]"]);
 
             }
             // left School, school absent, other
@@ -473,21 +409,21 @@ class ORoomController extends Controller
                  * $referral->Next = $referralCopy->Id
                  */
 
-                $pendingReferrals = Referrals// move other today's referrals for tomorrow
-                ::where('Date', $today)
-                    ->where('RefferalStatus', 0)
-                    ->whereNotIn('ReferralTypeId', [12, 18])//DONT MOVE AEC REFERRALS OR RETEACH
-                    ->where('StudentId', $referral->StudentId)
-                    ->update(['Date' => $tomorrow]);
+                $pendingReferrals->update(['Date' => $tomorrow]);
 
 
-
-
-                $useraction->update(['Comment' => $useraction->Comment . '[Rescheduling For Next Day(System)]']);
+                $useraction->fill(['Comment' => $useraction->Comment . '[Rescheduling For Next Day(System)]']);
             }
+
+            $useraction->save();
+            // link event(action)  with referral
+            Referralactions::create([
+                'ReferralId'=>$referral->Id,
+                'ActivityId'=>$useraction->Id,
+                'Type'=>1// attendance type
+            ]);
             $counters->save();
-            $referral->load('activity','referralType', 'teacher' );
-            $counters = Counters::find($request->StudentId);
+            $referral->load('activity','referralType', 'teacher', 'consequence.referralType' );
             return compact('msg', 'useraction', 'referral', 'counters', 'pendingReferrals', 'referrals');
         }
     }

@@ -23,4 +23,10 @@ class Oroomactivity extends Model
 	public function activity(){
 		return $this->hasOne('App\Activities', 'Id','ActivityId');	
 	}
+
+	public function scopeOfSchoolId($q,$schoolId){
+		$q->whereHas('student',function($q)use($schoolId){
+			$q->where("SchoolId",$schoolId);
+		});
+	}
 }
