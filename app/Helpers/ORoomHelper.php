@@ -10,6 +10,7 @@ namespace App\Helpers;
 
 use App\Students;
 use App\Referrals;
+use App\Oroomactivity;
 use Carbon\Carbon;
 
 
@@ -57,4 +58,45 @@ class ORoomHelper
 	}
 
 
+	/*
+	 * Get the orm list from a given school from a given date
+	 *
+	 * @param  integer 			$schoolId
+	 * @param  Carbon\Carbon  	$date
+	 * #@param array 			$periods list of periods as integer eg. period 1 = [1]
+	 * @return Collection       list of students with their referrals
+	 */
+	public static function getORMList($schoolId,$date, $periods){
+		$list = Students::with('counters','user')
+			->with(['referred'=>function($q)use($date){
+				$q->notOfTypes(Referrals::$lunchReferralType)
+					->where('Date',$date)
+					->with('user','teacher','referralType','assignment','activity','consequence.referralType')
+					->sortByPriority();
+			}])
+			->withPeriodRoomsWherePeriodsIn($periods)
+			->ofSchoolId($schoolId)
+			->ofTypesAndDate(Referrals::$oroomReferralTypes, $date)
+			->sortByLastName()
+			->get()
+			;
+		return $list;
+	}
+
+
+	/*
+	 * Get list of Oroom during the day (students sent out during class time)
+	 *
+	 * @param Integer 		$schoolId
+	 * @param Carbon\Carbon $date
+	 * return Collection 	Oroom Activity List(ORM during day)
+	 */
+	public static function getOroomDuringDayList($schoolId,$date){
+		$list = Oroomactivity::with('student.student.counters','teacher','period','activity')
+			->where('Date',$date)
+			->ofSchoolId($schoolId)
+			->orderBy('Id','DESC')// newest to oldest
+			->get();
+		return $list;
+	}
 }
