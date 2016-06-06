@@ -3,16 +3,14 @@
 (function (app) {
     app
         .controller("ProfileCtrl",
-            ["$scope", "StudentsService", '$rootScope', 'ProfessorClassesService','ClassStudentsService',
-                'notify', 'ProfileCounters', 'OroomService', 'AECListService', 'ReteachListService', 'ISSService',
-                'LunchService','UtilService',
-                function ($scope, students,$rootScope, professorclasses, ClassStuSer, notify, ProfileCounters,
-                          oser, aecser, retser, issser, ldser, utils) {
+            ["$scope", "StudentsService", 'ProfessorClassesService','ClassStudentsService', 'notify', 'ProfileCounters',
+                'OroomService', 'AECListService', 'ReteachListService', 'ISSService', 'LunchService','UtilService',
+                function ($scope, students, professorclasses, ClassStuSer, notify, ProfileCounters, oser, aecser,
+                          retser, issser, ldser, utils) {
                     $scope.schedule = []; // holds  student's schedule
                     $scope.activities = []; // holds student'activities
                     $scope.currentDate = new Date();
                     $scope.classes = professorclasses.query();
-                    $scope.role = $rootScope.currentUser.role;
 
                     // TODO : change to adapt to new table. used to be useractions, now referrals
                     $scope.downloadActivity = function () {
